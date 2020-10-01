@@ -1,0 +1,84 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+html,
+body,
+body > div:first-child,
+div#__next{
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#__next-prerender-indicator {
+  display: none;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    /* margin-bottom: 60px; */
+    font-family: 'Roboto';
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+/*Custom CSS*/
+.fullBG {
+    background-image: url('/images/dark_bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.halfTransparent {
+    background: rgba(255,255,255,0.8);
+}
+
+.btn-huge {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+    .cardcol {
+        column-count: 2;
+        column-gap: 1.25rem;
+        grid-row-gap: 1.25rem;
+        orphans: 1;
+        widows: 1;
+    }
+}
+
+
+
+
+
+@media (max-width: 767.98px) {
+    .errspan {
+        margin-top: -24px;
+    }
+    .adminlog {
+        height: auto !important;
+    }
+    .footertext {
+        font-size: 10px;
+    }
+}
