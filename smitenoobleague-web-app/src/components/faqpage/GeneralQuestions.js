@@ -41,13 +41,13 @@ return (
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="2">
             <Card.Body>
-            <p className="m-0">If you want to sign up as a team you should send an e-mail to <a href="mailto:signup@smitenoobleague.com?SUBJECT=Sign up">signup@smitenoobleague.com</a> with the following information:
+            <span className="m-0">If you want to sign up as a team you should send an e-mail to <a href="mailto:signup@smitenoobleague.com?SUBJECT=Sign up">signup@smitenoobleague.com</a> with the following information:
             <ul>
                 <li>Your Gamertag / ingame name</li>
                 <li>Your Platform</li>
                 <li>Your team's skill level (please answer fairly)</li>
             </ul>
-            </p>
+            </span>
             </Card.Body>
         </Accordion.Collapse>
         </Card>

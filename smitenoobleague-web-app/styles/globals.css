@@ -68,6 +68,13 @@ body {
         orphans: 1;
         widows: 1;
     }
+    .LeaderboardStatText {
+      margin: 0;
+      font-size: 0.86vw;
+    }
+    .LeaderBoardTitleText {
+      font-size: 1vw;
+    }
 }
 
 @media (max-width: 767.98px) {
@@ -97,4 +104,9 @@ body {
 /*leaderboard page*/
 .LeaderboardCard {
   font-size: 0.8rem;
+}
+
+.piechart {
+  height: 150px;
+  width: 150px;
 }
