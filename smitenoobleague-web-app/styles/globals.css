@@ -61,13 +61,6 @@ body {
 }
 
 @media (min-width: 768px) {
-    .cardcol {
-        column-count: 2;
-        column-gap: 1.25rem;
-        grid-row-gap: 1.25rem;
-        orphans: 1;
-        widows: 1;
-    }
     .LeaderboardStatText {
       margin: 0;
       font-size: 0.86vw;
@@ -109,4 +102,9 @@ body {
 .piechart {
   height: 150px;
   width: 150px;
+}
+
+.newsimg {
+  height: auto;
+  width: auto;
 }
