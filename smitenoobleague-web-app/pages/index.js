@@ -19,7 +19,7 @@ export default function Home() {
         <hr className="my-4" />
         <p>If you want more information about the league click the button below to check out our FAQ page</p>
         <p className="lead">
-            <a className="btn btn-primary btn-lg mb-4 btn-block" href="#" role="button">I want Info</a>
+            <a className="btn btn-primary btn-lg mb-4 btn-block" href="/faq" role="button">I want Info</a>
         </p>
     </div>
   </div>
