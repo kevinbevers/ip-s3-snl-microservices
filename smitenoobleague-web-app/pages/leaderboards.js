@@ -1,11 +1,12 @@
 //default page stuff
 import NavBar from '../src/components/NavBar';
 import Footer from '../src/components/Footer';
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
+//boostrap components
+import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Container } from 'react-bootstrap';
+import Card from 'react-bootstrap/Card';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 export default function leaderboards() {
   return (
