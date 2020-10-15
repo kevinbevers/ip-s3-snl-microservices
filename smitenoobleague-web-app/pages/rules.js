@@ -1,3 +1,5 @@
+//default react imports
+import React, { useState } from 'react';
 //default page stuff
 import NavBar from '../src/components/NavBar';
 import Footer from '../src/components/Footer';
@@ -7,10 +9,14 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
+//import background component and the image for it
+import FullBackground from '../src/components/FullBackground'
+import BG from 'public/images/Rules_Background.jpg';
 
 export default function rules() {
   return (
     <>
+        <FullBackground src={BG} />
       <NavBar />
       <Container className="mt-4">
         <Row>
@@ -21,38 +27,38 @@ export default function rules() {
               <h5 className="text-center">Smitenoobleague rules</h5>
               <hr />
               <Row>
-                <Col md={6} className="mx-auto">
+                <Col md={7} className="mx-auto">
               <div id="content-table" className="ml-3">
               <a href="#rule1"><b>1. Match rules</b></a><br />
-              <a href="#rule1.1">1.1. Be there or be square</a><br />
-              <a href="#rule1.2">1.2. Substitute player</a><br />
-              <a href="#rule1.3">1.3. Home team & Away team</a><br />
-              <a href="#rule1.4">1.4. Match settings</a><br />
-              <a href="#rule1.5">1.5. Ending of a match</a><br />
+              <a href="#rule1.1" className="subrule">1.1. Be there or be square</a><br />
+              <a href="#rule1.2" className="subrule">1.2. Substitute player</a><br />
+              <a href="#rule1.3" className="subrule">1.3. Home team & Away team</a><br />
+              <a href="#rule1.4" className="subrule">1.4. Match settings</a><br />
+              <a href="#rule1.5" className="subrule">1.5. Ending of a match</a><br />
 
               <a href="#rule2"><b>2. Scheduling rules</b></a><br />
-              <a href="#rule2.1">2.1. Planning the match</a><br />
-              <a href="#rule2.2">2.2. Unavailability</a><br />
-              <a href="#rule2.3">2.3. Catch-up match</a><br />
-              <a href="#rule2.4">2.4. Not playing on purpose.</a><br />
+              <a href="#rule2.1" className="subrule">2.1. Planning the match</a><br />
+              <a href="#rule2.2" className="subrule">2.2. Unavailability</a><br />
+              <a href="#rule2.3" className="subrule">2.3. Catch-up match</a><br />
+              <a href="#rule2.4" className="subrule">2.4. Not playing on purpose.</a><br />
 
               <a href="#rule3"><b>3. Team / roster rules</b></a><br />
-              <a href="#rule3.1">3.1. Trading players</a><br />
-              <a href="#rule3.2">3.2. Free agents</a><br />
-              <a href="#rule3.3">3.3. Player availability</a><br />
-              <a href="#rule3.4">3.4. Teamname and logo</a><br />
+              <a href="#rule3.1" className="subrule">3.1. Trading players</a><br />
+              <a href="#rule3.2" className="subrule">3.2. Free agents</a><br />
+              <a href="#rule3.3" className="subrule">3.3. Player availability</a><br />
+              <a href="#rule3.4" className="subrule">3.4. Teamname and logo</a><br />
 
               <a href="#rule4"><b>4. General league rules</b></a><br />
-              <a href="#rule4.1">4.1. Match format</a><br />
-              <a href="#rule4.2">4.2. Player investment</a><br />
-              <a href="#rule4.3">4.3. Clear communication</a><br />
-              <a href="#rule4.3">4.3. Input devices</a><br />
+              <a href="#rule4.1" className="subrule">4.1. Match format</a><br />
+              <a href="#rule4.2" className="subrule">4.2. Player investment</a><br />
+              <a href="#rule4.3" className="subrule">4.3. Clear communication</a><br />
+              <a href="#rule4.3" className="subrule">4.3. Input devices</a><br />
 
               <a href="#rule5"><b>5. In-game rules</b></a><br />
-              <a href="#rule5.1">5.1. Pausing</a><br />
-              <a href="#rule5.2">5.2. Inappropriate playername</a><br />
-              <a href="#rule5.3">5.3. Intentional feeding</a><br />
-              <a href="#rule5.4">5.4. Banned skins</a><br />
+              <a href="#rule5.1" className="subrule">5.1. Pausing</a><br />
+              <a href="#rule5.2" className="subrule">5.2. Inappropriate playername</a><br />
+              <a href="#rule5.3" className="subrule">5.3. Intentional feeding</a><br />
+              <a href="#rule5.4" className="subrule">5.4. Banned skins</a><br />
               </div>
               </Col>
               </Row>
@@ -62,7 +68,7 @@ export default function rules() {
         </Row>
         <Row>
         <Col md={1} xl={2}></Col>
-          <Col md={10} xl={8}>
+          <Col md={10} xl={8} className="bg-light rounded p-5 mb-4">
             {/* Rules Section 1 */}
           <h4 id="rule1" className="font-weight-bold">1. Match rules</h4>
           <p>In this section the rules for setting up the match and what should be done before and after a match will be described.</p>

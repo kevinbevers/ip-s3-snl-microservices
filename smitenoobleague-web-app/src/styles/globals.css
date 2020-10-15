@@ -108,3 +108,11 @@ body {
   height: auto;
   width: auto;
 }
+
+.subrule {
+  padding-left: 0.5vw;
+}
+
+.table-light tbody+tbody, .table-light td, .table-light th, .table-light thead th {
+  border-color: #dee2e6;
+}
