@@ -15,3 +15,7 @@ stages:
 test:
   script:
     - npm test
+  only:
+    refs:
+      - master
+      - schedules
