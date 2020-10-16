@@ -1,0 +1,8 @@
+stages:
+    - test
+
+test:
+    script:
+        - npm test
+
+
