@@ -10,8 +10,8 @@ cache:
     - node_modules/
 
 stages:
-    - test-front-end
+    - testfe
 
-test-front-end:
+testfe:
   script:
     - npm test
