@@ -14,5 +14,6 @@ stages:
 
 test:
   script:
+    - cd smitenoobleague-web-app
     - npm install
     - npm test
