@@ -2,7 +2,6 @@ default:
   image: node:latest
   before_script:
     - cd smitenoobleague-web-app
-    - npm
 
 # This folder is cached between builds
 cache:
