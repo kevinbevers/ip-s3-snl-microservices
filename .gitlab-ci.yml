@@ -1,19 +1,17 @@
-# This file is a template, and might need editing before it works on your project.
-# Official framework image. Look for the different tagged releases at:
-# https://hub.docker.com/r/library/node/tags/
-image: node:latest
+default:
+  image: node:latest
+  before_script:
+    - cd smitenoobleague-web-app
+    - npm
 
 # This folder is cached between builds
-# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
   paths:
     - node_modules/
 
 stages:
-    - test
+    - test-front-end
 
-test:
+test-front-end:
   script:
-    - cd smitenoobleague-web-app
-    - npm install
     - npm test
