@@ -9,8 +9,25 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+//custom imports
+import LeaderBoardStatCard from 'src/components/LeaderboardStatCard';
 
 export default function leaderboards() {
+
+  const [top10Array, setTop10Array] = useState([
+    {standing: 1,player: "playername", statvalue: "9999999999"},
+    {standing: 2,player: "playername", statvalue: "9999999999"},
+    {standing: 3,player: "playername", statvalue: "9999999999"},
+    {standing: 4,player: "playername", statvalue: "9999999999"},
+    {standing: 5,player: "playername", statvalue: "9999999999"},
+    {standing: 6,player: "playername", statvalue: "9999999999"},
+    {standing: 7,player: "playername", statvalue: "9999999999"},
+    {standing: 8,player: "playername", statvalue: "9999999999"},
+    {standing: 9,player: "playername", statvalue: "9999999999"},
+    {standing: 10,player: "playername", statvalue: "9999999999"},
+  ]); //Init top10array value
+
+  // question#1 should all the data be pulled on page load and drippled down to the components or should each component make it's own call.
   return (
     <>
       <NavBar />
@@ -19,139 +36,19 @@ export default function leaderboards() {
           <Col md={9}>
             <Row>
               <Col md={3}>
-                <Card className="mt-2 mb-2 mx-auto LeaderboardCard">
-                  <Card.Header className="text-center LeaderBoardTitleText">Kill</Card.Header>
-                  <Row>
-                    <Col className="pr-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">1.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">2.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">3.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">4.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">5.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">6.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">7.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">9.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">10. playername</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                    <Col className="pl-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </Card>
+                <LeaderBoardStatCard title={"Kill"} val={top10Array}/>
               </Col>
 
               <Col md={3}>
-                <Card className="mt-2 mb-2 mx-auto LeaderboardCard">
-                  <Card.Header className="text-center LeaderBoardTitleText">Assists</Card.Header>
-                  <Row>
-                    <Col className="pr-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">1.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">2.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">3.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">4.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">5.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">6.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">7.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">9.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">10. playername</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                    <Col className="pl-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </Card>
+                <LeaderBoardStatCard title={"Assists"} val={top10Array}/>
               </Col>
 
               <Col md={3}>
-                <Card className="mt-2 mb-2 mx-auto LeaderboardCard">
-                  <Card.Header className="text-center LeaderBoardTitleText">Damage dealt</Card.Header>
-                  <Row>
-                    <Col className="pr-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">1.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">2.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">3.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">4.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">5.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">6.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">7.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">9.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">10. playername</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                    <Col className="pl-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </Card>
+                <LeaderBoardStatCard title={"Damage dealt"} val={top10Array}/>
               </Col>
 
               <Col md={3}>
-                <Card className="mt-2 mb-2 mx-auto LeaderboardCard">
-                  <Card.Header className="text-center LeaderBoardTitleText">Damage mitigated</Card.Header>
-                  <Row>
-                    <Col className="pr-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">1.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">2.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">3.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">4.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">5.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">6.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">7.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">9.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">10. playername</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                    <Col className="pl-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </Card>
+              <LeaderBoardStatCard title={"Damage Mitigated"} val={top10Array}/>
               </Col>
             </Row>
           </Col>
@@ -170,139 +67,19 @@ export default function leaderboards() {
           <Col md={9}>
             <Row>
               <Col md={3}>
-                <Card className="mt-2 mb-2 mx-auto LeaderboardCard">
-                  <Card.Header className="text-center LeaderBoardTitleText">Kill participation</Card.Header>
-                  <Row>
-                    <Col className="pr-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">1.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">2.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">3.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">4.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">5.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">6.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">7.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">9.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">10. playername</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                    <Col className="pl-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </Card>
+              <LeaderBoardStatCard title={"Kill participation"} val={top10Array}/>
               </Col>
 
               <Col md={3}>
-                <Card className="mt-2 mb-2 mx-auto LeaderboardCard">
-                  <Card.Header className="text-center LeaderBoardTitleText">Deaths</Card.Header>
-                  <Row>
-                    <Col className="pr-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">1.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">2.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">3.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">4.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">5.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">6.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">7.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">9.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">10. playername</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                    <Col className="pl-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </Card>
+              <LeaderBoardStatCard title={"Deaths"} val={top10Array}/>
               </Col>
 
               <Col md={3}>
-                <Card className="mt-2 mb-2 mx-auto LeaderboardCard">
-                  <Card.Header className="text-center LeaderBoardTitleText">Damage taken</Card.Header>
-                  <Row>
-                    <Col className="pr-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">1.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">2.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">3.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">4.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">5.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">6.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">7.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">9.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">10. playername</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                    <Col className="pl-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </Card>
+              <LeaderBoardStatCard title={"Damage taken"} val={top10Array}/>
               </Col>
 
               <Col md={3}>
-                <Card className="mt-2 mb-2 mx-auto LeaderboardCard">
-                  <Card.Header className="text-center LeaderBoardTitleText">Healing</Card.Header>
-                  <Row>
-                    <Col className="pr-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">1.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">2.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">3.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">4.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">5.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">6.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">7.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">9.  playername</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">10. playername</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                    <Col className="pl-0">
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                        <ListGroup.Item className="p-1"><p className="LeaderboardStatText">999999999</p></ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </Card>
+              <LeaderBoardStatCard title={"Healing"} val={top10Array}/>
               </Col>
             </Row>
           </Col>
