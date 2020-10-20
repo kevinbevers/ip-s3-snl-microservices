@@ -14,7 +14,7 @@ import LeaderBoardStatCard from 'src/components/LeaderboardStatCard';
 
 export default function leaderboards() {
 
-  const [top10Array, setTop10Array] = useState([
+  const [Top10Array, setTop10Array] = useState([
     {standing: 1,player: "playername", statvalue: "9999999999"},
     {standing: 2,player: "playername", statvalue: "9999999999"},
     {standing: 3,player: "playername", statvalue: "9999999999"},
@@ -36,19 +36,19 @@ export default function leaderboards() {
           <Col md={9}>
             <Row>
               <Col md={3}>
-                <LeaderBoardStatCard title={"Kill"} val={top10Array}/>
+                <LeaderBoardStatCard title={"Kill"} val={Top10Array}/>
               </Col>
 
               <Col md={3}>
-                <LeaderBoardStatCard title={"Assists"} val={top10Array}/>
+                <LeaderBoardStatCard title={"Assists"} val={Top10Array}/>
               </Col>
 
               <Col md={3}>
-                <LeaderBoardStatCard title={"Damage dealt"} val={top10Array}/>
+                <LeaderBoardStatCard title={"Damage dealt"} val={Top10Array}/>
               </Col>
 
               <Col md={3}>
-              <LeaderBoardStatCard title={"Damage Mitigated"} val={top10Array}/>
+              <LeaderBoardStatCard title={"Damage Mitigated"} val={Top10Array}/>
               </Col>
             </Row>
           </Col>
@@ -67,19 +67,19 @@ export default function leaderboards() {
           <Col md={9}>
             <Row>
               <Col md={3}>
-              <LeaderBoardStatCard title={"Kill participation"} val={top10Array}/>
+              <LeaderBoardStatCard title={"Kill participation"} val={Top10Array}/>
               </Col>
 
               <Col md={3}>
-              <LeaderBoardStatCard title={"Deaths"} val={top10Array}/>
+              <LeaderBoardStatCard title={"Deaths"} val={Top10Array}/>
               </Col>
 
               <Col md={3}>
-              <LeaderBoardStatCard title={"Damage taken"} val={top10Array}/>
+              <LeaderBoardStatCard title={"Damage taken"} val={Top10Array}/>
               </Col>
 
               <Col md={3}>
-              <LeaderBoardStatCard title={"Healing"} val={top10Array}/>
+              <LeaderBoardStatCard title={"Healing"} val={Top10Array}/>
               </Col>
             </Row>
           </Col>
