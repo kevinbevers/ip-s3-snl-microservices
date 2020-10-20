@@ -22,11 +22,14 @@ import ScoreTable from 'src/components/ScoreTable';
 
 export default function standings() {
 
-  const [SelectedDivision, setSelectedDivision] = useState('Godlike division');
+  const [SelectedDivision, setSelectedDivision] = useState({id: 1, name: 'Godlike division'});
 
   const changeDivision = (evt) => {
-    setSelectedDivision(evt.target.value);
-    console.log(evt.target.value);
+    var id = evt.target.value;
+    // - 1 array index always starts at 0
+    var name = evt.target[id - 1].text;
+    setSelectedDivision({id: id, name: name});
+    console.log(SelectedDivision);
   }
 
   const [SelectedPeriod, setSelectedPeriod] = useState('Split 1 2020');
@@ -49,7 +52,7 @@ export default function standings() {
           <Col md={6} className="mx-auto">
             <Form>
               <Form.Group controlId="exampleForm.SelectCustom">
-                <Form.Control as="select" custom onChange={changeDivision} value={SelectedDivision}>
+                <Form.Control as="select" custom onChange={changeDivision} value={SelectedDivision.id}>
                   <option value="1">Godlike division</option>
                   <option value="2">Prime division</option>
                   <option value="3">Bronze division</option>
@@ -74,7 +77,7 @@ export default function standings() {
           </Row>
           </Col>
         </Row>
-       <ScoreTable />
+       <ScoreTable title={SelectedDivision.name}/>
       </Container>
       <Footer />
     </>

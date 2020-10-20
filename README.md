@@ -26,6 +26,7 @@ The web-app uses the following *npm* packages
 | React-bootstrap | [React-bootstrap README][React-bootstrapDoc] |
 | Next-optimized-images | [Next optimized images README][NextOptDoc] |
 | Next-compose-plugins | [Next compose plugins README][NextComDoc] |
+| react-icons | [React icons plugins README][ReactIconDoc] |
 
 
 ### Release installation
@@ -44,6 +45,7 @@ $ npm i npm install next react react-dom
 $ npm install react-bootstrap bootstrap
 $ npm install next-optimized-images@canary
 $ npm install --save next-compose-plugins
+$ npm install react-icons --save
 ```
 >Finally run the app:
 ```bash
@@ -67,4 +69,5 @@ $ npm run dev
    [React-bootstrapDoc]: <https://github.com/react-bootstrap/react-bootstrap/blob/master/README.md>
    [NextOptDoc]: <https://github.com/cyrilwanner/next-optimized-images/blob/master/README.md>
    [NextComDoc]: <https://github.com/cyrilwanner/next-compose-plugins/blob/master/README.md>
+   [ReactIconDoc]: <https://github.com/react-icons/react-icons/blob/master/README.md>
 

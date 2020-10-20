@@ -1,0 +1,47 @@
+.TableHeaders {
+    border-top: 0px;
+}
+.TableHeaders > tr > th {
+    border-top: 0px;
+}
+
+.TableTitle {
+    border-bottom: 0px;
+    color: #495057;
+    background-color: #e9ecef;
+}
+
+.table-light tbody+tbody, .table-light td, .table-light th, .table-light thead th {
+    border-color: #dee2e6;
+  }
+  
+  .LogoStanding {
+    height: 20px;
+    width: 20px;
+  }
+  .TeamStanding {
+    text-align: left;
+    padding-left: 3vw !important;
+}
+
+  @media (max-width: 768px) {
+    #StandingTable {
+      font-size: 10px;
+    }
+    .TableTitle {
+        font-size: 18px;
+    }
+    #StandingTable > tbody > tr > td {
+      font-size: 10px;
+    }
+    #StandingTable > tbody > tr > td {
+      padding: 0.25rem;
+    }
+    #StandingTable > thead > tr > th {
+      padding: 0.25rem;
+    }
+    .TeamStanding {
+        width: 36vw;
+        padding-left: 1vw !important;
+    }
+  }

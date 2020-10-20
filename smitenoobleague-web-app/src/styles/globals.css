@@ -1,3 +1,5 @@
+@import 'standing.css';
+
 html,
 body {
   padding: 0;
@@ -111,10 +113,6 @@ body {
 
 .subrule {
   padding-left: 0.5vw;
-}
-
-.table-light tbody+tbody, .table-light td, .table-light th, .table-light thead th {
-  border-color: #dee2e6;
 }
 
 .link-unstyled, .link-unstyled:link, .link-unstyled:hover {
