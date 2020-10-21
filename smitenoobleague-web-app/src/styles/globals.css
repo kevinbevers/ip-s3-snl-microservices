@@ -1,4 +1,5 @@
 @import 'standing.css';
+@import 'matchdetails.css';
 
 html,
 body {
@@ -118,4 +119,9 @@ body {
 .link-unstyled, .link-unstyled:link, .link-unstyled:hover {
   color: inherit;
   text-decoration: inherit;
+}
+
+.MhTeamImg {
+  height: 70px;
+  width: 70px;
 }

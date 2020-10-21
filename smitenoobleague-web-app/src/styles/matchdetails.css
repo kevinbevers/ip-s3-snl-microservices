@@ -1,0 +1,63 @@
+#TeamTable {
+  margin-bottom: 0.5rem !important;
+}
+
+#TeamTable > thead > tr > th {
+    border: none !important;
+    /* padding: 1rem !important; */
+}
+
+@media (max-width: 768px) {
+    #TeamTable {
+      font-size: 10px;
+    }
+    #TeamTable > tbody > tr > td {
+      font-size: 10px;
+    }
+
+  }
+
+  #TeamTable > tbody > tr > td {
+    padding: 0.25rem;
+    vertical-align: middle;
+  }
+
+  #TeamTable > thead > tr > th {
+    color: white;
+    font-weight: 600;
+  }
+  
+.table-success2 {
+    background: #e7f9eb;
+}
+
+.table-danger2 {
+    background: #f9e7ec;
+}
+
+.GodImg {
+    height: 30px;
+    width: 30px;
+  }
+
+.KDAPadding {
+    padding-right: 0.5rem !important;
+    padding-left: 0.5rem !important;
+}
+
+.TotalKillsTop {
+  align-self: flex-end;
+  text-align: end;
+}
+
+@media (min-width: 768px) {
+  .TotalGoldBottom {
+    text-align: end;
+  }
+}
+
+
+  /* .table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: green; 
+ } */

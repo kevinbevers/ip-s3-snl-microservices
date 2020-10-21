@@ -1,0 +1,163 @@
+//boostrap components
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Table from 'react-bootstrap/Table';
+import Image from 'react-bootstrap/Image';
+//icons
+import { FaBox } from 'react-icons/fa';
+
+export default function WinnerTeamTable() {
+    return (
+        <>
+            <Row className="mb-2">
+                <Col xl={10} md={10} xs={12} className="mx-auto">
+                    <Row>
+                        <Col md={8} className="d-inline-flex">
+                    <Image src="https://web2.hirez.com/esports/teams/ghost-70x70.png" />
+                    <h4 className="font-weight-bold my-auto">Ghost Gaming</h4>
+                    </Col>
+                        <Col md={4} className="TotalKillsTop"><h6 className="font-weight-bold ml-auto mr-3">TOTAL KILLS: 50</h6></Col>
+                    </Row>
+                </Col>
+            </Row>
+            <Row>
+                <Col xl={10} md={10} xs={12} className="mx-auto">
+                    <Table responsive variant='' className='rounded-bottom text-center' id="TeamTable">
+                        <thead className="">
+                            <tr className="bg-danger">
+                                <th>God</th>
+                                <th>Player</th>
+                                <th className="KDAPadding">K/D/A</th>
+                                <th>Damage dealt</th>
+                                <th>Damage Taken</th>
+                                <th>Damage Mitigated</th>
+                                <th>Gold</th>
+                                <th>GPM</th>
+                                <th>Build</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr className="table-danger">
+                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="SSG" className="GodImg" /></td>
+                                <td className="">lolliepoep</td>
+                                <td>10 / 2 / 3</td>
+                                <td>23000</td>
+                                <td>12000</td>
+                                <td>8230</td>
+                                <td>15000</td>
+                                <td>670</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr className="table-danger2">
+                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
+                                <td className="">lolliepoep</td>
+                                <td>10 / 2 / 3</td>
+                                <td>23000</td>
+                                <td>12000</td>
+                                <td>8230</td>
+                                <td>15000</td>
+                                <td>670</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr className="table-danger">
+                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
+                                <td className="">lolliepoep</td>
+                                <td>10 / 2 / 3</td>
+                                <td>23000</td>
+                                <td>12000</td>
+                                <td>8230</td>
+                                <td>15000</td>
+                                <td>670</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr className="table-danger2">
+                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
+                                <td className="">lolliepoep</td>
+                                <td>10 / 2 / 3</td>
+                                <td>23000</td>
+                                <td>12000</td>
+                                <td>8230</td>
+                                <td>15000</td>
+                                <td>670</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr className="table-danger">
+                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
+                                <td className="">lolliepoep</td>
+                                <td>10 / 2 / 3</td>
+                                <td>23000</td>
+                                <td>12000</td>
+                                <td>8230</td>
+                                <td>15000</td>
+                                <td>670</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </Table>
+                </Col>
+            </Row>
+            <Row className="mb-2">
+                <Col xl={10} md={10} xs={12} className="mx-auto">
+                    <Row>
+                        <Col md={8} className="d-inline-flex">
+                            <h6 className="font-weight-bold my-auto mr-2 ml-3">BANS:</h6>
+                            <div className="d-inline-flex my-auto">
+                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                            </div>
+                        </Col>
+                        <Col md={4} className=""><h6 className="font-weight-bold ml-3">TOTAL GOLD: 89000</h6></Col>
+                    </Row>
+                </Col>
+            </Row>
+        </>
+    );
+}
