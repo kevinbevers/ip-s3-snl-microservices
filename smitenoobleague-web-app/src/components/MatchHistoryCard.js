@@ -18,14 +18,14 @@ export default function MatchHistoryCard(props){
             <Col md={5} className="p-0">
             <Row>
             <Col md={3} className="p-0"><Image src="https://web2.hirez.com/esports/teams/ssg-70x70.png" className="MhTeamImg"></Image></Col>
-    <Col md={9} className="my-auto"><h3>{props.team1_name}</h3></Col>
+    <Col md={9} className="my-auto"><h3 className="">{props.team1_name}</h3></Col>
             </Row>
             </Col>
             <Col md={2} className="my-auto"><h2>{props.total_score}</h2></Col>
             <Col md={5} className="p-0">
             <Row>    
-            <Col md={9} className="my-auto"><h3>{props.team2_name}</h3></Col>
-            <Col md={3} className="p-0"><Image src="http://via.placeholder.com/70x70" className="MhTeamImg"></Image></Col> 
+            <Col md={9} className="my-auto"><h3 className="">{props.team2_name}</h3></Col>
+            <Col md={3} className="p-0"><Image src="https://web2.hirez.com/esports/teams/ghost-70x70.png" className="MhTeamImg"></Image></Col> 
             </Row>
             </Col>
             </Row>

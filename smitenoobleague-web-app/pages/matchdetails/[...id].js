@@ -20,8 +20,9 @@ export default function matchdetails({ postData }) {
   return (
     <>
       <NavBar />
-      {postData}
-      <Container>
+      {/* {postData} */}
+      <Container className="mt-2">
+        <Row><Col className="mx-auto text-center"><h3 className="font-weight-bolder">Game 1</h3></Col></Row>
         {/* Team 1 */}
        <WinnerTeamTable />
         {/* Divider */}

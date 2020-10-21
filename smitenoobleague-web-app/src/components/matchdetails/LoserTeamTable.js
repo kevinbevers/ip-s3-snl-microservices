@@ -13,7 +13,7 @@ export default function WinnerTeamTable() {
                 <Col xl={10} md={10} xs={12} className="mx-auto">
                     <Row>
                         <Col md={8} className="d-inline-flex">
-                    <Image src="https://web2.hirez.com/esports/teams/ghost-70x70.png" />
+                    <Image src="https://web2.hirez.com/esports/teams/ghost-70x70.png" className="TeamLogo"/>
                     <h4 className="font-weight-bold my-auto">Ghost Gaming</h4>
                     </Col>
                         <Col md={4} className="TotalKillsTop"><h6 className="font-weight-bold ml-auto mr-3">TOTAL KILLS: 50</h6></Col>
@@ -154,7 +154,7 @@ export default function WinnerTeamTable() {
                                 <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
                             </div>
                         </Col>
-                        <Col md={4} className=""><h6 className="font-weight-bold ml-3">TOTAL GOLD: 89000</h6></Col>
+                        <Col md={4} className="TotalGoldBottom"><h6 className="font-weight-bold ml-3">TOTAL GOLD: 89000</h6></Col>
                     </Row>
                 </Col>
             </Row>

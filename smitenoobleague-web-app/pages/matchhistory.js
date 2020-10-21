@@ -17,12 +17,12 @@ export default function matchhistory() {
     <>
       <NavBar />
       <Container className="mt-4">
-        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Teamname'} matchID={5234534}/>
-        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Teamname'} matchID={5234534}/>
-        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Teamname'}/>
-        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Teamname'}/>
-        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Teamname'}/>
-        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Teamname'}/>
+        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Ghost gaming'} matchID={5234534}/>
+        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Ghost gaming'} matchID={5234534}/>
+        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Ghost gaming'}/>
+        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Ghost gaming'}/>
+        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Ghost gaming'}/>
+        <MatchHistoryCard team1_name={'Spacestation Gaming'} total_score={'2 - 0'} team2_name={'Ghost gaming'}/>
         <Card className="text-center mb-2">
           <a href="#" className="link-unstyled">
             <Card.Header><h4 className="m-0">Load more matches...</h4></Card.Header>
