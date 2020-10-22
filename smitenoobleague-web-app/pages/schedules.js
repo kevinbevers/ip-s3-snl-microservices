@@ -58,10 +58,10 @@ export default function schedules() {
           <Col md={3}></Col>
           <Col md={6} className="d-inline-flex justify-content-center">
             {/* show previous button if we are not on first element */}
-            {count > 0 && <Button variant="secondary" onClick={() => setCount(count - 1)}>prev</Button> || <Button variant="secondary" disabled onClick={() => setCount(count - 1)}>prev</Button>}
+            {count > 0 && <Button variant="primary" onClick={() => setCount(count - 1)}>prev</Button> || <Button variant="primary" disabled onClick={() => setCount(count - 1)}>prev</Button>}
             <h4 className="ml-2 mr-2 mb-0 align-self-center font-weight-bold">Schedule Week {count + 1}</h4>
             {/* hide next button if we are at the last element */}
-            {count < components.length - 1 && <Button variant="secondary" onClick={() => setCount(count + 1)}>next</Button> || <Button variant="secondary" disabled onClick={() => setCount(count + 1)}>next</Button>}
+            {count < components.length - 1 && <Button variant="primary" onClick={() => setCount(count + 1)}>next</Button> || <Button variant="primary" disabled onClick={() => setCount(count + 1)}>next</Button>}
           </Col>
           <Col md={3}></Col>
         </Row>
