@@ -60,6 +60,29 @@
   height: 50px;
 }
 
+.NotPlayedText {
+  margin-top: 15%;
+  margin-bottom: 50%;
+}
+
+/* custom colors for the pill tabs */
+#pillNav .nav-link {
+  color: slategrey;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+#pillNav  .nav-link:hover {
+  color: darkslategrey;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+#pillNav .nav-link.active, .nav-pills .show>.nav-link {
+  color: #fff;
+  background-color: slategrey;
+}
+
 
   /* .table-striped>tbody>tr:nth-child(odd)>td, 
 .table-striped>tbody>tr:nth-child(odd)>th {

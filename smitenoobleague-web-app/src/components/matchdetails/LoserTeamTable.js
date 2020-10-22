@@ -10,7 +10,7 @@ export default function WinnerTeamTable() {
     return (
         <>
             <Row className="mb-2">
-                <Col xl={10} md={10} xs={12} className="mx-auto">
+                <Col xl={12} md={12} xs={12} className="mx-auto">
                     <Row>
                         <Col md={8} className="d-inline-flex">
                     <Image src="https://web2.hirez.com/esports/teams/ghost-70x70.png" className="TeamLogo"/>
@@ -21,24 +21,25 @@ export default function WinnerTeamTable() {
                 </Col>
             </Row>
             <Row>
-                <Col xl={10} md={10} xs={12} className="mx-auto">
+                <Col xl={12} md={12} xs={12} className="mx-auto">
                     <Table responsive variant='' className='rounded-bottom text-center' id="TeamTable">
                         <thead className="">
                             <tr className="bg-danger">
-                                <th>God</th>
+                            <th>God</th>
                                 <th>Player</th>
                                 <th className="KDAPadding">K/D/A</th>
-                                <th>Damage dealt</th>
-                                <th>Damage Taken</th>
-                                <th>Damage Mitigated</th>
+                                <th>DMG</th>
+                                <th>Taken</th>
+                                <th>Mitigated</th>
                                 <th>Gold</th>
                                 <th>GPM</th>
+                                <th>Relics</th>
                                 <th>Build</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr className="table-danger">
-                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="SSG" className="GodImg" /></td>
+                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
                                 <td className="">lolliepoep</td>
                                 <td>10 / 2 / 3</td>
                                 <td>23000</td>
@@ -46,6 +47,12 @@ export default function WinnerTeamTable() {
                                 <td>8230</td>
                                 <td>15000</td>
                                 <td>670</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                    </div>
+                                </td>
                                 <td className="">
                                     <div className="d-inline-flex">
                                         <FaBox className="mr-1" />
@@ -70,6 +77,12 @@ export default function WinnerTeamTable() {
                                     <div className="d-inline-flex">
                                         <FaBox className="mr-1" />
                                         <FaBox className="mr-1" />
+                                    </div>
+                                </td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
                                         <FaBox className="mr-1" />
                                         <FaBox className="mr-1" />
                                         <FaBox className="mr-1" />
@@ -86,6 +99,12 @@ export default function WinnerTeamTable() {
                                 <td>8230</td>
                                 <td>15000</td>
                                 <td>670</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                    </div>
+                                </td>
                                 <td className="">
                                     <div className="d-inline-flex">
                                         <FaBox className="mr-1" />
@@ -110,6 +129,12 @@ export default function WinnerTeamTable() {
                                     <div className="d-inline-flex">
                                         <FaBox className="mr-1" />
                                         <FaBox className="mr-1" />
+                                    </div>
+                                </td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
                                         <FaBox className="mr-1" />
                                         <FaBox className="mr-1" />
                                         <FaBox className="mr-1" />
@@ -126,6 +151,12 @@ export default function WinnerTeamTable() {
                                 <td>8230</td>
                                 <td>15000</td>
                                 <td>670</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <FaBox className="mr-1" />
+                                        <FaBox className="mr-1" />
+                                    </div>
+                                </td>
                                 <td className="">
                                     <div className="d-inline-flex">
                                         <FaBox className="mr-1" />
@@ -142,7 +173,7 @@ export default function WinnerTeamTable() {
                 </Col>
             </Row>
             <Row className="mb-2">
-                <Col xl={10} md={10} xs={12} className="mx-auto">
+                <Col xl={12} md={12} xs={12} className="mx-auto">
                     <Row>
                         <Col md={8} className="d-inline-flex">
                             <h6 className="font-weight-bold my-auto mr-2 ml-3">BANS:</h6>
@@ -154,7 +185,7 @@ export default function WinnerTeamTable() {
                                 <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
                             </div>
                         </Col>
-                        <Col md={4} className="TotalGoldBottom"><h6 className="font-weight-bold ml-3">TOTAL GOLD: 89000</h6></Col>
+                        <Col md={4} className="TotalGoldBottom"><h6 className="font-weight-bold mr-3">TOTAL GOLD: 89000</h6></Col>
                     </Row>
                 </Col>
             </Row>
