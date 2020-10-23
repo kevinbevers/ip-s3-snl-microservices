@@ -1,0 +1,29 @@
+.MainTeamImage {
+    max-height: 100px;
+    height: 100px;
+}
+
+.TeamStatTitle {
+    font-size: 3vw;
+    font-weight: 700;
+}
+
+.RecentPerformanceTitle {
+    font-size: 1.5vw;
+    font-weight: 700;
+}
+
+.TeamBannerStats {
+    font-size: 1.5vw;
+}
+
+
+@media (max-width: 767px) {
+    .TeamStatTitle {
+        font-size: 6vw;
+        font-weight: 700;
+    }
+    .TeamBannerStats {
+        font-size: 2vw;
+    }
+  }

@@ -1,0 +1,91 @@
+//default react imports
+import React, { useState } from 'react';
+//default page stuff
+import NavBar from 'src/components/NavBar';
+import Footer from 'src/components/Footer';
+//boostrap components
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
+import {  } from 'react-bootstrap';
+//icons
+import { FaBox } from 'react-icons/fa';
+//custom components
+
+export default function TeamStat({ postData }) {
+  return (
+    <>
+      <NavBar />
+      {/* {postData} */}
+      <Container fluid className="mt-4">
+          <Row>
+              <Col md={2} xl={1} xs={3} className="align-items-center">
+                  <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage"></Image>
+              </Col>
+              <Col md={7} xl={8} xs={9} className="pb-0 my-auto">
+              <Row className="">
+                  <Col md={12} className=""> <h3 className="TeamStatTitle">Spacestation Gaming</h3></Col>
+              </Row>
+              <Row>
+                <Col md={12} xl={10} xs={12} className="">
+                    <Row>
+                    <Col className="pr-0"><h5 className="mb-0 TeamBannerStats"><b>Games played:</b> 5000</h5></Col>
+                    <Col className="pl-0 pr-0"><h5 className="mb-0 TeamBannerStats"><b>Win percentage:</b> 100%</h5></Col>
+                    <Col className="pl-0 pr-0"><h5 className="mb-0 TeamBannerStats"><b>Current division:</b> Godlike</h5></Col>
+                    </Row>
+                </Col>
+              </Row>
+              </Col>
+              <Col md={3} xl={3} xs={12} className="">
+                 <Row>
+                     <Col md={12} className="text-center"><h5 className="RecentPerformanceTitle">Recent peformance chart</h5></Col>
+                 </Row>
+                 <Row className="text-center">
+                     <Col>CHARTBOX HERE</Col>
+                 </Row>
+             </Col>
+              
+            </Row>
+      </Container>
+      <Footer />
+    </>
+  );
+
+}
+
+export async function getStaticPaths() {
+  // Return a list of possible values for id
+  const paths = [
+    {
+      params: {
+        id: '2345'
+      }
+    },
+    {
+      params: {
+        id: '1234'
+      }
+    },
+    {
+      params: {
+        id: '1234'
+      }
+    }
+  ];
+  return {
+    paths,
+    fallback: false
+  }
+}
+
+export async function getStaticProps({ params }) {
+  // Fetch necessary data for the blog post using params.id
+  const postData = params.id;
+  return {
+    props: {
+      postData
+    }
+  }
+}
