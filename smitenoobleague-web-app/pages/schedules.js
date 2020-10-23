@@ -66,14 +66,14 @@ export default function schedules() {
           <Col md={3}></Col>
         </Row>
         <Row className="mt-2">
-          <Col md={2}></Col>
-          <Col md={8} className="text-center">
+          <Col md={1} xl={2}></Col>
+          <Col md={10} xl={8} className="text-center">
             {
               // render component from our components array
               components[count]
             }
           </Col>
-          <Col md={2}></Col>
+          <Col md={1} xl={2}></Col>
         </Row>
       </Container>
       <Footer />
