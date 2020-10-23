@@ -27,7 +27,7 @@ The web-app uses the following *npm* packages
 | Next-optimized-images | [Next optimized images README][NextOptDoc] |
 | Next-compose-plugins | [Next compose plugins README][NextComDoc] |
 | react-icons | [React icons plugins README][ReactIconDoc] |
-| react-chartjs-2 | [React charts README] [ReactChartDoc] |
+| react-chartjs-2 | [React charts README][ReactChartDoc] |
 
 
 ### Release installation
