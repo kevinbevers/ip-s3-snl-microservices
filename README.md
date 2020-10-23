@@ -27,6 +27,7 @@ The web-app uses the following *npm* packages
 | Next-optimized-images | [Next optimized images README][NextOptDoc] |
 | Next-compose-plugins | [Next compose plugins README][NextComDoc] |
 | react-icons | [React icons plugins README][ReactIconDoc] |
+| react-chartjs-2 | [React charts README] [ReactChartDoc] |
 
 
 ### Release installation
@@ -46,6 +47,7 @@ $ npm install react-bootstrap bootstrap
 $ npm install next-optimized-images@canary
 $ npm install --save next-compose-plugins
 $ npm install react-icons --save
+$ npm install --save react-chartjs-2 chart.js
 ```
 >Finally run the app:
 ```bash
@@ -70,4 +72,5 @@ $ npm run dev
    [NextOptDoc]: <https://github.com/cyrilwanner/next-optimized-images/blob/master/README.md>
    [NextComDoc]: <https://github.com/cyrilwanner/next-compose-plugins/blob/master/README.md>
    [ReactIconDoc]: <https://github.com/react-icons/react-icons/blob/master/README.md>
+   [ReactChartDoc]: <https://github.com/jerairrest/react-chartjs-2/blob/master/README.md>
 
