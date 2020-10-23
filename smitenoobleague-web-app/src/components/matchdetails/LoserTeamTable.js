@@ -176,16 +176,16 @@ export default function WinnerTeamTable() {
                 <Col xl={12} md={12} xs={12} className="mx-auto">
                     <Row>
                         <Col md={8} className="d-inline-flex">
-                            <h6 className="font-weight-bold my-auto mr-2 ml-3">BANS:</h6>
-                            <div className="d-inline-flex my-auto">
-                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
-                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
-                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
-                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
-                                <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
-                            </div>
-                        </Col>
-                        <Col md={4} className="TotalGoldBottom"><h6 className="font-weight-bold mr-3">TOTAL GOLD: 89000</h6></Col>
+                    <h6 className="font-weight-bold my-auto mr-2 ml-3">BANS:</h6>
+                    <div className="d-inline-flex my-auto">
+                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                    </div>
+                    </Col>
+                    <Col md={4} className="TotalGoldBottom"><h6 className="font-weight-bold ml-3 mr-3">TOTAL GOLD: 89000</h6></Col>
                     </Row>
                 </Col>
             </Row>

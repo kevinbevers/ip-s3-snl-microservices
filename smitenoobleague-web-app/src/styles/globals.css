@@ -1,6 +1,7 @@
 @import 'standing.css';
 @import 'matchdetails.css';
 @import 'teamstats.css';
+@import 'playerstats.css';
 
 html,
 body {
@@ -124,5 +125,4 @@ body {
 
 .MhTeamImg {
   height: 70px;
-  width: 70px;
 }
