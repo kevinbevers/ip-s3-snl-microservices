@@ -1,6 +1,6 @@
 .MainTeamImage {
-    max-height: 100px;
-    height: 100px;
+    max-height: 120px;
+    /* height: 100px; */
 }
 
 .TeamStatTitle {
@@ -25,5 +25,13 @@
     }
     .TeamBannerStats {
         font-size: 2vw;
+    }
+    .RecentPerformanceTitle {
+        font-size: 4vw;
+        font-weight: 700;
+    }
+    .MainTeamImage {
+        max-height: 25vw;
+        /* height: 100px; */
     }
   }

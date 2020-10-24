@@ -12,15 +12,61 @@ import Image from 'react-bootstrap/Image';
 import {  } from 'react-bootstrap';
 //icons
 import { FaBox } from 'react-icons/fa';
+//chart
+import {Line} from 'react-chartjs-2';
 //custom components
 
 export default function TeamStat({ postData }) {
+
+    const data = {
+        labels: ['week 1','week 2','week 3', 'week 4','week 5'],
+        datasets: [
+          {
+            label: 'Win percentage',
+            fill: false,
+            order: 0,
+            lineTension: 0.1,
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            borderColor: 'rgba(75,192,192,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: [1,0,1,1,1,0,1,1,0]
+          }
+        ]
+      };
+
+      const legendOpts = {
+        display: false,
+      };
+
+      const options = {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 1
+                }
+            }]
+        }
+      };
+
   return (
     <>
       <NavBar />
       {/* {postData} */}
-      <Container fluid className="mt-4">
-          <Row>
+      <Container fluid className="mt-2">
+          <Row className="">
               <Col md={2} xl={1} xs={3} className="align-items-center">
                   <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage"></Image>
               </Col>
@@ -43,10 +89,12 @@ export default function TeamStat({ postData }) {
                      <Col md={12} className="text-center"><h5 className="RecentPerformanceTitle">Recent peformance chart</h5></Col>
                  </Row>
                  <Row className="text-center">
-                     <Col>CHARTBOX HERE</Col>
+                     <Col><Line data={data} legend={legendOpts} height={100} options={options} /></Col>
                  </Row>
-             </Col>
-              
+             </Col> 
+            </Row>
+            <Row>
+                <Col><hr /></Col>
             </Row>
       </Container>
       <Footer />
