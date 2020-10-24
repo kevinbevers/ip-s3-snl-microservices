@@ -67,7 +67,7 @@ export default function TeamStat({ postData }) {
       {/* {postData} */}
       <Container fluid className="mt-2">
           <Row className="">
-              <Col md={2} xl={1} xs={3} className="align-items-center">
+              <Col md={2} xl={1} xs={3} className="my-auto">
                   <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage"></Image>
               </Col>
               <Col md={7} xl={8} xs={9} className="pb-0 my-auto">
