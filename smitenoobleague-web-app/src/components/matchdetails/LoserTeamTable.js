@@ -39,7 +39,7 @@ export default function WinnerTeamTable() {
                         </thead>
                         <tbody>
                             <tr className="table-danger">
-                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
+                            <td><Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" rounded/></td>
                                 <td className="">lolliepoep</td>
                                 <td>10 / 2 / 3</td>
                                 <td>23000</td>
@@ -65,7 +65,7 @@ export default function WinnerTeamTable() {
                                 </td>
                             </tr>
                             <tr className="table-danger2">
-                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
+                                <td><Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" rounded/></td>
                                 <td className="">lolliepoep</td>
                                 <td>10 / 2 / 3</td>
                                 <td>23000</td>
@@ -91,7 +91,7 @@ export default function WinnerTeamTable() {
                                 </td>
                             </tr>
                             <tr className="table-danger">
-                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
+                                <td><Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" rounded/></td>
                                 <td className="">lolliepoep</td>
                                 <td>10 / 2 / 3</td>
                                 <td>23000</td>
@@ -117,7 +117,7 @@ export default function WinnerTeamTable() {
                                 </td>
                             </tr>
                             <tr className="table-danger2">
-                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
+                                <td><Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" rounded/></td>
                                 <td className="">lolliepoep</td>
                                 <td>10 / 2 / 3</td>
                                 <td>23000</td>
@@ -178,11 +178,11 @@ export default function WinnerTeamTable() {
                         <Col md={8} className="d-inline-flex">
                     <h6 className="font-weight-bold my-auto mr-2 ml-3">BANS:</h6>
                     <div className="d-inline-flex my-auto">
-                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
-                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
-                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
-                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
-                        <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" />
+                    <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" rounded/>
+                        <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" rounded/>
+                        <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" rounded/>
+                        <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" rounded/>
+                        <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg mr-1" rounded/>
                     </div>
                     </Col>
                     <Col md={4} className="TotalGoldBottom"><h6 className="font-weight-bold ml-3 mr-3">TOTAL GOLD: 89000</h6></Col>

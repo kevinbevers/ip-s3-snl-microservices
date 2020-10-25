@@ -61,7 +61,7 @@ export default function matchdetails({ postData }) {
                     <h6><b>Total kills:</b> 100</h6>
                     <h6><b>Total Distance traveled:</b> 200000 units</h6>
                     <h6><b>Objectives taken:</b> 7</h6>
-                    <h6><b>MVP:</b> <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="SSG" className="GodImg" /> lolliepoep</h6>
+                    <h6><b>MVP:</b> <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="SSG" className="GodImg" rounded/> lolliepoep</h6>
                     <p className="mb-0">A little text describing the game, possibly auto generated.</p>
                   </Alert>
                 </Col>
@@ -86,7 +86,7 @@ export default function matchdetails({ postData }) {
                     <h6><b>Total kills:</b> 100</h6>
                     <h6><b>Total Distance traveled:</b> 200000 units</h6>
                     <h6><b>Objectives taken:</b> 7</h6>
-                    <h6><b>MVP:</b> <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="SSG" className="GodImg" /> lolliepoep</h6>
+                    <h6><b>MVP:</b> <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="SSG" className="GodImg" rounded/> lolliepoep</h6>
                     <p className="mb-0">A little text describing the game, possibly auto generated.</p>
                   </Alert>
                 </Col>
