@@ -111,31 +111,31 @@ export default function TeamStat({ postData }) {
                     <Col><h2 className="font-weight-bold StatTitle">GENERAL STATS</h2></Col>
                     </Row>
                     <Row className="mb-2">
-                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team kills:</h4></Col>
+                    <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team kills:</h4></Col>
                     <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
                     </Row>
                     <Row className="mb-2">
-                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team deaths:</h4></Col>
+                    <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team deaths:</h4></Col>
                     <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
                     </Row>
                     <Row className="mb-2">
-                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team assists:</h4></Col>
+                    <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team assists:</h4></Col>
                     <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
                     </Row>
                     <Row className="mb-2">
-                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage dealt:</h4></Col>
+                    <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage dealt:</h4></Col>
                     <Col className=""><h4 className="StatNumbers">1.000.000.000</h4></Col>
                     </Row>
                     <Row className="mb-2">
-                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage taken:</h4></Col>
+                    <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage taken:</h4></Col>
                     <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
                     </Row>
                     <Row className="mb-2">
-                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage mitigated:</h4></Col>
+                    <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage mitigated:</h4></Col>
                     <Col className=""><h4 className="StatNumbers">1.999.999.999</h4></Col>
                     </Row>
                     <Row className="mb-2">
-                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team healing:</h4></Col>
+                    <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team healing:</h4></Col>
                     <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
                     </Row>
                 </Col>
@@ -171,7 +171,7 @@ export default function TeamStat({ postData }) {
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" />
-                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>
                 <Row>
@@ -185,31 +185,31 @@ export default function TeamStat({ postData }) {
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Solo_Logo.png" className="GodImgStats mr-2" />
-                        <h3 className="my-auto StatSubTitle">verylonglonglongname</h3><Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge>
+                        <h3 className="my-auto RecentTeamPlayerName">verylonglonglongname</h3><Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge>
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" />
-                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Mid_Logo.png" className="GodImgStats mr-2" />
-                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Support_Logo.png" className="GodImgStats mr-2" />
-                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Adc_Logo.png" className="GodImgStats mr-2" />
-                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>
                 </Col>
