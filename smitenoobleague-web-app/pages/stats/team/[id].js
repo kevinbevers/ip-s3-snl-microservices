@@ -8,14 +8,13 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Badge, Image, Modal } from 'react-bootstrap';
+import { Badge, Image, Modal, Button } from 'react-bootstrap';
 //icons
 import { FaBox, FaInfoCircle } from 'react-icons/fa';
 //chart
 import {Line} from 'react-chartjs-2';
 //custom components
 import RecentTeams from 'src/components/RecentTeams';
-import MatchHistoryCard from 'src/components/MatchHistoryCard';
 
 export default function TeamStat({ postData }) {
 
@@ -138,6 +137,12 @@ export default function TeamStat({ postData }) {
                     <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team healing:</h4></Col>
                     <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
                     </Row>
+                    <Row className="mb-4">
+                <Col className="text-center">
+                    {/* Link to pick percentages of team */}
+                <Button href="/stats/team/2345/pickpercentages" className="StatSubTitle">Click to see team pick percentages</Button>
+                </Col>
+                </Row>
                 </Col>
                 {/* Pick stats and Star player */}
                 <Col md={3} className="border-right">
@@ -173,9 +178,6 @@ export default function TeamStat({ postData }) {
                         <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" />
                         <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
-                </Row>
-                <Row>
-
                 </Row>
                
                 </Col >
