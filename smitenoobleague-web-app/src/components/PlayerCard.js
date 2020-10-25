@@ -17,7 +17,7 @@ export default function PlayerCard(){
             <Row className="">
               <Col md={12} className="p-0 mx-auto">
                 <Row>
-                  <Col md={2} className="p-0 align-items-left"><Image src="https://static.wikia.nocookie.net/smite_gamepedia/images/1/19/NewUI_Class_Assassin.png/revision/latest?cb=20180923035640&format=original" className="MhTeamImg"></Image></Col>
+                  <Col md={2} className="p-0 align-items-left"><Image src="/images/roles/Jungle_Logo.png" className="MhTeamImg"></Image></Col>
                   <Col md={5} className="my-auto pl-0 pr-0"><h3 className="text-center mb-0">lolliepoep</h3>
                   </Col>
                   <Col md={5} className="pl-0 my-auto d-flex justify-content-center">

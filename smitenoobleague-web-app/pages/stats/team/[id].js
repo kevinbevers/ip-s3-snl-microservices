@@ -8,21 +8,23 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
-import {  } from 'react-bootstrap';
+import { Badge, Image, Modal } from 'react-bootstrap';
 //icons
-import { FaBox } from 'react-icons/fa';
+import { FaBox, FaInfoCircle } from 'react-icons/fa';
 //chart
 import {Line} from 'react-chartjs-2';
 //custom components
+import RecentTeams from 'src/components/RecentTeams';
+import MatchHistoryCard from 'src/components/MatchHistoryCard';
 
 export default function TeamStat({ postData }) {
 
+    // RPP recent peformance points. a calculation done in the back-end based on gametime, kills, win or loss, gold earned and a few more stats. combined into a algorithm
     const data = {
         labels: ['week 1','week 2','week 3', 'week 4','week 5'],
         datasets: [
           {
-            label: 'Win percentage',
+            label: 'Recent peformance points',
             fill: false,
             order: 0,
             lineTension: 0.1,
@@ -41,7 +43,7 @@ export default function TeamStat({ postData }) {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [1,0,1,1,1,0,1,1,0]
+            data: [2450,2300,2600,2000,2100,2230,2300,2400,2600]
           }
         ]
       };
@@ -55,17 +57,21 @@ export default function TeamStat({ postData }) {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-                    stepSize: 1
+                    stepSize: 500,
+                    suggestedMax: 3000,
                 }
             }]
         }
       };
+// Modal for info about linechart
+      const [rppShow, setRPPShow] = useState(false);
 
   return (
     <>
       <NavBar />
       {/* {postData} */}
       <Container fluid className="mt-2">
+          {/* Team Header */}
           <Row className="">
               <Col md={2} xl={1} xs={3} className="my-auto">
                   <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage"></Image>
@@ -86,9 +92,10 @@ export default function TeamStat({ postData }) {
               </Col>
               <Col md={3} xl={3} xs={12} className="">
                  <Row>
-                     <Col md={12} className="text-center"><h5 className="RecentPerformanceTitle">Recent peformance chart</h5></Col>
+                     <Col md={12} className="text-center"><h5 className="RecentPerformanceTitle">Recent peformance chart <a href="#" onClick={() => setRPPShow(true)} className="link-unstyled"><FaInfoCircle /></a></h5></Col>
                  </Row>
                  <Row className="text-center">
+                     {/* Chart.JS Line graph */}
                      <Col><Line data={data} legend={legendOpts} height={100} options={options} /></Col>
                  </Row>
              </Col> 
@@ -96,8 +103,154 @@ export default function TeamStat({ postData }) {
             <Row>
                 <Col><hr /></Col>
             </Row>
+            {/* Team Stats */}
+            <Row className="mt-3">
+                {/* General stats */}
+                <Col md={4} className="border-right">
+                    <Row className="mb-2">
+                    <Col><h2 className="font-weight-bold StatTitle">GENERAL STATS</h2></Col>
+                    </Row>
+                    <Row className="mb-2">
+                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team kills:</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    </Row>
+                    <Row className="mb-2">
+                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team deaths:</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    </Row>
+                    <Row className="mb-2">
+                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team assists:</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    </Row>
+                    <Row className="mb-2">
+                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage dealt:</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">1.000.000.000</h4></Col>
+                    </Row>
+                    <Row className="mb-2">
+                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage taken:</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    </Row>
+                    <Row className="mb-2">
+                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage mitigated:</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">1.999.999.999</h4></Col>
+                    </Row>
+                    <Row className="mb-2">
+                    <Col md={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team healing:</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    </Row>
+                </Col>
+                {/* Pick stats and Star player */}
+                <Col md={3} className="border-right">
+                <Row className="">
+                    <Col><h2 className="font-weight-bold StatTitle">MOST PLAYED</h2></Col>
+                </Row>
+                <Row className="mb-4">
+                    <Col>
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    </Col>
+                </Row>
+                <Row className="">
+                    <Col><h2 className="font-weight-bold StatTitle">MOST BANNED</h2></Col>
+                </Row>
+                <Row className="mb-4">
+                    <Col>
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    <img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" />
+                    </Col>
+                </Row>
+                <Row className="">
+                    <Col><h2 className="font-weight-bold StatTitle">STAR PLAYER</h2></Col>
+                </Row>
+                <Row className="mb-4">
+                    <Col className="d-flex">
+                        <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" />
+                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                    </Col>
+                </Row>
+                <Row>
+
+                </Row>
+               
+                </Col >
+                {/* Roster */}
+                <Col md={3} className="border-right">
+                <h2 className="font-weight-bold StatTitle">ROSTER</h2>
+                <Row className="mb-4">
+                    <Col className="d-flex">
+                        <img src="/images/roles/Solo_Logo.png" className="GodImgStats mr-2" />
+                        <h3 className="my-auto StatSubTitle">verylonglonglongname</h3><Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge>
+                    </Col>
+                </Row>
+                <Row className="mb-4">
+                    <Col className="d-flex">
+                        <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" />
+                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                    </Col>
+                </Row>
+                <Row className="mb-4">
+                    <Col className="d-flex">
+                        <img src="/images/roles/Mid_Logo.png" className="GodImgStats mr-2" />
+                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                    </Col>
+                </Row>
+                <Row className="mb-4">
+                    <Col className="d-flex">
+                        <img src="/images/roles/Support_Logo.png" className="GodImgStats mr-2" />
+                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                    </Col>
+                </Row>
+                <Row className="mb-4">
+                    <Col className="d-flex">
+                        <img src="/images/roles/Adc_Logo.png" className="GodImgStats mr-2" />
+                        <h3 className="my-auto StatSubTitle">lolliepoep</h3>
+                    </Col>
+                </Row>
+                </Col>
+                {/* Recently played, no border right needed */}
+                <Col md={2} className=""> 
+                    <h2 className="font-weight-bold StatTitle">RECENTLY PLAYED</h2>
+                    <Row><Col><RecentTeams backgroundColor={'RecentTeamWinBackground'} /></Col></Row>
+                    <Row><Col><RecentTeams backgroundColor={'RecentTeamWinBackground'} /></Col></Row>
+                    <Row><Col><RecentTeams backgroundColor={'RecentTeamLossBackground'} /></Col></Row>
+                    <Row><Col><RecentTeams backgroundColor={'RecentTeamWinBackground'} /></Col></Row>
+                    <Row><Col><RecentTeams backgroundColor={'RecentTeamLossBackground'} /></Col></Row>
+                    
+                </Col>
+            </Row>
       </Container>
       <Footer />
+
+      <Modal
+        size=""
+        show={rppShow}
+        onHide={() => setRPPShow(false)}
+        aria-labelledby="rppModal"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="rppModalTitle">
+            Recent performance chart
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <p>This chart shows the recent peformance of a team, The Recent performance is based of RPP(recent performance points)</p>
+                <p>these points are calculated based on:</p> 
+                <ul>
+                <li>win or loss of a match</li> 
+                <li>Time played</li>
+                <li>Gold earned</li>
+                <li>KDA of team</li>
+                <li>Damage dealt</li> 
+                <li>Kill particpation</li>
+                </ul>
+            </Modal.Body>
+      </Modal>
     </>
   );
 

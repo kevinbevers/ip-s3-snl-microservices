@@ -18,6 +18,41 @@
     font-size: 1.5vw;
 }
 
+.GodImgStats {
+    height: 3.6vw;
+}
+
+.StatTitle {
+    font-size: 2vw;
+}
+
+.StatSubTitle {
+    font-size: 1.3vw;
+}
+
+.StatNumbers {
+    font-size: 1.1vw;
+}
+
+.StatBadge {
+    font-size: 0.8vw;
+}
+
+.RecentTeamTitle {
+    font-size: 0.8vw;
+}
+
+.RecentTeamLogo {
+    height: 2vw;
+}
+
+.RecentTeamWinBackground {
+    background: #c3e6cb;
+}
+
+.RecentTeamLossBackground {
+    background: #f5c6cb;
+}
 
 @media (max-width: 767px) {
     .TeamStatTitle {
