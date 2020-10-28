@@ -92,37 +92,37 @@ export default function PickPercentages({ postData }) {
 
 }
 
-export async function getStaticPaths() {
-  // Return a list of possible value for id
-  const paths = [
-    {
-      params: {
-        id: ['2345', 'pickpercentages']
-      }
-    },
-    {
-      params: {
-        id: ['1234', 'pickpercentages']
-      }
-    },
-    {
-      params: {
-        id: ['2345', 'pickpercentages']
-      }
-    }
-  ];
-  return {
-    paths,
-    fallback: false
-  }
-}
+// export async function getStaticPaths() {
+//   // Return a list of possible value for id
+//   const paths = [
+//     {
+//       params: {
+//         id: ['2345', 'pickpercentages']
+//       }
+//     },
+//     {
+//       params: {
+//         id: ['1234', 'pickpercentages']
+//       }
+//     },
+//     {
+//       params: {
+//         id: ['2345', 'pickpercentages']
+//       }
+//     }
+//   ];
+//   return {
+//     paths,
+//     fallback: false
+//   }
+// }
 
-export async function getStaticProps({ params }) {
-  // Fetch necessary data for the blog post using params.id
-  const postData = params.id;
-  return {
-    props: {
-      postData
-    }
-  }
-}
+// export async function getStaticProps({ params }) {
+//   // Fetch necessary data for the blog post using params.id
+//   const postData = params.id;
+//   return {
+//     props: {
+//       postData
+//     }
+//   }
+// }

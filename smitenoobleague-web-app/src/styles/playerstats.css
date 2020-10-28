@@ -1,3 +1,73 @@
 .SmallTeamImage {
     height: 30px;
 }
+
+.SmallRoleImage {
+    height: 30px;
+}
+
+.MainRoleImage {
+    /* max-height: 12vw; */
+    max-height: 120px;
+    /* height: 100px; */
+}
+
+.PlayerBannerStatTitle {
+    font-size: 1.4vw;
+}
+
+.PlayerBannerStatText {
+    font-size: 1.1vw;
+}
+
+.PlayerRecentPickImg {
+    height: 3vw;
+}
+
+.PlayerStatTitle {
+    font-size: 3vw;
+    font-weight: 700;
+}
+
+.PlayerStatTeamTitle {
+    font-size: 1.8vw;
+    font-weight: 700;
+}
+
+.PlayerBannerStats {
+    font-size: 1.5vw;
+}
+
+@media (max-width: 767px) {
+    .PlayerStatTitle {
+        font-size: 6vw;
+        font-weight: 700;
+    }
+    .PlayerStatTeamTitle {
+        font-size: 4vw;
+        font-weight: 700;
+    }
+    
+    .PlayerBannerStats {
+        font-size: 3vw;
+    }
+    .MainRoleImage {
+        max-height: 23vw;
+    }
+    .PlayerBannerStatTitle {
+        font-size: 2.6vw;
+    }
+    
+    .PlayerBannerStatText {
+        font-size: 2vw;
+    }
+    .PlayerRecentPickImg {
+        height: 8vw !important;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .PlayerRecentPickImg {
+        height: 5vw;
+    }
+   };

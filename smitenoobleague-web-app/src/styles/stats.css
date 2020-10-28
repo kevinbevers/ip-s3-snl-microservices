@@ -1,0 +1,41 @@
+.GodImgStats {
+    height: 3.6vw;
+}
+
+.StatTitle {
+    font-size: 2vw;
+}
+
+.StatSubTitle {
+    font-size: 1.3vw;
+}
+
+.StatNumbers {
+    font-size: 1.1vw;
+}
+
+.StatBadge {
+    font-size: 0.8vw;
+}
+
+  @media (max-width: 767px) {
+    .GodImgStats {
+        height: 16vw;
+    }
+    
+    .StatTitle {
+        font-size: 6.5vw;
+    }
+    
+    .StatSubTitle {
+        font-size: 4vw;
+    }
+    
+    .StatNumbers {
+        font-size: 3.6vw;
+    }
+    
+    .StatBadge {
+        font-size: 3vw;
+    }  
+  }

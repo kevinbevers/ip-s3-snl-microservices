@@ -3,6 +3,8 @@
 @import 'teamstats.css';
 @import 'playerstats.css';
 @import 'pickpercentage.css';
+@import 'stats.css';
+@import 'captain.css';
 
 html,
 body {
@@ -103,11 +105,6 @@ body {
 /*leaderboard page*/
 .LeaderboardCard {
   font-size: 0.8rem;
-}
-
-.piechart {
-  height: 150px;
-  width: 150px;
 }
 
 .newsimg {

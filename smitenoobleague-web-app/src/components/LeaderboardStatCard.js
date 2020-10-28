@@ -12,7 +12,7 @@ export default function LeaderboardStatCard(props){
 
     return (
 <Card className="mt-2 mb-2 mx-auto LeaderboardCard">
-    <Card.Header className="text-center LeaderBoardTitleText">{props.title}</Card.Header>
+    <Card.Header className="text-center LeaderBoardTitleText font-weight-bold">{props.title}</Card.Header>
                   <Row>
                     <Col className="pr-0">
                       <ListGroup variant="flush">

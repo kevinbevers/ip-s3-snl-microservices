@@ -3,7 +3,6 @@
     /* height: 100px; */
 }
 
-
 .TeamStatTitle {
     font-size: 3vw;
     font-weight: 700;
@@ -16,26 +15,6 @@
 
 .TeamBannerStats {
     font-size: 1.5vw;
-}
-
-.GodImgStats {
-    height: 3.6vw;
-}
-
-.StatTitle {
-    font-size: 2vw;
-}
-
-.StatSubTitle {
-    font-size: 1.3vw;
-}
-
-.StatNumbers {
-    font-size: 1.1vw;
-}
-
-.StatBadge {
-    font-size: 0.8vw;
 }
 
 .RecentTeamTitle {
@@ -72,32 +51,12 @@
         font-weight: 700;
     }
     .MainTeamImage {
-        max-height: 25vw;
+        max-height: 23vw;
         /* height: 100px; */
     }
   }
 
   @media (max-width: 767px) {
-    .GodImgStats {
-        height: 16vw;
-    }
-    
-    .StatTitle {
-        font-size: 6.5vw;
-    }
-    
-    .StatSubTitle {
-        font-size: 4vw;
-    }
-    
-    .StatNumbers {
-        font-size: 3.6vw;
-    }
-    
-    .StatBadge {
-        font-size: 3vw;
-    }
-    
     .RecentTeamTitle {
         font-size: 4vw;
     }
