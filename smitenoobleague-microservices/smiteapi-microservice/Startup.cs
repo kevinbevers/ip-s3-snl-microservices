@@ -10,11 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-//Ocelot imports
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
 
-namespace ocelot_api_gateway
+namespace smiteapi_microservice
 {
     public class Startup
     {
@@ -29,11 +26,10 @@ namespace ocelot_api_gateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddOcelot(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -50,8 +46,6 @@ namespace ocelot_api_gateway
             {
                 endpoints.MapControllers();
             });
-
-            await app.UseOcelot();
         }
     }
 }

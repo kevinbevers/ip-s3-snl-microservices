@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace ocelot_api_gateway.Controllers
+namespace smiteapi_microservice.Controllers
 {
     [ApiController]
     [Route("[controller]")]
