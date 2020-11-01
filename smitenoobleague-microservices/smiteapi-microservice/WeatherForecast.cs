@@ -1,6 +1,6 @@
 using System;
 
-namespace ocelot_api_gateway
+namespace smiteapi_microservice
 {
     public class WeatherForecast
     {

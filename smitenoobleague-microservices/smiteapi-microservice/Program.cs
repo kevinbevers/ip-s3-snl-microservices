@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace ocelot_api_gateway
+namespace smiteapi_microservice
 {
     public class Program
     {
@@ -18,11 +18,6 @@ namespace ocelot_api_gateway
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((Host, config) =>  {
-                    var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-                    config.AddJsonFile("ocelot.json");
-                    config.AddJsonFile($"ocelot.{env}.json");
-                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
