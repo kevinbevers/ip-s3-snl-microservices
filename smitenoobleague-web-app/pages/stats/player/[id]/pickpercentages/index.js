@@ -44,7 +44,7 @@ export default function PickPercentages({ postData }) {
             <Row className="mb-4">
               <Col md={4} xs={4}></Col>
               <Col md={8} xs={8}>
-                <Button href="/stats/team/2345" className="w-100"><div className="d-flex text-center justify-content-center"><FaReply className="mr-2 my-auto" /><h5 className="my-auto BackButtonText">Back to player stats</h5></div></Button>
+                <Button href="/stats/player/343532" className="w-100"><div className="d-flex text-center justify-content-center"><FaReply className="mr-2 my-auto" /><h5 className="my-auto BackButtonText">Back to player stats</h5></div></Button>
               </Col>
             </Row>
             <Row>

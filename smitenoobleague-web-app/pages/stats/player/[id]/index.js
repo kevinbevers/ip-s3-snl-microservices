@@ -16,7 +16,7 @@ import {Doughnut, Pie} from 'react-chartjs-2';
 //custom components
 
 
-export default function TeamStat({ postData }) {
+export default function PlayerStat({ postData }) {
 
     const data = {
         labels: [
@@ -242,7 +242,7 @@ export default function TeamStat({ postData }) {
                 <Row className="">
                     <Col className="mb-2">
                     {/* Doughnut chart */}
-                        <Doughnut data={data} height={75} width={75} options={options}/>
+                        <Doughnut data={data} height={14} width={20} options={options}/>
                     </Col>
                 </Row>
                 </Col>
