@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using smiteapi_microservice.Classes;
 
 namespace smiteapi_microservice.Controllers
 {
+    [ServiceFilter(typeof(GatewayOnly))]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -21,18 +24,19 @@ namespace smiteapi_microservice.Controllers
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
-        }
 
+        }
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+           
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
+                Summary = Summaries[rng.Next(Summaries.Length)],
+        })
             .ToArray();
         }
     }
