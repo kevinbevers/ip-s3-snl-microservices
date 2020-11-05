@@ -275,3 +275,6 @@ __pycache__/
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
 smitenoobleague-microservices/ocelot-api-gateway/appsettings.Development.json
 smitenoobleague-microservices/ocelot-api-gateway/appsettings.json
+smitenoobleague-microservices/ocelot-api-gateway/ocelot.json
+smitenoobleague-microservices/smiteapi-microservice/appsettings.Development.json
+smitenoobleague-microservices/smiteapi-microservice/appsettings.json
