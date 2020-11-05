@@ -278,3 +278,5 @@ smitenoobleague-microservices/ocelot-api-gateway/appsettings.json
 smitenoobleague-microservices/ocelot-api-gateway/ocelot.json
 smitenoobleague-microservices/smiteapi-microservice/appsettings.Development.json
 smitenoobleague-microservices/smiteapi-microservice/appsettings.json
+appsettings.json
+ocelot.json
