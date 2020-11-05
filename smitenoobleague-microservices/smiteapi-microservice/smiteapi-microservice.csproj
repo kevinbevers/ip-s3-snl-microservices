@@ -6,4 +6,7 @@
   </PropertyGroup>
 
 
+  <ItemGroup>
+    <Folder Include="Classes\" />
+  </ItemGroup>
 </Project>

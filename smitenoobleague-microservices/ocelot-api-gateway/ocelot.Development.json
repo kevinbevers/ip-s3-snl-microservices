@@ -1,17 +1,20 @@
 {
     "Routes": [
-        {
-            "DownstreamPathTemplate": "/weatherforecast",
-            "DownstreamScheme": "https",
-            "DownstreamHostAndPorts": [
-                    {
-                        "Host": "localhost",
-                        "Port": 5001
-                    }
-                ],
-            "UpstreamPathTemplate": "/smiteapi/weather",
-            "UpstreamHttpMethod": [ "Get" ]
-        }
+      {
+        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5001
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/smiteapi/weather",
+        "UpstreamHttpMethod": [ "Get" ]
+      }
     ],
     "GlobalConfiguration": {
         "BaseUrl": "https://localhost:5000"
