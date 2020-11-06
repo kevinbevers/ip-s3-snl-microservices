@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using smiteapi_microservice.Interfaces;
+using smiteapi_microservice.Internal_Models;
+using smiteapi_microservice.External_Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,36 +16,53 @@ namespace smiteapi_microservice.Controllers
     [Route("[controller]")]
     public class SmiteApiController : Controller
     {
-        // GET: api/values
+        private IHirezApiService hirezApiService;
+
+        public SmiteApiController(IHirezApiService apiService)
+        {
+            hirezApiService = apiService;
+        }
+        // GET: /getpatchinfo
+        [Route("getpatchinfo")]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<string> GetPatchInfo()
         {
-            return new string[] { "value1", "value2" };
+            return await hirezApiService.GetCurrentPatchInfoAsync();
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET /getmatchdetails/1097729213
+        [Route("getmatchdetails/{gameID}")]
+        [HttpGet]
+        public async Task<Match> GetMatchDetails(int gameID)
         {
-            return "value";
+            return await hirezApiService.GetMatchDetailsAsync(gameID);
         }
 
-        // POST api/values
+        // POST /getmatchdetails/1097729213
+        [Route("savematchtostats")]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> SaveMatchToStats(Match match)
         {
+            Match matchData = await hirezApiService.GetMatchDetailsAsync(match.GameID);
+
+           
+
+            if (matchData.PlayerStats.Count() == 10)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // GET /getmatchdetails/1097729213
+        [Route("searchplayerbyname/{playername}")]
+        [HttpGet]
+        public async Task<IEnumerable<Player>> SearchPlayerByName(string playername)
         {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return await hirezApiService.SearchPlayersByNameAsync(playername);
         }
     }
 }
