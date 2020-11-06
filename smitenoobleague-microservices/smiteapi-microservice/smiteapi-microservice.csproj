@@ -8,5 +8,23 @@
 
   <ItemGroup>
     <Folder Include="Classes\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Contexts\" />
+    <Folder Include="Internal_Models\" />
+    <Folder Include="Services\" />
+    <Folder Include="Config\" />
+    <Folder Include="External_Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="SNL_DataAccessLayer\obj\project.assets.json" />
+    <Content Remove="SNL_DataAccessLayer\obj\SNL_DataAccessLayer.csproj.nuget.dgspec.json" />
+    <Content Remove="SNL_DataAccessLayer\obj\SNL_PersistenceLayer.csproj.nuget.dgspec.json" />
+    <Content Remove="SNL_LogicLayer\bin\Debug\netcoreapp3.1\SNL_LogicLayer.deps.json" />
+    <Content Remove="SNL_LogicLayer\obj\project.assets.json" />
+    <Content Remove="SNL_LogicLayer\obj\SNL_CoreLayer.csproj.nuget.dgspec.json" />
+    <Content Remove="SNL_LogicLayer\obj\SNL_LogicLayer.csproj.nuget.dgspec.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 </Project>
