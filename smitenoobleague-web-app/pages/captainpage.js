@@ -7,6 +7,12 @@ import Footer from '../src/components/Footer';
 import {Container, Row, Col, Form, Card, Button, Image, Badge} from 'react-bootstrap';
 //custom imports
 import {FaEdit, FaCheck, FaBan} from 'react-icons/fa';
+//importing images
+import Jungle from 'public/images/roles/Jungle_Logo.png';
+import Solo from 'public/images/roles/Solo_Logo.png';
+import Support from 'public/images/roles/Support_Logo.png';
+import Mid from 'public/images/roles/Mid_Logo.png';
+import Adc from 'public/images/roles/Adc_Logo.png';
 
 export default function captainpage() {
     return (
@@ -69,26 +75,26 @@ export default function captainpage() {
                       <Row><Col><h2 className="font-weight-bold">MANAGE TEAM</h2></Col></Row>
                       <Row className="mb-2">
                         <Col md={9} xs={12} className="d-flex">
-                          <Image src="images/roles/Solo_Logo.png" className="PlayerRole my-auto mr-2"></Image>
+                          <Image src={Solo} className="PlayerRole my-auto mr-2"></Image>
                           <h4 className="my-auto font-weight-bold p-2">lolliepoep <Badge variant="secondary">Captain</Badge></h4>
                           </Col>
                         <Col className="my-auto"><Button className="" variant="primary" size="lg" block>Edit</Button></Col>
                       </Row>
 
                       <Row className="mb-2">
-                        <Col md={9} className="d-flex"><Image src="images/roles/Jungle_Logo.png" className="PlayerRole my-auto mr-2"></Image><h4 className="my-auto font-weight-bold p-2">lolliepoep</h4></Col><Col className="my-auto"><Button variant="primary" size="lg" block>Edit</Button></Col>
+                        <Col md={9} className="d-flex"><Image src={Jungle} className="PlayerRole my-auto mr-2"></Image><h4 className="my-auto font-weight-bold p-2">lolliepoep</h4></Col><Col className="my-auto"><Button variant="primary" size="lg" block>Edit</Button></Col>
                       </Row>
 
                       <Row className="mb-2">
-                        <Col md={9} className="d-flex"><Image src="images/roles/Mid_Logo.png" className="PlayerRole my-auto mr-2"></Image><h4 className="my-auto font-weight-bold p-2">lolliepoep</h4></Col><Col className="my-auto"><Button variant="primary" size="lg" block>Edit</Button></Col>
+                        <Col md={9} className="d-flex"><Image src={Mid} className="PlayerRole my-auto mr-2"></Image><h4 className="my-auto font-weight-bold p-2">lolliepoep</h4></Col><Col className="my-auto"><Button variant="primary" size="lg" block>Edit</Button></Col>
                       </Row>
 
                       <Row className="mb-2">
-                        <Col md={9} className="d-flex"><Image src="images/roles/Support_Logo.png" className="PlayerRole my-auto mr-2"></Image><h4 className="my-auto font-weight-bold p-2">lolliepoep</h4></Col><Col className="my-auto"><Button variant="primary" size="lg" block>Edit</Button></Col>
+                        <Col md={9} className="d-flex"><Image src={Support} className="PlayerRole my-auto mr-2"></Image><h4 className="my-auto font-weight-bold p-2">lolliepoep</h4></Col><Col className="my-auto"><Button variant="primary" size="lg" block>Edit</Button></Col>
                       </Row>
 
                       <Row className="mb-2">
-                        <Col md={9} className="d-flex"><Image src="images/roles/Adc_Logo.png" className="PlayerRole my-auto mr-2"></Image><h4 className="my-auto font-weight-bold p-2">lolliepoep</h4></Col><Col className="my-auto"><Button variant="primary" size="lg" block>Edit</Button></Col>
+                        <Col md={9} className="d-flex"><Image src={Adc} className="PlayerRole my-auto mr-2"></Image><h4 className="my-auto font-weight-bold p-2">lolliepoep</h4></Col><Col className="my-auto"><Button variant="primary" size="lg" block>Edit</Button></Col>
                       </Row>
 
                       {/* Maybe have an info alert here. with info about the page */}
