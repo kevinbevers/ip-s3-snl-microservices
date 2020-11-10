@@ -11,7 +11,7 @@ namespace smiteapi_microservice.Interfaces
         Task<IEnumerable<Player>> SearchPlayersByNameAsync(string name);
         Task<Match> GetMatchDetailsAsync(int MatchID);
         Task<string> GetCurrentPatchInfoAsync();
-        Task<int?> UpdateGodsAsync();
-        Task<int?> UpdateItemsAsync();
+        Task<IEnumerable<ApiGod>> GetGodsAsync();
+        Task<IEnumerable<ApiItem>> GetItemsAsync();
     }
 }
