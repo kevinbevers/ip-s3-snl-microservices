@@ -9,7 +9,8 @@ namespace smiteapi_microservice.External_Models
         public DateTime EntryDate { get; set; }
         public int MatchDurationInSeconds { get; set; } //use timespan to convert to actual time for representation
         public string MatchDuration { get; set; }
-        public List<PlayerStat> PlayerStats { get; set; }
+        public List<PlayerStat> Winners { get; set; }
+        public List<PlayerStat> Losers { get; set; }
         public List<int> BannedGods { get; set; }
         public int GamemodeID { get; set; } //queue_id. 427 = custom conquest. 426 normal conquest
         //return message for possible errors. ex. match not available
@@ -22,11 +23,11 @@ namespace smiteapi_microservice.External_Models
             //Team and matchstate
             public int IngameTeamID { get; set; } //taskforce
             public bool Won { get; set; }
-            public int FirstBanSide { get; set; }
+            public bool FirstBanSide { get; set; }
             //Player info
             public Player player { get; set; }
             //God played
-            public int GodID { get; set; }
+            public God God { get; set; }
             //Damage info
             public int DamageDealt { get; set; }
             public int DamageTaken { get; set; }

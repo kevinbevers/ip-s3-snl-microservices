@@ -20,7 +20,6 @@ namespace ocelot_api_gateway
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((Host, config) =>  {
                     config.AddJsonFile("appsettings.json");
-                    config.AddJsonFile("ocelot.json");
 
                     var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
                     if (env != null)

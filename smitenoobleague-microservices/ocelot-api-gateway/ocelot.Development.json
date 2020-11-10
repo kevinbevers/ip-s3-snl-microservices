@@ -15,7 +15,7 @@
         "UpstreamPathTemplate": "/smiteapi/weather"
       },
       {
-        "DownstreamPathTemplate": "/smiteapi/{CatchAll}",
+        "DownstreamPathTemplate": "/{CatchAll}",
         "DownstreamScheme": "https",
         "DownstreamHostAndPorts": [
           {
