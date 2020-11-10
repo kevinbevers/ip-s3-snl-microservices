@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace smiteapi_microservice.External_Models
 {
-    public class Match
+    public class MatchData
     {
         public int GameID { get; set; }
         public DateTime EntryDate { get; set; }
@@ -44,6 +44,8 @@ namespace smiteapi_microservice.External_Models
             //Relics
             public int Relic1ID { get; set; }
             public int Relic2ID { get; set; }
+            public string Relic1Icon { get; set; }
+            public string Relic2Icon { get; set; }
             //Items
             public int Item1ID { get; set; }
             public int Item2ID { get; set; }
@@ -51,6 +53,12 @@ namespace smiteapi_microservice.External_Models
             public int Item4ID { get; set; }
             public int Item5ID { get; set; }
             public int Item6ID { get; set; }
+            public string Item1Icon { get; set; }
+            public string Item2Icon { get; set; }
+            public string Item3Icon { get; set; }
+            public string Item4Icon { get; set; }
+            public string Item5Icon { get; set; }
+            public string Item6Icon { get; set; }
             //Map stats
             public int FireGiantsKilled { get; set; }
             public int GoldFuriesKilled { get; set; }

@@ -16,8 +16,24 @@ import { FaBox } from 'react-icons/fa';
 //custom components
 import WinnerTeamTable from 'src/components/matchdetails/WinnerTeamTable';
 import LoserTeamTable from 'src/components/matchdetails/LoserTeamTable';
+import WinnerTeamTableStatic from 'src/components/matchdetails/WinnerTeamTableStatic';
+import LoserTeamTableStatic from 'src/components/matchdetails/LoserTeamTableStatic';
 
-export default function matchdetails({ postData }) {
+import DefaultErrorPage from 'next/error';
+import axios from 'axios';
+
+export default function matchdetails({received}) {
+
+  console.log(received);
+
+  if(received.status != 200)
+  {
+    return <DefaultErrorPage statusCode={received.status} />
+  }
+  else if(received.data.ret_msg != null){
+    return <DefaultErrorPage statusCode={404} />
+  }
+  else {
   return (
     <>
       <NavBar />
@@ -47,17 +63,17 @@ export default function matchdetails({ postData }) {
                 <Col xl={2} md={0}></Col>
                 <Col xl={8} md={9} xs={12}>
                   {/* Team 1 */}
-                  <WinnerTeamTable />
+                  <WinnerTeamTable playerdata={received.data.winners}/>
                   {/* Divider */}
                   <Row><Col className="my-auto text-center"><h5 className="mb-0 font-weight-bolder">VS</h5></Col></Row>
                   {/* Team 2 */}
-                  <LoserTeamTable />
+                  <LoserTeamTable playerdata={received.data.losers}/>
                 </Col>
                 <Col xl={2} md={3} className="my-auto">
                   <Alert variant="secondary">
                     <h5 className="font-weight-bold">Game stats</h5>
                     <hr />
-                    <h6><b>Length:</b> 24 min 35 sec</h6>
+                    <h6><b>Length:</b> {received.data.matchDuration}</h6>
                     <h6><b>Total kills:</b> 100</h6>
                     <h6><b>Total Distance traveled:</b> 200000 units</h6>
                     <h6><b>Objectives taken:</b> 7</h6>
@@ -72,11 +88,11 @@ export default function matchdetails({ postData }) {
                 <Col xl={2} md={0}></Col>
                 <Col xl={8} md={9} xs={12}>
                   {/* Team 1 */}
-                  <WinnerTeamTable />
+                  <WinnerTeamTableStatic />
                   {/* Divider */}
                   <Row><Col className="my-auto text-center"><h5 className="mb-0 font-weight-bolder">VS</h5></Col></Row>
                   {/* Team 2 */}
-                  <LoserTeamTable />
+                  <LoserTeamTableStatic />
                 </Col>
                 <Col xl={2} md={3} className="my-auto">
                 <Alert variant="secondary">
@@ -103,40 +119,32 @@ export default function matchdetails({ postData }) {
       <Footer />
     </>
   );
-
-}
-
-export async function getStaticPaths() {
-  // Return a list of possible value for id
-  const paths = [
-    {
-      params: {
-        id: ['5234534']
-      }
-    },
-    {
-      params: {
-        id: ['5234534', 'game', '1']
-      }
-    },
-    {
-      params: {
-        id: ['5234534', 'game', '2']
-      }
-    }
-  ];
-  return {
-    paths,
-    fallback: false
   }
 }
 
-export async function getStaticProps({ params }) {
-  // Fetch necessary data for the blog post using params.id
-  const postData = params.id;
+export async function getServerSideProps({params}) {
+
+try {
+  const response = await axios.get('https://localhost:5000/smiteapi/match/' + params.id);
+  const received = {
+    status: response.status,
+    data: response.data,
+  }
   return {
     props: {
-      postData
-    }
+      received
+    }, // will be passed to the page component as props
   }
+}
+catch {
+  const received = {
+    status: 404,
+    data: {},
+  }
+  return {
+    props: {
+      received
+    }, // will be passed to the page component as props
+  }
+}
 }

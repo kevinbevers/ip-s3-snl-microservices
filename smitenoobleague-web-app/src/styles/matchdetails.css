@@ -14,7 +14,12 @@
     #TeamTable > tbody > tr > td {
       font-size: 10px;
     }
+  }
 
+  @media (max-width: 769px) {
+    .ItemImg {
+      height: 1.3vw;
+    }
   }
 
   #TeamTable > tbody > tr > td {
@@ -37,7 +42,10 @@
 
 .GodImg {
     height: 30px;
-    width: 30px;
+  }
+
+  .ItemImg {
+    height: 25px;
   }
 
 .KDAPadding {

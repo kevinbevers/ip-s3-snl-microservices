@@ -9,7 +9,7 @@ namespace smiteapi_microservice.Interfaces
     public interface IHirezApiService
     {
         Task<IEnumerable<Player>> SearchPlayersByNameAsync(string name);
-        Task<Match> GetMatchDetailsAsync(int MatchID);
+        Task<MatchData> GetMatchDetailsAsync(int MatchID);
         Task<string> GetCurrentPatchInfoAsync();
         Task<IEnumerable<ApiGod>> GetGodsAsync();
         Task<IEnumerable<ApiItem>> GetItemsAsync();

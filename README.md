@@ -29,6 +29,7 @@ The web-app uses the following *npm* packages
 | react-icons | [React icons plugins README][ReactIconDoc] |
 | react-chartjs-2 | [React charts README][ReactChartDoc] |
 | SWR | [SWR page][SWRDoc]|
+| Jest| [Jest docs][JestDoc]|
 
 
 ### Release installation
@@ -50,6 +51,8 @@ $ npm install --save next-compose-plugins
 $ npm install react-icons --save
 $ npm install --save react-chartjs-2 chart.js
 $ npm install swr
+$ npm add --dev babel-jest @babel/core @babel/preset-env
+$ npm add -D jest jest-dom @testing-library/react @testing-library/jest-dom @testing-library/dom babel-jest
 ```
 >Finally run the app:
 ```bash
@@ -76,4 +79,5 @@ $ npm run dev
    [ReactIconDoc]: <https://github.com/react-icons/react-icons/blob/master/README.md>
    [ReactChartDoc]: <https://github.com/jerairrest/react-chartjs-2/blob/master/README.md>
    [SWRDoc]: <https://swr.vercel.app/>
+   [JestDoc]: <https://jestjs.io/>
 

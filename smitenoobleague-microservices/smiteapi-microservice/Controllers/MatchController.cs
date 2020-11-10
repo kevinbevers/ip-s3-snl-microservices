@@ -23,9 +23,11 @@ namespace smiteapi_microservice.Controllers
 
         // GET: /match/134314134141
         [HttpGet("{gameID}")]
-        public async Task<Match> Get(int gameID)
+        public async Task<MatchData> Get(int gameID)
         {
-            return await _hirezApiService.GetMatchDetailsAsync(gameID);
+            var match = await _hirezApiService.GetMatchDetailsAsync(gameID);
+
+            return match;
         }
 
         // POST api/values
