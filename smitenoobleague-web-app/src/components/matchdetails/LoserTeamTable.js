@@ -6,7 +6,7 @@ import Image from 'react-bootstrap/Image';
 //icons
 import { FaBox } from 'react-icons/fa';
 
-export default function WinnerTeamTable() {
+export default function WinnerTeamTable({playerdata}) {
     return (
         <>
             <Row className="mb-2">
@@ -39,132 +39,132 @@ export default function WinnerTeamTable() {
                         </thead>
                         <tbody>
                             <tr className="table-danger">
-                            <td><Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" rounded/></td>
-                                <td className="">lolliepoep</td>
-                                <td>10 / 2 / 3</td>
-                                <td>23000</td>
-                                <td>12000</td>
-                                <td>8230</td>
-                                <td>15000</td>
-                                <td>670</td>
+                            <td><Image src={playerdata[0].god.godIcon} alt="" className="GodImg" rounded/></td>
+                                <td className="">{playerdata[0].player.playername}</td>
+                                <td>{playerdata[0].kills}/{playerdata[0].deaths}/{playerdata[0].assists}</td>
+                                <td>{playerdata[0].damageDealt}</td>
+                                <td>{playerdata[0].damageTaken}</td>
+                                <td>{playerdata[0].damageMitigated}</td>
+                                <td>{playerdata[0].goldEarned}</td>
+                                <td>{playerdata[0].gPM}</td>
                                 <td className="">
                                     <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
+                                        <img src={playerdata[0].relic1Icon} className="mr-1 ItemImg" />
+                                        <img src={playerdata[0].relic2Icon} className="mr-1 ItemImg" />
                                     </div>
                                 </td>
                                 <td className="">
                                     <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr className="table-danger2">
-                                <td><Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" rounded/></td>
-                                <td className="">lolliepoep</td>
-                                <td>10 / 2 / 3</td>
-                                <td>23000</td>
-                                <td>12000</td>
-                                <td>8230</td>
-                                <td>15000</td>
-                                <td>670</td>
-                                <td className="">
-                                    <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                    </div>
-                                </td>
-                                <td className="">
-                                    <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr className="table-danger">
-                                <td><Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" rounded/></td>
-                                <td className="">lolliepoep</td>
-                                <td>10 / 2 / 3</td>
-                                <td>23000</td>
-                                <td>12000</td>
-                                <td>8230</td>
-                                <td>15000</td>
-                                <td>670</td>
-                                <td className="">
-                                    <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                    </div>
-                                </td>
-                                <td className="">
-                                    <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
+                                    <img src={playerdata[0].item1Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[0].item2Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[0].item3Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[0].item4Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[0].item5Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[0].item6Icon} className="mr-1 ItemImg" />
                                     </div>
                                 </td>
                             </tr>
                             <tr className="table-danger2">
-                                <td><Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" rounded/></td>
-                                <td className="">lolliepoep</td>
-                                <td>10 / 2 / 3</td>
-                                <td>23000</td>
-                                <td>12000</td>
-                                <td>8230</td>
-                                <td>15000</td>
-                                <td>670</td>
+                            <td><Image src={playerdata[1].god.godIcon} alt="" className="GodImg" rounded/></td>
+                                <td className="">{playerdata[1].player.playername}</td>
+                                <td>{playerdata[1].kills}/{playerdata[1].deaths}/{playerdata[1].assists}</td>
+                                <td>{playerdata[1].damageDealt}</td>
+                                <td>{playerdata[1].damageTaken}</td>
+                                <td>{playerdata[1].damageMitigated}</td>
+                                <td>{playerdata[1].goldEarned}</td>
+                                <td>{playerdata[1].gPM}</td>
                                 <td className="">
                                     <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
+                                        <img src={playerdata[1].relic1Icon} className="mr-1 ItemImg" />
+                                        <img src={playerdata[1].relic2Icon} className="mr-1 ItemImg" />
                                     </div>
                                 </td>
                                 <td className="">
                                     <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
+                                    <img src={playerdata[1].item1Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[1].item2Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[1].item3Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[1].item4Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[1].item5Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[1].item6Icon} className="mr-1 ItemImg" />
                                     </div>
                                 </td>
                             </tr>
                             <tr className="table-danger">
-                                <td><img src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImg" /></td>
-                                <td className="">lolliepoep</td>
-                                <td>10 / 2 / 3</td>
-                                <td>23000</td>
-                                <td>12000</td>
-                                <td>8230</td>
-                                <td>15000</td>
-                                <td>670</td>
+                            <td><Image src={playerdata[2].god.godIcon} alt="" className="GodImg" rounded/></td>
+                                <td className="">{playerdata[2].player.playername}</td>
+                                <td>{playerdata[2].kills}/{playerdata[2].deaths}/{playerdata[2].assists}</td>
+                                <td>{playerdata[2].damageDealt}</td>
+                                <td>{playerdata[2].damageTaken}</td>
+                                <td>{playerdata[2].damageMitigated}</td>
+                                <td>{playerdata[2].goldEarned}</td>
+                                <td>{playerdata[2].gPM}</td>
                                 <td className="">
                                     <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
+                                        <img src={playerdata[2].relic1Icon} className="mr-1 ItemImg" />
+                                        <img src={playerdata[2].relic2Icon} className="mr-1 ItemImg" />
                                     </div>
                                 </td>
                                 <td className="">
                                     <div className="d-inline-flex">
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
-                                        <FaBox className="mr-1" />
+                                    <img src={playerdata[2].item1Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[2].item2Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[2].item3Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[2].item4Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[2].item5Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[2].item6Icon} className="mr-1 ItemImg" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr className="table-danger2">
+                            <td><Image src={playerdata[3].god.godIcon} alt="" className="GodImg" rounded/></td>
+                                <td className="">{playerdata[3].player.playername}</td>
+                                <td>{playerdata[3].kills}/{playerdata[3].deaths}/{playerdata[3].assists}</td>
+                                <td>{playerdata[3].damageDealt}</td>
+                                <td>{playerdata[3].damageTaken}</td>
+                                <td>{playerdata[3].damageMitigated}</td>
+                                <td>{playerdata[3].goldEarned}</td>
+                                <td>{playerdata[3].gPM}</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <img src={playerdata[3].relic1Icon} className="mr-1 ItemImg" />
+                                        <img src={playerdata[3].relic2Icon} className="mr-1 ItemImg" />
+                                    </div>
+                                </td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                    <img src={playerdata[3].item1Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[3].item2Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[3].item3Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[3].item4Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[3].item5Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[3].item6Icon} className="mr-1 ItemImg" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr className="table-danger">
+                            <td><Image src={playerdata[4].god.godIcon} alt="" className="GodImg" rounded/></td>
+                                <td className="">{playerdata[4].player.playername}</td>
+                                <td>{playerdata[4].kills}/{playerdata[4].deaths}/{playerdata[4].assists}</td>
+                                <td>{playerdata[4].damageDealt}</td>
+                                <td>{playerdata[4].damageTaken}</td>
+                                <td>{playerdata[4].damageMitigated}</td>
+                                <td>{playerdata[4].goldEarned}</td>
+                                <td>{playerdata[4].gPM}</td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                        <img src={playerdata[4].relic1Icon} className="mr-1 ItemImg" />
+                                        <img src={playerdata[4].relic2Icon} className="mr-1 ItemImg" />
+                                    </div>
+                                </td>
+                                <td className="">
+                                    <div className="d-inline-flex">
+                                    <img src={playerdata[4].item1Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[4].item2Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[4].item3Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[4].item4Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[4].item5Icon} className="mr-1 ItemImg" />
+                                    <img src={playerdata[4].item6Icon} className="mr-1 ItemImg" />
                                     </div>
                                 </td>
                             </tr>

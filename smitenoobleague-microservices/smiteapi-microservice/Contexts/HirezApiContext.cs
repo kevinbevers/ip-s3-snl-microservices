@@ -217,7 +217,14 @@ namespace smiteapi_microservice.Contexts
                 {
                     var response = await httpClient.SendAsync(request);
                     string json = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<IEnumerable<ApiPlayer>>(json);
+                    try
+                    {
+                        return JsonConvert.DeserializeObject<IEnumerable<ApiPlayer>>(json);
+                    }
+                    catch
+                    {
+                        return new List<ApiPlayer> { new ApiPlayer { ret_msg = json } };
+                    }
                 }
             }
         }
@@ -283,7 +290,15 @@ namespace smiteapi_microservice.Contexts
                 {
                     var response = await httpClient.SendAsync(request);
                     string json = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<List<ApiPlayerMatchStat>>(json);
+                    //try catch if API is unavailable
+                    try
+                    {
+                        return JsonConvert.DeserializeObject<List<ApiPlayerMatchStat>>(json);
+                    }
+                    catch
+                    {
+                        return new List<ApiPlayerMatchStat> { new ApiPlayerMatchStat { ret_msg = json } };
+                    }
                 }
             }
         }

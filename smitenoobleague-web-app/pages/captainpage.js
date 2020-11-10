@@ -1,5 +1,6 @@
 //default react imports
 import React, { useState } from 'react';
+import Router from "next/router";
 //default page stuff
 import NavBar from '../src/components/NavBar';
 import Footer from '../src/components/Footer';
@@ -15,6 +16,17 @@ import Mid from 'public/images/roles/Mid_Logo.png';
 import Adc from 'public/images/roles/Adc_Logo.png';
 
 export default function captainpage() {
+
+  const [matchID, setMatchID] = useState();
+
+  const handleChange = (event) => {
+    setMatchID(event.target.value );
+  };
+
+  const handleSubmit = (event) => {
+    Router.push("/matchdetails/" + matchID);
+  };
+
     return (
       <>      
         <NavBar />
@@ -29,8 +41,8 @@ export default function captainpage() {
                     <Card.Body className="">
                     <h2 className="font-weight-bold">SUBMIT MATCH</h2>
                     <Form.Group className="">
-                    <Form.Control type="text" placeholder="Match ID..." className="mb-2"/>
-                    <Button variant="primary" size="lg" block>Submit</Button>
+                    <Form.Control type="text" placeholder="Match ID..." className="mb-2" onChange={handleChange}/>
+                    <Button variant="primary" size="lg" block onClick={handleSubmit}>Submit</Button>
                   </Form.Group>
                   
                     </Card.Body>
