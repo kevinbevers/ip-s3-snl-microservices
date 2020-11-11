@@ -28,32 +28,5 @@ namespace smiteapi_microservice.Controllers
         {
             return await hirezApiService.GetCurrentPatchInfoAsync();
         }
-
-        //// POST /getmatchdetails/1097729213
-        //[Route("savematchtostats")]
-        //[HttpPost]
-        //public async Task<IActionResult> SaveMatchToStats(Match match)
-        //{
-        //    Match matchData = await hirezApiService.GetMatchDetailsAsync(match.GameID);
-
-           
-
-        //    if (matchData.PlayerStats.Count() == 10)
-        //    {
-        //        return Ok();
-        //    }
-        //    else
-        //    {
-        //        return NotFound();
-        //    }
-        //}
-
-        //// GET /getmatchdetails/1097729213
-        //[Route("searchplayerbyname/{playername}")]
-        //[HttpGet]
-        //public async Task<IEnumerable<Player>> SearchPlayerByName(string playername)
-        //{
-        //    return await hirezApiService.SearchPlayersByNameAsync(playername);
-        //}
     }
 }

@@ -129,7 +129,8 @@ namespace smiteapi_microservice.Internal_Models
         public string name { get; set; }
         public int playerId { get; set; }
         public string playerName { get; set; }
-        public string playerPortalId { get; set; }
+        //public string playerPortalId { get; set; }
+        public ApiPlatformEnum? playerPortalId { get; set; }
         public string playerPortalUserId { get; set; }
         public object ret_msg { get; set; }
     }

@@ -32,7 +32,7 @@ namespace smiteapi_microservice
         {
             services.AddControllers();
             //add API dev authorization
-            services.AddSingleton<IHirezApiContext>(new HirezApiContext (Configuration.GetSection("Credentials").Get<ApiCredentials>()));
+            services.AddSingleton<IHirezApiContext>(new HirezApiContextV2 (Configuration.GetSection("Credentials").Get<ApiCredentials>()));
 
             //inject gatewaykey from appsettings.json
             services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));

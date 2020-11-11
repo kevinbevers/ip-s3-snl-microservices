@@ -17,7 +17,7 @@ namespace smiteapi_microservice.Contexts
         private readonly string _devID;
         private readonly string _authKey;
         private const int language = 1;
-        readonly string timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+        private string timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
         private ApiSessionResult sessionResult = new ApiSessionResult();
         private readonly string PCAPIurl = "http://api.smitegame.com/smiteapi.svc/";
         //private readonly string PaladinsAPIurl = "http://api.paladins.com/paladinsapi.svc/";
@@ -68,6 +68,8 @@ namespace smiteapi_microservice.Contexts
         }
         private async Task CheckSession()
         {
+            timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+
             if (!File.Exists("Config/hirezapi.json"))
             {
                 await CreateSession();
@@ -155,7 +157,7 @@ namespace smiteapi_microservice.Contexts
                 }
             }
         }
-        public async Task<IEnumerable<ApiPlayer>> GetPlayerIdByGamtertag(string username, ApiPlatformEnum platformId)
+        public async Task<List<ApiPlayer>> GetPlayerIdByGamtertag(string username, ApiPlatformEnum platformId)
         {
             await CheckSession();
 
@@ -168,7 +170,7 @@ namespace smiteapi_microservice.Contexts
                 {
                     var response = await httpClient.SendAsync(request);
                     string json = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<IEnumerable<ApiPlayer>>(json);
+                    return JsonConvert.DeserializeObject<List<ApiPlayer>>(json);
                 }
             }
         }
@@ -204,7 +206,7 @@ namespace smiteapi_microservice.Contexts
                 }
             }
         }
-        public async Task<IEnumerable<ApiPlayer>> SearchPlayerByName(string username)
+        public async Task<List<ApiPlayer>> SearchPlayerByName(string username)
         {
             await CheckSession();
 
@@ -219,7 +221,7 @@ namespace smiteapi_microservice.Contexts
                     string json = await response.Content.ReadAsStringAsync();
                     try
                     {
-                        return JsonConvert.DeserializeObject<IEnumerable<ApiPlayer>>(json);
+                        return JsonConvert.DeserializeObject<List<ApiPlayer>>(json);
                     }
                     catch
                     {
@@ -260,7 +262,7 @@ namespace smiteapi_microservice.Contexts
                 }
             }
         }
-        public async Task<IEnumerable<ApiItem>> GetAllItems()
+        public async Task<List<ApiItem>> GetAllItems()
         {
             await CheckSession();
 
@@ -273,11 +275,11 @@ namespace smiteapi_microservice.Contexts
                 {
                     var response = await httpClient.SendAsync(request);
                     string json = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<IEnumerable<ApiItem>>(json);
+                    return JsonConvert.DeserializeObject<List<ApiItem>>(json);
                 }
             }
         }
-        public async Task<IEnumerable<ApiPlayerMatchStat>> GetMatchDetailsByMatchID(int matchID)
+        public async Task<List<ApiPlayerMatchStat>> GetMatchDetailsByMatchID(int matchID)
         {
             await CheckSession();
 
@@ -302,7 +304,7 @@ namespace smiteapi_microservice.Contexts
                 }
             }
         }
-        public async Task<IEnumerable<ApiPlayerMatchStat>> GetMatchPlayerDetails(int matchID)
+        public async Task<List<ApiPlayerMatchStat>> GetMatchPlayerDetails(int matchID)
         {
             await CheckSession();
 
@@ -315,11 +317,11 @@ namespace smiteapi_microservice.Contexts
                 {
                     var response = await httpClient.SendAsync(request);
                     string json = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<IEnumerable<ApiPlayerMatchStat>>(json);
+                    return JsonConvert.DeserializeObject<List<ApiPlayerMatchStat>>(json);
                 }
             }
         }
-        public async Task<IEnumerable<ApiGod>> GetAllGods()
+        public async Task<List<ApiGod>> GetAllGods()
         {
             await CheckSession();
 
@@ -332,7 +334,7 @@ namespace smiteapi_microservice.Contexts
                 {
                     var response = await httpClient.SendAsync(request);
                     string json = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<IEnumerable<ApiGod>>(json);
+                    return JsonConvert.DeserializeObject<List<ApiGod>>(json);
                 }
             }
         }

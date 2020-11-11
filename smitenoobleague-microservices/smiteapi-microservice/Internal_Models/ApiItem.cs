@@ -20,7 +20,7 @@ namespace smiteapi_microservice.Internal_Models
         public bool StartingItem { get; set; }
         public string Type { get; set; }
         public Uri ItemIcon_Url { get; set; }
-        public object RetMsg { get; set; }
+        public object ret_msg { get; set; }
     }
 
     public partial class ItemDescription

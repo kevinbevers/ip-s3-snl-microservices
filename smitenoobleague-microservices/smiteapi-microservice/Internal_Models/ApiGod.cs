@@ -63,7 +63,7 @@ namespace smiteapi_microservice.Internal_Models
         public Uri GodIcon_URL { get; set; }
         public long Id { get; set; }
         public LatestGod LatestGod { get; set; }
-        public object RetMsg { get; set; }
+        public object ret_msg { get; set; }
     }
 
     public partial class AbilityDescription1
