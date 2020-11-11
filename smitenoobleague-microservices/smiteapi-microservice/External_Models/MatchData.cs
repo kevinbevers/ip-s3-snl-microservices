@@ -11,7 +11,7 @@ namespace smiteapi_microservice.External_Models
         public string MatchDuration { get; set; }
         public List<PlayerStat> Winners { get; set; }
         public List<PlayerStat> Losers { get; set; }
-        public List<int> BannedGods { get; set; }
+        public List<God> BannedGods { get; set; }
         public int GamemodeID { get; set; } //queue_id. 427 = custom conquest. 426 normal conquest
         //return message for possible errors. ex. match not available
         public object ret_msg { get; set; } 

@@ -28,9 +28,9 @@ namespace smiteapi_microservice.Services
 
         public async Task<IEnumerable<ApiGod>> GetGodsAsync()
         {
-            //List<ApiGod> gods = (List<ApiGod>)await _hirezApi.GetAllGods();
+            List<ApiGod> gods = await _hirezApi.GetAllGods();
 
-            return await _hirezApi.GetAllGods();
+            return gods;
         }
 
         public async Task<IEnumerable<ApiItem>> GetItemsAsync()
@@ -40,26 +40,43 @@ namespace smiteapi_microservice.Services
 
         public async Task<MatchData> GetMatchDetailsAsync(int MatchID)
         {
-            //try
+            //var pong = await _hirezApi.PingAPI();
+            //if (pong != null || pong != "")
             //{
-                List<ApiPlayerMatchStat> matchDetails = (List<ApiPlayerMatchStat>)await _hirezApi.GetMatchDetailsByMatchID(MatchID);
+                List<ApiPlayerMatchStat> matchDetails = await _hirezApi.GetMatchDetailsByMatchID(MatchID);
 
-                if (matchDetails.Count() > 0)
+                TimeSpan time = TimeSpan.FromSeconds((int)matchDetails[0]?.Match_Duration);
+                var ms = matchDetails[0];
+
+
+                MatchData match = new MatchData
                 {
-                    TimeSpan time = TimeSpan.FromSeconds((int)matchDetails[0]?.Match_Duration);
+                    GameID = MatchID,
+                    MatchDurationInSeconds = (int)ms?.Match_Duration,
+                    MatchDuration = $"{time:mm} min {time:ss} sec",
+                    EntryDate = (DateTime)ms?.Entry_Datetime,
+                    GamemodeID = (int)ms?.match_queue_id,
+                    ret_msg = ms?.ret_msg + " ",
+                    Winners = new List<MatchData.PlayerStat>(),
+                    Losers = new List<MatchData.PlayerStat>(),
+                    BannedGods = new List<God>(),
+                };
+                List<string> banNames = new List<string> { ms.Ban1, ms.Ban2, ms.Ban3, ms.Ban4, ms.Ban5, ms.Ban6, ms.Ban7, ms.Ban8, ms.Ban9, ms.Ban10 };
+                List<int> bansIds = new List<int> { ms.Ban1Id, ms.Ban2Id, ms.Ban3Id, ms.Ban4Id, ms.Ban5Id, ms.Ban6Id, ms.Ban7Id, ms.Ban8Id, ms.Ban9Id, ms.Ban10Id };
 
-
-                    MatchData match = new MatchData
+                for (int i = 0; i < 9; i++)
+                {
+                    var godname = Regex.Replace(banNames[i].Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                    God ban = new God
                     {
-                        GameID = MatchID,
-                        MatchDurationInSeconds = (int)matchDetails[0]?.Match_Duration,
-                        MatchDuration = time.ToString(@"mm\:ss"),
-                        EntryDate = (DateTime)matchDetails[0]?.Entry_Datetime,
-                        GamemodeID = (int)matchDetails[0]?.match_queue_id,
-                        ret_msg = matchDetails[0]?.ret_msg,
-                        Winners = new List<MatchData.PlayerStat>(),
-                        Losers = new List<MatchData.PlayerStat>(),
+                        GodId = bansIds[i],
+                        GodName = banNames[i],
+                        GodIcon = "https://web2.hirez.com/smite/god-icons/" + godname + ".jpg"
                     };
+
+                    match.BannedGods.Add(ban);
+                }
+
 
                 if (matchDetails.Count() > 9)
                 {
@@ -80,7 +97,7 @@ namespace smiteapi_microservice.Services
                         MatchData.PlayerStat playerStat = new MatchData.PlayerStat
                         {
                             //General info //gamertag for console - playername for pc, will be empty string when other platform
-                            player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId },
+                            player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId.ToString() },
                             IngameTeamID = mp.TaskForce,
                             Won = mp.TaskForce == mp.Winning_TaskForce ? true : false,
                             FirstBanSide = mp.Win_Status == mp.First_Ban_Side ? true : false,
@@ -133,27 +150,20 @@ namespace smiteapi_microservice.Services
                         if (mp.TaskForce == mp.Winning_TaskForce) { match.Winners.Add(playerStat); } else { match.Losers.Add(playerStat); }
                     }
                 }
-                    //Return match when there is data available
-                    return match;
-                }
-                else
-                {
-                    //return an empty match with info when no data is available
-                    return new MatchData { GameID = MatchID, ret_msg = "oops, something went wrong!" };
-                }
-           // }
-            //catch(Exception ex)
-            //{
-            //    return new MatchData { GameID = MatchID, ret_msg = ex.Message  };
+                //Return match when there is data available
+                return match;
             //}
-
+            //else
+            //{
+            //    return new MatchData { ret_msg = "pinging smite api failed" };
+            //}
         }
 
         public async Task<IEnumerable<Player>> SearchPlayersByNameAsync(string name)
         {
             List<ApiPlayer> playersfound = (List<ApiPlayer>)await _hirezApi.SearchPlayerByName(name);
 
-            List <Player> returnList = new List<Player>();
+            List<Player> returnList = new List<Player>();
             //convert ApiPlayer model to Player model
             playersfound.ForEach(p => returnList.Add(new Player { Playername = p.Name, Platform = p.portal_id.ToString(), PlayerID = p.player_id }));
 

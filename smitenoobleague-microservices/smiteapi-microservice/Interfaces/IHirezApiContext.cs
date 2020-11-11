@@ -11,17 +11,17 @@ namespace smiteapi_microservice.Interfaces
         Task<string> GetPlayerByID(int id);
         Task<string> GetPlayerAchievementsByID(int id);
         Task<string> GetPlayerIdByName(string name);
-        Task<IEnumerable<ApiPlayer>> GetPlayerIdByGamtertag(string gamertag, ApiPlatformEnum platform);
+        Task<List<ApiPlayer>> GetPlayerIdByGamtertag(string gamertag, ApiPlatformEnum platform);
         Task<string> GetGodRanks(int id);
         Task<string> GetQueueStats(int id, int queue);
-        Task<IEnumerable<ApiPlayer>> SearchPlayerByName(string playername);
+        Task<List<ApiPlayer>> SearchPlayerByName(string playername);
         Task<string> GetTeamDetails(int id);
         Task<string> GetPlayerStatus(int playerID);
-        Task<IEnumerable<ApiItem>> GetAllItems();
-        Task<IEnumerable<ApiGod>> GetAllGods();
-        Task<IEnumerable<ApiPlayerMatchStat>> GetMatchDetailsByMatchID(int matchID);
+        Task<List<ApiItem>> GetAllItems();
+        Task<List<ApiGod>> GetAllGods();
+        Task<List<ApiPlayerMatchStat>> GetMatchDetailsByMatchID(int matchID);
         //same as above method?! but different url Call
-        Task<IEnumerable<ApiPlayerMatchStat>> GetMatchPlayerDetails(int matchID);
+        Task<List<ApiPlayerMatchStat>> GetMatchPlayerDetails(int matchID);
         Task<string> GetEsportsProLeagueDetails();
         Task<ApiPatchInfo> GetPatchInfo();
         //API core functions
