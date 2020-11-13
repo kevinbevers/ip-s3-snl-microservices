@@ -27,6 +27,20 @@
           "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
         },
         "UpstreamPathTemplate": "/smiteapi/{CatchAll}"
+      },
+      {
+        "DownstreamPathTemplate": "/{CatchAll}",
+        "DownstreamScheme": "https",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5002
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/schedule/{CatchAll}"
       }
     ],
     "GlobalConfiguration": {
