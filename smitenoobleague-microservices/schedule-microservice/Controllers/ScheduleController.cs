@@ -14,9 +14,9 @@ namespace division_microservice.Controllers
     [Route("[controller]")]
     public class ScheduleController : Controller
     {
-        // GET: api/values
+        // GET: schedule
         [HttpGet]
-        public IEnumerable<Matchup> Get()
+        public Schedule Get()
         {
             List<Team> teams = new List<Team> {
                 new Team { TeamName = "team1", TeamID = 1 },
@@ -28,7 +28,15 @@ namespace division_microservice.Controllers
                 new Team { TeamName = "team7", TeamID = 7},
                 new Team { TeamName = "team8", TeamID = 8 }};
 
-            return Scheduling.Create(teams);
+            Schedule schedule = new Schedule {
+                DivisionID = 4,
+                ScheduleID = 0,
+                ScheduleName = "Split 1",
+                ScheduleStartDate = Convert.ToDateTime("11-11-20"),
+                Matchups = Scheduling.Create(teams),
+            };
+
+            return schedule;
         }
 
         // GET api/values/5

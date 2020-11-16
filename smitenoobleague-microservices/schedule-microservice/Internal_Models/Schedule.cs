@@ -5,6 +5,7 @@ namespace division_microservice.Internal_Models
 {
     public class Schedule
     {
+        public int DivisionID { get; set; }
         public int ScheduleID { get; set; }
         public string ScheduleName { get; set; }
         public DateTime ScheduleStartDate { get; set; }

@@ -3,7 +3,7 @@ namespace smiteapi_microservice.External_Models
 {
     public class God
     {
-        public int GodId { get; set; }
+        public int? GodId { get; set; }
         public string GodName { get; set; }
         public string GodClass { get; set; }
         public string GodIcon { get; set; }
