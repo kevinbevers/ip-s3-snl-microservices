@@ -40,7 +40,7 @@
         "UpstreamHeaderTransform": {
           "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
         },
-        "UpstreamPathTemplate": "/schedule/{CatchAll}"
+        "UpstreamPathTemplate": "/division/{CatchAll}"
       }
     ],
     "GlobalConfiguration": {
