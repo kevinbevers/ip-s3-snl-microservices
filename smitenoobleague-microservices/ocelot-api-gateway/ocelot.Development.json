@@ -41,6 +41,20 @@
           "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
         },
         "UpstreamPathTemplate": "/division/{CatchAll}"
+      },
+      {
+        "DownstreamPathTemplate": "/{CatchAll}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5003
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/nodeschedule/{CatchAll}"
       }
     ],
     "GlobalConfiguration": {
