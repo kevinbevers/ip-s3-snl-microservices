@@ -8,10 +8,6 @@ namespace division_microservice.Division_DB
 {
     public partial class SNL_Division_DBContext : DbContext
     {
-        public SNL_Division_DBContext()
-        {
-        }
-
         public SNL_Division_DBContext(DbContextOptions<SNL_Division_DBContext> options)
             : base(options)
         {
