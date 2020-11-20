@@ -134,7 +134,16 @@ namespace smiteapi_microservice.Contexts
                 //set error message as ret_msg 
                 return error;
             }
-            return JsonConvert.DeserializeObject<List<ApiPlayerMatchStat>>(response.content);
+            try
+            {
+                return JsonConvert.DeserializeObject<List<ApiPlayerMatchStat>>(response.content);
+            }
+            catch
+            {
+                var error = new List<ApiPlayerMatchStat> { new ApiPlayerMatchStat { ret_msg = response.content } };
+                //set error message as ret_msg 
+                return error;
+            }
         }
 
         public Task<string> GetPlayerByID(int id)

@@ -43,7 +43,7 @@ namespace smiteapi_microservice.Services
             //var pong = await _hirezApi.PingAPI();
             //if (pong != null || pong != "")
             //{
-                List<ApiPlayerMatchStat> matchDetails = await _hirezApi.GetMatchDetailsByMatchID(MatchID);
+              List<ApiPlayerMatchStat> matchDetails = await _hirezApi.GetMatchDetailsByMatchID(MatchID);
 
             if (matchDetails.Count() > 0)
             {
