@@ -283,3 +283,5 @@ ocelot.json
 smitenoobleague-microservices/ocelot-api-gateway/ocelot.Production.json
 smitenoobleague-microservices/smiteapi-microservice/appsettings.Production.json
 smitenoobleague-web-app/build.zip
+smitenoobleague-microservices/schedule-microservice/appsettings.Development.json
+smitenoobleague-microservices/schedule-microservice/appsettings.Development.json

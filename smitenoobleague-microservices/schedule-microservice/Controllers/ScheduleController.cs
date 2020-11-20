@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using division_microservice.Classes;
 using division_microservice.Internal_Models;
 using Microsoft.AspNetCore.Mvc;
-using static division_microservice.Internal_Models.Schedule;
+using Microsoft.EntityFrameworkCore;
+using division_microservice.Division_DB;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,9 +15,16 @@ namespace division_microservice.Controllers
     [Route("[controller]")]
     public class ScheduleController : Controller
     {
+        SNL_Division_DBContext _context;
+
+        public ScheduleController(SNL_Division_DBContext context)
+        {
+            _context = context;
+        }
+
         // GET: schedule
         [HttpGet]
-        public Schedule Get()
+        public async Task<Schedule> Get()
         {
             List<Team> teams = new List<Team> {
                 new Team { TeamName = "team1", TeamID = 1 },
@@ -35,6 +43,9 @@ namespace division_microservice.Controllers
                 ScheduleStartDate = Convert.ToDateTime("11-11-20"),
                 Matchups = Scheduling.Create(teams),
             };
+
+            _context.TableDivisions.Add(new TableDivision { DivisionName = "test divisiokn" });
+            await _context.SaveChangesAsync();
 
             return schedule;
         }
