@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 app.use(express.json()); //add post middleware
 const schedule = require('node-schedule');
- 
+ //export TZ=UTC
 
 //should make a call to smiteapi api to get scheduled matchIDS from the database. 
 //save the scheduled tasks data to make sure they can be retrieved when node app restarts
