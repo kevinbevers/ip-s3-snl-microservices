@@ -11,6 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using division_microservice.Classes;
+//database
+using division_microservice.Division_DB;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace division_microservice
 {
@@ -26,10 +30,20 @@ namespace division_microservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllers();
 
-            //inject gatewaykey from appsettings.json
-            services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
+            // Replace "YourDbContext" with the name of your own DbContext derived class.
+            services.AddDbContextPool<SNL_Division_DBContext>(
+                dbContextOptions => dbContextOptions
+                    .UseMySql(
+                        // Replace with your connection string.
+                        Configuration.GetConnectionString("DefaultConnection"),
+                        // Replace with your server version and type.
+                        // For common usages, see pull request #1233.
+                        new MySqlServerVersion(new Version(8, 0, 22)), 
+                        mySqlOptions => mySqlOptions
+                            .CharSetBehavior(CharSetBehavior.NeverAppend)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
