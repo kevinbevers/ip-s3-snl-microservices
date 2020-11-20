@@ -44,8 +44,8 @@ namespace division_microservice.Controllers
                 Matchups = Scheduling.Create(teams),
             };
 
-            _context.TableDivisions.Add(new TableDivision { DivisionName = "test divisiokn" });
-            await _context.SaveChangesAsync();
+            //_context.TableDivisions.Add(new TableDivision { DivisionName = "test divisiokn" });
+            //await _context.SaveChangesAsync();
 
             return schedule;
         }
