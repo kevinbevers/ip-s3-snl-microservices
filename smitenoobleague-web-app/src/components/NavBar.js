@@ -1,7 +1,8 @@
 //import react-bootstrap navbar parts 
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
-import NavDropdown from 'react-bootstrap/NavDropdown'
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+
 //nextjs router hook
 import { useRouter } from "next/router";
 export default function NavBar() {

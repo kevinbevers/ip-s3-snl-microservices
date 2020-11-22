@@ -1,0 +1,63 @@
+{
+    "Routes": [
+      {
+        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5001
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/smiteapi/weather"
+      },
+      {
+        "DownstreamPathTemplate": "/{CatchAll}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5001
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/smiteapi/{CatchAll}"
+      },
+      {
+        "DownstreamPathTemplate": "/{CatchAll}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5002
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/division/{CatchAll}"
+      },
+      {
+        "DownstreamPathTemplate": "/{CatchAll}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5003
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/nodeschedule/{CatchAll}"
+      }
+    ],
+    "GlobalConfiguration": {
+        "BaseUrl": "http://localhost:5000"
+    }
+}

@@ -26,6 +26,10 @@ The web-app uses the following *npm* packages
 | React-bootstrap | [React-bootstrap README][React-bootstrapDoc] |
 | Next-optimized-images | [Next optimized images README][NextOptDoc] |
 | Next-compose-plugins | [Next compose plugins README][NextComDoc] |
+| react-icons | [React icons plugins README][ReactIconDoc] |
+| react-chartjs-2 | [React charts README][ReactChartDoc] |
+| SWR | [SWR page][SWRDoc]|
+| Jest| [Jest docs][JestDoc]|
 
 
 ### Release installation
@@ -44,6 +48,11 @@ $ npm i npm install next react react-dom
 $ npm install react-bootstrap bootstrap
 $ npm install next-optimized-images@canary
 $ npm install --save next-compose-plugins
+$ npm install react-icons --save
+$ npm install --save react-chartjs-2 chart.js
+$ npm install swr
+$ npm add --dev babel-jest @babel/core @babel/preset-env
+$ npm add -D jest jest-dom @testing-library/react @testing-library/jest-dom @testing-library/dom babel-jest
 ```
 >Finally run the app:
 ```bash
@@ -67,4 +76,8 @@ $ npm run dev
    [React-bootstrapDoc]: <https://github.com/react-bootstrap/react-bootstrap/blob/master/README.md>
    [NextOptDoc]: <https://github.com/cyrilwanner/next-optimized-images/blob/master/README.md>
    [NextComDoc]: <https://github.com/cyrilwanner/next-compose-plugins/blob/master/README.md>
+   [ReactIconDoc]: <https://github.com/react-icons/react-icons/blob/master/README.md>
+   [ReactChartDoc]: <https://github.com/jerairrest/react-chartjs-2/blob/master/README.md>
+   [SWRDoc]: <https://swr.vercel.app/>
+   [JestDoc]: <https://jestjs.io/>
 

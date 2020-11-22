@@ -1,3 +1,11 @@
+@import 'standing.css';
+@import 'matchdetails.css';
+@import 'teamstats.css';
+@import 'playerstats.css';
+@import 'pickpercentage.css';
+@import 'stats.css';
+@import 'captain.css';
+
 html,
 body {
   padding: 0;
@@ -99,11 +107,6 @@ body {
   font-size: 0.8rem;
 }
 
-.piechart {
-  height: 150px;
-  width: 150px;
-}
-
 .newsimg {
   height: auto;
   width: auto;
@@ -113,6 +116,11 @@ body {
   padding-left: 0.5vw;
 }
 
-.table-light tbody+tbody, .table-light td, .table-light th, .table-light thead th {
-  border-color: #dee2e6;
+.link-unstyled, .link-unstyled:link, .link-unstyled:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.MhTeamImg {
+  height: 70px;
 }

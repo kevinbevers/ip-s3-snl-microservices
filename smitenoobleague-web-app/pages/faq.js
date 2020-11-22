@@ -11,7 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 //page components
 import GeneralQuestions from 'src/components/faqpage/GeneralQuestions';
-import TeamQuestions from 'src/components/faqpage/teamquestions';
+import TeamQuestions from 'src/components/faqpage/TeamQuestions';
 import PlayerQuestions from 'src/components/faqpage/PlayerQuestions';
 import CaptainQuestions from 'src/components/faqpage/CaptainQuestions';
 import DivisionQuestions from 'src/components/faqpage/DivisionQuestions';

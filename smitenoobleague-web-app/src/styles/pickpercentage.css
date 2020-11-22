@@ -1,0 +1,38 @@
+.BackButtonText {
+    font-size: 1.2vw;
+}
+
+.GodImgPick {
+    height: 4vw;
+}
+
+.GodPickTitle {
+  font-size: 1.5vw;
+}
+
+.GodPickSubTitle {
+  font-size: 1.1vw;
+}
+
+  @media (max-width: 767px) {
+    .BackButtonText {
+        font-size: 4vw;
+    }
+    .GodImgPick {
+      height: 12vw !important;
+  }
+  .GodPickTitle {
+    font-size: 4vw;
+  }
+  
+  .GodPickSubTitle {
+    font-size: 2.4vw;
+  }
+
+  }
+
+  @media (max-width: 768px) {
+    /* .GodImgPick {
+      height: 8.5vw;
+  } */
+}
