@@ -20,7 +20,7 @@ namespace smiteapi_microservice
             Host.CreateDefaultBuilder(args)
                  .ConfigureAppConfiguration((Host, config) => {
                      var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-                     config.AddJsonFile("appsettings.json");
+                     //config.AddJsonFile("appsettings.json");
                      if (env != null)
                      {
                          config.AddJsonFile($"appsettings.{env}.json");

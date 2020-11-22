@@ -6,16 +6,22 @@ Database first approach
 - C# project (Asp.net Core)
 
 ## step by step
-* ##### Step 1: Install the packages.
+* ##### Step 1: Install dotnet tools (admin required if install is -g(global))
+```bash
+$ sudo dotnet install tools -g
+```
+* ##### Step 2: Install the packages.
 ```bash
 $ cd service
+$ dotnet add package Microsoft.EntityFrameworkCore -v 5.0.0 
+$ dotnet add package Pomelo.EntityFrameworkCore.MySql -v 5.0.0-alpha.2 
+$ dotnet add package Microsoft.EntityFrameworkCore.Design -v 5.0.0
+```
+> or install using package manager console in visual studio or the manage package interface from nuget
+```packagemanager
 $ Install-Package Microsoft.EntityFrameworkCore -Version 5.0.0 
 $ Install-Package Pomelo.EntityFrameworkCore.MySql -Version 5.0.0-alpha.2 
 $ Install-Package Microsoft.EntityFrameworkCore.Design -Version 5.0.0
-```
-* ##### Step 2: Install dotnet tools (admin required if install is -g(global))
-```bash
-$ sudo dotnet install tools -g
 ```
 
 * ##### Step 3: Scaffold the database into the project
@@ -33,7 +39,7 @@ $ dotnet ef dbcontext scaffold "server='localhost';port=3306;user=root;password=
 ```
 > Add the following using to your startup.cs
 ```C#
-    using database context class
+    using database context class;
     using Microsoft.EntityFrameworkCore;
     using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 ```
