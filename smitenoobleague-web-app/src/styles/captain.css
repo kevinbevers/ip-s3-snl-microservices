@@ -1,0 +1,35 @@
+.PlayerRole {
+    height: 4vw;
+}
+
+.CaptainBadge {
+    font-size: 0.8vw;
+}
+
+.TeamInfoTitle {
+    font-size: 1.8vw;
+}
+
+.TeamInfoText {
+    font-size: 1.4vw;
+}
+
+.TeamInfoIcon {
+    font-size: 1.4vw;
+}
+
+@media (max-width: 767px) { 
+    .TeamInfoTitle {
+        font-size: 3vw;
+    }
+    
+    .TeamInfoText {
+        font-size: 2vw;
+    }
+    .TeamInfoIcon {
+        font-size: 4vw;
+    }
+    .PlayerRole {
+        height: 8vw;
+    }
+};

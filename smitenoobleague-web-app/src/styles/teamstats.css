@@ -1,0 +1,73 @@
+.MainTeamImage {
+    max-height: 120px;
+    /* height: 100px; */
+}
+
+.TeamStatTitle {
+    font-size: 3vw;
+    font-weight: 700;
+}
+
+.RecentPerformanceTitle {
+    font-size: 1.5vw;
+    font-weight: 700;
+}
+
+.TeamBannerStats {
+    font-size: 1.5vw;
+}
+
+.RecentTeamTitle {
+    font-size: 0.8vw;
+}
+
+.RecentTeamLogo {
+    height: 2vw;
+}
+
+.RecentTeamPlayerName {
+    font-size: 1.3vw;
+    font-weight: 700;
+}
+
+.RecentTeamWinBackground {
+    background: #c3e6cb;
+}
+
+.RecentTeamLossBackground {
+    background: #f5c6cb;
+}
+
+@media (max-width: 767px) {
+    .TeamStatTitle {
+        font-size: 6vw;
+        font-weight: 700;
+    }
+    .TeamBannerStats {
+        font-size: 2vw;
+    }
+    .RecentPerformanceTitle {
+        font-size: 4vw;
+        font-weight: 700;
+    }
+    .MainTeamImage {
+        max-height: 23vw;
+        /* height: 100px; */
+    }
+  }
+
+  @media (max-width: 767px) {
+    .RecentTeamTitle {
+        font-size: 4vw;
+    }
+    
+    .RecentTeamLogo {
+        height: 9vw;
+    }
+
+    .RecentTeamPlayerName {
+        font-size: 5vw;
+        font-weight: 700;
+    }
+    
+  }

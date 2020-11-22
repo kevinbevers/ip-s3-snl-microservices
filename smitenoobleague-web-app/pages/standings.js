@@ -16,81 +16,26 @@ import Dropdown from 'react-bootstrap/Dropdown';
 //import background component and the image for it
 import FullBackground from '../src/components/FullBackground'
 import BG from '../public/images/dark_bg.png'
+import ScoreTable from 'src/components/ScoreTable';
 
-
-// move to component and give it props to fill the table. array of data
-function ScoreTable() {
-  return (
-    <>
-      <Row className="mt-4">
-        <Col md={3}></Col>
-        <Col md={6} className="">
-          <h5 className="text-center font-weight-bold bg-light mb-0 p-2 rounded-top"><u>Current standing for Divisionname</u></h5>
-          <Table responsive  variant='light' className='rounded-bottom'>
-            <thead className="thead-light">
-              <tr>
-                <th>#</th>
-                <th>Team</th>
-                <th>Points</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Teamname</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Teamname</td>
-                <td>15</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Teamname</td>
-                <td>12</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Teamname</td>
-                <td>11</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>Teamname</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>6</td>
-                <td>Teamname</td>
-                <td>6</td>
-              </tr>
-              <tr>
-                <td>7</td>
-                <td>Teamname</td>
-                <td>3</td>
-              </tr>
-              <tr>
-                <td>8</td>
-                <td>Teamname</td>
-                <td>1</td>
-              </tr>
-            </tbody>
-          </Table>
-        </Col>
-        <Col md={3}></Col>
-      </Row>
-    </>
-  );
-}
 
 
 export default function standings() {
 
-  const [SelectedDivision, setSelectedDivision] = useState('Godlike division');
+  const [SelectedDivision, setSelectedDivision] = useState({id: 1, name: 'Godlike division'});
 
   const changeDivision = (evt) => {
-    setSelectedDivision(evt.target.value);
+    var id = evt.target.value;
+    // - 1 array index always starts at 0
+    var name = evt.target[id - 1].text;
+    setSelectedDivision({id: id, name: name});
+    console.log(SelectedDivision);
+  }
+
+  const [SelectedPeriod, setSelectedPeriod] = useState('Split 1 2020');
+
+  const changePeriod = (evt) => {
+    setSelectedPeriod(evt.target.value);
     console.log(evt.target.value);
   }
 
@@ -103,9 +48,11 @@ export default function standings() {
       <Container>
         <Row className="mt-4">
           <Col md={6} className="mx-auto">
+            <Row>
+          <Col md={6} className="mx-auto">
             <Form>
               <Form.Group controlId="exampleForm.SelectCustom">
-                <Form.Control as="select" custom onChange={changeDivision} value={SelectedDivision}>
+                <Form.Control as="select" custom onChange={changeDivision} value={SelectedDivision.id}>
                   <option value="1">Godlike division</option>
                   <option value="2">Prime division</option>
                   <option value="3">Bronze division</option>
@@ -115,8 +62,22 @@ export default function standings() {
               </Form.Group>
             </Form>
           </Col>
+          <Col md={6} className="mx-auto">
+            <Form>
+              <Form.Group controlId="exampleForm.SelectCustom">
+                <Form.Control as="select" custom onChange={changePeriod} value={SelectedPeriod}>
+                  <option value="1">Split 1 2020</option>
+                  <option value="2">Mini-split 1 2020</option>
+                  <option value="3">Summer 2020 split</option>
+                  <option value="4">Fall 2020 split</option>
+                </Form.Control>
+              </Form.Group>
+            </Form>
+          </Col>
+          </Row>
+          </Col>
         </Row>
-       <ScoreTable />
+       <ScoreTable title={SelectedDivision.name}/>
       </Container>
       <Footer />
     </>
