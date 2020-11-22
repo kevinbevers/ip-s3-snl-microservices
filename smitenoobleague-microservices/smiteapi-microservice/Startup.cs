@@ -15,6 +15,10 @@ using smiteapi_microservice.Classes;
 using smiteapi_microservice.Contexts;
 using smiteapi_microservice.Interfaces;
 using smiteapi_microservice.Services;
+//database
+using smiteapi_microservice.Smiteapi_DB;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace smiteapi_microservice
 {
@@ -31,6 +35,18 @@ namespace smiteapi_microservice
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            // Replace "YourDbContext" with the name of your own DbContext derived class.
+            services.AddDbContextPool<SNL_Smiteapi_DBContext>(
+                dbContextOptions => dbContextOptions
+                    .UseMySql(
+                        // Replace with your connection string.
+                        Configuration.GetConnectionString("DefaultConnection"),
+                        // Replace with your server version and type.
+                        // For common usages, see pull request #1233.
+                        new MySqlServerVersion(new Version(8, 0, 22)),
+                        mySqlOptions => mySqlOptions
+                            .CharSetBehavior(CharSetBehavior.NeverAppend)));
+
             //add API dev authorization
             services.AddSingleton<IHirezApiContext>(new HirezApiContextV2 (Configuration.GetSection("Credentials").Get<ApiCredentials>()));
 
