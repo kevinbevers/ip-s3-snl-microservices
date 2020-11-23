@@ -15,6 +15,8 @@ using division_microservice.Classes;
 using division_microservice.Division_DB;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+//swagger
+using Microsoft.OpenApi.Models;
 
 namespace division_microservice
 {
@@ -44,6 +46,11 @@ namespace division_microservice
                         new MySqlServerVersion(new Version(8, 0, 22)), 
                         mySqlOptions => mySqlOptions
                             .CharSetBehavior(CharSetBehavior.NeverAppend)));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +70,13 @@ namespace division_microservice
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Division microservice API V1");
             });
         }
     }

@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ocelot-api-gateway", "ocelo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "smiteapi-microservice", "smiteapi-microservice\smiteapi-microservice.csproj", "{A0963638-4782-46D8-B784-47D319706D5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "division-microservice", "schedule-microservice\division-microservice.csproj", "{5D0D1A84-07AC-48A1-A09C-565ABD7F5B92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "division-microservice", "division-microservice\division-microservice.csproj", "{A4466488-F321-40F0-918E-C9B0AEFCD606}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +21,9 @@ Global
 		{A0963638-4782-46D8-B784-47D319706D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0963638-4782-46D8-B784-47D319706D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0963638-4782-46D8-B784-47D319706D5E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D0D1A84-07AC-48A1-A09C-565ABD7F5B92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D0D1A84-07AC-48A1-A09C-565ABD7F5B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D0D1A84-07AC-48A1-A09C-565ABD7F5B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D0D1A84-07AC-48A1-A09C-565ABD7F5B92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4466488-F321-40F0-918E-C9B0AEFCD606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4466488-F321-40F0-918E-C9B0AEFCD606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4466488-F321-40F0-918E-C9B0AEFCD606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4466488-F321-40F0-918E-C9B0AEFCD606}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

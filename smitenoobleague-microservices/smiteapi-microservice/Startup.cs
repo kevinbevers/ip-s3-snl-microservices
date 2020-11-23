@@ -19,6 +19,8 @@ using smiteapi_microservice.Services;
 using smiteapi_microservice.Smiteapi_DB;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+//swagger
+using Microsoft.OpenApi.Models;
 
 namespace smiteapi_microservice
 {
@@ -56,6 +58,12 @@ namespace smiteapi_microservice
 
             //add Scoped Services
             services.AddScoped<IHirezApiService, HirezApiService>();
+
+            //add swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Smiteapi microservice API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +83,13 @@ namespace smiteapi_microservice
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smiteapi microservice API V1");
             });
         }
     }
