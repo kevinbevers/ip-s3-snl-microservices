@@ -1,7 +1,11 @@
+//express for api
 const express = require('express');
 const app = express();
 app.use(express.json()); //add post middleware
+
+//schedule job
 const schedule = require('node-schedule');
+//http call 
 const http = require('http');
  //export TZ=UTC
  //export PORT=5003
@@ -73,9 +77,11 @@ app.get('/schedulematch/:id/:time', function (req, res) {
   res.send(`Game with ID: ${id} added to scheduling. Date: ${date}`);
 });
  
+//App listen
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port: ${port}`));
 
+//Methods / functions
 function ScheduleGame(date, id) {
   schedule.scheduleJob(date, function () {
     console.log("scheduled job ran.. " + "id: " + id + " @: " + date);
