@@ -1,63 +1,73 @@
 {
-    "Routes": [
-      {
-        "DownstreamPathTemplate": "/weatherforecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5001
-          }
-        ],
-        "UpstreamHeaderTransform": {
-          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-        },
-        "UpstreamPathTemplate": "/smiteapi/weather"
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamHeaderTransform": {
+        "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
       },
-      {
-        "DownstreamPathTemplate": "/{CatchAll}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5001
-          }
-        ],
-        "UpstreamHeaderTransform": {
-          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-        },
-        "UpstreamPathTemplate": "/smiteapi/{CatchAll}"
+      "UpstreamPathTemplate": "/smiteapi/{everything}",
+      "SwaggerKey": "smiteapi"
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamHeaderTransform": {
+        "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
       },
-      {
-        "DownstreamPathTemplate": "/{CatchAll}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5002
-          }
-        ],
-        "UpstreamHeaderTransform": {
-          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-        },
-        "UpstreamPathTemplate": "/division/{CatchAll}"
+      "UpstreamPathTemplate": "/division/{everything}",
+      "SwaggerKey": "division"
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamHeaderTransform": {
+        "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
       },
-      {
-        "DownstreamPathTemplate": "/{CatchAll}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5003
-          }
-        ],
-        "UpstreamHeaderTransform": {
-          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-        },
-        "UpstreamPathTemplate": "/nodeschedule/{CatchAll}"
-      }
-    ],
-    "GlobalConfiguration": {
-        "BaseUrl": "http://localhost:5000"
+      "UpstreamPathTemplate": "/nodeschedule/{everything}"
     }
+  ],
+  "SwaggerEndPoints": [ //Swagger Endpoints should match the Routes
+    {
+      "Key": "smiteapi",
+      "Config": [
+        {
+          "Name": "Smiteapi microservice API",
+          "Version": "v1",
+          "Url": "http://localhost:5001/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "division",
+      "Config": [
+        {
+          "Name": "Division microservice API",
+          "Version": "v1",
+          "Url": "http://localhost:5002/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000"
+  }
 }
