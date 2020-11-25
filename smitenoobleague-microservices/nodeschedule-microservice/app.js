@@ -1,7 +1,10 @@
 //express for api
 const express = require('express');
 const app = express();
-app.use(express.json()); //add post middleware
+app.use(express.json());
+//env variables
+const dotenv = require('dotenv');
+dotenv.config(); //add post middleware
 
 //schedule job
 const schedule = require('node-schedule');
