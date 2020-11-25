@@ -9,6 +9,7 @@ namespace division_microservice.Models.Internal
         public int ScheduleID { get; set; }
         public string ScheduleName { get; set; }
         public DateTime ScheduleStartDate { get; set; }
-        public List<Matchup> Matchups { get; set; }
+        public int CurrentWeek { get; set; }
+        public IEnumerable<Matchup> Matchups { get; set; }
     }
 }

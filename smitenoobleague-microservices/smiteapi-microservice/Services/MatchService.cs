@@ -36,7 +36,7 @@ namespace smiteapi_microservice.Services
             _logger = logger;
         }
 
-        public async Task<ActionResult<MatchData>> GetRawMatchData(int gameID)
+        public async Task<ActionResult<MatchData>> GetRawMatchDataAsync(int gameID)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace smiteapi_microservice.Services
             }
         }
 
-        public async Task<IActionResult> ProcessMatchID(MatchSubmission submission)
+        public async Task<IActionResult> ProcessMatchIdAsync(MatchSubmission submission)
         {
             try
             {
@@ -76,11 +76,11 @@ namespace smiteapi_microservice.Services
                         //check return message from api. if the return msg is null the match is valid
                         if (match.ret_msg != null)
                         {
-                            return await ProcessReturnMessageFromSmiteApi(submission, match);
+                            return await ProcessReturnMessageFromSmiteApiAsync(submission, match);
                         }
                         else
                         {
-                            return await SaveGameIdAndSendToStats(submission);
+                            return await SaveGameIdAndSendToStatsAsync(submission);
                         }
                     }
                 }
@@ -94,7 +94,7 @@ namespace smiteapi_microservice.Services
             }
         }
 
-        public async Task<IActionResult> ProcessScheduleApiRequest(MatchSubmission submission)
+        public async Task<IActionResult> ProcessScheduleApiRequestAsync(MatchSubmission submission)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace smiteapi_microservice.Services
                 }
                 else
                 {
-                    return await SaveGameIdAndSendToStats(submission);
+                    return await SaveGameIdAndSendToStatsAsync(submission);
                 }
             }
             catch(Exception ex)
@@ -122,7 +122,7 @@ namespace smiteapi_microservice.Services
             }
         }
 
-        public async Task<ActionResult<List<QueuedMatch>>> GetScheduledGamesFromDB()
+        public async Task<ActionResult<List<QueuedMatch>>> GetScheduledGamesFromDbAsync()
         {
             try
             {
@@ -151,7 +151,7 @@ namespace smiteapi_microservice.Services
         }
 
         #region Methods
-        private async Task<IActionResult> SaveGameIdAndSendToStats(MatchSubmission submission)
+        private async Task<IActionResult> SaveGameIdAndSendToStatsAsync(MatchSubmission submission)
         {
             //Add or update the submission entry in the database
             TableQueue entry = await _db.TableQueues.Where(entry => entry.GameId == submission.gameID).FirstAsync();
@@ -174,7 +174,7 @@ namespace smiteapi_microservice.Services
             return new ObjectResult(ResponseText_MatchDetailsAdded) { StatusCode = 201 }; //CREATED
         }
 
-        private async Task<IActionResult> ProcessReturnMessageFromSmiteApi(MatchSubmission submission, MatchData match)
+        private async Task<IActionResult> ProcessReturnMessageFromSmiteApiAsync(MatchSubmission submission, MatchData match)
         {
             string msg = match.ret_msg.ToString();
 
@@ -188,7 +188,7 @@ namespace smiteapi_microservice.Services
                 await _db.SaveChangesAsync();
 
                 //call the nodejs schedule api
-                await CallScheduleAPI(submission, plannedDate);
+                await CallScheduleApiAsync(submission, plannedDate);
                 //beautify response
                 string bdate = match.EntryDate.AddDays(7).ToString("dddd dd MMMM yyyy 'around' H:mm");
 
@@ -198,7 +198,7 @@ namespace smiteapi_microservice.Services
             return new ObjectResult(msg) { StatusCode = 200 }; //OK
         }
 
-        private static async Task CallScheduleAPI(MatchSubmission submission, string plannedDate)
+        private static async Task CallScheduleApiAsync(MatchSubmission submission, string plannedDate)
         {
             using (var httpClient = new HttpClient())
             {
