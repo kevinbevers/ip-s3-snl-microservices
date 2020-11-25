@@ -18,14 +18,19 @@ namespace smiteapi_microservice
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                 .ConfigureAppConfiguration((Host, config) => {
-                     var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-                     //config.AddJsonFile("appsettings.json");
-                     if (env != null)
-                     {
-                         config.AddJsonFile($"appsettings.{env}.json");
-                     }
-                 })
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                })
+                .ConfigureAppConfiguration((Host, config) => {
+                    var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                    //config.AddJsonFile("appsettings.json");
+                    if (env != null)
+                    {
+                        config.AddJsonFile($"appsettings.{env}.json");
+                    }
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

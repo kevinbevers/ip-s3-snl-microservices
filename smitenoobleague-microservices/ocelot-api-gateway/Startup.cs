@@ -54,12 +54,11 @@ namespace ocelot_api_gateway
             });
 
 
-            app.UseSwaggerForOcelotUI(opt =>
+            await app.UseSwaggerForOcelotUI(opt =>
             {
                 opt.PathToSwaggerGenerator = "/swagger/docs";
             })
-            .UseOcelot()
-            .Wait();
+            .UseOcelot();
         }
     }
 }

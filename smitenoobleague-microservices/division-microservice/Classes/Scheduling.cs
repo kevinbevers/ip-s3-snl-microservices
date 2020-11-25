@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using division_microservice.Internal_Models;
-using static division_microservice.Internal_Models.Schedule;
+using division_microservice.Models.Internal;
 
 namespace division_microservice.Classes
 {

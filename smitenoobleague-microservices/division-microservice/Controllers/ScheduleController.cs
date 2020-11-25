@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using division_microservice.Classes;
-using division_microservice.Internal_Models;
+using division_microservice.Models.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using division_microservice.Division_DB;
@@ -24,7 +24,7 @@ namespace division_microservice.Controllers
 
         // GET: schedule
         [HttpGet]
-        public async Task<Schedule> Get()
+        public Schedule Get()
         {
             List<Team> teams = new List<Team> {
                 new Team { TeamName = "team1", TeamID = 1 },

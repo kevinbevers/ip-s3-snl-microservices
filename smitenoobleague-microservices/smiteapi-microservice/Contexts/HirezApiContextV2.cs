@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using smiteapi_microservice.Internal_Models;
+using smiteapi_microservice.Models.Internal;
 using smiteapi_microservice.Interfaces;
-using smiteapi_microservice.Classes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using smiteapi_microservice.Interfaces;
-using smiteapi_microservice.Internal_Models;
-using smiteapi_microservice.External_Models;
+using smiteapi_microservice.Models.Internal;
+using smiteapi_microservice.Models.External;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,17 +16,17 @@ namespace smiteapi_microservice.Controllers
     [Route("[controller]")]
     public class ItemController : Controller
     {
-        private IHirezApiService hirezApiService;
+        private readonly IHirezApiService _hirezApiService;
 
         public ItemController(IHirezApiService apiService)
         {
-            hirezApiService = apiService;
+            _hirezApiService = apiService;
         }
         // GET: /patch
         [HttpGet]
         public async Task<IEnumerable<ApiItem>> Get()
         {
-            return await hirezApiService.GetItemsAsync();
+            return await _hirezApiService.GetItemsAsync();
         }
     }
 }
