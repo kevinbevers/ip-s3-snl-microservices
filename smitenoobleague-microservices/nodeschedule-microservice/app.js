@@ -8,48 +8,38 @@ dotenv.config(); //add post middleware
 
 //schedule job
 const schedule = require('node-schedule');
-//http call 
-const http = require('http');
+//make api calls with axios
+const axios = require('axios');
  //export TZ=UTC
  //export PORT=5003
 
 //should make a call to smiteapi api to get scheduled matchIDS from the database. 
 //save the scheduled tasks data to make sure they can be retrieved when node app restarts
-  http.get('http://localhost:5000/smiteapi/queuedmatch', (resp) => {
-  let data = '';
+axios.get(process.env.API_URL + '/queuedmatch')
+.then(res =>
+// The whole response has been received. Print out the result.
+{
+  console.log(JSON.parse(data));
+  let scheduledGames = JSON.parse(data);
+  //foreach received object
+  scheduledGames.forEach(game => {
 
-  // A chunk of data has been recieved.
-  resp.on('data', (chunk) => {
-    data += chunk;
+    const id = game.gameID;
+    const date = new Date(game.scheduleTime);
+    //still something wrong with this date sorting.
+    if (Date.parse(date) <= Date.now()) {
+      console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
+      //make api call to get matchdata. in that call it will also update the database
+    }
+    else {
+      console.log("Added " + id + " as scheduled job @: " + date);
+      ScheduleGame(date, id);
+    }
   });
-
-  // The whole response has been received. Print out the result.
-  resp.on('end', () => {
-    console.log(JSON.parse(data));
-    let scheduledGames = JSON.parse(data);
-
-    scheduledGames.forEach(game => {
-
-      const id = game.gameID;
-      const date = new Date(game.scheduleTime);
-
-      //still something wrong with this date sorting.
-      if(Date.parse(date) <= Date.now())
-      {
-        console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
-        //make api call to get matchdata. in that call it will also update the database
-      }
-      else {
-        console.log("Added " + id + " as scheduled job @: " + date );
-        ScheduleGame(date, id);
-      }
-    });
-
+})
+  .catch(err => {
+    console.log("Error: " + err.message);
   });
-
-}).on("error", (err) => {
-  console.log("Error: " + err.message);
-});
 
 app.get('/', function (req, res) {
   res.send('Node scheduler is running')
@@ -87,6 +77,32 @@ app.listen(port, () => console.log(`Listening on port: ${port}`));
 //Methods / functions
 function ScheduleGame(date, id) {
   schedule.scheduleJob(date, function () {
-    console.log("scheduled job ran.. " + "id: " + id + " @: " + date);
+
+    //send the gameID to the smiteapi microservice
+    axios.post(process.env.API_URL + '/queuedmatch', {
+      gameID: id,
+      teamID: 0
+      
+    })  
+    .then(res => {
+      //log the response
+      console.log("scheduled job ran successfull with the following data: {" + "id: " + id + " @: " + date + "}");
+      console.log(`statusCode: ${res.statusCode}`);
+      console.log(res);
+    })
+    .catch(error => {
+      //log the error
+      console.log("scheduled job ran unsuccessfull with the following data: {" + "id: " + id + " @: " + date + "}");
+      console.error(error);
+
+      //reschedule with + 2 hours
+      date = date.addHours(2);
+      ScheduleGame(date, id);
+    })
   });
+}
+//extension for Date object
+Date.prototype.addHours= function(h){
+  this.setHours(this.getHours()+h);
+  return this;
 }
