@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using smiteapi_microservice.Internal_Models;
+using smiteapi_microservice.Models.Internal;
 
 namespace smiteapi_microservice.Interfaces
 {

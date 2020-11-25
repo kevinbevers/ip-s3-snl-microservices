@@ -1,5 +1,5 @@
 ﻿using System;
-namespace smiteapi_microservice.External_Models
+namespace smiteapi_microservice.Models.External
 {
     public class MatchSubmission
     {

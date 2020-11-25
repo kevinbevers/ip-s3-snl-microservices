@@ -58,6 +58,7 @@ namespace smiteapi_microservice
 
             //add Scoped Services
             services.AddScoped<IHirezApiService, HirezApiService>();
+            services.AddScoped<IMatchService, MatchService>();
 
             //add swagger
             services.AddSwaggerGen(c =>

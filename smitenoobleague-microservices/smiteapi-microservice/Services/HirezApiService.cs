@@ -1,6 +1,6 @@
-﻿using smiteapi_microservice.Internal_Models;
+﻿using smiteapi_microservice.Models.Internal;
 using smiteapi_microservice.Interfaces;
-using smiteapi_microservice.External_Models;
+using smiteapi_microservice.Models.External;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace smiteapi_microservice.Internal_Models
+namespace smiteapi_microservice.Models.Internal
 {
     public partial class ApiItem
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace smiteapi_microservice.Internal_Models
+namespace smiteapi_microservice.Models.Internal
 {
     public partial class ApiGod
     {
