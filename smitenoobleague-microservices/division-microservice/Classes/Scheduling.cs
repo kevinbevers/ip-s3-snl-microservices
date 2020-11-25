@@ -7,30 +7,30 @@ namespace division_microservice.Classes
 {
     public static class Scheduling
     {
-        public static List<Matchup> Create(List<Team> ListTeam)
+        public static IEnumerable<Matchup> Create(List<MatchupTeam> ListTeam)
         {
             List<Matchup> matchups = new List<Matchup>();
             //if teams are uneven
             if (ListTeam.Count % 2 != 0)
             {
-                ListTeam.Add(new Team { TeamName = "No match planned", TeamID = 999999 });
+                ListTeam.Add(new MatchupTeam { TeamName = "No match planned", TeamID = 999999 });
             }
-            List<Team> teams = new List<Team>();
+            List<MatchupTeam> teams = new List<MatchupTeam>();
 
             teams.AddRange(ListTeam); // Copy all the elements.
             teams.RemoveAt(0); // To exclude the first team.
 
-
-            RoundRobin(ListTeam, matchups,teams);
-            RoundRobinInverted(ListTeam, matchups,teams);
+            matchups.AddRange(RoundRobin(ListTeam, teams));
+            matchups.AddRange(RoundRobinInverted(ListTeam,teams));
 
             //return schedule
             return matchups;
 
         }
 
-        private static void RoundRobin(List<Team> ListTeam, List<Matchup> matchups, List<Team> teams)
+        private static IList<Matchup> RoundRobin(IList<MatchupTeam> ListTeam, IList<MatchupTeam> teams)
         {
+            IList<Matchup> matchups = new List<Matchup>();
             int numTeams = ListTeam.Count();
             int numWeeks = (numTeams - 1);
             int numTeamsHalf = numTeams / 2;
@@ -72,9 +72,11 @@ namespace division_microservice.Classes
                     });
                 }
             }
+            return matchups;
         }
-        private static void RoundRobinInverted(List<Team> ListTeam, List<Matchup> matchups, List<Team> teams)
+        private static IList<Matchup> RoundRobinInverted(IList<MatchupTeam> ListTeam, IList<MatchupTeam> teams)
         {
+            IList <Matchup> matchups = new List<Matchup>();
             int numTeams = ListTeam.Count();
             int numWeeks = (numTeams - 1);
             int numTeamsHalf = numTeams / 2;
@@ -116,6 +118,8 @@ namespace division_microservice.Classes
                     });
                 }
             }
+
+            return matchups;
         }
     }
 
