@@ -29,14 +29,14 @@ namespace smiteapi_microservice.Controllers
         [HttpGet("{gameID}")]
         public async Task<ActionResult<MatchData>> Get(int gameID)
         {
-            return await _matchService.GetRawMatchData(gameID);
+            return await _matchService.GetRawMatchDataAsync(gameID);
         }
 
         // POST /match
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]MatchSubmission submission)
         {
-            return await _matchService.ProcessMatchID(submission);
+            return await _matchService.ProcessMatchIdAsync(submission);
         }
     }
 }

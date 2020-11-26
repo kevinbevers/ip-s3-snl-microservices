@@ -26,14 +26,14 @@ namespace smiteapi_microservice.Controllers
         [HttpGet]
         public async Task<ActionResult<List<QueuedMatch>>> Get()
         {
-            return await _matchService.GetScheduledGamesFromDB();
+            return await _matchService.GetScheduledGamesFromDbAsync();
         }
 
         // POST: /queuedmatch
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] MatchSubmission submission)
         {
-            return await _matchService.ProcessMatchID(submission);
+            return await _matchService.ProcessMatchIdAsync(submission);
 
         }
     }

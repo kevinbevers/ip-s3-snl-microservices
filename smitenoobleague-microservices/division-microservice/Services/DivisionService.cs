@@ -119,8 +119,7 @@ namespace division_microservice.Services
         #region methods
         private async Task<IEnumerable<Team>> GetTeamsByDivisionIdAsync(int divisionID)
         {
-            //call team service
-
+            //call team service           
             List<Team> mockTeams = new List<Team> {
                 new Team { TeamName = "team1", TeamID = 1 },
                 new Team { TeamName = "team2", TeamID = 2 },
