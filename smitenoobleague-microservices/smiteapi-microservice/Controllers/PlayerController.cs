@@ -10,7 +10,7 @@ using smiteapi_microservice.Interfaces;
 
 namespace smiteapi_microservice.Controllers
 {
-    [ServiceFilter(typeof(GatewayOnly))]
+    //[ServiceFilter(typeof(GatewayOnly))]
     [Route("[controller]")]
     public class PlayerController : Controller
     {

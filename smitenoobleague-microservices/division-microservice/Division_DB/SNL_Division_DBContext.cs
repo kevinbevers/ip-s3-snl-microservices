@@ -8,6 +8,7 @@ namespace division_microservice.Division_DB
 {
     public partial class SNL_Division_DBContext : DbContext
     {
+
         public SNL_Division_DBContext(DbContextOptions<SNL_Division_DBContext> options)
             : base(options)
         {
@@ -30,11 +31,10 @@ namespace division_microservice.Division_DB
 
                 entity.ToTable("TableDivision");
 
-                entity.Property(e => e.DivisionId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("DivisionID");
+                entity.Property(e => e.DivisionId).HasColumnName("DivisionID");
 
                 entity.Property(e => e.DivisionName)
+                    .IsRequired()
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
@@ -67,10 +67,15 @@ namespace division_microservice.Division_DB
 
                 entity.Property(e => e.ScheduleDivisionId).HasColumnName("ScheduleDivisionID");
 
+                entity.Property(e => e.ScheduleEndDate).HasColumnType("datetime");
+
                 entity.Property(e => e.ScheduleName)
+                    .IsRequired()
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.ScheduleStartDate).HasColumnType("datetime");
             });
 
             OnModelCreatingPartial(modelBuilder);

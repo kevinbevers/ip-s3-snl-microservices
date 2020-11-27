@@ -7,27 +7,62 @@ using division_microservice.Models.Internal;
 using Microsoft.AspNetCore.Mvc;
 using division_microservice.Division_DB;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using division_microservice.Classes;
+using System.Linq;
 
 namespace division_microservice.Services
 {
     public class DivisionService : IDivisionService
     {
         private readonly SNL_Division_DBContext _db;
+        private readonly IScheduleService _scheduleService;
         private readonly ILogger<DivisionService> _logger;
+        private readonly IValidationService _validationService;
 
-        public DivisionService(SNL_Division_DBContext db, ILogger<DivisionService> logger)
+        public DivisionService(SNL_Division_DBContext db, ILogger<DivisionService> logger, IScheduleService scheduleService, IValidationService validationService)
         {
             _db = db;
+            _scheduleService = scheduleService;
             _logger = logger;
+            _validationService = validationService;
         }
-        //located here so that the front-end only makes 1 call
-        public Task<ActionResult<int>> AddTeamsToDivisionAsync(IEnumerable<Team> teamsToAdd, int divisionID)
+
+        public async Task<ActionResult<IEnumerable<Division>>> GetDivisionsWithTeamsAsync()
         {
-            //call Teamservice with a list of teams
-            throw new NotImplementedException();
+            try
+            {
+                //get all rows of the table divisions
+                List<TableDivision> allDivisions = await _db.TableDivisions.ToListAsync();
+                if (allDivisions == null || allDivisions.Count() == 0)
+                {
+                    return new ObjectResult("No divisions created yet.") { StatusCode = 404 }; //OK
+                }
+                else
+                {
+                    List<Division> returnDivisions = new List<Division>();
+
+                    allDivisions.ForEach(async (division) =>
+                    {
+
+                        Division returnDivision = new Division { DivisionID = division.DivisionId, DivisionName = division.DivisionName };
+                        returnDivision.DivisionTeams = await DivisionTeams.GetByDivisionIdAsync(division.DivisionId);
+                        returnDivisions.Add(returnDivision);
+                    });
+
+                    return new ObjectResult(returnDivisions) { StatusCode = 200 }; //OK
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get all divisions.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get all divisions.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
         }
-        //located here so that the front-end only makes 1 call
-        public Task<ActionResult<int>> RemoveTeamsFromDivisionAsync(IEnumerable<Team> teamsToRemove, int divisionID)
+
+        public Task<ActionResult<int>> UpdateDivisionTeamsAsync(IEnumerable<Team> teams, int divisionID)
         {
             throw new NotImplementedException();
         }
@@ -36,16 +71,23 @@ namespace division_microservice.Services
         {
             try
             {
-                //create new row in database and save
-                TableDivision newDivision = new TableDivision { DivisionName = divisionName };
-                _db.TableDivisions.Add(newDivision);
-                await _db.SaveChangesAsync(); //entityframework will automatically populaty the ID
+                if (await _validationService.DivisionNameIsTakenAsync(divisionName, null))
+                {
+                    return new ObjectResult("Given division name is already in use") { StatusCode = 400 }; //CREATED
+                }
+                else
+                {
+                    //create new row in database and save
+                    TableDivision newDivision = new TableDivision { DivisionName = divisionName };
+                    _db.TableDivisions.Add(newDivision);
+                    await _db.SaveChangesAsync(); //entityframework will automatically populaty the ID
 
-                Division returnDivision = new Division { DivisionID = newDivision.DivisionId, DivisionName = newDivision.DivisionName };
+                    Division returnDivision = new Division { DivisionID = newDivision.DivisionId, DivisionName = newDivision.DivisionName };
 
-                return new ObjectResult(returnDivision) { StatusCode = 201 }; //CREATED
+                    return new ObjectResult(returnDivision) { StatusCode = 201 }; //CREATED
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //log the error
                 _logger.LogError(ex, "Something went wrong trying to create a division.");
@@ -58,11 +100,26 @@ namespace division_microservice.Services
         {
             try
             {
+                //delete all division data
+                await DeleteAllSchedulesForDivisionByIdAsync(divisionID);
                 //delete row in database and save
-                _db.TableDivisions.Remove(await _db.TableDivisions.FindAsync(divisionID));
-                await _db.SaveChangesAsync(); //entityframework will automatically populaty the ID
+                TableDivision divisionToDelete = await _db.TableDivisions.Where(d => d.DivisionId == divisionID).FirstOrDefaultAsync();
 
-                return new ObjectResult("Division successfully deleted") { StatusCode = 200 }; //OK
+                if (divisionToDelete == null)
+                {
+                    return new ObjectResult("No division found with the given ID") { StatusCode = 404 }; //OK
+                }
+                else
+                {
+                    _db.TableDivisions.Remove(divisionToDelete);
+                    await _db.SaveChangesAsync(); //save deletion / could have save changes as int changes and count the amount of changes and return that
+
+                    //make call to teamService to remove division id from the teams that have it
+
+                    return new ObjectResult("Division successfully deleted") { StatusCode = 200 }; //OK
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -77,13 +134,20 @@ namespace division_microservice.Services
         {
             try
             {
-                //delete row in database and save
+                //get row in database
                 TableDivision foundDivision = await _db.TableDivisions.FindAsync(divisionID);
+                //check if an object was returned
+                if (foundDivision == null)
+                {
+                    return new ObjectResult("No division found with the given divisionID") { StatusCode = 404 }; //NOT FOUND
+                }
+                else
+                {
+                    Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
+                    returnDivision.DivisionTeams = await DivisionTeams.GetByDivisionIdAsync(foundDivision.DivisionId);
 
-                Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
-                returnDivision.DivisionTeams = await GetTeamsByDivisionIdAsync(foundDivision.DivisionId);
-
-                return new ObjectResult(foundDivision) { StatusCode = 200 }; //OK
+                    return new ObjectResult(foundDivision) { StatusCode = 200 }; //OK
+                }
             }
             catch (Exception ex)
             {
@@ -94,43 +158,121 @@ namespace division_microservice.Services
             }
         }
 
+        public async Task<ActionResult<IEnumerable<Division>>> GetDivisionsAsync()
+        {
+            try
+            {
+                //get all rows of the table divisions
+                List<TableDivision> allDivisions = await _db.TableDivisions.ToListAsync();
+                if (allDivisions == null || allDivisions.Count() == 0)
+                {
+                    return new ObjectResult("No divisions created yet.") { StatusCode = 404 }; //OK
+                }
+                else
+                {
+                    List<Division> returnDivisions = new List<Division>();
+
+                    allDivisions.ForEach(division =>
+                    {
+
+                        Division returnDivision = new Division { DivisionID = division.DivisionId, DivisionName = division.DivisionName };
+                        returnDivisions.Add(returnDivision);
+                    });
+
+
+                    return new ObjectResult(returnDivisions) { StatusCode = 200 }; //OK
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get all divisions.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get all divisions.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
         public async Task<ActionResult<Division>> UpdateDivisionAsync(Division division)
         {
             try
             {
-                //update row in database and save
-                TableDivision foundDivision = await _db.TableDivisions.FindAsync(division.DivisionID);
-                foundDivision.DivisionName = division.DivisionName;
-                await _db.SaveChangesAsync();
+                    //update row in database and save
+                    TableDivision foundDivision = await _db.TableDivisions.FindAsync(division?.DivisionID);
 
-                Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
+                    if (foundDivision == null)
+                    {
+                        return new ObjectResult("No division found with the given divisionID") { StatusCode = 404 }; //NOT FOUND
+                    }
+                    else
+                    {
+                        if (await _validationService.DivisionNameIsTakenAsync(division.DivisionName, division.DivisionID))
+                        {
+                            return new ObjectResult("Given division name is already in use") { StatusCode = 400 }; //CREATED
+                        }
 
-                return new ObjectResult(foundDivision) { StatusCode = 200 }; //OK
+                        foundDivision.DivisionName = division?.DivisionName;
+                        await _db.SaveChangesAsync();
+
+                        Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
+                        return new ObjectResult(foundDivision) { StatusCode = 200 }; //OK
+                    }
             }
             catch (Exception ex)
             {
                 //log the error
                 _logger.LogError(ex, "Something went wrong trying to update division.");
+                //nullReference get's thrown when body is wrong.
+                //if (ex is NullReferenceException)
+                //{
+                //    //return result to client
+                //    return new ObjectResult("Body empty or not formatted correctly.") { StatusCode = 400 }; //BAD REQUEST
+                //}
+                //else
+                //{
                 //return result to client
                 return new ObjectResult("Something went wrong trying to update division.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+                //}
             }
         }
 
         #region methods
-        private async Task<IEnumerable<Team>> GetTeamsByDivisionIdAsync(int divisionID)
+        private async Task<bool> DeleteAllSchedulesForDivisionByIdAsync(int divisionID)
         {
-            //call team service           
-            List<Team> mockTeams = new List<Team> {
-                new Team { TeamName = "team1", TeamID = 1 },
-                new Team { TeamName = "team2", TeamID = 2 },
-                new Team { TeamName = "team3", TeamID = 3 },
-                new Team { TeamName = "team4", TeamID = 4 },
-                new Team { TeamName = "team5", TeamID = 5 },
-                new Team { TeamName = "team6", TeamID = 6 },
-                new Team { TeamName = "team7", TeamID = 7},
-                new Team { TeamName = "team8", TeamID = 8 }};
+            //no try catch neccesary let it throw exception when something goes wrong and catch it in the parent method
+            List<TableSchedule> schedulestoDelete = await _db.TableSchedules.Where(s => s.ScheduleDivisionId == divisionID).ToListAsync();
+            if (schedulestoDelete == null || schedulestoDelete.Count() == 0)
+            {
+                return true; //no schedules found
+            }
+            else
+            {
+                _db.RemoveRange(schedulestoDelete);
+                //get all schedule ids from the scheduleservice
+                ActionResult<IEnumerable<int>> actionResult = await _scheduleService.GetAllScheduleIDsByDivisionIdAsync(divisionID);
+                //if response was OK. then the response is valid to use
+                ObjectResult Result = actionResult.Result as ObjectResult;
+                if (Result.StatusCode == 200)
+                {
+                    //for each schedule that was found remove the matchups from the matchup table
+                    IEnumerable<int> scheduleIds = (IEnumerable<int>)Result.Value;
+                    foreach (int id in scheduleIds)
+                    {
+                        List<TableMatchup> matchupsToDelete = await _db.TableMatchups.Where(m => m.ScheduleId == id).ToListAsync();
+                        if (matchupsToDelete != null || matchupsToDelete.Count() > 0)
+                        {
+                            _db.RemoveRange(matchupsToDelete);
+                        }
+                    }
 
-            return mockTeams;
+                    await _db.SaveChangesAsync();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
         #endregion
     }

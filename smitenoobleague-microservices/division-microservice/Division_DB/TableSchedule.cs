@@ -9,6 +9,8 @@ namespace division_microservice.Division_DB
     {
         public int ScheduleId { get; set; }
         public string ScheduleName { get; set; }
-        public int? ScheduleDivisionId { get; set; }
+        public int ScheduleDivisionId { get; set; }
+        public DateTime ScheduleStartDate { get; set; }
+        public DateTime ScheduleEndDate { get; set; }
     }
 }

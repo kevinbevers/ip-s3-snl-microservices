@@ -1,5 +1,5 @@
 ﻿using System;
-namespace division_microservice.Models.External
+namespace division_microservice.Models.Internal
 {
     public class Team
     {

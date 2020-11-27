@@ -12,7 +12,7 @@
       "UpstreamHeaderTransform": {
         "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
       },
-      "UpstreamPathTemplate": "/smiteapi/{everything}",
+      "UpstreamPathTemplate": "/smiteapi-service/{everything}",
       "SwaggerKey": "smiteapi"
     },
     {
@@ -27,7 +27,7 @@
       "UpstreamHeaderTransform": {
         "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
       },
-      "UpstreamPathTemplate": "/division/{everything}",
+      "UpstreamPathTemplate": "/division-service/{everything}",
       "SwaggerKey": "division"
     },
     {

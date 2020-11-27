@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace smiteapi_microservice.Controllers
 {
-    [ServiceFilter(typeof(GatewayOnly))]
+    //[ServiceFilter(typeof(GatewayOnly))]
     [Route("[controller]")]
     public class MatchController : Controller
     {

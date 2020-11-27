@@ -28,9 +28,7 @@ namespace smiteapi_microservice.Services
 
         public async Task<IEnumerable<ApiGod>> GetGodsAsync()
         {
-            List<ApiGod> gods = await _hirezApi.GetAllGods();
-
-            return gods;
+           return await _hirezApi.GetAllGods();
         }
 
         public async Task<IEnumerable<ApiItem>> GetItemsAsync()

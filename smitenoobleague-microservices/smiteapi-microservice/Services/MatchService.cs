@@ -10,6 +10,8 @@ using smiteapi_microservice.Models.External;
 using smiteapi_microservice.Smiteapi_DB;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using smiteapi_microservice.Classes;
+using Microsoft.Extensions.Options;
 
 namespace smiteapi_microservice.Services
 {
@@ -20,13 +22,15 @@ namespace smiteapi_microservice.Services
         private readonly IHirezApiService _hirezApi;
         //logging
         private readonly ILogger<MatchService> _logger;
+        //gateway key
+        //private readonly GatewayKey _gatewayKey;
         //return messages, move to static class
         private readonly string ResponeText_alreadySubmitted = "gameID is already submitted";
         private readonly string ResponeText_gameIdEmpty = "gameID can't be empty";
         private readonly string ResponseText_MatchDetailsHidden = "Matchdata not yet available. The data will be added once it becomes available at"; //Date will be added after this
         private readonly string ResponseText_MatchDetailsAdded = "Matchdata was added to our database";
 
-        public MatchService(SNL_Smiteapi_DBContext db, IHirezApiService hirezApi, ILogger<MatchService> logger)
+        public MatchService(SNL_Smiteapi_DBContext db, IHirezApiService hirezApi, ILogger<MatchService> logger) //, IOptions<GatewayKey> gatewayKey
         {
             //database
             _db = db;
@@ -34,6 +38,8 @@ namespace smiteapi_microservice.Services
             _hirezApi = hirezApi;
             //logger
             _logger = logger;
+            //key to access api's
+            //_gatewayKey = gatewayKey.Value;
         }
 
         public async Task<ActionResult<MatchData>> GetRawMatchDataAsync(int gameID)
@@ -188,7 +194,7 @@ namespace smiteapi_microservice.Services
                 await _db.SaveChangesAsync();
 
                 //call the nodejs schedule api
-                await CallScheduleApiAsync(submission, plannedDate);
+                await CallScheduleApiAsync(submission, plannedDate); // _gatewayKey.Key
                 //beautify response
                 string bdate = match.EntryDate.AddDays(7).ToString("dddd dd MMMM yyyy 'around' H:mm");
 
@@ -198,10 +204,11 @@ namespace smiteapi_microservice.Services
             return new ObjectResult(msg) { StatusCode = 200 }; //OK
         }
 
-        private static async Task CallScheduleApiAsync(MatchSubmission submission, string plannedDate)
+        private static async Task CallScheduleApiAsync(MatchSubmission submission, string plannedDate)//, string gatewayKey
         {
             using (var httpClient = new HttpClient())
             {
+                //httpClient.DefaultRequestHeaders.Add("GatewayKey", gatewayKey);
                 httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
                                                               //should make the http call dynamic by getting the string from the Gateway
                 using (var response = await httpClient.GetAsync($"http://localhost:5003/schedulematch/{submission.gameID}/{plannedDate}"))
