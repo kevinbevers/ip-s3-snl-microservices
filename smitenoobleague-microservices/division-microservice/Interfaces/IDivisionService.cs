@@ -14,8 +14,9 @@ namespace division_microservice.Interfaces
         Task<ActionResult<Division>> UpdateDivisionAsync(Division division);
         Task<ActionResult<int>> DeleteDivisionByIdAsync(int divisionID);
         Task<ActionResult<Division>> GetDivisionByIdAsync(int divisionID);
+        Task<ActionResult<IEnumerable<Division>>> GetDivisionsAsync();
         //Division teams
-        Task<ActionResult<int>> AddTeamsToDivisionAsync(IEnumerable<Team> teamsToAdd, int divisionID);
-        Task<ActionResult<int>> RemoveTeamsFromDivisionAsync(IEnumerable<Team> teamsToRemove, int divisionID);
+        Task<ActionResult<int>> UpdateDivisionTeamsAsync(IEnumerable<Team> teams, int divisionID);
+        Task<ActionResult<IEnumerable<Division>>> GetDivisionsWithTeamsAsync();
     }
 }

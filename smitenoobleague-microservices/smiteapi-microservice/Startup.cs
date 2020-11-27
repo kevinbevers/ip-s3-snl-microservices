@@ -52,9 +52,9 @@ namespace smiteapi_microservice
             //add API dev authorization
             services.AddSingleton<IHirezApiContext>(new HirezApiContextV2 (Configuration.GetSection("Credentials").Get<ApiCredentials>()));
 
-            //inject gatewaykey from appsettings.json
-            services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
-            services.AddScoped<GatewayOnly>();
+            //inject gatewaykey from appsettings.json UNUSED if api's are not exposed
+            //services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
+            //services.AddScoped<GatewayOnly>();
 
             //add Scoped Services
             services.AddScoped<IHirezApiService, HirezApiService>();

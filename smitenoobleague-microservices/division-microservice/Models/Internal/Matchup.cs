@@ -5,8 +5,9 @@ namespace division_microservice.Models.Internal
     {
         public int MatchupID { get; set; }
         public int WeekNumber { get; set; }
-        public MatchupTeam HomeTeam { get; set; }
-        public MatchupTeam AwayTeam { get; set; }
+        public Team HomeTeam { get; set; }
+        public Team AwayTeam { get; set; }
         public bool ByeWeek { get; set; }
+        public string Score { get; set; }
     }
 }

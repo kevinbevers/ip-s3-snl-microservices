@@ -17,6 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 //swagger
 using Microsoft.OpenApi.Models;
+using division_microservice.Interfaces;
+using division_microservice.Services;
 
 namespace division_microservice
 {
@@ -46,6 +48,14 @@ namespace division_microservice
                         new MySqlServerVersion(new Version(8, 0, 22)), 
                         mySqlOptions => mySqlOptions
                             .CharSetBehavior(CharSetBehavior.NeverAppend)));
+
+            //inject gatewaykey from appsettings.json
+            //services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
+            //services.AddScoped<GatewayOnly>();
+            //add Scoped services
+            services.AddScoped<IDivisionService, DivisionService>();
+            services.AddScoped<IScheduleService, ScheduleService>();
+            services.AddScoped<IValidationService, ValidationService>();
 
             services.AddSwaggerGen(c =>
             {

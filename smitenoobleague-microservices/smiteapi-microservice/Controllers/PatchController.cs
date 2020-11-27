@@ -11,7 +11,7 @@ using smiteapi_microservice.Models.External;
 
 namespace smiteapi_microservice.Controllers
 {
-    [ServiceFilter(typeof(GatewayOnly))]
+    //[ServiceFilter(typeof(GatewayOnly))]
     [ApiController]
     [Route("[controller]")]
     public class PatchController : Controller

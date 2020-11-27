@@ -7,15 +7,15 @@ namespace division_microservice.Classes
 {
     public static class Scheduling
     {
-        public static IEnumerable<Matchup> Create(List<MatchupTeam> ListTeam)
+        public static IEnumerable<Matchup> Create(List<Team> ListTeam)
         {
             List<Matchup> matchups = new List<Matchup>();
             //if teams are uneven
             if (ListTeam.Count % 2 != 0)
             {
-                ListTeam.Add(new MatchupTeam { TeamName = "No match planned", TeamID = 999999 });
+                ListTeam.Add(new Team { TeamName = "No match planned", TeamID = 999999 });
             }
-            List<MatchupTeam> teams = new List<MatchupTeam>();
+            List<Team> teams = new List<Team>();
 
             teams.AddRange(ListTeam); // Copy all the elements.
             teams.RemoveAt(0); // To exclude the first team.
@@ -28,7 +28,7 @@ namespace division_microservice.Classes
 
         }
 
-        private static IList<Matchup> RoundRobin(IList<MatchupTeam> ListTeam, IList<MatchupTeam> teams)
+        private static IList<Matchup> RoundRobin(IList<Team> ListTeam, IList<Team> teams)
         {
             IList<Matchup> matchups = new List<Matchup>();
             int numTeams = ListTeam.Count();
@@ -74,7 +74,7 @@ namespace division_microservice.Classes
             }
             return matchups;
         }
-        private static IList<Matchup> RoundRobinInverted(IList<MatchupTeam> ListTeam, IList<MatchupTeam> teams)
+        private static IList<Matchup> RoundRobinInverted(IList<Team> ListTeam, IList<Team> teams)
         {
             IList <Matchup> matchups = new List<Matchup>();
             int numTeams = ListTeam.Count();
