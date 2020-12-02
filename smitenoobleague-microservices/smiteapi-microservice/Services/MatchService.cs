@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using smiteapi_microservice.Classes;
 using Microsoft.Extensions.Options;
-
+//#optimize / make it cleaner in the future
 namespace smiteapi_microservice.Services
 {
     public class MatchService : IMatchService

@@ -117,6 +117,11 @@ namespace smiteapi_microservice.Contexts
 
                 return res;
             }
+            else if(!json.Contains("{"))
+            {
+                res.error = json;
+                return res;
+            }
             else
             {
                 res.content = json;
@@ -183,8 +188,17 @@ namespace smiteapi_microservice.Contexts
                 var error = new List<ApiPlayer> { new ApiPlayer { ret_msg = response.error } };
                 //set error message as ret_msg 
                 return error;
+            }    
+            try
+            {
+                return JsonConvert.DeserializeObject<List<ApiPlayer>>(response.content);
             }
-            return JsonConvert.DeserializeObject<List<ApiPlayer>>(response.content);
+            catch
+            {
+                var error = new List<ApiPlayer> { new ApiPlayer { ret_msg = response.content } };
+                //set error message as ret_msg 
+                return error;
+            }
         }
 
         public Task<string> GetTeamDetails(int id)
@@ -206,7 +220,16 @@ namespace smiteapi_microservice.Contexts
                 //set error message as ret_msg 
                 return error;
             }
-            return JsonConvert.DeserializeObject<List<ApiItem>>(response.content);
+            try
+            {
+                return JsonConvert.DeserializeObject<List<ApiItem>>(response.content);
+            }
+            catch
+            {
+                var error = new List<ApiItem> { new ApiItem { ret_msg = response.content } };
+                //set error message as ret_msg 
+                return error;
+            }  
         }
 
         public async Task<List<ApiGod>> GetAllGods()
@@ -218,8 +241,17 @@ namespace smiteapi_microservice.Contexts
                 var error = new List<ApiGod> { new ApiGod { ret_msg = response.error } };
                 //set error message as ret_msg 
                 return error;
+            }           
+            try
+            {
+                return JsonConvert.DeserializeObject<List<ApiGod>>(response.content);
             }
-            return JsonConvert.DeserializeObject<List<ApiGod>>(response.content);
+            catch
+            {
+                var error = new List<ApiGod> { new ApiGod { ret_msg = response.content } };
+                //set error message as ret_msg 
+                return error;
+            }
         }
 
         public Task<IEnumerable<ApiPlayerMatchStat>> GetMatchPlayerDetails(int matchID)
@@ -240,8 +272,17 @@ namespace smiteapi_microservice.Contexts
                 var error = new ApiPatchInfo { ret_msg = response.error } ;
                 //set error message as ret_msg 
                 return error;
+            }        
+            try
+            {
+                return JsonConvert.DeserializeObject<ApiPatchInfo>(response.content);
             }
-            return JsonConvert.DeserializeObject<ApiPatchInfo>(response.content);
+            catch
+            {
+                var error = new ApiPatchInfo { ret_msg = response.content };
+                //set error message as ret_msg 
+                return error;
+            }
         }
 
         public async Task<string> PingAPI()
