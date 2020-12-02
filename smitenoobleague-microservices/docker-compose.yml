@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  division-microservice:
+    image: ${DOCKER_REGISTRY-}divisionmicroservice
+    container_name: divisionmicroservice
+    build:
+      context: ./division-microservice/
+
+  smiteapi-microservice:
+    image: ${DOCKER_REGISTRY-}smiteapimicroservice
+    container_name: smiteapimicroservice
+    build:
+      context: ./smiteapi-microservice/
+
+  ocelot-api-gateway:
+    image: ${DOCKER_REGISTRY-}ocelotapigateway
+    container_name: ocelotapigateway
+    build:
+      context: ./ocelot-api-gateway/
+    depends_on:
+      - division-microservice
+      - smiteapi-microservice
+
+  nodeschedule-microservice:
+    image: ${DOCKER_REGISTRY-}nodeschedulemicroservice
+    container_name: nodeschedulemicroservice
+    build:
+      context: ./nodeschedule-microservice/
+    environment:
+      PORT: 80
+      TZ: UTC
+      API_URL: http://smiteapi-microservice
+    depends_on:
+      - smiteapi-microservice
+

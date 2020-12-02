@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>smiteapi_microservice</RootNamespace>
+    <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>64019f72-5ff4-4271-8728-a3e001e06285</UserSecretsId>
   </PropertyGroup>
 
 

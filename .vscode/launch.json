@@ -10,6 +10,17 @@
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}/smitenoobleague-web-app"
+        },
+        {
+            "name": "Docker Node.js Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "platform": "node",
+            "node": {
+                "package": "${workspaceFolder}/smitenoobleague-microservices/nodeschedule-microservice/package.json",
+                "localRoot": "${workspaceFolder}/smitenoobleague-microservices/nodeschedule-microservice"
+            }
         }
     ]
 }
