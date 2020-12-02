@@ -91,7 +91,7 @@ export default function TeamStat({ postData }) {
               </Col>
               <Col md={3} xl={3} xs={12} className="">
                  <Row>
-                     <Col md={12} className="text-center"><h5 className="RecentPerformanceTitle">Recent peformance chart <a href="#" onClick={() => setRPPShow(true)} className="link-unstyled"><FaInfoCircle /></a></h5></Col>
+                     <Col md={12} className="text-center"><h5 className="RecentPerformanceTitle">Recent performance chart <a href="#" onClick={() => setRPPShow(true)} className="link-unstyled"><FaInfoCircle /></a></h5></Col>
                  </Row>
                  <Row className="text-center">
                      {/* Chart.JS Line graph */}
