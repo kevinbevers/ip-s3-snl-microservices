@@ -285,3 +285,5 @@ smitenoobleague-microservices/smiteapi-microservice/appsettings.Production.json
 smitenoobleague-web-app/build.zip
 smitenoobleague-microservices/schedule-microservice/appsettings.Development.json
 smitenoobleague-microservices/smiteapi-microservice/Config/hirezapi.json
+.env
+.vscode
