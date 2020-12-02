@@ -45,7 +45,14 @@ namespace smiteapi_microservice.Services
 
             if (matchDetails[0].ret_msg != null)
             {
-                return new MatchData { ret_msg = matchDetails[0].ret_msg };
+                if (matchDetails[0].ret_msg.ToString() == "[]")
+                {
+                    return new MatchData { ret_msg = "No match found with the given ID" };
+                }
+                else
+                {
+                    return new MatchData { ret_msg = matchDetails[0].ret_msg };
+                }
             }
             else
             {

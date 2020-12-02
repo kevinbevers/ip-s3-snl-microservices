@@ -5,14 +5,15 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "smiteapi-microservice",
+          "Port": 80
         }
       ],
       "UpstreamHeaderTransform": {
         "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
       },
       "UpstreamPathTemplate": "/smiteapi-service/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET" ],
       "SwaggerKey": "smiteapi"
     },
     {
@@ -20,8 +21,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "division-microservice",
+          "Port": 80
         }
       ],
       "UpstreamHeaderTransform": {
@@ -35,8 +36,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "nodeschedule-microservice",
+          "Port": 80
         }
       ],
       "UpstreamHeaderTransform": {
@@ -52,7 +53,7 @@
         {
           "Name": "Smiteapi microservice API",
           "Version": "v1",
-          "Url": "http://localhost:5001/swagger/v1/swagger.json"
+          "Url": "http://smiteapi-microservice/swagger/v1/swagger.json"
         }
       ]
     },
@@ -62,12 +63,12 @@
         {
           "Name": "Division microservice API",
           "Version": "v1",
-          "Url": "http://localhost:5002/swagger/v1/swagger.json"
+          "Url": "http://division-microservice/swagger/v1/swagger.json"
         }
       ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5000"
+    "BaseUrl": "ocelot-api-gateway"
   }
 }

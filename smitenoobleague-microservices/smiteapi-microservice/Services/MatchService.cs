@@ -211,7 +211,7 @@ namespace smiteapi_microservice.Services
                 //httpClient.DefaultRequestHeaders.Add("GatewayKey", gatewayKey);
                 httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
                                                               //should make the http call dynamic by getting the string from the Gateway
-                using (var response = await httpClient.GetAsync($"http://localhost:5003/schedulematch/{submission.gameID}/{plannedDate}"))
+                using (var response = await httpClient.GetAsync($"http://nodeschedule-microservice/schedulematch/{submission.gameID}/{plannedDate}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     //msg += " res:" + apiResponse;

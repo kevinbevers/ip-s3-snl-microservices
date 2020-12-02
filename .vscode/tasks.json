@@ -37,6 +37,47 @@
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build",
+            "platform": "node",
+            "dockerBuild": {
+                "dockerfile": "${workspaceFolder}/smitenoobleague-microservices/nodeschedule-microservice/Dockerfile",
+                "context": "${workspaceFolder}/smitenoobleague-microservices/nodeschedule-microservice",
+                "pull": true
+            },
+            "node": {
+                "package": "${workspaceFolder}/smitenoobleague-microservices/nodeschedule-microservice/package.json"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: release",
+            "dependsOn": [
+                "docker-build"
+            ],
+            "platform": "node",
+            "node": {
+                "package": "${workspaceFolder}/smitenoobleague-microservices/nodeschedule-microservice/package.json"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: debug",
+            "dependsOn": [
+                "docker-build"
+            ],
+            "dockerRun": {
+                "env": {
+                    "DEBUG": "*",
+                    "NODE_ENV": "development"
+                }
+            },
+            "node": {
+                "package": "${workspaceFolder}/smitenoobleague-microservices/nodeschedule-microservice/package.json",
+                "enableDebugging": true
+            }
         }
     ]
 }

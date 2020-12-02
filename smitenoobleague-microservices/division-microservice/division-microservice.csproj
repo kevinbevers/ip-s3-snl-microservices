@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>division_microservice</RootNamespace>
+    <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>0e11edeb-a397-47c7-b308-3fcc6a81fe0a</UserSecretsId>
   </PropertyGroup>
 
 
