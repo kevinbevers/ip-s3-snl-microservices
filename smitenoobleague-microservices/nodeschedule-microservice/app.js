@@ -55,11 +55,11 @@ function ScheduleGame(date, id) {
     //teamid part not implemented yet
     teamid = 0;
     //send the gameID to the smiteapi microservice
-    CallSmiteApi(id,teamid);
+    CallSmiteApi(id,teamid,date);
   });
 }
 
-function CallSmiteApi(id, teamid){
+function CallSmiteApi(id, teamid,date){
   axios.post(process.env.API_URL + '/queuedmatch', {
     gameID: id,
     teamID: teamid
@@ -73,12 +73,13 @@ function CallSmiteApi(id, teamid){
   .catch(error => {
     //log the error
     console.log("scheduled job ran unsuccessfull with the following data: {" + "id: " + id + " @: " + date + "}");
-    console.error(error);
+    //Log the response text
+    console.error(error.response.data);
 
     //reschedule with + 2 hours
     date = date.addHours(2);
     ScheduleGame(date, id);
-  });
+  }).catch(error => {console.error(error);});
 }
 
 function GetJobsFromDB()
@@ -87,8 +88,9 @@ function GetJobsFromDB()
 .then(res =>
 // The whole response has been received. Print out the result.
 {
-  console.log(JSON.parse(data));
-  let scheduledGames = JSON.parse(data);
+  const data = res.data;
+  console.log(data);
+  let scheduledGames = data;
   //foreach received object
   scheduledGames.forEach(game => {
 
@@ -98,7 +100,7 @@ function GetJobsFromDB()
     if (Date.parse(date) <= Date.now()) {
       console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
       //make api call to get matchdata. in that call it will also update the database
-      CallSmiteApi(id,0); //teamid not yet implemented
+      CallSmiteApi(id,0,date); //teamid not yet implemented
     }
     else {
       console.log("Added " + id + " as scheduled job @: " + date);

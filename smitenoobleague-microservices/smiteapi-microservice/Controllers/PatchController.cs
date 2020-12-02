@@ -24,7 +24,7 @@ namespace smiteapi_microservice.Controllers
         }
         // GET: /patch
         [HttpGet]
-        public async Task<string> Get()
+        public async Task<ApiPatchInfo> Get()
         {
             return await _hirezApiService.GetCurrentPatchInfoAsync();
         }
