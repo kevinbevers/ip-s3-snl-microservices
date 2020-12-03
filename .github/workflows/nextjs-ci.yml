@@ -30,7 +30,15 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd smitenoobleague-web-app
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+    - name: Install dependencies
+      run: |
+       cd smitenoobleague-web-app
+       npm ci
+    - name: Build
+      run: |
+       cd smitenoobleague-web-app
+       npm run build --if-present
+    - name: Test
+      run: |
+       cd smitenoobleague-web-app
+       npm test
