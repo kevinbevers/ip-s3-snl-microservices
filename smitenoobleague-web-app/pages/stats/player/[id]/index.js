@@ -4,15 +4,11 @@ import React, { useState } from "react";
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
 //boostrap components
-import Jumbotron from "react-bootstrap/Jumbotron";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { Badge, Image, Modal, Button } from "react-bootstrap";
+import { Badge, Image, Modal, Button, Jumbotron, Container, Row, Col } from "react-bootstrap";
 //icons
-import { FaBox, FaInfoCircle } from "react-icons/fa";
+// import {} from "react-icons/fa";
 //chart
-import {Doughnut, Pie} from "react-chartjs-2";
+import {Doughnut} from "react-chartjs-2";
 //custom components
 
 
