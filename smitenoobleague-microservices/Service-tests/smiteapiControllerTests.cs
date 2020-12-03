@@ -56,7 +56,6 @@ namespace service_tests
 
             //Assert
             var QueuedMatches = Assert.IsType<ActionResult<List<QueuedMatch>>>(result);
-
             //check if something got returned
             Assert.True(QueuedMatches.Value != null);
             //check if the first match has a gameid of 1233
