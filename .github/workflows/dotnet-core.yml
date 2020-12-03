@@ -18,8 +18,16 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore
+      run: |
+        cd smitenoobleague-microservices 
+        dotnet restore division-microservice
+        dotnet restore smiteapi-microservice
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: |
+        cd smitenoobleague-microservices
+        dotnet build --configuration Release --no-restore division-microservice
+        dotnet build --configuration Release --no-restore smiteapi-microservice
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: |
+        cd smitenoobleague-microservices
+        dotnet test --no-restore --verbosity normal service-tests
