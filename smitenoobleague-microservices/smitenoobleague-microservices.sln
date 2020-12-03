@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "division-microservice", "di
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4D888BD1-FA88-485E-AE5D-48ED13599735}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service-tests", "Service-tests\Service-tests.csproj", "{9032EB4A-B689-441B-AD45-BE8DE0B230C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,5 +33,9 @@ Global
 		{4D888BD1-FA88-485E-AE5D-48ED13599735}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D888BD1-FA88-485E-AE5D-48ED13599735}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D888BD1-FA88-485E-AE5D-48ED13599735}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9032EB4A-B689-441B-AD45-BE8DE0B230C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9032EB4A-B689-441B-AD45-BE8DE0B230C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9032EB4A-B689-441B-AD45-BE8DE0B230C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9032EB4A-B689-441B-AD45-BE8DE0B230C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
