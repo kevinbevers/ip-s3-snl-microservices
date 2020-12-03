@@ -32,6 +32,7 @@ namespace smiteapi_microservice
         }
 
         public IConfiguration Configuration { get; }
+        string dbpass = Environment.GetEnvironmentVariable("DB_Password");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -42,7 +43,7 @@ namespace smiteapi_microservice
                 dbContextOptions => dbContextOptions
                     .UseMySql(
                         // Replace with your connection string.
-                        Configuration.GetConnectionString("DefaultConnection"),
+                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_Smiteapi_DB",
                         // Replace with your server version and type.
                         // For common usages, see pull request #1233.
                         new MySqlServerVersion(new Version(8, 0, 22)),
