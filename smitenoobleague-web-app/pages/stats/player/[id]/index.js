@@ -1,8 +1,8 @@
 //default react imports
 import React, { useState } from "react";
 //default page stuff
-import NavBar from "src/components/NavBar";
-import Footer from "src/components/Footer";
+import NavBar from "src/components/NavBar"; 
+import Footer from "src/components/Footer"; 
 //boostrap components
 import { Badge, Image, Modal, Button, Jumbotron, Container, Row, Col } from "react-bootstrap";
 //icons
