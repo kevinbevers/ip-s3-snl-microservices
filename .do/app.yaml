@@ -1,0 +1,10 @@
+name: snl-web-app
+services:
+- build_command: npm run build
+  environment_slug: node-js
+  github:
+    branch: master
+    deploy_on_push: true
+    repo: kevinbevers/ip-s3-snl-microservices
+  name: snl-web-app
+  source_dir: smitenoobleague-web-app
