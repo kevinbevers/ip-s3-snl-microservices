@@ -30,7 +30,7 @@ export default function matchdetails({received}) {
   {
     return <DefaultErrorPage statusCode={received.status} />
   }
-  else if(received.data.ret_msg != null){
+  else if(received.data.ret_msg != ""){
     return <DefaultErrorPage statusCode={404} />
   }
   else {
@@ -125,7 +125,7 @@ export default function matchdetails({received}) {
 export async function getServerSideProps({params}) {
 
 try {
-  const response = await axios.get('https://localhost:5000/smiteapi/match/' + params.id);
+  const response = await axios.get('http://localhost:5000/smiteapi-service/Match/' + params.id);
   const received = {
     status: response.status,
     data: response.data,

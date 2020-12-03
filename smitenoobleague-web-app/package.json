@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "prod": "next export",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@babel/core": "^7.12.3",
@@ -29,8 +31,26 @@
     "react-icons": "^3.11.0",
     "resolve-url-loader": "^3.1.2"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    },
+    "roots": [
+      "<rootDir>",
+      "src"
+    ],
+    "modulePaths": [
+      "<rootDir>",
+      "src"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ]
+  },
   "devDependencies": {
     "@testing-library/react": "^11.1.0",
+    "jest-canvas-mock": "^2.3.0",
     "jest": "^26.6.0"
   }
 }

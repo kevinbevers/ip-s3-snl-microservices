@@ -1,63 +1,74 @@
 {
-    "Routes": [
-      {
-        "DownstreamPathTemplate": "/weatherforecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5001
-          }
-        ],
-        "UpstreamHeaderTransform": {
-          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-        },
-        "UpstreamPathTemplate": "/smiteapi/weather"
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "smiteapi-microservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamHeaderTransform": {
+        "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
       },
-      {
-        "DownstreamPathTemplate": "/{CatchAll}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5001
-          }
-        ],
-        "UpstreamHeaderTransform": {
-          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-        },
-        "UpstreamPathTemplate": "/smiteapi/{CatchAll}"
+      "UpstreamPathTemplate": "/smiteapi-service/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET" ],
+      "SwaggerKey": "smiteapi"
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "division-microservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamHeaderTransform": {
+        "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
       },
-      {
-        "DownstreamPathTemplate": "/{CatchAll}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5002
-          }
-        ],
-        "UpstreamHeaderTransform": {
-          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-        },
-        "UpstreamPathTemplate": "/division/{CatchAll}"
+      "UpstreamPathTemplate": "/division-service/{everything}",
+      "SwaggerKey": "division"
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "nodeschedule-microservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamHeaderTransform": {
+        "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
       },
-      {
-        "DownstreamPathTemplate": "/{CatchAll}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5003
-          }
-        ],
-        "UpstreamHeaderTransform": {
-          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-        },
-        "UpstreamPathTemplate": "/nodeschedule/{CatchAll}"
-      }
-    ],
-    "GlobalConfiguration": {
-        "BaseUrl": "http://localhost:5000"
+      "UpstreamPathTemplate": "/nodeschedule/{everything}"
     }
+  ],
+  "SwaggerEndPoints": [ //Swagger Endpoints should match the Routes
+    {
+      "Key": "smiteapi",
+      "Config": [
+        {
+          "Name": "Smiteapi microservice API",
+          "Version": "v1",
+          "Url": "http://smiteapi-microservice/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "division",
+      "Config": [
+        {
+          "Name": "Division microservice API",
+          "Version": "v1",
+          "Url": "http://division-microservice/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "ocelot-api-gateway"
+  }
 }

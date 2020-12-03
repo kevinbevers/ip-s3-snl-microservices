@@ -19,6 +19,8 @@ using smiteapi_microservice.Services;
 using smiteapi_microservice.Smiteapi_DB;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+//swagger
+using Microsoft.OpenApi.Models;
 
 namespace smiteapi_microservice
 {
@@ -30,6 +32,7 @@ namespace smiteapi_microservice
         }
 
         public IConfiguration Configuration { get; }
+        string dbpass = Environment.GetEnvironmentVariable("DB_Password");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -40,7 +43,7 @@ namespace smiteapi_microservice
                 dbContextOptions => dbContextOptions
                     .UseMySql(
                         // Replace with your connection string.
-                        Configuration.GetConnectionString("DefaultConnection"),
+                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_Smiteapi_DB",
                         // Replace with your server version and type.
                         // For common usages, see pull request #1233.
                         new MySqlServerVersion(new Version(8, 0, 22)),
@@ -50,12 +53,19 @@ namespace smiteapi_microservice
             //add API dev authorization
             services.AddSingleton<IHirezApiContext>(new HirezApiContextV2 (Configuration.GetSection("Credentials").Get<ApiCredentials>()));
 
-            //inject gatewaykey from appsettings.json
-            services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
-            services.AddScoped<GatewayOnly>();
+            //inject gatewaykey from appsettings.json UNUSED if api's are not exposed
+            //services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
+            //services.AddScoped<GatewayOnly>();
 
             //add Scoped Services
             services.AddScoped<IHirezApiService, HirezApiService>();
+            services.AddScoped<IMatchService, MatchService>();
+
+            //add swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Smiteapi microservice API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +85,13 @@ namespace smiteapi_microservice
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smiteapi microservice API V1");
             });
         }
     }

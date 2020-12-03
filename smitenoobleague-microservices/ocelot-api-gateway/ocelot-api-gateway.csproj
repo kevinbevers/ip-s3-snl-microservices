@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>ocelot_api_gateway</RootNamespace>
+    <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>1f010c85-405a-4426-9bd9-19f57fd172a7</UserSecretsId>
   </PropertyGroup>
 
 
@@ -10,7 +12,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MMLib.SwaggerForOcelot" Version="2.6.1" />
     <PackageReference Include="Ocelot" Version="16.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.2" />
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties ocelot_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

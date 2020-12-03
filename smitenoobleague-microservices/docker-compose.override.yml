@@ -1,0 +1,44 @@
+﻿version: '3.4'
+
+services:
+  division-microservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ~/.aspnet/https:/root/.aspnet/https:ro
+      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+
+  smiteapi-microservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ~/.aspnet/https:/root/.aspnet/https:ro
+      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+
+  ocelot-api-gateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTPS_PORT=5000
+      - ASPNETCORE_URLS=https://+:443;http://+80
+    volumes:
+      - ~/.aspnet/https:/root/.aspnet/https:ro
+      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+    ports:
+        - 5000:443
+        - 4000:80
+  
+  nodeschedule-microservice:
+    volumes:
+      - "./nodeschedule-microservice/app.js:/usr/src/app/app.js"
+      - node_modules:/usr/src/app/node_modules
+
+  db:
+    volumes:
+        - ./db/mysql/data:/var/lib/mysql
+    ports:
+        - 3308:3306
+
+volumes:
+  node_modules:

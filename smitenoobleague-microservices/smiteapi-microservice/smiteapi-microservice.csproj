@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>smiteapi_microservice</RootNamespace>
+    <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>64019f72-5ff4-4271-8728-a3e001e06285</UserSecretsId>
   </PropertyGroup>
 
 
@@ -10,10 +12,11 @@
     <Folder Include="Classes\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Contexts\" />
-    <Folder Include="Internal_Models\" />
     <Folder Include="Services\" />
     <Folder Include="Config\" />
-    <Folder Include="External_Models\" />
+    <Folder Include="Models\" />
+    <Folder Include="Models\Internal\" />
+    <Folder Include="Models\External\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="SNL_DataAccessLayer\obj\project.assets.json" />
@@ -32,5 +35,7 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.6.2" />
   </ItemGroup>
 </Project>

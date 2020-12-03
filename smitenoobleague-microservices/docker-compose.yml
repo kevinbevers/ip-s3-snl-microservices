@@ -1,0 +1,67 @@
+version: '3.4'
+
+services:
+  division-microservice:
+    image: ${DOCKER_REGISTRY-}divisionmicroservice
+    container_name: divisionmicroservice
+    restart: always
+    build:
+      context: ./division-microservice/
+    environment:
+        - DB_Password=${DB_PASS}
+    depends_on:
+      - db
+
+  smiteapi-microservice:
+    image: ${DOCKER_REGISTRY-}smiteapimicroservice
+    container_name: smiteapimicroservice
+    restart: always
+    build:
+      context: ./smiteapi-microservice/
+    environment:
+        - DB_Password=${DB_PASS}
+    depends_on:
+      - db
+      
+
+  ocelot-api-gateway:
+    image: ${DOCKER_REGISTRY-}ocelotapigateway
+    container_name: ocelotapigateway
+    build:
+      context: ./ocelot-api-gateway/
+    restart: always
+    environment:
+        - ASPNETCORE_HTTPS_PORT=443
+    ports:
+        - 443:443
+        - 80:80
+    depends_on:
+      - division-microservice
+      - smiteapi-microservice
+
+  nodeschedule-microservice:
+    image: ${DOCKER_REGISTRY-}nodeschedulemicroservice
+    container_name: nodeschedulemicroservice
+    build:
+      context: ./nodeschedule-microservice/
+    restart: always
+    environment:
+      PORT: 80
+      TZ: UTC
+      API_URL: http://smiteapi-microservice
+    depends_on:
+      - smiteapi-microservice
+
+  db:
+    image: mysql:8.0.22
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+        # So you don't have to use root, but you can if you like
+        # MYSQL_USER: 'user'
+        # MYSQL_PASSWORD: ${DB_PASS}
+        # Password for root access
+        MYSQL_ROOT_PASSWORD: ${DB_PASS}
+    volumes:
+        - ./db/mysql/init:/docker-entrypoint-initdb.d/:ro
+

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 //Ocelot imports
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+//swagger
 
 namespace ocelot_api_gateway
 {
@@ -30,6 +31,7 @@ namespace ocelot_api_gateway
         {
             services.AddControllers();
             services.AddOcelot(Configuration);
+            services.AddSwaggerForOcelot(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,7 +53,12 @@ namespace ocelot_api_gateway
                 endpoints.MapControllers();
             });
 
-            await app.UseOcelot();
+
+            await app.UseSwaggerForOcelotUI(opt =>
+            {
+                opt.PathToSwaggerGenerator = "/swagger/docs";
+            })
+            .UseOcelot();
         }
     }
 }
