@@ -1,8 +1,5 @@
 //boostrap components
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Table from "react-bootstrap/Table";
-import Image from "react-bootstrap/Image";
+import {Row, Col, Table, Image} from "react-bootstrap";
 //icons
 import { FaBox } from "react-icons/fa";
 
