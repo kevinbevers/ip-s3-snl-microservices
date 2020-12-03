@@ -37,3 +37,7 @@ jobs:
       run: |
         cd smitenoobleague-microservices
         dotnet test --no-restore --verbosity normal tests
+    - uses: dodopizza/dotcover-action@v1
+      with:
+        dotCoverCommand: cover
+        configFile: dotcover.xml
