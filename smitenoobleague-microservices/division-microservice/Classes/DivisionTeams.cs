@@ -8,7 +8,7 @@ namespace division_microservice.Classes
 {
     public static class DivisionTeams
     {
-        public static async Task<IList<Team>> GetByDivisionIdAsync(int divisionID)
+        public static async IList<Team> GetByDivisionIdAsync(int divisionID)
         {
             //call team service           
             List<Team> mockTeams = new List<Team> {
