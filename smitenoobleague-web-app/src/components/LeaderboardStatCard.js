@@ -1,12 +1,12 @@
 
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //bootstrap implements
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import ListGroup from "react-bootstrap/ListGroup";
+import Card from "react-bootstrap/Card";
+import Container from "react-bootstrap/Container";
 
 export default function LeaderboardStatCard(props){
 

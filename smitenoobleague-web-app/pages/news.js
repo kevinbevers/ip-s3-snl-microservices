@@ -1,16 +1,16 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from '../src/components/NavBar';
-import Footer from '../src/components/Footer';
-import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { CardColumns, Container } from 'react-bootstrap';
-import NewsCard from 'src/components/NewsCard';
+import NavBar from "../src/components/NavBar";
+import Footer from "../src/components/Footer";
+import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { CardColumns, Container } from "react-bootstrap";
+import NewsCard from "src/components/NewsCard";
 //import background component and the image for it
-import FullBackground from '../src/components/FullBackground'
-import BG from 'public/images/News_Background.jpg';
+import FullBackground from "../src/components/FullBackground"
+import BG from "public/images/News_Background.jpg";
 
 
 export default function news() {

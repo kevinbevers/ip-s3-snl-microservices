@@ -1,26 +1,26 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from 'src/components/NavBar';
-import Footer from 'src/components/Footer';
+import NavBar from "src/components/NavBar";
+import Footer from "src/components/Footer";
 //boostrap components
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Table from 'react-bootstrap/Table';
-import Image from 'react-bootstrap/Image';
-import { Alert, Tab, Nav } from 'react-bootstrap';
+import Jumbotron from "react-bootstrap/Jumbotron";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Table from "react-bootstrap/Table";
+import Image from "react-bootstrap/Image";
+import { Alert, Tab, Nav } from "react-bootstrap";
 //icons
-import { FaBox } from 'react-icons/fa';
+import { FaBox } from "react-icons/fa";
 //custom components
-import WinnerTeamTable from 'src/components/matchdetails/WinnerTeamTable';
-import LoserTeamTable from 'src/components/matchdetails/LoserTeamTable';
-import WinnerTeamTableStatic from 'src/components/matchdetails/WinnerTeamTableStatic';
-import LoserTeamTableStatic from 'src/components/matchdetails/LoserTeamTableStatic';
+import WinnerTeamTable from "src/components/matchdetails/WinnerTeamTable";
+import LoserTeamTable from "src/components/matchdetails/LoserTeamTable";
+import WinnerTeamTableStatic from "src/components/matchdetails/WinnerTeamTableStatic";
+import LoserTeamTableStatic from "src/components/matchdetails/LoserTeamTableStatic";
 
-import DefaultErrorPage from 'next/error';
-import axios from 'axios';
+import DefaultErrorPage from "next/error";
+import axios from "axios";
 
 export default function matchdetails({received}) {
 
@@ -125,7 +125,7 @@ export default function matchdetails({received}) {
 export async function getServerSideProps({params}) {
 
 try {
-  const response = await axios.get('http://localhost:5000/smiteapi-service/Match/' + params.id);
+  const response = await axios.get("http://localhost:5000/smiteapi-service/Match/" + params.id);
   const received = {
     status: response.status,
     data: response.data,

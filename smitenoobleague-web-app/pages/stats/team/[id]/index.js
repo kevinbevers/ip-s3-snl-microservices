@@ -1,44 +1,44 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from 'src/components/NavBar';
-import Footer from 'src/components/Footer';
+import NavBar from "src/components/NavBar";
+import Footer from "src/components/Footer";
 //boostrap components
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { Badge, Image, Modal, Button } from 'react-bootstrap';
+import Jumbotron from "react-bootstrap/Jumbotron";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { Badge, Image, Modal, Button } from "react-bootstrap";
 //icons
-import { FaBox, FaInfoCircle } from 'react-icons/fa';
+import { FaBox, FaInfoCircle } from "react-icons/fa";
 //chart
-import {Line} from 'react-chartjs-2';
+import {Line} from "react-chartjs-2";
 //custom components
-import RecentTeams from 'src/components/RecentTeams';
+import RecentTeams from "src/components/RecentTeams";
 
 export default function TeamStat({ postData }) {
 
     // RPP recent peformance points. a calculation done in the back-end based on gametime, kills, win or loss, gold earned and a few more stats. combined into a algorithm
     const data = {
-        labels: ['week 1','week 2','week 3', 'week 4','week 5'],
+        labels: ["week 1","week 2","week 3", "week 4","week 5"],
         datasets: [
           {
-            label: 'Recent peformance points',
+            label: "Recent peformance points",
             fill: false,
             order: 0,
             lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: "butt",
             borderDash: [],
             borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
+            borderJoinStyle: "miter",
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
@@ -218,11 +218,11 @@ export default function TeamStat({ postData }) {
                 {/* Recently played, no border right needed */}
                 <Col md={2} className=""> 
                     <h2 className="font-weight-bold StatTitle">RECENTLY PLAYED</h2>
-                    <Row><Col><RecentTeams backgroundColor={'RecentTeamWinBackground'} /></Col></Row>
-                    <Row><Col><RecentTeams backgroundColor={'RecentTeamWinBackground'} /></Col></Row>
-                    <Row><Col><RecentTeams backgroundColor={'RecentTeamLossBackground'} /></Col></Row>
-                    <Row><Col><RecentTeams backgroundColor={'RecentTeamWinBackground'} /></Col></Row>
-                    <Row><Col><RecentTeams backgroundColor={'RecentTeamLossBackground'} /></Col></Row>
+                    <Row><Col><RecentTeams backgroundColor={"RecentTeamWinBackground"} /></Col></Row>
+                    <Row><Col><RecentTeams backgroundColor={"RecentTeamWinBackground"} /></Col></Row>
+                    <Row><Col><RecentTeams backgroundColor={"RecentTeamLossBackground"} /></Col></Row>
+                    <Row><Col><RecentTeams backgroundColor={"RecentTeamWinBackground"} /></Col></Row>
+                    <Row><Col><RecentTeams backgroundColor={"RecentTeamLossBackground"} /></Col></Row>
                     
                 </Col>
             </Row>
@@ -263,17 +263,17 @@ export default function TeamStat({ postData }) {
 //   const paths = [
 //     {
 //       params: {
-//         id: '2345'
+//         id: "2345"
 //       }
 //     },
 //     {
 //       params: {
-//         id: '1234'
+//         id: "1234"
 //       }
 //     },
 //     {
 //       params: {
-//         id: '1234'
+//         id: "1234"
 //       }
 //     }
 //   ];

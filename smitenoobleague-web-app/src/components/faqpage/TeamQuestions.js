@@ -1,5 +1,5 @@
-import Accordion from 'react-bootstrap/Accordion'
-import Card from 'react-bootstrap/Card'
+import Accordion from "react-bootstrap/Accordion"
+import Card from "react-bootstrap/Card"
 
 export default function TeamQuestions() {
 return (
@@ -14,7 +14,7 @@ return (
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="0">
             <Card.Body>
-            <p className="m-0">When a player in your team can't play, you can result to a substitute player.
+            <p className="m-0">When a player in your team can"t play, you can result to a substitute player.
             There is only <b>1 substitute</b> allowed per team ensuring the original team is mostly intact.</p>
             </Card.Body>
         </Accordion.Collapse>

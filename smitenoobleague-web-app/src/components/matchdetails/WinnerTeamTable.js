@@ -1,10 +1,10 @@
 //boostrap components
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Table from 'react-bootstrap/Table';
-import Image from 'react-bootstrap/Image';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Table from "react-bootstrap/Table";
+import Image from "react-bootstrap/Image";
 //icons
-import { FaBox } from 'react-icons/fa';
+import { FaBox } from "react-icons/fa";
 
 export default function WinnerTeamTable({playerdata}) {
     return (
@@ -22,7 +22,7 @@ export default function WinnerTeamTable({playerdata}) {
             </Row>
             <Row>
                 <Col xl={12} md={12} xs={12} className="mx-auto">
-                    <Table responsive variant='' className='rounded-bottom text-center' id="TeamTable">
+                    <Table responsive variant="" className="rounded-bottom text-center" id="TeamTable">
                         <thead className="">
                             <tr className="bg-success">
                                 <th>God</th>

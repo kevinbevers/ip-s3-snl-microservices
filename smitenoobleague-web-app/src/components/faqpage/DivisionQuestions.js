@@ -1,5 +1,5 @@
-import Accordion from 'react-bootstrap/Accordion'
-import Card from 'react-bootstrap/Card'
+import Accordion from "react-bootstrap/Accordion"
+import Card from "react-bootstrap/Card"
 
 export default function DivisionQuestions() {
 return (
@@ -38,7 +38,7 @@ return (
         <Accordion.Collapse eventKey="2">
             <Card.Body>
             <p className="m-0">You play <b>1</b> game per week. 
-            If your team can't play a week then you it's expected that you play that game the week after and play the regular game of that week.</p>
+            If your team can"t play a week then you it"s expected that you play that game the week after and play the regular game of that week.</p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>

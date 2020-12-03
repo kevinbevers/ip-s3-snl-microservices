@@ -1,19 +1,19 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Router from "next/router";
 //default page stuff
-import NavBar from '../src/components/NavBar';
-import Footer from '../src/components/Footer';
+import NavBar from "../src/components/NavBar";
+import Footer from "../src/components/Footer";
 //bootstrap components
-import {Container, Row, Col, Form, Card, Button, Image, Badge} from 'react-bootstrap';
+import {Container, Row, Col, Form, Card, Button, Image, Badge} from "react-bootstrap";
 //custom imports
-import {FaEdit, FaCheck, FaBan} from 'react-icons/fa';
+import {FaEdit, FaCheck, FaBan} from "react-icons/fa";
 //importing images
-import Jungle from 'public/images/roles/Jungle_Logo.png';
-import Solo from 'public/images/roles/Solo_Logo.png';
-import Support from 'public/images/roles/Support_Logo.png';
-import Mid from 'public/images/roles/Mid_Logo.png';
-import Adc from 'public/images/roles/Adc_Logo.png';
+import Jungle from "public/images/roles/Jungle_Logo.png";
+import Solo from "public/images/roles/Solo_Logo.png";
+import Support from "public/images/roles/Support_Logo.png";
+import Mid from "public/images/roles/Mid_Logo.png";
+import Adc from "public/images/roles/Adc_Logo.png";
 
 export default function captainpage() {
 

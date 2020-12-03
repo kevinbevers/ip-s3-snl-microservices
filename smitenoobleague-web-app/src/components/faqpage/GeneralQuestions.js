@@ -1,5 +1,5 @@
-import Accordion from 'react-bootstrap/Accordion'
-import Card from 'react-bootstrap/Card'
+import Accordion from "react-bootstrap/Accordion"
+import Card from "react-bootstrap/Card"
 
 export default function GeneralQuestions() {
 return (
@@ -15,7 +15,7 @@ return (
         <Accordion.Collapse eventKey="0">
             <Card.Body>
             <p className="m-0">Atm there is a delay in the Hi-rez api that prevents custom game data to be pulled right after playing, this delay is <b>7 days</b>. 
-            If a captain submits a match-id it get's stored. When the match data becomes available it get's immediately processed.</p>
+            If a captain submits a match-id it get"s stored. When the match data becomes available it get"s immediately processed.</p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>
@@ -26,7 +26,7 @@ return (
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="1">
             <Card.Body>
-            <p className="m-0">Smitenoobleague or in short SNL is a website where amateur smite league's get hosted and managed. 
+            <p className="m-0">Smitenoobleague or in short SNL is a website where amateur smite league"s get hosted and managed. 
             In the smitenoobleague there are multiple divisions, each division contains a number of teams, 
             these teams compete agains eachother for several weeks. during this time team captains submit their played match IDs. 
             These match IDs get collected and processed, with the data the matches provide everything gets calculated.
@@ -45,7 +45,7 @@ return (
             <ul>
                 <li>Your Gamertag / ingame name</li>
                 <li>Your Platform</li>
-                <li>Your team's skill level (please answer fairly)</li>
+                <li>Your team"s skill level (please answer fairly)</li>
             </ul>
             </span>
             </Card.Body>

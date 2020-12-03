@@ -1,20 +1,20 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from '../src/components/NavBar';
-import Footer from '../src/components/Footer';
+import NavBar from "../src/components/NavBar";
+import Footer from "../src/components/Footer";
 
 //boostrap components
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Jumbotron from "react-bootstrap/Jumbotron";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 //page components
-import GeneralQuestions from 'src/components/faqpage/GeneralQuestions';
-import TeamQuestions from 'src/components/faqpage/TeamQuestions';
-import PlayerQuestions from 'src/components/faqpage/PlayerQuestions';
-import CaptainQuestions from 'src/components/faqpage/CaptainQuestions';
-import DivisionQuestions from 'src/components/faqpage/DivisionQuestions';
+import GeneralQuestions from "src/components/faqpage/GeneralQuestions";
+import TeamQuestions from "src/components/faqpage/TeamQuestions";
+import PlayerQuestions from "src/components/faqpage/PlayerQuestions";
+import CaptainQuestions from "src/components/faqpage/CaptainQuestions";
+import DivisionQuestions from "src/components/faqpage/DivisionQuestions";
 
 
 

@@ -1,12 +1,12 @@
 //default page stuff
-import NavBar from 'src/components/NavBar';
-import Footer from 'src/components/Footer';
+import NavBar from "src/components/NavBar";
+import Footer from "src/components/Footer";
 //bootstrap components
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import { Container, Card, Image, FormControl, InputGroup } from 'react-bootstrap';
-import PlayerCard from 'src/components/PlayerCard';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import { Container, Card, Image, FormControl, InputGroup } from "react-bootstrap";
+import PlayerCard from "src/components/PlayerCard";
 
 export default function player() {
     return (

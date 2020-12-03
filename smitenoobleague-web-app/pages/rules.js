@@ -1,17 +1,17 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from '../src/components/NavBar';
-import Footer from '../src/components/Footer';
+import NavBar from "../src/components/NavBar";
+import Footer from "../src/components/Footer";
 //boostrap components
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
+import Jumbotron from "react-bootstrap/Jumbotron";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 //import background component and the image for it
-import FullBackground from '../src/components/FullBackground'
-import BG from 'public/images/Rules_Background.jpg';
+import FullBackground from "../src/components/FullBackground"
+import BG from "public/images/Rules_Background.jpg";
 
 export default function rules() {
   return (
@@ -84,7 +84,7 @@ export default function rules() {
           <p>Aenean dignissim odio convallis urna sagittis, non tincidunt leo laoreet. Duis condimentum quis nisl a malesuada. Maecenas augue magna, volutpat et justo tempor, luctus iaculis lorem. Pellentesque a eros vitae mi vulputate fringilla quis et mauris. Pellentesque et massa ut lacus dictum convallis a nec dui. Pellentesque posuere neque a neque pulvinar feugiat. Fusce ac scelerisque massa, eu faucibus enim. Aenean ultrices, quam eget fringilla varius, risus lorem venenatis justo, rhoncus ullamcorper lacus ligula ac nisi. Vivamus et lacus felis. Integer aliquet augue eu erat facilisis sagittis. Sed porttitor ex urna, id luctus ipsum posuere vitae. Integer efficitur neque gravida erat mollis, eu malesuada mauris egestas. In sapien neque, rhoncus ac viverra sit amet, mollis eget tellus.</p>
           {/* Rules Section 2 */}
           <h4 id="rule2" className="font-weight-bold">2. Scheduling rules</h4>
-          <p>In this section the rules for Scheduling a match are described and what happens when you can't or don't show up.</p>
+          <p>In this section the rules for Scheduling a match are described and what happens when you can"t or don"t show up.</p>
           <h5 id="rule2.1" className="font-weight-bold">2.1. Planning the match</h5>
           <p>Aenean dignissim odio convallis urna sagittis, non tincidunt leo laoreet. Duis condimentum quis nisl a malesuada. Maecenas augue magna, volutpat et justo tempor, luctus iaculis lorem. Pellentesque a eros vitae mi vulputate fringilla quis et mauris. Pellentesque et massa ut lacus dictum convallis a nec dui. Pellentesque posuere neque a neque pulvinar feugiat. Fusce ac scelerisque massa, eu faucibus enim. Aenean ultrices, quam eget fringilla varius, risus lorem venenatis justo, rhoncus ullamcorper lacus ligula ac nisi. Vivamus et lacus felis. Integer aliquet augue eu erat facilisis sagittis. Sed porttitor ex urna, id luctus ipsum posuere vitae. Integer efficitur neque gravida erat mollis, eu malesuada mauris egestas. In sapien neque, rhoncus ac viverra sit amet, mollis eget tellus.</p>
           <h5 id="rule2.2" className="font-weight-bold">2.2. Unavailability</h5>

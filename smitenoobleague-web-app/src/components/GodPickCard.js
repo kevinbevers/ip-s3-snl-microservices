@@ -1,6 +1,6 @@
-import Card from 'react-bootstrap/Card';
-import Col from 'react-bootstrap/Col';
-import {Image, Row, Container} from 'react-bootstrap';
+import Card from "react-bootstrap/Card";
+import Col from "react-bootstrap/Col";
+import {Image, Row, Container} from "react-bootstrap";
 
 
 export default function GodPickCard(){
