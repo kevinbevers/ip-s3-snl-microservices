@@ -62,7 +62,7 @@ $ npm add -D jest jest-dom @testing-library/react @testing-library/jest-dom @tes
 ```bash
 $ npm run dev
 ```
->finally go to [http:localhost:3000][localhost] to see the web-app in the browser
+>finally go to [http//:localhost:3000][localhost] to see the web-app in the browser
 
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
