@@ -30,6 +30,8 @@ services:
     build:
       context: ./ocelot-api-gateway/
     restart: always
+    environment:
+        - ASPNETCORE_HTTPS_PORT=443
     ports:
         - 443:443
         - 80:80
@@ -62,3 +64,4 @@ services:
         MYSQL_ROOT_PASSWORD: ${DB_PASS}
     volumes:
         - ./db/mysql/init:/docker-entrypoint-initdb.d/:ro
+

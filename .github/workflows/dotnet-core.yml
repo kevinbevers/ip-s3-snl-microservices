@@ -36,4 +36,4 @@ jobs:
     - name: Test
       run: |
         cd smitenoobleague-microservices
-        dotnet test --no-restore --verbosity normal tests
+        dotnet test tests
