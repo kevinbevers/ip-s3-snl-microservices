@@ -18,11 +18,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-
-    - name: Copy file via scp
     - uses: actions/checkout@master
-    - name: copy files via ssh key
+    - name: copy files via sshkey
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
