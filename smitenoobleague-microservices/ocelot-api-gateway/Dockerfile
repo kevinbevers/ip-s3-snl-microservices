@@ -7,7 +7,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ocelot-api-gateway/ocelot-api-gateway.csproj ocelot-api-gateway/
+COPY . ocelot-api-gateway/
 RUN dotnet restore "ocelot-api-gateway/ocelot-api-gateway.csproj"
 COPY . .
 WORKDIR "/src/ocelot-api-gateway"

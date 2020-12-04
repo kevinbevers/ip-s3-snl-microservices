@@ -6,7 +6,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY smiteapi-microservice/smiteapi-microservice.csproj smiteapi-microservice/
+COPY . smiteapi-microservice/
 RUN dotnet restore "smiteapi-microservice/smiteapi-microservice.csproj"
 COPY . .
 WORKDIR "/src/smiteapi-microservice"
