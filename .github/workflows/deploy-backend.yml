@@ -27,7 +27,7 @@ jobs:
         key: ${{ secrets.SSHKEY }}
         passphrase: ${{ secrets.SSHPASS }}
         port: ${{ secrets.PORT }}
-        source: "./smitenoobleague-microservices/*"
+        source: "./smitenoobleague-microservices/."
         target: "/opt/app/"
 
     - name: Executing remote  command
@@ -39,5 +39,5 @@ jobs:
         passphrase: ${{ secrets.SSHPASS }}
         key: ${{ secrets.SSHKEY }}
         script: |
-          cd /opt/app
+          cd /opt/app/smitenoobleague-microservices
           docker-compose -f docker-compose.yml up -d
