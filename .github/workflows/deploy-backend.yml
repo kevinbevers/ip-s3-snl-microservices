@@ -27,8 +27,8 @@ jobs:
         key: ${{ secrets.SSHKEY }}
         passphrase: ${{ secrets.SSHPASS }}
         port: ${{ secrets.PORT }}
-        source: "./smitenoobleague-microservices/**"
-        target: "/opt/app"
+        source: "./smitenoobleague-microservices/*"
+        target: "/opt/app/"
 
     - name: Executing remote  command
       uses: appleboy/ssh-action@master
