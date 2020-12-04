@@ -30,10 +30,7 @@ services:
     build:
       context: ./ocelot-api-gateway/
     restart: always
-    environment:
-        - ASPNETCORE_HTTPS_PORT=443
     ports:
-        - 443:443
         - 80:80
     depends_on:
       - division-microservice
