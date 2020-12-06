@@ -24,7 +24,7 @@ jobs:
         envkey_DevId: ${{ secrets.DevId }}
         envkey_AuthKey: ${{ secrets.AuthKey }}
         envkey_DB_PASS: ${{ secrets.DB_PASS }}
-        directory: ./smitenoobleague-microservices/.
+        directory: /smitenoobleague-microservices/
         file_name: .env
     - uses: actions/checkout@master
     - name: copy files via sshkey
@@ -37,6 +37,17 @@ jobs:
         port: ${{ secrets.PORT }}
         source: "./smitenoobleague-microservices/."
         target: "/opt/app/"
+    - uses: actions/checkout@master
+    - name: copy generated .env file to server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSHKEY }}
+        passphrase: ${{ secrets.SSHPASS }}
+        port: ${{ secrets.PORT }}
+        source: "./smitenoobleague-microservices/.env"
+        target: "/opt/app/.env"
 
     - name: Executing remote  command
       uses: appleboy/ssh-action@master
