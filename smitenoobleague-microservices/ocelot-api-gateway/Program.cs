@@ -24,7 +24,7 @@ namespace ocelot_api_gateway
                     var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
                     if (env != null)
                     {
-                        config.AddJsonFile($"ocelot.{env}.json");
+                        config.AddJsonFile($"ocelot.{env}.json", optional: true);
                     }
                     
                 })

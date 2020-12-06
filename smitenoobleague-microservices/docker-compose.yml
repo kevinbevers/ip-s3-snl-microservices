@@ -37,7 +37,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
     restart: always
     ports:
-        - 8080:80
+        - 80:80
     depends_on:
       - division-microservice
       - smiteapi-microservice
