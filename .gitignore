@@ -287,3 +287,4 @@ smitenoobleague-microservices/smiteapi-microservice/Config/hirezapi.json
 smitenoobleague-microservices/db/mysql/data
 smitenoobleague-web-app/smitenoobleague_com.csr
 smitenoobleague-web-app/smitenoobleague_com.key
+smitenoobleague-microservices/division-microservice/appsettings.Development.json
