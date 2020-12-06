@@ -22,7 +22,7 @@ jobs:
     - name: App Settings Variable Substitution
       uses: microsoft/variable-substitution@v1
       with:
-        files: './smitenoobleague-microservices/smiteapi-microservice/appsettings.json'
+        files: '**/appsettings.json'
       env:
         Credentials.DevId: ${{ secrets.DevId }}
         Credentials.AuthKey: ${{ secrets.AuthKey }}
