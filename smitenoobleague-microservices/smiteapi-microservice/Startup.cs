@@ -33,6 +33,8 @@ namespace smiteapi_microservice
 
         public IConfiguration Configuration { get; }
         string dbpass = Environment.GetEnvironmentVariable("DB_Password");
+        string DevId = Environment.GetEnvironmentVariable("DevId");
+        string AuthKey = Environment.GetEnvironmentVariable("AuthKey");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -51,7 +53,8 @@ namespace smiteapi_microservice
                             .CharSetBehavior(CharSetBehavior.NeverAppend)));
 
             //add API dev authorization
-            services.AddSingleton<IHirezApiContext>(new HirezApiContextV2 (Configuration.GetSection("Credentials").Get<ApiCredentials>()));
+            //services.AddSingleton<IHirezApiContext>(new HirezApiContextV2 (Configuration.GetSection("Credentials").Get<ApiCredentials>()));
+            services.AddSingleton<IHirezApiContext>(new HirezApiContextV2(new ApiCredentials { DevId = DevId, AuthKey = AuthKey }));
 
             //inject gatewaykey from appsettings.json UNUSED if api's are not exposed
             //services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
