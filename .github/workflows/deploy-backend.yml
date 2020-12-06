@@ -24,6 +24,7 @@ jobs:
         envkey_DevId: ${{ secrets.DevId }}
         envkey_AuthKey: ${{ secrets.AuthKey }}
         envkey_DB_PASS: ${{ secrets.DB_PASS }}
+        directory: test
         file_name: .env
     - uses: actions/checkout@master
     - name: copy files via sshkey
@@ -44,8 +45,8 @@ jobs:
         key: ${{ secrets.SSHKEY }}
         passphrase: ${{ secrets.SSHPASS }}
         port: ${{ secrets.PORT }}
-        source: ".env"
-        target: "/opt/app/.env"
+        source: "test"
+        target: "/opt/app/"
 
     - name: Executing remote  command
       uses: appleboy/ssh-action@master
