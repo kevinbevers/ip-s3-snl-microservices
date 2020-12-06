@@ -8,7 +8,8 @@ services:
     build:
       context: ./division-microservice/
     environment:
-        - DB_Password=${DB_PASS}
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DB_Password=${DB_PASS}
     depends_on:
       - db
 
@@ -19,6 +20,7 @@ services:
     build:
       context: ./smiteapi-microservice/
     environment:
+        - ASPNETCORE_ENVIRONMENT=Production
         - DB_Password=${DB_PASS}
     depends_on:
       - db
@@ -29,9 +31,11 @@ services:
     container_name: ocelotapigateway
     build:
       context: ./ocelot-api-gateway/
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
     restart: always
     ports:
-        - 80:80
+        - 8080:80
     depends_on:
       - division-microservice
       - smiteapi-microservice

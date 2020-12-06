@@ -18,6 +18,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      #substitute production appsettings entries to appsettings json file
+    - name: App Settings Variable Substitution
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: 'smitenoobleague-microservices/smiteapi-microservice/appsettings.json'
+      env:
+        Credentials.DevId: ${{ secrets.DevId }}
+        Credentials.AuthKey: ${{ secrets.AuthKey }}
     - uses: actions/checkout@master
     - name: copy files via sshkey
       uses: appleboy/scp-action@master
