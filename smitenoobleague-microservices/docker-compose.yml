@@ -65,3 +65,4 @@ services:
         MYSQL_ROOT_PASSWORD: ${DB_PASS}
     volumes:
         - ./db/mysql/init:/docker-entrypoint-initdb.d/:ro
+        
