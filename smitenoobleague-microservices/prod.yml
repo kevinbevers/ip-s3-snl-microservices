@@ -7,6 +7,6 @@ services:
       - ASPNETCORE_HTTPS_PORT=443
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${CertPass}
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/certs/www_smitenoobleague_xyz.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/www_smitenoobleague_xyz.pfx
     volumes:
       - ./certs:/app/certs
