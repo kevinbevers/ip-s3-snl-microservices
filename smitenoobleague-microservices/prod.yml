@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  ocelot-api-gateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CertPass}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path="/certs/www_smitenoobleague_xyz.pfx"
+    volumes:
+      - ./certs:/certs

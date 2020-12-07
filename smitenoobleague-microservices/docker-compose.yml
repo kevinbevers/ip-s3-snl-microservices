@@ -36,8 +36,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTPS_PORT=443
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CertPass}
-      - ASPNETCORE_Kestrel__Certificates__Default__Path="./www_smitenoobleague_xyz.pfx"
     restart: always
     ports:
         - 80:80
