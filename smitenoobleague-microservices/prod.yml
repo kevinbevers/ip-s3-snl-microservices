@@ -1,5 +1,6 @@
 version: '3.4'
 
+# SSL CERTIFICATE and forcing so that the gateway is secure 
 services:
   ocelot-api-gateway:
     environment:
