@@ -35,6 +35,7 @@ services:
       context: ./ocelot-api-gateway/
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTPS_PORT=443
     restart: always
     ports:
         - 80:80
