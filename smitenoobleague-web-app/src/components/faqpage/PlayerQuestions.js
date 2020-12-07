@@ -1,5 +1,5 @@
-import Accordion from 'react-bootstrap/Accordion'
-import Card from 'react-bootstrap/Card'
+import Accordion from "react-bootstrap/Accordion"
+import Card from "react-bootstrap/Card"
 
 export default function PlayerQuestions() {
 return (

@@ -1,3 +1,7 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/23de5418d4e049c1bab35d91aedc7c3a)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kevinbevers/ip-s3-snl-microservices&amp;utm_campaign=Badge_Grade)
+![Front-end app](https://github.com/kevinbevers/ip-s3-snl-microservices/workflows/Front-end%20Node.js%20CI/badge.svg)
+![Back-end services](https://github.com/kevinbevers/ip-s3-snl-microservices/workflows/Back-end%20.NET%20Core%20CI/badge.svg)
+
 # IP S3 SNL microservices
 # Smitenoobleague 
 >Smitenoobleague is a website where teams can sign up, compete and see there stats.
@@ -58,7 +62,7 @@ $ npm add -D jest jest-dom @testing-library/react @testing-library/jest-dom @tes
 ```bash
 $ npm run dev
 ```
->finally go to [http:localhost:3000][localhost] to see the web-app in the browser
+>finally go to [http//:localhost:3000][localhost] to see the web-app in the browser
 
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)

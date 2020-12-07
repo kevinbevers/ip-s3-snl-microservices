@@ -1,28 +1,28 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from '../src/components/NavBar';
-import Footer from '../src/components/Footer';
+import NavBar from "../src/components/NavBar";
+import Footer from "../src/components/Footer";
 //boostrap components
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Table from 'react-bootstrap/Table';
-import Form from 'react-bootstrap/Form';
+import Jumbotron from "react-bootstrap/Jumbotron";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Table from "react-bootstrap/Table";
+import Form from "react-bootstrap/Form";
 //page imports
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 //import background component and the image for it
-import FullBackground from '../src/components/FullBackground'
-import BG from '../public/images/dark_bg.png'
-import ScoreTable from 'src/components/ScoreTable';
+import FullBackground from "../src/components/FullBackground"
+import BG from "../public/images/dark_bg.png"
+import ScoreTable from "src/components/ScoreTable";
 
 
 
 export default function standings() {
 
-  const [SelectedDivision, setSelectedDivision] = useState({id: 1, name: 'Godlike division'});
+  const [SelectedDivision, setSelectedDivision] = useState({id: 1, name: "Godlike division"});
 
   const changeDivision = (evt) => {
     var id = evt.target.value;
@@ -32,7 +32,7 @@ export default function standings() {
     console.log(SelectedDivision);
   }
 
-  const [SelectedPeriod, setSelectedPeriod] = useState('Split 1 2020');
+  const [SelectedPeriod, setSelectedPeriod] = useState("Split 1 2020");
 
   const changePeriod = (evt) => {
     setSelectedPeriod(evt.target.value);

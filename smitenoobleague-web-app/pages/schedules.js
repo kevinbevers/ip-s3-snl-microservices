@@ -1,21 +1,21 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from '../src/components/NavBar';
-import Footer from '../src/components/Footer';
+import NavBar from "../src/components/NavBar";
+import Footer from "../src/components/Footer";
 //bootstrap components
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import { Container, Card, Image, Form } from 'react-bootstrap';
-import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import { Container, Card, Image, Form } from "react-bootstrap";
+import { FaCaretRight, FaCaretLeft } from "react-icons/fa";
 //custom components
-import ScheduleItem from 'src/components/ScheduleItem';
+import ScheduleItem from "src/components/ScheduleItem";
 
 export default function schedules() {
 
 
-  const [SelectedDivision, setSelectedDivision] = useState({id: 1, name: 'Godlike division'});
+  const [SelectedDivision, setSelectedDivision] = useState({id: 1, name: "Godlike division"});
 
   const changeDivision = (evt) => {
     var id = evt.target.value;

@@ -6,7 +6,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY division-microservice/division-microservice.csproj division-microservice/
+COPY . division-microservice/
 RUN dotnet restore "division-microservice/division-microservice.csproj"
 COPY . .
 WORKDIR "/src/division-microservice"

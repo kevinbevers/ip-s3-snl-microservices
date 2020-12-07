@@ -1,20 +1,20 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from 'src/components/NavBar';
-import Footer from 'src/components/Footer';
+import NavBar from "src/components/NavBar";
+import Footer from "src/components/Footer";
 //boostrap components
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Table from 'react-bootstrap/Table';
-import Image from 'react-bootstrap/Image';
-import { Button, FormControl, Card } from 'react-bootstrap';
+import Jumbotron from "react-bootstrap/Jumbotron";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Table from "react-bootstrap/Table";
+import Image from "react-bootstrap/Image";
+import { Button, FormControl, Card } from "react-bootstrap";
 //icons
-import { FaReply } from 'react-icons/fa';
+import { FaReply } from "react-icons/fa";
 //custom components
-import GodPickCard from 'src/components/GodPickCard';
+import GodPickCard from "src/components/GodPickCard";
 
 
 export default function PickPercentages({ postData }) {
@@ -97,17 +97,17 @@ export default function PickPercentages({ postData }) {
 //   const paths = [
 //     {
 //       params: {
-//         id: ['2345', 'pickpercentages']
+//         id: ["2345", "pickpercentages"]
 //       }
 //     },
 //     {
 //       params: {
-//         id: ['1234', 'pickpercentages']
+//         id: ["1234", "pickpercentages"]
 //       }
 //     },
 //     {
 //       params: {
-//         id: ['2345', 'pickpercentages']
+//         id: ["2345", "pickpercentages"]
 //       }
 //     }
 //   ];

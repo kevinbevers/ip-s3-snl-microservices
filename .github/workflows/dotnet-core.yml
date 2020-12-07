@@ -1,0 +1,39 @@
+name: Back-end .NET Core CI
+
+on:
+  push:
+    branches: 
+      - master
+    paths:
+      - smitenoobleague-microservices/**
+  pull_request:     
+    branches: 
+      - master
+    paths:
+      - smitenoobleague-microservices/**
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Install dependencies
+      run: |
+        cd smitenoobleague-microservices 
+        dotnet restore division-microservice
+        dotnet restore smiteapi-microservice
+    - name: Build
+      run: |
+        cd smitenoobleague-microservices
+        dotnet build --configuration Release --no-restore division-microservice
+        dotnet build --configuration Release --no-restore smiteapi-microservice
+    - name: Test
+      run: |
+        cd smitenoobleague-microservices
+        dotnet test tests

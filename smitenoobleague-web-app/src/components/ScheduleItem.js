@@ -1,9 +1,9 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //bootstrap components
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { Container, Card, Image } from 'react-bootstrap';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { Container, Card, Image } from "react-bootstrap";
 
 export default function ScheduleItem() {
     return (

@@ -1,18 +1,14 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from 'src/components/NavBar';
-import Footer from 'src/components/Footer';
+import NavBar from "src/components/NavBar"; 
+import Footer from "src/components/Footer"; 
 //boostrap components
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { Badge, Image, Modal, Button } from 'react-bootstrap';
+import { Badge, Image, Modal, Button, Jumbotron, Container, Row, Col } from "react-bootstrap";
 //icons
-import { FaBox, FaInfoCircle } from 'react-icons/fa';
+// import {} from "react-icons/fa";
 //chart
-import {Doughnut, Pie} from 'react-chartjs-2';
+import {Doughnut} from "react-chartjs-2";
 //custom components
 
 
@@ -20,27 +16,27 @@ export default function PlayerStat({ postData }) {
 
     const data = {
         labels: [
-            'Ratatoskr',
-            'Sun Wukong',
-            'Ao Kuang',
-            'Mulan',
-            'Other'
+            "Ratatoskr",
+            "Sun Wukong",
+            "Ao Kuang",
+            "Mulan",
+            "Other"
         ],
         datasets: [{
             data: [20,20, 20, 10, 40],
             backgroundColor: [
-                '#6925E8',
-                '#27DBF2',
-                '#57DB2D',
-                '#F2C027',
-                '#EB2602'
+                "#6925E8",
+                "#27DBF2",
+                "#57DB2D",
+                "#F2C027",
+                "#EB2602"
             ],
             hoverBackgroundColor: [
-                '#6925E8',
-                '#27DBF2',
-                '#57DB2D',
-                '#F2C027',
-                '#EB2602'
+                "#6925E8",
+                "#27DBF2",
+                "#57DB2D",
+                "#F2C027",
+                "#EB2602"
             ]
         }]
     };
@@ -50,18 +46,18 @@ export default function PlayerStat({ postData }) {
             display: true,
             labels: {
                 fontSize: 10,
-                fontStyle: 'bold',
-                fontFamily: 'Roboto',
+                fontStyle: "bold",
+                fontFamily: "Roboto",
             },
          },
         tooltips: {
             callbacks: {
               label: function (tooltipItem, data) {
                 try {
-                  let label = ' ' + data.labels[tooltipItem.index] || '';
+                  let label = " " + data.labels[tooltipItem.index] || "";
         
                   if (label) {
-                    label += ': ';
+                    label += ": ";
                   }
         
                   const sum = data.datasets[0].data.reduce((accumulator, curValue) => {
@@ -69,7 +65,7 @@ export default function PlayerStat({ postData }) {
                   });
                   const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
         
-                  label += Number((value / sum) * 100).toFixed(0) + '%';
+                  label += Number((value / sum) * 100).toFixed(0) + "%";
                   return label;
                 } catch (error) {
                   console.log(error);

@@ -1,0 +1,76 @@
+{
+    "Routes": [
+      {
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "smiteapi-microservice",
+            "Port": 80
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/smiteapi-service/{everything}",
+        "UpstreamHttpMethod": [ "POST", "PUT", "GET" ],
+        "SwaggerKey": "smiteapi"
+      },
+      {
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "division-microservice",
+            "Port": 80
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/division-service/{everything}",
+        "SwaggerKey": "division"
+      },
+      {
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "nodeschedule-microservice",
+            "Port": 80
+          }
+        ],
+        "UpstreamHeaderTransform": {
+          "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
+        },
+        "UpstreamPathTemplate": "/nodeschedule/{everything}"
+      }
+    ],
+    "SwaggerEndPoints": [ //Swagger Endpoints should match the Routes
+      {
+        "Key": "smiteapi",
+        "Config": [
+          {
+            "Name": "Smiteapi microservice API",
+            "Version": "v1",
+            "Url": "http://smiteapi-microservice/swagger/v1/swagger.json"
+          }
+        ]
+      },
+      {
+        "Key": "division",
+        "Config": [
+          {
+            "Name": "Division microservice API",
+            "Version": "v1",
+            "Url": "http://division-microservice/swagger/v1/swagger.json"
+          }
+        ]
+      }
+    ],
+    "GlobalConfiguration": {
+      "BaseUrl": "ocelot-api-gateway"
+    }
+  }
+
+  

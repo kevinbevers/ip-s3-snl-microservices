@@ -1,18 +1,18 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from '../src/components/NavBar';
-import Footer from '../src/components/Footer';
+import NavBar from "../src/components/NavBar";
+import Footer from "../src/components/Footer";
 //boostrap components
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import ListGroup from "react-bootstrap/ListGroup";
 //custom imports
-import LeaderBoardStatCard from 'src/components/LeaderboardStatCard';
+import LeaderBoardStatCard from "src/components/LeaderboardStatCard";
 //chart
-import {Pie, Bar} from 'react-chartjs-2';
+import {Pie, Bar} from "react-chartjs-2";
 
 export default function leaderboards() {
 
@@ -30,15 +30,15 @@ export default function leaderboards() {
   ]); //Init top10array value
 
   const BarData = {
-    labels: ['Playername', 'Playername', 'Playername', 'Playername', 'Playername', 'Playername', 'Playername'],
+    labels: ["Playername", "Playername", "Playername", "Playername", "Playername", "Playername", "Playername"],
     datasets: [
       {
-        label: 'Player KDA',
-        backgroundColor: '#EB2602',
-        borderColor: '#EB2602',
+        label: "Player KDA",
+        backgroundColor: "#EB2602",
+        borderColor: "#EB2602",
         borderWidth: 1,
-        hoverBackgroundColor: '#EB2602',
-        hoverBorderColor: '#EB2602',
+        hoverBackgroundColor: "#EB2602",
+        hoverBorderColor: "#EB2602",
         data: [3.5, 4.5, 9.1, 2.7, 6.3, 4, 1.9]
       }
     ]
@@ -60,27 +60,27 @@ export default function leaderboards() {
 
   const data = {
     labels: [
-        'Playername',
-        'Playername',
-        'Playername',
-        'Playername',
-        'Playername'
+        "Playername",
+        "Playername",
+        "Playername",
+        "Playername",
+        "Playername"
     ],
     datasets: [{
         data: [20,20, 20, 10, 40],
         backgroundColor: [
-            '#6925E8',
-            '#27DBF2',
-            '#57DB2D',
-            '#F2C027',
-            '#EB2602'
+            "#6925E8",
+            "#27DBF2",
+            "#57DB2D",
+            "#F2C027",
+            "#EB2602"
         ],
         hoverBackgroundColor: [
-            '#6925E8',
-            '#27DBF2',
-            '#57DB2D',
-            '#F2C027',
-            '#EB2602'
+            "#6925E8",
+            "#27DBF2",
+            "#57DB2D",
+            "#F2C027",
+            "#EB2602"
         ]
     }]
 };
@@ -90,18 +90,18 @@ const options = {
         display: false,
         labels: {
             fontSize: 10,
-            fontStyle: 'bold',
-            fontFamily: 'Roboto',
+            fontStyle: "bold",
+            fontFamily: "Roboto",
         },
      },
     tooltips: {
         callbacks: {
           label: function (tooltipItem, data) {
             try {
-              let label = ' ' + data.labels[tooltipItem.index] || '';
+              let label = " " + data.labels[tooltipItem.index] || "";
     
               if (label) {
-                label += ': ';
+                label += ": ";
               }
     
               const sum = data.datasets[0].data.reduce((accumulator, curValue) => {
@@ -109,7 +109,7 @@ const options = {
               });
               const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
     
-              label += Number((value / sum) * 100).toFixed(0) + '%';
+              label += Number((value / sum) * 100).toFixed(0) + "%";
               return label;
             } catch (error) {
               console.log(error);
@@ -119,7 +119,7 @@ const options = {
       }
   };
 
-  // question#1 should all the data be pulled on page load and drippled down to the components or should each component make it's own call.
+  // question#1 should all the data be pulled on page load and drippled down to the components or should each component make it"s own call.
   return (
     <>
       <NavBar />

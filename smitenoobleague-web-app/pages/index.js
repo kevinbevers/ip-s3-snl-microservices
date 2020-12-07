@@ -1,12 +1,12 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //default page stuff
-import NavBar from '../src/components/NavBar';
-import Footer from '../src/components/Footer';
+import NavBar from "../src/components/NavBar";
+import Footer from "../src/components/Footer";
 
 //import background component and the image for it
-import FullBackground from '../src/components/FullBackground'
-import BG from '../public/images/dark_bg.png'
+import FullBackground from "../src/components/FullBackground"
+import BG from "../public/images/dark_bg.png"
 
 export default function Home() {
   return (

@@ -1,11 +1,11 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //boostrap components
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Table from 'react-bootstrap/Table';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Table from "react-bootstrap/Table";
 //icons
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 export default function ScoreTable(props) {
     return (
@@ -14,7 +14,7 @@ export default function ScoreTable(props) {
           <Col md={1} xl={2}></Col>
           <Col md={10} xl={8} className="">
     <h4 className="text-center font-weight-bold mb-0 p-2 rounded-top TableTitle">Current standing for {props.title}</h4>
-            <Table responsive  variant='light' className='rounded-bottom text-center' id="StandingTable">
+            <Table responsive  variant="light" className="rounded-bottom text-center" id="StandingTable">
               <thead className="thead-light TableHeaders">
                 <tr>
                   {/* <th></th> */}

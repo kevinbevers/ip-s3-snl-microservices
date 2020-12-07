@@ -24,11 +24,12 @@ namespace smiteapi_microservice
                     logging.AddConsole();
                 })
                 .ConfigureAppConfiguration((Host, config) => {
+                    config.AddJsonFile("appsettings.json");
                     var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
                     //config.AddJsonFile("appsettings.json");
                     if (env != null)
                     {
-                        config.AddJsonFile($"appsettings.{env}.json");
+                        config.AddJsonFile($"appsettings.{env}.json", optional: true);
                     }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

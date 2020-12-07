@@ -1,11 +1,11 @@
 //default react imports
-import React, { useState } from 'react';
+import React, { useState } from "react";
 //bootstrap implements
-import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import { Container, Image } from 'react-bootstrap';
+import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import { Container, Image } from "react-bootstrap";
 
 export default function MatchHistoryCard(props){
 

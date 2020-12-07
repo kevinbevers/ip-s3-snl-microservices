@@ -1,16 +1,18 @@
-@import 'standing.css';
-@import 'matchdetails.css';
-@import 'teamstats.css';
-@import 'playerstats.css';
-@import 'pickpercentage.css';
-@import 'stats.css';
-@import 'captain.css';
+@import "standing.css";
+@import "matchdetails.css";
+@import "teamstats.css";
+@import "playerstats.css";
+@import "pickpercentage.css";
+@import "stats.css";
+@import "captain.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap');
 
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Roboto', sans-serif; font-weight:400; font-style:regular;
+  font-family: 'Roboto', sans-serif !important; font-weight:400 !important; font-style:regular !important;
 }
 
 html,
@@ -54,7 +56,7 @@ body {
 
 /*Custom CSS*/
 .fullBG {
-    background-image: url('/images/dark_bg.png');
+    background-image: url("/images/dark_bg.png");
     background-size: cover;
     background-repeat: no-repeat;
 }
