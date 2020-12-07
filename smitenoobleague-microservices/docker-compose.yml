@@ -38,7 +38,7 @@ services:
     restart: always
     ports:
         - 80:80
-        - 433:433
+        - 443:443
     depends_on:
       - division-microservice
       - smiteapi-microservice
