@@ -1,11 +1,13 @@
 name: Back-end .NET Core CI
 
+
+#   push:
+#     branches: 
+#       - master
+#     paths:
+#       - smitenoobleague-microservices/**
+
 on:
-  push:
-    branches: 
-      - master
-    paths:
-      - smitenoobleague-microservices/**
   pull_request:     
     branches: 
       - master
