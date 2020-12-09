@@ -18,11 +18,11 @@ using smiteapi_microservice.Models.External;
 namespace service_tests
 {
 
-    public class smiteapiControllerTests
+    public class smiteapiServiceTests
     {
         private readonly SNL_Smiteapi_DBContext _mockedDB;
 
-        public smiteapiControllerTests()
+        public smiteapiServiceTests()
         {
             var options = new DbContextOptionsBuilder<SNL_Smiteapi_DBContext>()
             .UseInMemoryDatabase(databaseName: "SNL_Smiteapi_DB")

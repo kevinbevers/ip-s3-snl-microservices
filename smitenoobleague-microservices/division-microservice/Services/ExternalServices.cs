@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using division_microservice.Models.External;
+using System.Linq;
+using division_microservice.Interfaces;
 using division_microservice.Models.Internal;
 
-namespace division_microservice.Classes
+namespace division_microservice.Services
 {
-    public static class DivisionTeams
+    public class ExternalServices : IExternalServices
     {
-        public static async Task<IList<Team>> GetByDivisionIdAsync(int divisionID)
+        public ExternalServices()
         {
+        }
+
+        public async Task<IList<Team>> GetDivisionTeamsByIdAsync(int divisionID)
+        {
+            await Task.Delay(0);
             //call team service           
             List<Team> mockTeams = new List<Team> {
                 new Team { TeamName = "team1", TeamID = 1 },
