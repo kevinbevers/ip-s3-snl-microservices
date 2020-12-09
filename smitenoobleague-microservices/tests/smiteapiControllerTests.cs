@@ -31,12 +31,13 @@ namespace service_tests
             // Insert seed data into the database using one instance of the context
             var context = new SNL_Smiteapi_DBContext(options);
 
+            context.Database.EnsureDeleted();
             context.TableQueues.Add(new TableQueue { QueueId = 1, GameId = 1233, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = false });
-            context.TableQueues.Add(new TableQueue { QueueId = 2, GameId = 1234, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = false });
-            context.TableQueues.Add(new TableQueue { QueueId = 3, GameId = 1235, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = false });
-            context.TableQueues.Add(new TableQueue { QueueId = 4, GameId = 1236, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = false });
-            context.TableQueues.Add(new TableQueue { QueueId = 5, GameId = 1237, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = true });
-            context.TableQueues.Add(new TableQueue { QueueId = 6, GameId = 1238, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = true });
+            context.TableQueues.Add(new TableQueue { QueueId = 2, GameId = 12343434, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = false });
+            context.TableQueues.Add(new TableQueue { QueueId = 3, GameId = 12353434, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = false });
+            context.TableQueues.Add(new TableQueue { QueueId = 4, GameId = 12363434, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = false });
+            context.TableQueues.Add(new TableQueue { QueueId = 5, GameId = 12373434, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = true });
+            context.TableQueues.Add(new TableQueue { QueueId = 6, GameId = 12383434, QueueDate = DateTime.Parse("2009-06-15T13:45:09"), QueueState = true });
             context.SaveChanges();
             //use across tests
             _mockedDB = context;
@@ -51,7 +52,7 @@ namespace service_tests
             //Arrange
             var mock = new Mock<ILogger<MatchService>>();
             ILogger<MatchService> logger = mock.Object;
-            var controller = new QueuedMatchController(new MatchService(_mockedDB,null,logger));
+            var controller = new QueuedMatchController(new MatchService(_mockedDB, null, logger));
 
             //Act
             var result = await controller.Get();
@@ -66,6 +67,7 @@ namespace service_tests
             Assert.Equal(DateTime.Parse("2009-06-15T13:45:09"), QueuedMatches.Value[0].scheduleTime);
             //check if only the 4 queuestate false got returned. because we only want the queuestate false results
             Assert.Equal(4, QueuedMatches.Value.Count());
+            
         }
 
         [Fact]
@@ -220,10 +222,12 @@ namespace service_tests
                     Gold_Earned = 10,
                     Gold_Per_Minute = 10,
                     GodId = 1,
+                    Reference_Name = "SunWukong",
                     hz_gamer_tag = "test",
                     hz_player_name = null,
                     playerId = 123566,
                     Time_In_Match_Seconds = 12032,
+                    Match_Duration = 12032,
                     Healing = 100,
                     match_queue_id = 427,
                     ret_msg = null,
@@ -301,10 +305,12 @@ namespace service_tests
                     Gold_Earned = 10,
                     Gold_Per_Minute = 10,
                     GodId = 1,
+                    Reference_Name = "SunWukong",
                     hz_gamer_tag = "test",
                     hz_player_name = null,
                     playerId = 123566,
                     Time_In_Match_Seconds = 12032,
+                    Match_Duration = 12032,
                     Healing = 100,
                     match_queue_id = 427,
                     ret_msg = null,
