@@ -44,6 +44,7 @@ namespace service_tests
 
         }
 
+        #region QueuedMatch Controller
         [Fact]
         public async Task GetAllQueuedMatchesFromDb_TestAsync()
         {
@@ -69,7 +70,9 @@ namespace service_tests
             Assert.Equal(4, QueuedMatches.Value.Count());
             
         }
+        #endregion
 
+        #region Match Controller
         [Fact]
         public async Task GetRawMatchDataWithValidMatchId_TestAsync()
         {
@@ -137,7 +140,7 @@ namespace service_tests
             var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
 
             //Act
-            var result = await controller.Get(1234555);
+            var result = await controller.Get(5432);
 
             //Assert
             var MatchData = Assert.IsType<ActionResult<MatchData>>(result);
@@ -147,6 +150,177 @@ namespace service_tests
             Assert.Contains("MatchDetails are intentionally hidden", MatchData.Value.ret_msg.ToString());
         }
 
+        [Fact]
+        public async Task ProcessMatchIdWithValidMatchId_TestAsync()
+        {
+            //Test a call to process a valid match id
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
+
+            //Act
+            var result = await controller.Post(new MatchSubmission {gameID = 1234, teamID = 0 });
+
+            //Assert
+            var response = Assert.IsAssignableFrom<ActionResult>(result) as ObjectResult;
+            //check if the response code is correct
+            Assert.Equal(201, response.StatusCode);
+            //check if the response message is as expected
+            Assert.Contains("Matchdata was added to our database", response.Value.ToString());
+        }
+
+        [Fact]
+        public async Task ProcessMatchIdWithInvalidMatchId_TestAsync()
+        {
+            //Test a to process a invalid matchid
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
+
+            //Act
+            var result = await controller.Post(new MatchSubmission { gameID = 12323124, teamID = 0 });
+
+            //Assert
+            var response = Assert.IsAssignableFrom<ActionResult>(result) as ObjectResult;
+            //check if the response code is correct
+            Assert.Equal(200, response.StatusCode);
+            //check if the response message is as expected
+            Assert.Contains("No match found with the given ID", response.Value.ToString());
+        }
+
+        [Fact]
+        public async Task ProcessMatchIdWithMatchIdWhereDataIsStillHidden_TestAsync()
+        {
+            //Test a call to process a smite matchid when te match data is still hidden
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
+
+            //Act
+            var result = await controller.Post(new MatchSubmission { gameID = 5432, teamID = 0 });
+
+            //Assert
+            var response = Assert.IsAssignableFrom<ActionResult>(result) as ObjectResult;
+            //check if the response code is correct
+            Assert.Equal(200, response.StatusCode);
+            //check if the response message is as expected
+            Assert.Contains("Matchdata not yet available. The data will be added once it becomes available at", response.Value.ToString());
+        }
+        #endregion
+
+        #region Misc Controllers
+        [Fact]
+        public async Task GetAllGodsData_TestAsync()
+        {
+            //Test a call for raw god data from the smite api
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new GodController(hirezApiService);
+
+            //Act
+            var result = await controller.Get();
+
+            //Assert
+            var response = Assert.IsAssignableFrom<IEnumerable<ApiGod>>(result);
+            //check if the returned ienumerable contains data object is returned
+            Assert.True(response.Count() > 0);
+            Assert.Equal("Godname1", response.First().Name);
+        }
+
+        [Fact]
+        public async Task GeAllItemsData_TestAsync()
+        {
+            //Test a call for raw item data from the smite api
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new ItemController(hirezApiService);
+
+            //Act
+            var result = await controller.Get();
+
+            //Assert
+            var response = Assert.IsAssignableFrom<IEnumerable<ApiItem>>(result);
+            //check if the returned ienumerable contains data object is returned
+            Assert.True(response.Count() > 0);
+            Assert.Equal("Item1", response.First().DeviceName);
+        }
+
+        [Fact]
+        public async Task GetPatchInfo_TestAsync()
+        {
+            //Test a call for raw patch data from the smite api
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new PatchController(hirezApiService);
+
+            //Act
+            var result = await controller.Get();
+
+            //Assert
+            var response = Assert.IsAssignableFrom<ApiPatchInfo>(result);
+            //check if the returned object contains the expected data
+            Assert.True(response.ret_msg == null);
+            Assert.Equal("7.11", response.version_string);
+        }
+
+        [Fact]
+        public async Task SearchPlayerByName_TestAsync()
+        {
+            //Test a call where the smite api searchs players and returns a list of matching players
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new PlayerController(hirezApiService);
+
+            //Act
+            var result = await controller.Get("Testuser");
+
+            //Assert
+            var response = Assert.IsAssignableFrom<IEnumerable<Player>>(result);
+            //check if the returned list is higher then 0
+            Assert.True(response.Count() > 0);
+            //check if all player data is returned correctly
+            Assert.Equal("Testuser", response.First().Playername);
+            Assert.Equal(ApiPlatformEnum.PS4.ToString(), response.First().Platform);
+            Assert.Equal(1, response.First().PlayerID);
+        }
+        #endregion
+
+        #region private methods
         private static Mock<IHirezApiContext> CreateMockHirezApiContext()
         {
             var mockHirezApiContext = new Mock<IHirezApiContext>();
@@ -319,8 +493,10 @@ namespace service_tests
                     Region = "EU",
                 });
             }
-
+            //Valid match
             mockHirezApiContext.Setup(r => r.GetMatchDetailsByMatchID(1234)).ReturnsAsync(match);
+            //Hidden match
+            mockHirezApiContext.Setup(r => r.GetMatchDetailsByMatchID(5432)).ReturnsAsync(new List<ApiPlayerMatchStat> { new ApiPlayerMatchStat {ret_msg = "MatchDetails are intentionally hidden" } });
 
             mockHirezApiContext.Setup(r => r.GetPatchInfo()).ReturnsAsync(
                     new ApiPatchInfo
@@ -421,6 +597,7 @@ namespace service_tests
 
             return mockHirezApiContext;
         }
+        #endregion
     }
 
 }

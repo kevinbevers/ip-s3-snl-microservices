@@ -43,7 +43,7 @@ namespace smiteapi_microservice.Services
             //{
               List<ApiPlayerMatchStat> matchDetails = await _hirezApi.GetMatchDetailsByMatchID(MatchID);
 
-            if (matchDetails[0].ret_msg != null)
+            if (matchDetails?[0]?.ret_msg != null)
             {
                 if (matchDetails[0].ret_msg.ToString() == "[]")
                 {
@@ -56,7 +56,7 @@ namespace smiteapi_microservice.Services
             }
             else
             {
-                if (matchDetails.Count() > 0)
+                if (matchDetails?.Count() > 0)
                 {
 
                     TimeSpan time = TimeSpan.FromSeconds((int)matchDetails[0]?.Match_Duration);
@@ -83,7 +83,7 @@ namespace smiteapi_microservice.Services
                     //if a match isn't available yet this will happen and the return message will contain the date + 7 days for when the match becomes available
                     //should check ret_msg before doing all the rest
                     //should split up in little methods for a clearer view of code
-                    if (matchDetails.Count() == 10)
+                    if (matchDetails?.Count() == 10)
                     {
                         for (int i = 0; i < 9; i++)
                         {
@@ -113,7 +113,7 @@ namespace smiteapi_microservice.Services
                         }
 
 
-                        if (matchDetails.Count() > 9)
+                        if (matchDetails?.Count() > 9)
                         {
                             //Fill the winner and loser list
                             foreach (var mp in matchDetails)

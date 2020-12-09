@@ -59,7 +59,7 @@ namespace smiteapi_microservice.Services
             }
         }
 
-        public async Task<IActionResult> ProcessMatchIdAsync(MatchSubmission submission)
+        public async Task<ActionResult> ProcessMatchIdAsync(MatchSubmission submission)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace smiteapi_microservice.Services
             }
         }
 
-        public async Task<IActionResult> ProcessScheduleApiRequestAsync(MatchSubmission submission)
+        public async Task<ActionResult> ProcessScheduleApiRequestAsync(MatchSubmission submission)
         {
             try
             {
@@ -157,10 +157,10 @@ namespace smiteapi_microservice.Services
         }
 
         #region Methods
-        private async Task<IActionResult> SaveGameIdAndSendToStatsAsync(MatchSubmission submission)
+        private async Task<ActionResult> SaveGameIdAndSendToStatsAsync(MatchSubmission submission)
         {
             //Add or update the submission entry in the database
-            TableQueue entry = await _db.TableQueues.Where(entry => entry.GameId == submission.gameID).FirstAsync();
+            TableQueue entry = await _db.TableQueues.Where(entry => entry.GameId == submission.gameID).FirstOrDefaultAsync();
 
             if (entry != null)
             {
@@ -180,7 +180,7 @@ namespace smiteapi_microservice.Services
             return new ObjectResult(ResponseText_MatchDetailsAdded) { StatusCode = 201 }; //CREATED
         }
 
-        private async Task<IActionResult> ProcessReturnMessageFromSmiteApiAsync(MatchSubmission submission, MatchData match)
+        private async Task<ActionResult> ProcessReturnMessageFromSmiteApiAsync(MatchSubmission submission, MatchData match)
         {
             string msg = match.ret_msg.ToString();
 
@@ -204,18 +204,27 @@ namespace smiteapi_microservice.Services
             return new ObjectResult(msg) { StatusCode = 200 }; //OK
         }
 
-        private static async Task CallScheduleApiAsync(MatchSubmission submission, string plannedDate)//, string gatewayKey
+        private async Task CallScheduleApiAsync(MatchSubmission submission, string plannedDate)//, string gatewayKey
         {
-            using (var httpClient = new HttpClient())
+            //Log the occurence of the call not getting made. but if the call wasn't received then the matchId is still in database and will get scheduled later
+            try
             {
-                //httpClient.DefaultRequestHeaders.Add("GatewayKey", gatewayKey);
-                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
-                                                              //should make the http call dynamic by getting the string from the Gateway
-                using (var response = await httpClient.GetAsync($"http://nodeschedule-microservice/schedulematch/{submission.gameID}/{plannedDate}"))
+                using (var httpClient = new HttpClient())
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    //msg += " res:" + apiResponse;
+                    //httpClient.DefaultRequestHeaders.Add("GatewayKey", gatewayKey);
+                    httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                                                                  //should make the http call dynamic by getting the string from the Gateway
+                    using (var response = await httpClient.GetAsync($"http://nodeschedule-microservice/schedulematch/{submission.gameID}/{plannedDate}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        //msg += " res:" + apiResponse;
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong getting all scheduled gameIds from the database");
             }
         }
         #endregion
