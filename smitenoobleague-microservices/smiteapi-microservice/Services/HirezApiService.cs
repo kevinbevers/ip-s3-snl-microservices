@@ -87,15 +87,29 @@ namespace smiteapi_microservice.Services
                     {
                         for (int i = 0; i < 9; i++)
                         {
-                            var godname = Regex.Replace(banNames[i].Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                            God ban = new God
+                            if (banNames[i] != null)
                             {
-                                GodId = bansIds[i],
-                                GodName = banNames[i],
-                                GodIcon = "https://web2.hirez.com/smite/god-icons/" + godname + ".jpg"
-                            };
-
-                            match.BannedGods.Add(ban);
+                                var godname = Regex.Replace(banNames[i].Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                God ban = new God
+                                {
+                                    GodId = bansIds[i],
+                                    GodName = banNames[i],
+                                    GodIcon = "https://web2.hirez.com/smite/god-icons/" + godname + ".jpg"
+                                };
+                                //add to list of bans
+                                match.BannedGods.Add(ban);
+                            }
+                            else
+                            {
+                                God ban = new God
+                                {
+                                    GodId = bansIds[i],
+                                    GodName = banNames[i],
+                                    GodIcon = null
+                                };
+                                //add to list of bans
+                                match.BannedGods.Add(ban);
+                            }
                         }
 
 
@@ -177,7 +191,7 @@ namespace smiteapi_microservice.Services
                 }
                 else
                 {
-                    return new MatchData { ret_msg = "no match found with that id" };
+                    return new MatchData { ret_msg = "No match found with the given ID" };
                 }
             }
             //}

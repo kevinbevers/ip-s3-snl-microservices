@@ -44,8 +44,10 @@ namespace service_tests
         }
 
         [Fact]
-        public async Task GetAllQueuedMatchesFromDbTestAsync()
+        public async Task GetAllQueuedMatchesFromDb_TestAsync()
         {
+            //Test a call for all queuedmatches. should return all match id's and dates for matches where the data hasn't been retrieved yet
+
             //Arrange
             var mock = new Mock<ILogger<MatchService>>();
             ILogger<MatchService> logger = mock.Object;
@@ -64,6 +66,83 @@ namespace service_tests
             Assert.Equal(DateTime.Parse("2009-06-15T13:45:09"), QueuedMatches.Value[0].scheduleTime);
             //check if only the 4 queuestate false got returned. because we only want the queuestate false results
             Assert.Equal(4, QueuedMatches.Value.Count());
+        }
+
+        [Fact]
+        public async Task GetRawMatchDataWithValidMatchId_TestAsync()
+        {
+            //Test a call for raw matchdata for a match where the matchid is valid and matchdata is returned
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
+
+            //Act
+            var result = await controller.Get(1234);
+
+            //Assert
+            var MatchData = Assert.IsType<ActionResult<MatchData>>(result);
+            //check if matchdata object is returned
+            Assert.True(MatchData.Value != null);
+            //check if the returned data contains a list of 5 winners and 5 losers
+            Assert.Equal(5, MatchData.Value.Winners.Count());
+            Assert.Equal(5, MatchData.Value.Losers.Count());
+            //check if the bans are added to a list.
+            Assert.True(MatchData.Value.BannedGods.Count() > 0);
+            //check if match ret_msg is null. ret_msg is null on success
+            Assert.True(MatchData.Value.ret_msg == null);
+        }
+
+        [Fact]
+        public async Task GetRawMatchDataWithInvalidMatchId_TestAsync()
+        {
+            //Test a call for raw matchdata for a match where the matchid does not exist / does not return matchdata
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
+
+            //Act
+            var result = await controller.Get(1234555);
+
+            //Assert
+            var MatchData = Assert.IsType<ActionResult<MatchData>>(result);
+            //check if matchdata object is returned
+            Assert.True(MatchData.Value != null);
+            //check if match ret_msg contains the reason why the matchdata isn't given. ret_msg stats reason on success
+            Assert.True(MatchData.Value.ret_msg.ToString() == "No match found with the given ID");
+        }
+
+        [Fact]
+        public async Task GetRawMatchDataWithMatchIdWhereDataIsStillHidden_TestAsync()
+        {
+            //Test a call for raw matchdata for a match where the game data is still hidden by the smite api
+
+            //Arrange
+            var mock = new Mock<ILogger<MatchService>>();
+            ILogger<MatchService> logger = mock.Object;
+            Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
+            IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
+
+            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
+
+            //Act
+            var result = await controller.Get(1234555);
+
+            //Assert
+            var MatchData = Assert.IsType<ActionResult<MatchData>>(result);
+            //check if matchdata object is returned
+            Assert.True(MatchData.Value != null);
+            //check if match ret_msg contains the reason why the matchdata isn't given. ret_msg stats reason on success
+            Assert.Contains("MatchDetails are intentionally hidden", MatchData.Value.ret_msg.ToString());
         }
 
         private static Mock<IHirezApiContext> CreateMockHirezApiContext()
@@ -241,7 +320,7 @@ namespace service_tests
                     new ApiPatchInfo
                     {
                         ret_msg = null,
-                        version_string = "7.12"
+                        version_string = "7.11"
                     }
                 );
 
