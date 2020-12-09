@@ -119,15 +119,15 @@ namespace smiteapi_microservice.Services
                             foreach (var mp in matchDetails)
                             {
                                 //make names friendly for image url
-                                var relic1 = Regex.Replace(mp.Item_Active_1.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var relic2 = Regex.Replace(mp.Item_Active_2.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item1 = Regex.Replace(mp.Item_Purch_1.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item2 = Regex.Replace(mp.Item_Purch_2.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item3 = Regex.Replace(mp.Item_Purch_3.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item4 = Regex.Replace(mp.Item_Purch_4.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item5 = Regex.Replace(mp.Item_Purch_5.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item6 = Regex.Replace(mp.Item_Purch_6.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var godname = Regex.Replace(mp.Reference_Name.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string relic1 = Regex.Replace(mp.Item_Active_1?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string relic2 = Regex.Replace(mp.Item_Active_2?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item1 = Regex.Replace(mp.Item_Purch_1?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item2 = Regex.Replace(mp.Item_Purch_2?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item3 = Regex.Replace(mp.Item_Purch_3?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item4 = Regex.Replace(mp.Item_Purch_4?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item5 = Regex.Replace(mp.Item_Purch_5?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item6 = Regex.Replace(mp.Item_Purch_6?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string godname = Regex.Replace(mp.Reference_Name?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
 
                                 MatchData.PlayerStat playerStat = new MatchData.PlayerStat
                                 {
