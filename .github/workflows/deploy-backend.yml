@@ -26,8 +26,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd smitenoobleague-microservices 
-          dotnet restore division-microservice
-          dotnet restore smiteapi-microservice
+          dotnet smitenoobleague-microservices.sln
       - name: Build
         run: |
           cd smitenoobleague-microservices
