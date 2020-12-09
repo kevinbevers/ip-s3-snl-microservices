@@ -33,7 +33,7 @@ jobs:
     - name: Install dependencies
       run: |
         cd smitenoobleague-microservices 
-        dotnet smitenoobleague-microservices.sln
+        dotnet restore smitenoobleague-microservices.sln
     - name: Build
       run: |
         cd smitenoobleague-microservices
