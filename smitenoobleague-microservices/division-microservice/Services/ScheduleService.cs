@@ -16,14 +16,16 @@ namespace division_microservice.Services
     public class ScheduleService : IScheduleService
     {
         private readonly SNL_Division_DBContext _db;
-        private readonly ILogger<DivisionService> _logger;
+        private readonly ILogger<ScheduleService> _logger;
         private readonly IValidationService _validationService;
+        private readonly IExternalServices _externalServices;
 
-        public ScheduleService(SNL_Division_DBContext db, ILogger<DivisionService> logger, IValidationService validationService)
+        public ScheduleService(SNL_Division_DBContext db, ILogger<ScheduleService> logger, IValidationService validationService, IExternalServices externalServices)
         {
             _db = db;
             _logger = logger;
             _validationService = validationService;
+            _externalServices = externalServices;
         }
 
         public async Task<ActionResult> CreateScheduleForDivisionAsync(ScheduleCreation values)
@@ -37,7 +39,7 @@ namespace division_microservice.Services
                 else
                 {
                     //get teams from teams service
-                    List<Team> divisionTeams = (List<Team>)await DivisionTeams.GetByDivisionIdAsync(values.DivisionID);
+                    List<Team> divisionTeams = (List<Team>)await _externalServices.GetDivisionTeamsByIdAsync(values.DivisionID);
                     if (divisionTeams.Count() == 0 || divisionTeams == null)
                     {
                         return new ObjectResult("Can't create a schedule if the division has no teams") { StatusCode = 400 }; //CREATED
@@ -80,7 +82,7 @@ namespace division_microservice.Services
                 else
                 {
                     //get all teams in the division
-                    IList<Team> divisionTeams = await DivisionTeams.GetByDivisionIdAsync(divisionID);
+                    IList<Team> divisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(divisionID);
 
                     List<Schedule> divisionSchedules = new List<Schedule>();
 
@@ -149,7 +151,7 @@ namespace division_microservice.Services
                 }
                 else
                 {
-                    IList<Team> divisionTeams = await DivisionTeams.GetByDivisionIdAsync(fs.ScheduleDivisionId);
+                    IList<Team> divisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(fs.ScheduleDivisionId);
 
                     Schedule schedule = new Schedule
                         {

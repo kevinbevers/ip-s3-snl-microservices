@@ -8,6 +8,11 @@ name: Back-end .NET Core CI
 #       - smitenoobleague-microservices/**
 
 on:
+  push:
+    branches: 
+      - dev
+    paths:
+      - smitenoobleague-microservices/**
   pull_request:     
     branches: 
       - master
@@ -15,7 +20,7 @@ on:
       - smitenoobleague-microservices/**
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
@@ -33,9 +38,8 @@ jobs:
     - name: Build
       run: |
         cd smitenoobleague-microservices
-        dotnet build --configuration Release --no-restore division-microservice
-        dotnet build --configuration Release --no-restore smiteapi-microservice
+        dotnet build --configuration Release --no-restore smitenoobleague-microservices.sln
     - name: Test
       run: |
         cd smitenoobleague-microservices
-        dotnet test tests
+        dotnet test smitenoobleague-microservices.sln

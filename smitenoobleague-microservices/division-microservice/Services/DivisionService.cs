@@ -19,13 +19,15 @@ namespace division_microservice.Services
         private readonly IScheduleService _scheduleService;
         private readonly ILogger<DivisionService> _logger;
         private readonly IValidationService _validationService;
+        private readonly IExternalServices _externalServices;
 
-        public DivisionService(SNL_Division_DBContext db, ILogger<DivisionService> logger, IScheduleService scheduleService, IValidationService validationService)
+        public DivisionService(SNL_Division_DBContext db, ILogger<DivisionService> logger, IScheduleService scheduleService, IValidationService validationService, IExternalServices externalServices)
         {
             _db = db;
             _scheduleService = scheduleService;
             _logger = logger;
             _validationService = validationService;
+            _externalServices = externalServices;
         }
 
         public async Task<ActionResult<IEnumerable<Division>>> GetDivisionsWithTeamsAsync()
@@ -46,7 +48,7 @@ namespace division_microservice.Services
                     {
 
                         Division returnDivision = new Division { DivisionID = division.DivisionId, DivisionName = division.DivisionName };
-                        returnDivision.DivisionTeams = await DivisionTeams.GetByDivisionIdAsync(division.DivisionId);
+                        returnDivision.DivisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(division.DivisionId);
                         returnDivisions.Add(returnDivision);
                     });
 
@@ -144,9 +146,9 @@ namespace division_microservice.Services
                 else
                 {
                     Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
-                    returnDivision.DivisionTeams = await DivisionTeams.GetByDivisionIdAsync(foundDivision.DivisionId);
+                    returnDivision.DivisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(foundDivision.DivisionId);
 
-                    return new ObjectResult(foundDivision) { StatusCode = 200 }; //OK
+                    return new ObjectResult(returnDivision) { StatusCode = 200 }; //OK
                 }
             }
             catch (Exception ex)
@@ -214,7 +216,7 @@ namespace division_microservice.Services
                         await _db.SaveChangesAsync();
 
                         Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
-                        return new ObjectResult(foundDivision) { StatusCode = 200 }; //OK
+                        return new ObjectResult(returnDivision) { StatusCode = 200 }; //OK
                     }
             }
             catch (Exception ex)
