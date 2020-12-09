@@ -6,7 +6,7 @@ name: Front-end Node.js CI
 on:
   push:
     branches: 
-      - master
+      - dev
     paths:
       - smitenoobleague-web-app/**
   pull_request:     
@@ -16,7 +16,7 @@ on:
       - smitenoobleague-web-app/**
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
