@@ -43,7 +43,7 @@ namespace smiteapi_microservice.Services
             //{
               List<ApiPlayerMatchStat> matchDetails = await _hirezApi.GetMatchDetailsByMatchID(MatchID);
 
-            if (matchDetails[0].ret_msg != null)
+            if (matchDetails?[0]?.ret_msg != null)
             {
                 if (matchDetails[0].ret_msg.ToString() == "[]")
                 {
@@ -56,7 +56,7 @@ namespace smiteapi_microservice.Services
             }
             else
             {
-                if (matchDetails.Count() > 0)
+                if (matchDetails?.Count() > 0)
                 {
 
                     TimeSpan time = TimeSpan.FromSeconds((int)matchDetails[0]?.Match_Duration);
@@ -83,7 +83,7 @@ namespace smiteapi_microservice.Services
                     //if a match isn't available yet this will happen and the return message will contain the date + 7 days for when the match becomes available
                     //should check ret_msg before doing all the rest
                     //should split up in little methods for a clearer view of code
-                    if (matchDetails.Count() == 10)
+                    if (matchDetails?.Count() == 10)
                     {
                         for (int i = 0; i < 9; i++)
                         {
@@ -113,21 +113,21 @@ namespace smiteapi_microservice.Services
                         }
 
 
-                        if (matchDetails.Count() > 9)
+                        if (matchDetails?.Count() > 9)
                         {
                             //Fill the winner and loser list
                             foreach (var mp in matchDetails)
                             {
                                 //make names friendly for image url
-                                var relic1 = Regex.Replace(mp.Item_Active_1.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var relic2 = Regex.Replace(mp.Item_Active_2.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item1 = Regex.Replace(mp.Item_Purch_1.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item2 = Regex.Replace(mp.Item_Purch_2.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item3 = Regex.Replace(mp.Item_Purch_3.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item4 = Regex.Replace(mp.Item_Purch_4.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item5 = Regex.Replace(mp.Item_Purch_5.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var item6 = Regex.Replace(mp.Item_Purch_6.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                var godname = Regex.Replace(mp.Reference_Name.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string relic1 = Regex.Replace(mp.Item_Active_1?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string relic2 = Regex.Replace(mp.Item_Active_2?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item1 = Regex.Replace(mp.Item_Purch_1?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item2 = Regex.Replace(mp.Item_Purch_2?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item3 = Regex.Replace(mp.Item_Purch_3?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item4 = Regex.Replace(mp.Item_Purch_4?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item5 = Regex.Replace(mp.Item_Purch_5?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string item6 = Regex.Replace(mp.Item_Purch_6?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                string godname = Regex.Replace(mp.Reference_Name?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
 
                                 MatchData.PlayerStat playerStat = new MatchData.PlayerStat
                                 {
