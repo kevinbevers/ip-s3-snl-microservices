@@ -40,5 +40,6 @@ jobs:
         key: ${{ secrets.SSHKEY }}
         script: |
           cd /opt/app/smitenoobleague-microservices
+          docker-compose down
           docker-compose build
           docker-compose -f docker-compose.yml -f prod.yml up -d
