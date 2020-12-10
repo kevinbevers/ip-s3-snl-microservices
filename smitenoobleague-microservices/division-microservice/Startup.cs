@@ -53,10 +53,13 @@ namespace division_microservice
             //inject gatewaykey from appsettings.json
             //services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
             //services.AddScoped<GatewayOnly>();
+
             //add Scoped services
+            services.AddScoped<IExternalServices, ExternalServices>();
             services.AddScoped<IDivisionService, DivisionService>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<IValidationService, ValidationService>();
+            
 
             services.AddSwaggerGen(c =>
             {
@@ -72,7 +75,7 @@ namespace division_microservice
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

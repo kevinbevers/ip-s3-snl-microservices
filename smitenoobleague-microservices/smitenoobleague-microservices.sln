@@ -11,6 +11,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service-tests", "tests\service-tests.csproj", "{08B03152-77CF-4B6C-878A-49EE11B7BEDA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "team-microservice", "team-microservice\team-microservice.csproj", "{088D67EC-2F49-48EE-B6CD-83C7956A3531}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,5 +39,9 @@ Global
 		{08B03152-77CF-4B6C-878A-49EE11B7BEDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08B03152-77CF-4B6C-878A-49EE11B7BEDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08B03152-77CF-4B6C-878A-49EE11B7BEDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{088D67EC-2F49-48EE-B6CD-83C7956A3531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{088D67EC-2F49-48EE-B6CD-83C7956A3531}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{088D67EC-2F49-48EE-B6CD-83C7956A3531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{088D67EC-2F49-48EE-B6CD-83C7956A3531}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
