@@ -8,10 +8,6 @@ namespace team_microservice.Team_DB
 {
     public partial class SNL_Team_DBContext : DbContext
     {
-        public SNL_Team_DBContext()
-        {
-        }
-
         public SNL_Team_DBContext(DbContextOptions<SNL_Team_DBContext> options)
             : base(options)
         {
@@ -71,6 +67,14 @@ namespace team_microservice.Team_DB
                 entity.ToTable("TableTeamMember");
 
                 entity.Property(e => e.TeamMemberId).HasColumnName("TeamMemberID");
+
+                entity.Property(e => e.TeamMemberAccountId)
+                    .HasColumnType("varchar(45)")
+                    .HasColumnName("TeamMemberAccountID")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_unicode_ci");
+
+                entity.Property(e => e.TeamMemberDivisionId).HasColumnName("TeamMemberDivisionID");
 
                 entity.Property(e => e.TeamMemberName)
                     .HasColumnType("varchar(45)")

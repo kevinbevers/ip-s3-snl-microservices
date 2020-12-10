@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 //swagger
 using Microsoft.OpenApi.Models;
+using team_microservice.Interfaces;
+using team_microservice.Services;
 
 namespace team_microservice
 {
@@ -32,6 +34,11 @@ namespace team_microservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAntiforgery(o => {
+                o.Cookie.Name = "X-CSRF-TOKEN";
+            });
+
+
             services.AddControllers();
             // Replace "YourDbContext" with the name of your own DbContext derived class.
             services.AddDbContextPool<SNL_Team_DBContext>(
@@ -44,6 +51,10 @@ namespace team_microservice
                         new MySqlServerVersion(new Version(8, 0, 22)),
                         mySqlOptions => mySqlOptions
                             .CharSetBehavior(CharSetBehavior.NeverAppend)));
+
+            //add services
+            services.AddScoped<ITeamService, TeamService>();
+            services.AddScoped<IValidationService, ValidationService>();
 
 
 
