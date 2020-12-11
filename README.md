@@ -36,8 +36,8 @@ The web-app uses the following *npm* packages
 | Jest| [Jest docs][JestDoc]|
 
 
-### Release installation
-project not ready for release.
+### Production
+www.smitenoobleague.com
 #### Development installation
 
 ##### Setting up the web-app
