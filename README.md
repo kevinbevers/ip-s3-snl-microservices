@@ -37,7 +37,7 @@ The web-app uses the following *npm* packages
 
 
 ### Production
-www.smitenoobleague.com
+https://smitenoobleague.com
 #### Development installation
 
 ##### Setting up the web-app
