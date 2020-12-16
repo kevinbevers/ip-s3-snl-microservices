@@ -49,30 +49,12 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg 
   function handleOnDragEnd(result) {
     if (!result.destination) return;
 
-    console.log(result);
-
     const items = Array.from(teamMembers);
     items[result.source.index] = teamMembers[result.destination.index];
     items[result.destination.index] = teamMembers[result.source.index];
 
-    console.log(items);
-
     setTeamMembers(items);
   }
-
-  function getStyle(style, snapshot) {
-    if (!snapshot.isDragging) return {};
-    if (!snapshot.isDropAnimating) {
-      return style;
-    }
-
-    return {
-      ...style,
-      // cannot be 0, but make it super tiny
-      transitionDuration: `0.001s`
-    };
-  }
-
 
 
   if (status != null) {
@@ -164,47 +146,53 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg 
 
                               <Draggable key={0} draggableId={"Solo"} index={0}>
                                 {(provided, snapshot) => (
-                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getStyle(provided.draggableProps.style, snapshot)}>
+                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                     <Col md={10} xs={10} className="d-flex p-0">
                                       <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{teamMembers[0] != null ? teamMembers[0].teamMemberName : "This role is still empty"} {teamMembers[0] != null && teamMembers[0].teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4>
                                     </Col>
                                     <Col xs={2} className="my-auto p-0 pr-2">{teamMembers[0] != null ? <Button variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
+                                    {provided.placeholder}
                                   </Row>
                                 )}</Draggable>
 
                               <Draggable key={1} draggableId={"Jungle"} index={1}>
                                 {(provided, snapshot) => (
-                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getStyle(provided.draggableProps.style, snapshot)}>
+                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                     <Col md={10} xs={10} className="d-flex p-0">
                                       <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{teamMembers[1] != null ? teamMembers[1].teamMemberName : "This role is still empty"} {teamMembers[1] != null && teamMembers[1].teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4></Col>
                                     <Col xs={2} className="my-auto p-0 pr-2">{teamMembers[1] != null ? <Button variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
+                                    {provided.placeholder}
                                   </Row>
                                 )}</Draggable>
 
                               <Draggable key={2} draggableId={"Mid"} index={2}>
                                 {(provided, snapshot) => (
-                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getStyle(provided.draggableProps.style, snapshot)}>
+                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                     <Col md={10} xs={10} className="d-flex p-0">
                                       <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{teamMembers[2] != null ? teamMembers[2].teamMemberName : "This role is still empty"} {teamMembers[2] != null && teamMembers[2].teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4></Col>
                                     <Col xs={2} className="my-auto p-0 pr-2">{teamMembers[2] != null ? <Button variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
+                                    {provided.placeholder}
                                   </Row>
+                                 
                                 )}</Draggable>
 
                               <Draggable key={3} draggableId={"Support"} index={3}>
                                 {(provided, snapshot) => (
-                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getStyle(provided.draggableProps.style, snapshot)}>
+                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                     <Col md={10} xs={10} className="d-flex p-0">
                                       <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{teamMembers[3] != null ? teamMembers[3].teamMemberName : "This role is still empty"} {teamMembers[3] != null && teamMembers[3].teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4></Col>
                                     <Col xs={2} className="my-auto p-0 pr-2">{teamMembers[3] != null ? <Button variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
+                                    {provided.placeholder}
                                   </Row>
                                 )}</Draggable>
 
                               <Draggable key={4} draggableId={"Adc"} index={4}>
-                                {(provided, snapshot) => (
-                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getStyle(provided.draggableProps.style, snapshot)}>
+                                {(provided, snapshot) => ( 
+                                  <Row className="mb-2 rounded bg-white border border-silver PlayerRole" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                     <Col md={10} xs={10} className="d-flex p-0">
                                       <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{teamMembers[4] != null ? teamMembers[4].teamMemberName : "This role is still empty"} {teamMembers[4] != null && teamMembers[4].teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4></Col>
                                     <Col xs={2} className="my-auto p-0 pr-2">{teamMembers[4] != null ? <Button variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
+                                    {provided.placeholder}
                                   </Row>
                                 )}</Draggable>
 
