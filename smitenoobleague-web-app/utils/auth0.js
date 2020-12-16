@@ -1,16 +1,16 @@
 import { initAuth0 } from '@auth0/nextjs-auth0';
 
 export default initAuth0({
-  domain: "smitenoobleague.eu.auth0.com",
-  clientId: process.env.AUTH0_CLIENT_ID,
-  clientSecret: process.env.AUTH0_CLIENT_SECRET,
-  audience: process.env.AUTH0_AUDIENCE,
+  domain: process.env.AUTH0_DOMAIN || "yourdomain.eu.auth0.com",
+  clientId: process.env.AUTH0_CLIENT_ID || "verysecretclientidhere",
+  clientSecret: process.env.AUTH0_CLIENT_SECRET || "verysecretsecrethere",
+  audience: process.env.AUTH0_AUDIENCE || "youradiencehere",
   scope: "openid profile",
-  redirectUri: process.env.AUTH0_RETURN_URL,
-  postLogoutRedirectUri: process.env.AUTH0_LOGOUT_URL,
+  redirectUri: process.env.AUTH0_RETURN_URL || "redirecttohere",
+  postLogoutRedirectUri: process.env.AUTH0_LOGOUT_URL || "redirecttohere",
   session: {
     // The secret used to encrypt the cookie.
-    cookieSecret: process.env.COOKIE_SECRET,
+    cookieSecret: process.env.COOKIE_SECRET || "secretcookiethatisveryveryverysecret",
     // The cookie lifetime (expiration) in seconds. Set to 8 hours by default.
     cookieLifetime: 60 * 60 * 8,
     // (Optional) The cookie domain this should run on. Leave it blank to restrict it to your domain.
