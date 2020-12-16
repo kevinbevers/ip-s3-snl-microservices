@@ -32,16 +32,6 @@ CREATE TABLE `TableRole` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TableRole`
---
-
-LOCK TABLES `TableRole` WRITE;
-/*!40000 ALTER TABLE `TableRole` DISABLE KEYS */;
-INSERT INTO `TableRole` VALUES (1,'Solo'),(2,'Jungle'),(3,'Mid'),(4,'Support'),(5,'Adc');
-/*!40000 ALTER TABLE `TableRole` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `TableTeam`
 --
 
@@ -53,18 +43,10 @@ CREATE TABLE `TableTeam` (
   `TeamDivisionID` int DEFAULT NULL,
   `TeamName` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   `TeamCaptainID` int DEFAULT NULL,
+  `TeamLogoPath` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`TeamID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `TableTeam`
---
-
-LOCK TABLES `TableTeam` WRITE;
-/*!40000 ALTER TABLE `TableTeam` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TableTeam` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `TableTeamMember`
@@ -85,15 +67,6 @@ CREATE TABLE `TableTeamMember` (
   PRIMARY KEY (`TeamMemberID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `TableTeamMember`
---
-
-LOCK TABLES `TableTeamMember` WRITE;
-/*!40000 ALTER TABLE `TableTeamMember` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TableTeamMember` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -104,4 +77,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-10 23:00:43
+-- Dump completed on 2020-12-15 22:22:56

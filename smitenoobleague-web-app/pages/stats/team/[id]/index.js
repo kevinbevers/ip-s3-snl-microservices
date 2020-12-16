@@ -15,8 +15,10 @@ import { FaBox, FaInfoCircle } from "react-icons/fa";
 import {Line} from "react-chartjs-2";
 //custom components
 import RecentTeams from "src/components/RecentTeams";
+//Auth
+import helpers from "utils/helpers";
 
-export default function TeamStat({ postData }) {
+export default function TeamStat({ postData, LoginSession }) {
 
     // RPP recent peformance points. a calculation done in the back-end based on gametime, kills, win or loss, gold earned and a few more stats. combined into a algorithm
     const data = {
@@ -67,7 +69,7 @@ export default function TeamStat({ postData }) {
 
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       {/* {postData} */}
       <Container fluid className="mt-2">
           {/* Team Header */}
@@ -258,37 +260,13 @@ export default function TeamStat({ postData }) {
 
 }
 
-// export async function getStaticPaths() {
-//   // Return a list of possible values for id
-//   const paths = [
-//     {
-//       params: {
-//         id: "2345"
-//       }
-//     },
-//     {
-//       params: {
-//         id: "1234"
-//       }
-//     },
-//     {
-//       params: {
-//         id: "1234"
-//       }
-//     }
-//   ];
-//   return {
-//     paths,
-//     fallback: false
-//   }
-// }
-
-// export async function getStaticProps({ params }) {
-//   // Fetch necessary data for the blog post using params.id
-//   const postData = params.id;
-//   return {
-//     props: {
-//       postData
-//     }
-//   }
-// }
+export async function getServerSideProps(context) {
+  
+    const loginSessionData = await helpers.GetLoginSession(context.req);
+  
+    return {
+        props: {
+            LoginSession: loginSessionData
+        },
+    };
+  }

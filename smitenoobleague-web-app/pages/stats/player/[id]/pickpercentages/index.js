@@ -15,12 +15,13 @@ import { Button, FormControl, Card } from "react-bootstrap";
 import { FaReply } from "react-icons/fa";
 //custom components
 import GodPickCard from "src/components/GodPickCard";
+//Auth
+import helpers from "utils/helpers";
 
-
-export default function PickPercentages({ postData }) {
+export default function PickPercentages({ postData, LoginSession}) {
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       {/* {postData} */}
       <Container fluid className="mt-2">
         {/* Team Header */}
@@ -90,4 +91,15 @@ export default function PickPercentages({ postData }) {
     </>
   );
 
+}
+
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

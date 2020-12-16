@@ -15,9 +15,13 @@ namespace team_microservice.Interfaces
 
         //team    
         Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByTeamIdAsync(int teamID);
-        Task<ActionResult<Team>> AddTeamAsync(TeamSubmission teamSubmisssion);
-        Task<ActionResult> UpdateTeamAsync(TeamSubmission teamSubmisssion);
+        Task<ActionResult> UpdateTeamAsCaptainSync(TeamSubmission teamSubmisssion);
+        Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByCaptainAccountIdAsync(string captainID);
+
+        //Admin functions
+        Task<ActionResult> UpdateTeamAsAdminAsync(TeamSubmissionAdmin teamSubmisssion);
         Task<ActionResult> DeleteTeamAsync(int teamID);
+        Task<ActionResult<Team>> AddTeamAsync(TeamSubmissionAdmin teamSubmisssion);
 
         //team members
         Task<ActionResult> UpdateTeamMemberRole(UpdateRole update);

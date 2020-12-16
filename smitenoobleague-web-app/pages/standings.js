@@ -17,10 +17,11 @@ import Dropdown from "react-bootstrap/Dropdown";
 import FullBackground from "../src/components/FullBackground"
 import BG from "../public/images/dark_bg.png"
 import ScoreTable from "src/components/ScoreTable";
+//Auth
+import helpers from "utils/helpers";
 
 
-
-export default function standings() {
+export default function standings({LoginSession}) {
 
   const [SelectedDivision, setSelectedDivision] = useState({id: 1, name: "Godlike division"});
 
@@ -44,7 +45,7 @@ export default function standings() {
   return (
     <>
       <FullBackground src={BG} />
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       <Container>
         <Row className="mt-4">
           <Col md={6} className="mx-auto">
@@ -82,4 +83,15 @@ export default function standings() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

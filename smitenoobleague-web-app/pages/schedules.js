@@ -11,8 +11,10 @@ import { Container, Card, Image, Form } from "react-bootstrap";
 import { FaCaretRight, FaCaretLeft } from "react-icons/fa";
 //custom components
 import ScheduleItem from "src/components/ScheduleItem";
+//Auth
+import helpers from "utils/helpers";
 
-export default function schedules() {
+export default function schedules({LoginSession}) {
 
 
   const [SelectedDivision, setSelectedDivision] = useState({id: 1, name: "Godlike division"});
@@ -37,7 +39,7 @@ export default function schedules() {
 
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       <Container fluid>
         <Row className="mt-4">
         <Col md={3} className="mx-auto">
@@ -79,4 +81,15 @@ export default function schedules() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

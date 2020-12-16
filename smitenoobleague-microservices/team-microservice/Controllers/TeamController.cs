@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using team_microservice.Interfaces;
 using team_microservice.Models.External;
@@ -35,22 +36,32 @@ namespace team_microservice.Controllers
             return await _teamService.GetTeamsByDivisionIdWithDetailsAsync(divisionID);
         }
 
-        // GET: team-service/bydivision/{divisionID}
+        // GET: team-service/{divisionID}
         [HttpGet("{teamID}")]
         public async Task<ActionResult<TeamWithDetails>> Get(int teamID)
         {
             return await _teamService.GetTeamWithDetailsByTeamIdAsync(teamID);
         }
 
+        // GET: team-service/{divisionID}
+        [HttpGet("bycaptainid/{captainID}")]
+        [Authorize(Roles = "Captain,Admin")]
+        public async Task<ActionResult<TeamWithDetails>> GetByCaptainID(string captainID)
+        {
+            return await _teamService.GetTeamWithDetailsByCaptainAccountIdAsync(captainID);
+        }
+
         // POST team-service
         [HttpPost]
-        public async Task<ActionResult<Team>> Post([FromBody]TeamSubmission teamSubmission)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Team>> Post([FromBody]TeamSubmissionAdmin teamSubmission)
         {
             return ModelState.IsValid ? await _teamService.AddTeamAsync(teamSubmission) : BadRequest(ModelState);
         }
 
         // POST team-service/teammember
         [HttpPost("teammember")]
+        [Authorize(Roles = "Captain,Admin")]
         public async Task<ActionResult<Team>> Post([FromBody] TeamMemberSubmission teamMemberSubmission)
         {
             return ModelState.IsValid ? await _teamService.AddTeamMemberToTeamAsync(teamMemberSubmission) : BadRequest(ModelState);
@@ -58,13 +69,23 @@ namespace team_microservice.Controllers
 
         // PUT team-service
         [HttpPut]
-        public async Task<ActionResult> Put([FromBody]TeamSubmission teamSubmission)
+        [Authorize(Roles = "Captain,Admin")]
+        public async Task<ActionResult> Put([FromBody] TeamSubmission teamSubmission)
         {
-            return ModelState.IsValid ? await _teamService.UpdateTeamAsync(teamSubmission) : BadRequest(ModelState);
+            return ModelState.IsValid ? await _teamService.UpdateTeamAsCaptainSync(teamSubmission) : BadRequest(ModelState);
+        }
+
+        // PUT team-service
+        [HttpPut("admin")]
+        [Authorize(Roles = "Captain,Admin")]
+        public async Task<ActionResult> PutAdmin([FromBody]TeamSubmissionAdmin teamSubmission)
+        {
+            return ModelState.IsValid ? await _teamService.UpdateTeamAsAdminAsync(teamSubmission) : BadRequest(ModelState);
         }
 
         // PUT team-service/updaterole
         [HttpPut("updaterole")]
+        [Authorize(Roles = "Captain,Admin")]
         public async Task<ActionResult> UpdateMemberRole([FromBody]UpdateRole update)
         {
             return ModelState.IsValid ? await _teamService.UpdateTeamMemberRole(update) : BadRequest(ModelState);
@@ -72,6 +93,7 @@ namespace team_microservice.Controllers
 
         // PUT team-service/updatemember
         [HttpPut("updatemember")]
+        [Authorize(Roles = "Captain,Admin")]
         public async Task<ActionResult> UpdateMember([FromBody]TeamMemberSubmission teamMemberSubmission)
         {
             return ModelState.IsValid ? await _teamService.UpdateTeamMemberToTeamAsync(teamMemberSubmission) : BadRequest(ModelState);
@@ -80,6 +102,7 @@ namespace team_microservice.Controllers
 
         // DELETE team-service/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int id)
         {
             return await _teamService.DeleteTeamAsync(id);
@@ -87,6 +110,7 @@ namespace team_microservice.Controllers
 
         // DELETE team-service/teammember/{teamMemberID}
         [HttpDelete("teammember/{teamMemberID}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteTeamMember(int teamMemberID)
         {
             return await _teamService.DeleteTeamMemberFromTeamSync(teamMemberID);
@@ -94,6 +118,7 @@ namespace team_microservice.Controllers
 
         // DELETE team-service/bydivision/{divisionID}
         [HttpDelete("bydivision/{divisionID}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteTeamsByDivisionID(int divisionID)
         {
             return await _teamService.DeleteTeamsByDivisionIdAsync(divisionID);

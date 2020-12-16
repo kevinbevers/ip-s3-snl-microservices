@@ -8,6 +8,7 @@ namespace team_microservice.Team_DB
 {
     public partial class SNL_Team_DBContext : DbContext
     {
+
         public SNL_Team_DBContext(DbContextOptions<SNL_Team_DBContext> options)
             : base(options)
         {
@@ -51,6 +52,11 @@ namespace team_microservice.Team_DB
                 entity.Property(e => e.TeamCaptainId).HasColumnName("TeamCaptainID");
 
                 entity.Property(e => e.TeamDivisionId).HasColumnName("TeamDivisionID");
+
+                entity.Property(e => e.TeamLogoPath)
+                    .HasColumnType("varchar(300)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_unicode_ci");
 
                 entity.Property(e => e.TeamName)
                     .IsRequired()

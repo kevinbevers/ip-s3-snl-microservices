@@ -10,7 +10,8 @@ namespace team_microservice.Models.External
         [Required]
         public int PlayerID { get; set; }
         [Required]
-        public int PlatformID { get; set; }
+        //public int PlatformID { get; set; }
+        public string PlatformName { get; set; }
         [Required]
         public int TeamID { get; set; }
         [Required]

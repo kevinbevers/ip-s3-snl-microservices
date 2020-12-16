@@ -2,6 +2,14 @@
     height: 4vw;
 }
 
+.PlayerText {
+    font-size: 1.4vw;
+}
+
+.PlayerEdit {
+    font-size: 1vw;
+}
+
 .CaptainBadge {
     font-size: 0.8vw;
 }
@@ -31,5 +39,11 @@
     }
     .PlayerRole {
         height: 8vw;
+    }
+    .PlayerText {
+        font-size: 3vw;
+    }
+    .PlayerEdit {
+        font-size: 2vw;
     }
 };

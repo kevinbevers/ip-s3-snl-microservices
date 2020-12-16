@@ -15,14 +15,15 @@ import TeamQuestions from "src/components/faqpage/TeamQuestions";
 import PlayerQuestions from "src/components/faqpage/PlayerQuestions";
 import CaptainQuestions from "src/components/faqpage/CaptainQuestions";
 import DivisionQuestions from "src/components/faqpage/DivisionQuestions";
+//Auth
+import helpers from "utils/helpers";
 
 
 
-
-export default function faq() {
+export default function faq({LoginSession}) {
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       <Jumbotron className="faq-banner">
         <h2 className="display-5 m-0 text-uppercase font-weight-bold">FREQUENTLY ASKED QUESTIONS</h2>
       </Jumbotron>
@@ -46,4 +47,15 @@ export default function faq() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

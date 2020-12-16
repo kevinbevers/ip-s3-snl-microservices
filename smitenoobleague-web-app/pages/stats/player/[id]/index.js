@@ -11,8 +11,10 @@ import { Badge, Image, Modal, Button, Jumbotron, Container, Row, Col } from "rea
 import {Doughnut} from "react-chartjs-2";
 //custom components
 
+//Auth
+import helpers from "utils/helpers";
 
-export default function PlayerStat({ postData }) {
+export default function PlayerStat({ postData, LoginSession }) {
 
     const data = {
         labels: [
@@ -77,7 +79,7 @@ export default function PlayerStat({ postData }) {
 
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       {/* {postData} */}
       <Container fluid className="mt-2">
           {/* Team Header */}
@@ -248,4 +250,15 @@ export default function PlayerStat({ postData }) {
     </>
   );
 
+}
+
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

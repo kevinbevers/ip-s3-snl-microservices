@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace team_microservice.Models.External
 {
@@ -11,16 +12,6 @@ namespace team_microservice.Models.External
         [MinLength(5, ErrorMessage = "Team name is too short, a minimum of 5 characters is required")]
         [MaxLength(20, ErrorMessage = "Team name is too long, a maximum of 25 characters is allowed")]
         public string TeamName { get; set; }
-        public int? TeamDivisionID { get; set; }
-        public CaptainData Captain { get; set; }
-
-        public class CaptainData
-        {
-            public string TeamCaptainAccountID { get; set; }
-            public int? TeamCaptainPlayerID { get; set; }
-            public string TeamCaptainPlayerName { get; set; }
-            public int? TeamCaptainPlatformID { get; set; }
-            public int? TeamCaptainRoleID { get; set; }
-        }
+        public IFormFile TeamLogo { get; set; }
     }
 }

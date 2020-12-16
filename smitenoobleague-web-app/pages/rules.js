@@ -12,12 +12,14 @@ import Alert from "react-bootstrap/Alert";
 //import background component and the image for it
 import FullBackground from "../src/components/FullBackground"
 import BG from "public/images/Rules_Background.jpg";
+//Auth
+import auth0 from "utils/auth0";
 
-export default function rules() {
+export default function rules({LoginSession}) {
   return (
     <>
         <FullBackground src={BG} />
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       <Container className="mt-4">
         <Row>
           <Col md={2} xl={3}></Col>
@@ -135,5 +137,28 @@ export default function rules() {
   );
 }
 
+export async function getServerSideProps(context) {
+  //get session
+  const session = await auth0.getSession(context.req);
+  //Check if logged in user is captain to show captainpage in navbar
+  let Captain = false;
+
+  if(session?.user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes("Captain"))
+  {
+    Captain = true;
+  }
+  else {
+    Captain = false;
+  }
+
+  return {
+      props: {
+          LoginSession: {
+          user: session?.user || null,
+          isCaptain: Captain
+          }
+      },
+  };
+}
 
 

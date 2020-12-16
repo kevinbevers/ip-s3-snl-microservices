@@ -22,7 +22,10 @@ import LoserTeamTableStatic from "src/components/matchdetails/LoserTeamTableStat
 import DefaultErrorPage from "next/error";
 import axios from "axios";
 
-export default function matchdetails({received}) {
+//Auth
+import helpers from "utils/helpers";
+
+export default function matchdetails({received, LoginSession}) {
 
   console.log(received);
 
@@ -36,7 +39,7 @@ export default function matchdetails({received}) {
   else {
   return (
     <>
-      <NavBar />
+     <NavBar LoginSession={LoginSession}/>
       {/* {postData} */}
       <Container fluid className="mt-2">
         <Tab.Container id="GameNavBar" defaultActiveKey="Game1">
@@ -123,6 +126,8 @@ export default function matchdetails({received}) {
 }
 
 export async function getServerSideProps({params}) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
 
 try {
   const response = await axios.get("http://localhost:5000/smiteapi-service/Match/" + params.id);
@@ -132,7 +137,8 @@ try {
   }
   return {
     props: {
-      received
+      received,
+      LoginSession: loginSessionData
     }, // will be passed to the page component as props
   }
 }
@@ -140,10 +146,12 @@ catch {
   const received = {
     status: 404,
     data: {},
+    LoginSession: loginSessionData
   }
   return {
     props: {
-      received
+      received,
+      LoginSession: loginSessionData
     }, // will be passed to the page component as props
   }
 }

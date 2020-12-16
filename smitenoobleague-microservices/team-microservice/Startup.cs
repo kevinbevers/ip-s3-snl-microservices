@@ -18,6 +18,13 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.OpenApi.Models;
 using team_microservice.Interfaces;
 using team_microservice.Services;
+//Auth
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace team_microservice
 {
@@ -56,6 +63,22 @@ namespace team_microservice
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IValidationService, ValidationService>();
 
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    
+                    options.Authority = "https://smitenoobleague.eu.auth0.com/";
+                    options.Audience = "smitenoobleague";
+                    // If the access token does not have a `sub` claim, `User.Identity.Name` will be `null`. Map it to a different claim by setting the NameClaimType below.
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "Role",
+                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                    };
+                });
+
+
 
 
             //add swagger
@@ -75,7 +98,16 @@ namespace team_microservice
 
             //app.UseHttpsRedirection();
 
+            //serve saved images.
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "images")),
+                RequestPath = "/images"
+            });
+
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

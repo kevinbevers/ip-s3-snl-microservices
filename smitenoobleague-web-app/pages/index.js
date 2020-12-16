@@ -5,14 +5,17 @@ import NavBar from "../src/components/NavBar";
 import Footer from "../src/components/Footer";
 
 //import background component and the image for it
-import FullBackground from "../src/components/FullBackground"
-import BG from "../public/images/dark_bg.png"
+import FullBackground from "../src/components/FullBackground";
+import BG from "../public/images/dark_bg.png";
+//Auth
+import helpers from "utils/helpers";
 
-export default function Home() {
+function Home({LoginSession}) {
+
   return (
     <>
     <FullBackground src={BG} />
-    <NavBar />
+    <NavBar LoginSession={LoginSession}/>
   <div className="jumbotron-fluid">
     {/* render body here */}
     <div className=" container halfTransparent mb-2 mt-5 rounded p-3" id="welcomeScreen">
@@ -29,3 +32,16 @@ export default function Home() {
     </>
   )
 }
+
+export async function getServerSideProps(context) {
+
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
+}
+
+export default Home;

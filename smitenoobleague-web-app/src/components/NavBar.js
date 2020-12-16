@@ -2,11 +2,11 @@
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
-
 //nextjs router hook
 import { useRouter } from "next/router";
-export default function NavBar() {
 
+export default function NavBar({LoginSession}) {
+    
     const router = useRouter();
 
     return (
@@ -17,7 +17,7 @@ export default function NavBar() {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mr-auto">
-                    <Nav.Link href="/captainpage" className={router?.pathname == "/captainpage" ? "active" : ""}>Captain page</Nav.Link>
+                    {LoginSession?.isCaptain ? <><Nav.Link href="/captainpage" className={router?.pathname == "/captainpage" ? "active" : ""}>Captain page</Nav.Link></> : <> </>}
                     <NavDropdown title="Stats" id="collapsible-nav-dropdown">
                         <NavDropdown.Item href="/stats/team" className={router?.pathname == "/stats/team" ? "active" : ""}>Team stats</NavDropdown.Item>
                         <NavDropdown.Divider />
@@ -32,9 +32,16 @@ export default function NavBar() {
                     <Nav.Link href="/faq" className={router?.pathname == "/faq" ? "active" : ""}>FAQ</Nav.Link>
                     </Nav>
                     <Nav>
-                    <Nav.Link href="#account">
-                        Accountname
-                    </Nav.Link>
+                        {LoginSession?.user != null ? 
+                        <> 
+                        <Nav.Link href="/api/logout">
+                            Logout
+                        </Nav.Link> 
+                        </> : <>                    
+                        <Nav.Link href="/api/login">
+                            Login
+                        </Nav.Link> 
+                        </>}
                     </Nav>
                 </Navbar.Collapse>
                 </Navbar>
