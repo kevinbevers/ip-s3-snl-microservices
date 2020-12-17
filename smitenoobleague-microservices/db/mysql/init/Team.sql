@@ -63,7 +63,7 @@ CREATE TABLE `TableTeamMember` (
   `TeamMemberName` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `TeamMemberPlatformID` int DEFAULT NULL,
   `TeamMemberAccountID` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `TeamMemberDivisionID` int NOT NULL,
+  `TeamMemberDivisionID` int DEFAULT NULL,
   PRIMARY KEY (`TeamMemberID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -77,4 +77,4 @@ CREATE TABLE `TableTeamMember` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-15 22:22:56
+-- Dump completed on 2020-12-17 19:22:27

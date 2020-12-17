@@ -263,6 +263,42 @@ namespace team_microservice.Services
             }
         }
 
+        public async Task<ActionResult<Team>> GetAllTeamsAsync()
+        {
+            try
+            {
+                List<TableTeam> foundTeams = await _db.TableTeams.ToListAsync();
+                if (foundTeams.Count() == 0)
+                {
+                    return new ObjectResult("No teams created yet.") { StatusCode = 404 }; //NOT FOUND
+                }
+                else
+                {
+                    List<Team> returnTeams = new List<Team>();
+
+                    foreach (var team in foundTeams)
+                    {
+                        returnTeams.Add(new TeamWithDetails
+                        {
+                            TeamID = team.TeamId,
+                            TeamName = team.TeamName,
+                            DivisionID = (int)team.TeamDivisionId,
+                            TeamLogoPath = team.TeamLogoPath
+                        });
+                    }
+
+                    return new ObjectResult(returnTeams) { StatusCode = 200 }; //OK
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get teams all teams");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get teams all teams.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
         public async Task<ActionResult<IEnumerable<Team>>> GetTeamsByDivisionIdAsync(int divisionID)
         {
             try
@@ -463,6 +499,64 @@ namespace team_microservice.Services
                 _logger.LogError(ex, "Something went wrong trying to get team with ID.");
                 //return result to client
                 return new ObjectResult("Something went wrong trying to get team with ID.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
+        public async Task<ActionResult> SetDivisionTeams(SetDivisionTeams divisionTeams)
+        {
+            try
+            {
+                if (divisionTeams.teamIdList.Count() > 0)
+                {
+                    List<TableTeam> teamsToRemove = await _db.TableTeams.Where(t => t.TeamDivisionId == divisionTeams.divisionID).ToListAsync();
+                    if (teamsToRemove.Count() > 0)
+                    {
+                        //Remove current teams and members from the given division
+                        List<TableTeamMember> foundMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberDivisionId == divisionTeams.divisionID).ToListAsync();
+                        foundMembers.ForEach(m => m.TeamMemberDivisionId = null);
+                        teamsToRemove.ForEach(t => t.TeamDivisionId = null);
+
+                        _db.TableTeamMembers.UpdateRange(foundMembers);
+                        _db.TableTeams.UpdateRange(teamsToRemove);
+
+                        await _db.SaveChangesAsync();
+                    }
+
+                    List<TableTeam> teamsToAdd = await _db.TableTeams.Where(t => divisionTeams.teamIdList.Contains(t.TeamId)).ToListAsync();
+                    if (teamsToAdd.Count() > 0)
+                    {
+                        //update teams and members with the given division
+                        teamsToAdd.ForEach(t => t.TeamDivisionId = divisionTeams.divisionID);
+
+                        List<TableTeamMember> membersToAdd = await _db.TableTeamMembers.Where(m => divisionTeams.teamIdList.Contains(m.TeamMemberTeamId)).ToListAsync();
+                        membersToAdd.ForEach(m => m.TeamMemberDivisionId = divisionTeams.divisionID);
+
+                        _db.TableTeams.UpdateRange(teamsToAdd);
+                        _db.TableTeamMembers.UpdateRange(membersToAdd);
+
+                        await _db.SaveChangesAsync();
+
+                        return new ObjectResult("Division teams updated") { StatusCode = 200 }; //OK
+                    }
+                    else
+                    {
+                        return new ObjectResult("No teams found with the given IDs.") { StatusCode = 404 }; //NOT FOUND  
+                    }
+                }
+                else
+                {
+                    return new ObjectResult("No teamID's submitted") { StatusCode = 400 }; //NOT FOUND  
+                }
+
+
+                          
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to set division for teams.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to set division for teams.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
 

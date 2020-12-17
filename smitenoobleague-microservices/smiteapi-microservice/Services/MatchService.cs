@@ -26,7 +26,7 @@ namespace smiteapi_microservice.Services
         //private readonly GatewayKey _gatewayKey;
         //return messages, move to static class
         private readonly string ResponeText_alreadySubmitted = "gameID is already submitted";
-        private readonly string ResponeText_gameIdEmpty = "invalid gameID submitted";
+        private readonly string ResponeText_gameIdEmpty = "Invalid gameID submitted";
         private readonly string ResponseText_MatchDetailsHidden = "Matchdata not yet available. The data will be added once it becomes available at"; //Date will be added after this
         private readonly string ResponseText_MatchDetailsAdded = "Matchdata was added to our database";
 
