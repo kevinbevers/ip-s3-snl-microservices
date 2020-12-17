@@ -36,7 +36,16 @@ const GetSecureApi = async(req, res) => {
   });
 };
 
+const GetAccessTokenForClient = async(req, res) => {
+
+  const tokenCache = auth0.tokenCache(req, res);
+  const { accessToken } = await tokenCache.getAccessToken();
+
+  return accessToken;
+};
+
 export default {
   GetLoginSession,
-  GetSecureApi
+  GetSecureApi,
+  GetAccessTokenForClient
 }

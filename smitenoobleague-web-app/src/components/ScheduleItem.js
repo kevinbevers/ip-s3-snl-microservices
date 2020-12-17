@@ -13,7 +13,7 @@ export default function ScheduleItem() {
                     <Row>
                         <Col md={5} className="p-0">
                             <Row>
-                                <Col md={3} className="p-0"><Image src="https://web2.hirez.com/esports/teams/ssg-70x70.png" className="MhTeamImg"></Image></Col>
+                                <Col md={3} className="p-0"><Image src="https://web2.hirez.com/esports/teams/ssg-70x70.png" className="MhTeamImg" draggable={false}></Image></Col>
                                 <Col md={9} className="my-auto"><h3 className="">Spacestation Gaming</h3></Col>
                             </Row>
                         </Col>
@@ -21,7 +21,7 @@ export default function ScheduleItem() {
                         <Col md={5} className="p-0">
                             <Row>
                                 <Col md={9} className="my-auto"><h3 className="">Ghost Gaming</h3></Col>
-                                <Col md={3} className="p-0"><Image src="https://web2.hirez.com/esports/teams/ghost-70x70.png" className="MhTeamImg"></Image></Col>
+                                <Col md={3} className="p-0"><Image src="https://web2.hirez.com/esports/teams/ghost-70x70.png" className="MhTeamImg" draggable={false}></Image></Col>
                             </Row>
                         </Col>
                     </Row>

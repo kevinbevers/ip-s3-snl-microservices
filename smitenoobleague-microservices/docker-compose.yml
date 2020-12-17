@@ -50,6 +50,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTPS_PORT=443
+      - Domain=${Domain}
     restart: always
     ports:
         - 80:80

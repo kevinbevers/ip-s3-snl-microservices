@@ -27,7 +27,7 @@ export default function PickPercentages({ postData, LoginSession }) {
         {/* Team Header */}
         <Row className="">
           <Col md={2} xl={1} xs={3} className="my-auto">
-            <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage"></Image>
+            <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage" draggable={false}></Image>
           </Col>
           <Col md={7} xl={8} xs={9} className="pb-0 my-auto">
             <Row className="">

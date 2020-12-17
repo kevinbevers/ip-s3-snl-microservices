@@ -8,7 +8,7 @@ namespace team_microservice.Models.External
     {
         public int? TeamMemberID { get; set; }
         [Required]
-        public int PlayerID { get; set; }
+        public int? PlayerID { get; set; }
         [Required]
         //public int PlatformID { get; set; }
         public string PlatformName { get; set; }
@@ -17,6 +17,6 @@ namespace team_microservice.Models.External
         [Required]
         public string PlayerName { get; set; }
         [Required]
-        public int RoleID { get; set; }
+        public int? RoleID { get; set; }
     }
 }

@@ -12,7 +12,7 @@ export default function NavBar({LoginSession}) {
     return (
             <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
                 <Navbar.Brand href="/" className="p-0" className={router?.pathname == "/" ? "active" : ""}>
-                <img src="/images/SNL_Navbar_Logo.png" width="60" height="60" className="d-inline-block align-top" alt="Smitenoobleague logo"/>
+                <img src="/images/SNL_Navbar_Logo.png" width="60" height="60" className="d-inline-block align-top" alt="Smitenoobleague logo" draggable={false}/>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">

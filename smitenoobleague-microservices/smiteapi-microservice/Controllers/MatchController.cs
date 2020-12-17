@@ -34,7 +34,7 @@ namespace smiteapi_microservice.Controllers
 
         // POST /match
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]MatchSubmission submission)
+        public async Task<IActionResult> Post([FromBody] MatchSubmission submission)
         {
             return await _matchService.ProcessMatchIdAsync(submission);
         }

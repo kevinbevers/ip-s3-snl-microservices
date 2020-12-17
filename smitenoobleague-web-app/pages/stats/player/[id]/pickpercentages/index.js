@@ -27,7 +27,7 @@ export default function PickPercentages({ postData, LoginSession}) {
         {/* Team Header */}
         <Row className="">
           <Col md={2} xl={1} xs={3} className="my-auto">
-            <Image src="/images/roles/Jungle_Logo.png" className="MainTeamImage"></Image>
+            <Image src="/images/roles/Jungle_Logo.png" className="MainTeamImage" draggable={false}></Image>
           </Col>
           <Col md={7} xl={8} xs={9} className="pb-0 my-auto">
             <Row className="">

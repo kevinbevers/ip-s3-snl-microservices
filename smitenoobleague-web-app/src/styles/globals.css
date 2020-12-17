@@ -126,3 +126,11 @@ body {
 .MhTeamImg {
   height: 70px;
 }
+
+.Clickable {
+  cursor: pointer;
+}
+
+.Disabled {
+  cursor: not-allowed;
+}

@@ -75,7 +75,7 @@ export default function TeamStat({ postData, LoginSession }) {
           {/* Team Header */}
           <Row className="">
               <Col md={2} xl={1} xs={3} className="my-auto">
-                  <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage"></Image>
+                  <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage" draggable={false}></Image>
               </Col>
               <Col md={7} xl={8} xs={9} className="pb-0 my-auto">
               <Row className="">
@@ -153,11 +153,11 @@ export default function TeamStat({ postData, LoginSession }) {
                 </Row>
                 <Row className="mb-4">
                     <Col>                      
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
                     </Col>
                 </Row>
                 <Row className="">
@@ -165,11 +165,11 @@ export default function TeamStat({ postData, LoginSession }) {
                 </Row>
                 <Row className="mb-4">
                     <Col>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
                     </Col>
                 </Row>
                 <Row className="">
@@ -177,7 +177,7 @@ export default function TeamStat({ postData, LoginSession }) {
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" />
+                        <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" draggable={false}/>
                         <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>
@@ -188,31 +188,31 @@ export default function TeamStat({ postData, LoginSession }) {
                 <h2 className="font-weight-bold StatTitle">ROSTER</h2>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Solo_Logo.png" className="GodImgStats mr-2" />
+                        <img src="/images/roles/Solo_Logo.png" className="GodImgStats mr-2" draggable={false}/>
                         <h3 className="my-auto RecentTeamPlayerName">verylonglonglongname</h3><Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge>
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" />
+                        <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" draggable={false}/>
                         <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Mid_Logo.png" className="GodImgStats mr-2" />
+                        <img src="/images/roles/Mid_Logo.png" className="GodImgStats mr-2" draggable={false}/>
                         <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Support_Logo.png" className="GodImgStats mr-2" />
+                        <img src="/images/roles/Support_Logo.png" className="GodImgStats mr-2" draggable={false}/>
                         <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Adc_Logo.png" className="GodImgStats mr-2" />
+                        <img src="/images/roles/Adc_Logo.png" className="GodImgStats mr-2" draggable={false}/>
                         <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
                     </Col>
                 </Row>

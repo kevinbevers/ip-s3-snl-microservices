@@ -117,7 +117,7 @@ namespace team_microservice.Services
                     }
                     else
                     {
-                        if (await _validationService.CheckIfTeamMemberIsTaken(teamMemberSubmission.PlayerID, teamMemberSubmission.TeamID))
+                        if (await _validationService.CheckIfTeamMemberIsTaken((int)teamMemberSubmission.PlayerID, teamMemberSubmission.TeamID))
                         {
                             return new ObjectResult("Couldn't add team-member, given player is already taken.") { StatusCode = 400 };
                         }
@@ -142,7 +142,7 @@ namespace team_microservice.Services
                                             TeamMemberTeamId = teamMemberSubmission.TeamID,
                                             TeamMemberDivisionId = (int)await _db.TableTeams.Where(t => t.TeamId == teamMemberSubmission.TeamID).Select(t => t.TeamDivisionId).FirstOrDefaultAsync(),
                                             TeamMemberName = teamMemberSubmission.PlayerName,
-                                            TeamMemberPlayerId = teamMemberSubmission.PlayerID,
+                                            TeamMemberPlayerId = (int)teamMemberSubmission.PlayerID,
                                             TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), teamMemberSubmission.PlatformName),
                                             TeamMemberRole = teamMemberSubmission.RoleID, //1 solo, 2 jungle, 3 mid, 4 support, 5 adc
                                         };
@@ -604,7 +604,17 @@ namespace team_microservice.Services
                     }
                     else
                     {
-                        foundTeam.TeamName = ts.TeamName;
+                        //update teamname
+                        if (ts.TeamName != null)
+                        {
+                            foundTeam.TeamName = ts.TeamName;
+                        }
+
+                        //update team logo
+                        if(ts.TeamLogo != null)
+                        {
+
+                        }
 
                         _db.TableTeams.Update(foundTeam);
                         await _db.SaveChangesAsync();
@@ -646,28 +656,22 @@ namespace team_microservice.Services
                     }
                     else
                     {
-                        int teamID = teamMemberToUpdate.TeamMemberTeamId;
-                        TableTeamMember teamMemberToSwapWith = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == teamID && m.TeamMemberRole == update.RoleID).FirstOrDefaultAsync();
+                            List<TableTeamMember> swap = await SwapRoles(teamMemberToUpdate, update.RoleID);
 
-                        if (teamMemberToSwapWith != null)
+                        if (swap.Count() > 1)
                         {
-                            int swapRole = (int)teamMemberToUpdate.TeamMemberRole;
-
-                            teamMemberToSwapWith.TeamMemberRole = swapRole;
-                            teamMemberToUpdate.TeamMemberRole = update.RoleID;
-
-                            _db.TableTeamMembers.Update(teamMemberToSwapWith);
-                            _db.TableTeamMembers.Update(teamMemberToUpdate);
+                            _db.UpdateRange(swap);
                             await _db.SaveChangesAsync();
+                            return new ObjectResult("Team-member roles swapped") { StatusCode = 200 }; //OK
                         }
                         else
                         {
-                            teamMemberToUpdate.TeamMemberRole = update.RoleID;
-                            _db.TableTeamMembers.Update(teamMemberToUpdate);
+                            _db.UpdateRange(swap);
                             await _db.SaveChangesAsync();
+                            return new ObjectResult("Team-member role updated") { StatusCode = 200 }; //OK
                         }
 
-                        return new ObjectResult("Team-member role updated") { StatusCode = 200 }; //OK
+                        
                     }
                 }
             }
@@ -695,30 +699,58 @@ namespace team_microservice.Services
                     }
                     else
                     {
-                        if (foundTeamMember.TeamMemberRole == ts.RoleID)
+                        if (ts.PlayerID == 0 || ts.PlayerName == null || ts.PlatformName == null)
                         {
-                            foundTeamMember.TeamMemberRole = ts.RoleID;
-                            foundTeamMember.TeamMemberPlayerId = ts.PlayerID;
-                            foundTeamMember.TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts.PlatformName);
-                            foundTeamMember.TeamMemberName = ts.PlayerName;
-
-                            _db.TableTeamMembers.Update(foundTeamMember);
-                            await _db.SaveChangesAsync();
-
-                            return new ObjectResult("Team-member updated successfully.") { StatusCode = 200 }; //OK
+                            return new ObjectResult("Player data was incomplete or empty") { StatusCode = 400 }; //OK
                         }
                         else
                         {
-                            foundTeamMember.TeamMemberPlayerId = ts.PlayerID;
-                            foundTeamMember.TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts.PlatformName);
-                            foundTeamMember.TeamMemberName = ts.PlayerName;
+                            if (ts.RoleID != null)
+                            {
+                                if (await _db.TableRoles.Where(r => r.RoleId == ts.RoleID).CountAsync() > 0)
+                                {
+                                    if (foundTeamMember.TeamMemberRole == ts.RoleID)
+                                    {
+                                        foundTeamMember.TeamMemberRole = ts.RoleID;
+                                        foundTeamMember.TeamMemberPlayerId = (int)ts.PlayerID;
+                                        foundTeamMember.TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts.PlatformName);
+                                        foundTeamMember.TeamMemberName = ts.PlayerName;
 
-                            List<TableTeamMember> swap = await SwapRoles(foundTeamMember, ts.RoleID);
+                                        _db.TableTeamMembers.Update(foundTeamMember);
+                                        await _db.SaveChangesAsync();
 
-                            _db.UpdateRange(swap);
-                            await _db.SaveChangesAsync();
+                                        return new ObjectResult("Team-member updated successfully.") { StatusCode = 200 }; //OK
+                                    }
+                                    else
+                                    {
+                                        foundTeamMember.TeamMemberPlayerId = (int)ts.PlayerID;
+                                        foundTeamMember.TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts.PlatformName);
+                                        foundTeamMember.TeamMemberName = ts.PlayerName;
 
-                            return new ObjectResult("Team-member updated successfully.") { StatusCode = 200 }; //OK
+                                        List<TableTeamMember> swap = await SwapRoles(foundTeamMember, (int)ts.RoleID);
+
+                                        _db.UpdateRange(swap);
+                                        await _db.SaveChangesAsync();
+
+                                        return new ObjectResult("Team-member updated successfully.") { StatusCode = 200 }; //OK
+                                    }
+                                }
+                                else
+                                {
+                                    return new ObjectResult("Given RoleID was invalid") { StatusCode = 400 }; //OK
+                                }
+                            }
+                            else
+                            {
+                                foundTeamMember.TeamMemberPlayerId = (int)ts.PlayerID;
+                                foundTeamMember.TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts.PlatformName);
+                                foundTeamMember.TeamMemberName = ts.PlayerName;
+
+                                _db.TableTeamMembers.Update(foundTeamMember);
+                                await _db.SaveChangesAsync();
+
+                                return new ObjectResult("Team-member updated successfully.") { StatusCode = 200 }; //OK
+                            }
                         }
 
                     }
@@ -744,16 +776,28 @@ namespace team_microservice.Services
         {
             TableTeamMember teamMemberToSwapWith = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == foundTeamMember.TeamMemberTeamId && m.TeamMemberRole == RoleID).FirstOrDefaultAsync();
 
-            int swapRole = (int)foundTeamMember.TeamMemberRole;
+            if (teamMemberToSwapWith != null)
+            {
+                int swapRole = (int)foundTeamMember.TeamMemberRole;
 
-            teamMemberToSwapWith.TeamMemberRole = swapRole;
-            foundTeamMember.TeamMemberRole = RoleID;
+                teamMemberToSwapWith.TeamMemberRole = swapRole;
+                foundTeamMember.TeamMemberRole = RoleID;
 
-            List<TableTeamMember> swap = new List<TableTeamMember>();
-            swap.Add(teamMemberToSwapWith);
-            swap.Add(foundTeamMember);
+                List<TableTeamMember> swap = new List<TableTeamMember>();
+                swap.Add(teamMemberToSwapWith);
+                swap.Add(foundTeamMember);
+                return swap;
+            }
+            else
+            {
+                foundTeamMember.TeamMemberRole = RoleID;
 
-            return swap;
+                List<TableTeamMember> swap = new List<TableTeamMember>();
+                swap.Add(foundTeamMember);
+                return swap;
+            }
+
+            
         }
         #endregion
     }
