@@ -62,6 +62,7 @@ namespace team_microservice
             //add services
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IValidationService, ValidationService>();
+            services.AddScoped<IExternalServices, ExternalServices>();
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

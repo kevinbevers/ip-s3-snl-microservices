@@ -17,81 +17,156 @@ namespace team_microservice.Services
         private readonly SNL_Team_DBContext _db;
         private readonly ILogger<TeamService> _logger;
         private readonly IValidationService _validationService;
+        private readonly IExternalServices _externalServices;
 
-        public TeamService(SNL_Team_DBContext db, ILogger<TeamService> logger, IValidationService validationService)
+        public TeamService(SNL_Team_DBContext db, ILogger<TeamService> logger, IValidationService validationService, IExternalServices externalServices)
         {
             _db = db;
             _logger = logger;
             _validationService = validationService;
+            _externalServices = externalServices;
         }
 
         public async Task<ActionResult<Team>> AddTeamAsync(TeamSubmissionAdmin teamSubmisssion)
         {
             try
             {
-                if (await _validationService.CheckIfDivisionIsFull((int)teamSubmisssion.TeamDivisionID))
+                if (teamSubmisssion.TeamDivisionID != null)
                 {
-                    return new ObjectResult("Couldn't add team, division is already at the cap of 8 teams.") { StatusCode = 400 };
-                }
-                else
-                {
-                    if (await _validationService.CheckIfTeamNameIsTaken(teamSubmisssion.TeamName, null))
+                    IList<Division> divisions = await _externalServices.GetAllAvailableDivisions();
+                    if (divisions != null)
                     {
-                        return new ObjectResult("Couldn't add team, given name is already taken.") { StatusCode = 400 };
-                    }
-                    else
-                    {
-                        if (teamSubmisssion.Captain.TeamCaptainPlayerID != null)
-                        {
-                            if (await _validationService.CheckIfCaptainIsTaken((int)teamSubmisssion.Captain.TeamCaptainPlayerID, null))
+                        if (divisions.Where(d => d.DivisionID == teamSubmisssion.TeamDivisionID).Count() > 0)
+                        { 
+                            if (await _validationService.CheckIfDivisionIsFull((int)teamSubmisssion.TeamDivisionID))
                             {
-                                return new ObjectResult("Teamcaptain already taken.") { StatusCode = 400 }; //BAD REQUEST
+                                return new ObjectResult("Couldn't add team, division is already at the cap of 8 teams.") { StatusCode = 400 };
                             }
-
-                            TableTeamMember addCaptain = new TableTeamMember
+                            else
                             {
-                                TeamMemberPlayerId = (int)teamSubmisssion.Captain.TeamCaptainPlayerID,
-                                TeamMemberName = teamSubmisssion.Captain.TeamCaptainPlayerName,
-                                TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
-                                TeamMemberPlatformId = teamSubmisssion.Captain.TeamCaptainPlatformID,
-                                TeamMemberDivisionId = (int)teamSubmisssion.TeamDivisionID,
-                                TeamMemberRole = 1 //default sololaner they can change it themselves
-                            };
+                                if (await _validationService.CheckIfTeamNameIsTaken(teamSubmisssion.TeamName, null))
+                                {
+                                    return new ObjectResult("Couldn't add team, given name is already taken.") { StatusCode = 400 };
+                                }
+                                else
+                                {
+                                    if (teamSubmisssion.Captain?.TeamCaptainPlayerID != null)
+                                    {
+                                        if (await _validationService.CheckIfCaptainIsTaken((int)teamSubmisssion.Captain.TeamCaptainPlayerID, null))
+                                        {
+                                            return new ObjectResult("Teamcaptain already taken.") { StatusCode = 400 }; //BAD REQUEST
+                                        }
 
-                            _db.TableTeamMembers.Add(addCaptain);
-                            await _db.SaveChangesAsync();
+                                        TableTeamMember addCaptain = new TableTeamMember
+                                        {
+                                            TeamMemberPlayerId = (int)teamSubmisssion.Captain.TeamCaptainPlayerID,
+                                            TeamMemberName = teamSubmisssion.Captain.TeamCaptainPlayerName,
+                                            TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
+                                            TeamMemberPlatformId = teamSubmisssion.Captain.TeamCaptainPlatformID,
+                                            TeamMemberDivisionId = (int)teamSubmisssion.TeamDivisionID,
+                                            TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1
+                                        };
 
-                            TableTeam addTeam = new TableTeam
-                            {
-                                TeamName = teamSubmisssion.TeamName,
-                                TeamDivisionId = teamSubmisssion.TeamDivisionID,
-                                TeamCaptainId = addCaptain.TeamMemberId,
-                            };
+                                        _db.TableTeamMembers.Add(addCaptain);
+                                        await _db.SaveChangesAsync();
 
-                            _db.TableTeams.Add(addTeam);
-                            await _db.SaveChangesAsync();
+                                        TableTeam addTeam = new TableTeam
+                                        {
+                                            TeamName = teamSubmisssion.TeamName,
+                                            TeamDivisionId = teamSubmisssion.TeamDivisionID,
+                                            TeamCaptainId = addCaptain.TeamMemberId,
+                                        };
 
-                            //update captain teamID with the generated ID
-                            addCaptain.TeamMemberTeamId = addTeam.TeamId;
-                            _db.TableTeamMembers.Update(addCaptain);
-                            _db.SaveChanges();
+                                        _db.TableTeams.Add(addTeam);
+                                        await _db.SaveChangesAsync();
 
-                            return new ObjectResult("Team added succesfully, with captain.") { StatusCode = 201 };
+                                        //update captain teamID with the generated ID
+                                        addCaptain.TeamMemberTeamId = addTeam.TeamId;
+                                        _db.TableTeamMembers.Update(addCaptain);
+                                        _db.SaveChanges();
+
+                                        return new ObjectResult("Team added succesfully, with captain.") { StatusCode = 201 };
+                                    }
+                                    else
+                                    {
+                                        TableTeam addTeam = new TableTeam
+                                        {
+                                            TeamName = teamSubmisssion.TeamName,
+                                            TeamDivisionId = teamSubmisssion.TeamDivisionID,
+                                            TeamCaptainId = null
+                                        };
+
+                                        _db.TableTeams.Add(addTeam);
+                                        await _db.SaveChangesAsync();
+
+                                        return new ObjectResult("Team added succesfully, without captain.") { StatusCode = 201 };
+                                    }
+                                }
+                            }
                         }
                         else
                         {
-                            TableTeam addTeam = new TableTeam
-                            {
-                                TeamName = teamSubmisssion.TeamName,
-                                TeamDivisionId = teamSubmisssion.TeamDivisionID,
-                                TeamCaptainId = null
-                            };
-
-                            _db.TableTeams.Add(addTeam);
-                            await _db.SaveChangesAsync();
-
-                            return new ObjectResult("Team added succesfully, without captain.") { StatusCode = 201 };
+                            return new ObjectResult("Cant add a team to a non existent division") { StatusCode = 400 };
+                            
                         }
+                    }
+                    else
+                    {
+                        return new ObjectResult("No divisions created yet. Add a division or remove divisionID from the request.") { StatusCode = 400 };
+                    }
+                }
+                else
+                {
+                    if (teamSubmisssion.Captain?.TeamCaptainPlayerID != null)
+                    {
+                        if (await _validationService.CheckIfCaptainIsTaken((int)teamSubmisssion.Captain.TeamCaptainPlayerID, null))
+                        {
+                            return new ObjectResult("Teamcaptain already taken.") { StatusCode = 400 }; //BAD REQUEST
+                        }
+
+                        TableTeamMember addCaptain = new TableTeamMember
+                        {
+                            TeamMemberPlayerId = (int)teamSubmisssion.Captain.TeamCaptainPlayerID,
+                            TeamMemberName = teamSubmisssion.Captain.TeamCaptainPlayerName,
+                            TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
+                            TeamMemberPlatformId = teamSubmisssion.Captain.TeamCaptainPlatformID,
+                            TeamMemberDivisionId = (int)teamSubmisssion.TeamDivisionID,
+                            TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1
+                        };
+
+                        _db.TableTeamMembers.Add(addCaptain);
+                        await _db.SaveChangesAsync();
+
+                        TableTeam addTeam = new TableTeam
+                        {
+                            TeamName = teamSubmisssion.TeamName,
+                            TeamDivisionId = teamSubmisssion.TeamDivisionID,
+                            TeamCaptainId = addCaptain.TeamMemberId,
+                        };
+
+                        _db.TableTeams.Add(addTeam);
+                        await _db.SaveChangesAsync();
+
+                        //update captain teamID with the generated ID
+                        addCaptain.TeamMemberTeamId = addTeam.TeamId;
+                        _db.TableTeamMembers.Update(addCaptain);
+                        _db.SaveChanges();
+
+                        return new ObjectResult("Team added succesfully, with captain, and no division.") { StatusCode = 201 };
+                    }
+                    else
+                    {
+                        TableTeam addTeam = new TableTeam
+                        {
+                            TeamName = teamSubmisssion.TeamName,
+                            TeamDivisionId = teamSubmisssion.TeamDivisionID,
+                            TeamCaptainId = null
+                        };
+
+                        _db.TableTeams.Add(addTeam);
+                        await _db.SaveChangesAsync();
+
+                        return new ObjectResult("Team added succesfully, without captain and division.") { StatusCode = 201 };
                     }
                 }
 
@@ -432,7 +507,7 @@ namespace team_microservice.Services
                             TeamMembers = members,
                             DivisionID = (int)foundTeam.TeamDivisionId,
                             TeamLogoPath = foundTeam.TeamLogoPath
-                            
+
                         };
 
                         return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
@@ -549,7 +624,7 @@ namespace team_microservice.Services
                 }
 
 
-                          
+
             }
             catch (Exception ex)
             {
@@ -564,117 +639,36 @@ namespace team_microservice.Services
         {
             try
             {
-                TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == ts.TeamID).FirstOrDefaultAsync();
-                if (foundTeam != null)
+                if (ts.TeamDivisionID != null)
                 {
-                    if (await _validationService.CheckIfTeamNameIsTaken(ts.TeamName, foundTeam.TeamId))
+                    IList<Division> divisions = await _externalServices.GetAllAvailableDivisions();
+                    if (divisions != null)
                     {
-                        return new ObjectResult("Teamname is already taken.") { StatusCode = 400 }; //BAD REQUEST
-                    }
-                    else
-                    {
-                        List<TableTeamMember> foundMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == ts.TeamID).ToListAsync();
-
-                        //update team members divisionID
-                        if(ts.TeamDivisionID != null && ts.TeamDivisionID != foundTeam.TeamDivisionId)
+                        if (divisions.Where(d => d.DivisionID == ts.TeamDivisionID).Count() > 0)
                         {
-                            foreach(var member in foundMembers)
+                            if (await _validationService.CheckIfDivisionIsFull((int)ts.TeamDivisionID))
                             {
-                                member.TeamMemberDivisionId = (int)ts.TeamDivisionID;
-                            }
-                            _db.TableTeamMembers.UpdateRange(foundMembers);
-                            await _db.SaveChangesAsync();
-                        }
-
-                        if (ts.Captain?.TeamCaptainPlayerID != null)
-                        {
-                            if (await _validationService.CheckIfCaptainIsTaken((int)ts.Captain?.TeamCaptainPlayerID, foundTeam.TeamId))
-                            {
-                                return new ObjectResult("Teamcaptain already taken.") { StatusCode = 400 }; //BAD REQUEST
+                                return new ObjectResult("Couldn't add team, division is already at the cap of 8 teams.") { StatusCode = 400 };
                             }
                             else
                             {
-                                if (ts.Captain.TeamCaptainPlatformID == null || ts.Captain.TeamCaptainPlayerName == null)
-                                {
-                                    return new ObjectResult("Not all info provided for Teamcaptain.") { StatusCode = 400 }; //OK
-                                }
-
-                                TableTeamMember TeamCaptain = foundMembers.Where(m => m.TeamMemberPlayerId == ts.Captain.TeamCaptainPlayerID).FirstOrDefault();
-                                //if captain isn't in the current team
-                                if (TeamCaptain == null)
-                                {
-                                    TableTeamMember tc = new TableTeamMember
-                                    {
-                                        TeamMemberPlayerId = (int)ts.Captain.TeamCaptainPlayerID,
-                                        TeamMemberAccountId = ts.Captain.TeamCaptainAccountID,
-                                        TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : (int)foundTeam.TeamDivisionId,
-                                        TeamMemberName = ts.Captain.TeamCaptainPlayerName,
-                                        TeamMemberRole = ts.Captain.TeamCaptainRoleID,
-                                        TeamMemberPlatformId = ts.Captain.TeamCaptainPlatformID,
-                                        TeamMemberTeamId = foundTeam.TeamId
-                                    };
-
-                                    _db.TableTeamMembers.Remove(await _db.TableTeamMembers.Where(m => m.TeamMemberId == foundTeam.TeamCaptainId).FirstOrDefaultAsync());
-                                    _db.TableTeamMembers.Add(tc);
-                                    await _db.SaveChangesAsync();
-
-
-
-                                    foundTeam.TeamDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam.TeamDivisionId;
-                                        foundTeam.TeamCaptainId = tc.TeamMemberId;
-                                        foundTeam.TeamName = ts.TeamName;
-
-
-                                    _db.TableTeams.Update(foundTeam);
-
-                                    return new ObjectResult("Team updated successfully.") { StatusCode = 200 }; //OK
-                                }
-                                else
-                                {
-
-                                    //update current team member to captain if the given captain is a team member
-                                    TeamCaptain.TeamMemberPlayerId = (int)ts.Captain.TeamCaptainPlayerID;
-                                    TeamCaptain.TeamMemberAccountId = ts.Captain.TeamCaptainAccountID;
-                                    TeamCaptain.TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : (int)foundTeam.TeamDivisionId;
-                                    TeamCaptain.TeamMemberName = ts.Captain.TeamCaptainPlayerName;
-                                    TeamCaptain.TeamMemberRole = ts.Captain.TeamCaptainRoleID;
-                                    TeamCaptain.TeamMemberPlatformId = ts.Captain.TeamCaptainPlatformID;
-
-                                    _db.TableTeamMembers.Update(TeamCaptain);
-                                    await _db.SaveChangesAsync();
-
-
-
-                                    foundTeam.TeamDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam.TeamDivisionId;
-                                    foundTeam.TeamCaptainId = TeamCaptain.TeamMemberId;
-                                    foundTeam.TeamName = ts.TeamName;
-
-                                    _db.TableTeams.Update(foundTeam);
-                                    await _db.SaveChangesAsync();
-
-
-                                    return new ObjectResult("Team updated successfully.") { StatusCode = 200 }; //OK
-                                }
+                                return await UpdateTeam(ts);
                             }
                         }
                         else
                         {
-                            foundTeam.TeamDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam.TeamDivisionId;
-                            foundTeam.TeamCaptainId = foundTeam.TeamCaptainId;
-                            foundTeam.TeamName = ts.TeamName;
-
-                            _db.TableTeams.Update(foundTeam);
-                            await _db.SaveChangesAsync();
-
-                            return new ObjectResult("Team updated successfully.") { StatusCode = 200 }; //OK
+                            return new ObjectResult("No divisions created yet. Add a division or remove divisionID from the request.") { StatusCode = 400 };
                         }
+                    }
+                    else
+                    {
+                        return new ObjectResult("No divisions created yet. Add a division or remove divisionID from the request.") { StatusCode = 400 };
                     }
                 }
                 else
                 {
-                    return new ObjectResult("No teams found with the given ID.") { StatusCode = 404 }; //NOT FOUND
+                    return await UpdateTeam(ts);
                 }
-
             }
             catch (Exception ex)
             {
@@ -705,7 +699,7 @@ namespace team_microservice.Services
                         }
 
                         //update team logo
-                        if(ts.TeamLogo != null)
+                        if (ts.TeamLogo != null)
                         {
 
                         }
@@ -750,7 +744,7 @@ namespace team_microservice.Services
                     }
                     else
                     {
-                            List<TableTeamMember> swap = await SwapRoles(teamMemberToUpdate, update.RoleID);
+                        List<TableTeamMember> swap = await SwapRoles(teamMemberToUpdate, update.RoleID);
 
                         if (swap.Count() > 1)
                         {
@@ -765,7 +759,7 @@ namespace team_microservice.Services
                             return new ObjectResult("Team-member role updated") { StatusCode = 200 }; //OK
                         }
 
-                        
+
                     }
                 }
             }
@@ -891,7 +885,120 @@ namespace team_microservice.Services
                 return swap;
             }
 
-            
+
+        }
+        private async Task<ActionResult> UpdateTeam(TeamSubmissionAdmin ts)
+        {
+            TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == ts.TeamID).FirstOrDefaultAsync();
+            if (foundTeam != null)
+            {
+                if (await _validationService.CheckIfTeamNameIsTaken(ts.TeamName, foundTeam.TeamId))
+                {
+                    return new ObjectResult("Teamname is already taken.") { StatusCode = 400 }; //BAD REQUEST
+                }
+                else
+                {
+                    List<TableTeamMember> foundMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == ts.TeamID).ToListAsync();
+
+                    //update team members divisionID
+                    if (ts.TeamDivisionID != null && ts.TeamDivisionID != foundTeam.TeamDivisionId)
+                    {
+                        foreach (var member in foundMembers)
+                        {
+                            member.TeamMemberDivisionId = (int)ts.TeamDivisionID;
+                        }
+                        _db.TableTeamMembers.UpdateRange(foundMembers);
+                        await _db.SaveChangesAsync();
+                    }
+
+                    if (ts.Captain?.TeamCaptainPlayerID != null)
+                    {
+                        if (await _validationService.CheckIfCaptainIsTaken((int)ts.Captain?.TeamCaptainPlayerID, foundTeam.TeamId))
+                        {
+                            return new ObjectResult("Teamcaptain already taken.") { StatusCode = 400 }; //BAD REQUEST
+                        }
+                        else
+                        {
+                            if (ts.Captain.TeamCaptainPlatformID == null || ts.Captain.TeamCaptainPlayerName == null)
+                            {
+                                return new ObjectResult("Not all info provided for Teamcaptain.") { StatusCode = 400 }; //OK
+                            }
+
+                            TableTeamMember TeamCaptain = foundMembers.Where(m => m.TeamMemberPlayerId == ts.Captain.TeamCaptainPlayerID).FirstOrDefault();
+                            //if captain isn't in the current team
+                            if (TeamCaptain == null)
+                            {
+                                TableTeamMember tc = new TableTeamMember
+                                {
+                                    TeamMemberPlayerId = (int)ts.Captain.TeamCaptainPlayerID,
+                                    TeamMemberAccountId = ts.Captain.TeamCaptainAccountID,
+                                    TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : (int)foundTeam.TeamDivisionId,
+                                    TeamMemberName = ts.Captain.TeamCaptainPlayerName,
+                                    TeamMemberRole = ts.Captain.TeamCaptainRoleID,
+                                    TeamMemberPlatformId = ts.Captain.TeamCaptainPlatformID,
+                                    TeamMemberTeamId = foundTeam.TeamId
+                                };
+
+                                _db.TableTeamMembers.Remove(await _db.TableTeamMembers.Where(m => m.TeamMemberId == foundTeam.TeamCaptainId).FirstOrDefaultAsync());
+                                _db.TableTeamMembers.Add(tc);
+                                await _db.SaveChangesAsync();
+
+
+
+                                foundTeam.TeamDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam.TeamDivisionId;
+                                foundTeam.TeamCaptainId = tc.TeamMemberId;
+                                foundTeam.TeamName = ts.TeamName;
+
+
+                                _db.TableTeams.Update(foundTeam);
+
+                                return new ObjectResult("Team updated successfully.") { StatusCode = 200 }; //OK
+                            }
+                            else
+                            {
+
+                                //update current team member to captain if the given captain is a team member
+                                TeamCaptain.TeamMemberPlayerId = (int)ts.Captain.TeamCaptainPlayerID;
+                                TeamCaptain.TeamMemberAccountId = ts.Captain.TeamCaptainAccountID;
+                                TeamCaptain.TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : (int)foundTeam.TeamDivisionId;
+                                TeamCaptain.TeamMemberName = ts.Captain.TeamCaptainPlayerName;
+                                TeamCaptain.TeamMemberRole = ts.Captain.TeamCaptainRoleID;
+                                TeamCaptain.TeamMemberPlatformId = ts.Captain.TeamCaptainPlatformID;
+
+                                _db.TableTeamMembers.Update(TeamCaptain);
+                                await _db.SaveChangesAsync();
+
+
+
+                                foundTeam.TeamDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam.TeamDivisionId;
+                                foundTeam.TeamCaptainId = TeamCaptain.TeamMemberId;
+                                foundTeam.TeamName = ts.TeamName;
+
+                                _db.TableTeams.Update(foundTeam);
+                                await _db.SaveChangesAsync();
+
+
+                                return new ObjectResult("Team updated successfully.") { StatusCode = 200 }; //OK
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foundTeam.TeamDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam.TeamDivisionId;
+                        foundTeam.TeamCaptainId = foundTeam.TeamCaptainId;
+                        foundTeam.TeamName = ts.TeamName;
+
+                        _db.TableTeams.Update(foundTeam);
+                        await _db.SaveChangesAsync();
+
+                        return new ObjectResult("Team updated successfully.") { StatusCode = 200 }; //OK
+                    }
+                }
+            }
+            else
+            {
+                return new ObjectResult("No teams found with the given ID.") { StatusCode = 404 }; //NOT FOUND
+            }
         }
         #endregion
     }

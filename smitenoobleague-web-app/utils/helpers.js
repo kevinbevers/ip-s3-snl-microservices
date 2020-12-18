@@ -8,6 +8,8 @@ const GetLoginSession = async(req) => {
   //Check if logged in user is captain to show captainpage in navbar
   let Captain = false;
 
+  //console.log(session.accessToken);
+
   if(session?.user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes("Captain"))
   {
     Captain = true;

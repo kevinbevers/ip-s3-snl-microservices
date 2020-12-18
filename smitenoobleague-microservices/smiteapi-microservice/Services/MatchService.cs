@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -68,7 +68,7 @@ namespace smiteapi_microservice.Services
                     //if gameID is already submitted
                     if (await _db.TableQueues.Where(game => game.GameId == submission.gameID).CountAsync() > 0)
                     {
-                        return new ObjectResult(ResponeText_alreadySubmitted) { StatusCode = 200 }; //OK
+                        return new ObjectResult(ResponeText_alreadySubmitted) { StatusCode = 400 }; //OK
                     }
                     else
                     {
@@ -236,7 +236,7 @@ namespace smiteapi_microservice.Services
             catch(Exception ex)
             {
                 //log the error
-                _logger.LogError(ex, "Something went wrong getting all scheduled gameIds from the database");
+                _logger.LogError(ex, "Something went wrong calling the Scheduling Service");
             }
         }
         #endregion

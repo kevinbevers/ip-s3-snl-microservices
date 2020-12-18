@@ -42,13 +42,33 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   };
 
   const handleChange = (event) => {
-      setMatchID(event.target.value);
+    if(event.target?.value != null)
+    {
+      if(event.target.value.length <= 10)
+      {
+        setShowSubmissionAlert(false);
+        setMatchID(event.target.value);
+      }
+      
+      if(event.target.value.length > 10)
+      {
+        setSubmissionMsg({text: "gameID to long to be valid. a maximum of 10 characters is allowed", color: "danger"})
+        setShowSubmissionAlert(true);
+      }
+
+    }
   };
   const handleSubmit = async(event) => {
 
-    if(matchID != null && matchID != "" && matchID.length > 5)
+    const id = Number(matchID);
+    const team = Number(apiResponse.teamID);
+    
+    console.log(id);
+
+    if(matchID != null && matchID != "" && matchID.length >= 5 && matchID.length <= 10)
     {
-    await captainservice.SubmitMatchID(apiToken, {gameID: parseInt(matchID), teamID: apiResponse.teamID})
+    setShowSubmissionAlert(false);
+    await captainservice.SubmitMatchID(apiToken, {gameID: id, teamID: team})
     .then(res => { 
       setSubmissionMsg({text: res.data, color: "success"})
       setShowSubmissionAlert(true); 
@@ -59,7 +79,11 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
     });
   }
   else if(matchID != null && matchID && matchID.length < 5){
-    setSubmissionMsg({text: "gameID to short to be valid.", color: "danger"})
+    setSubmissionMsg({text: "gameID to short to be valid. a minimum of 5 characters is required", color: "danger"})
+    setShowSubmissionAlert(true);
+  }
+  else if(matchID != null && matchID && matchID.length > 10) {
+    setSubmissionMsg({text: "gameID to long to be valid. a maximum of 10 characters is allowed", color: "danger"})
     setShowSubmissionAlert(true);
   }
   };
@@ -131,7 +155,7 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   const[oldName,setOldName] = useState("");
   //handle change
   const handleEditTeamName = (event) => {
-    setTeamName(event.target.value);
+      setTeamName(event.target.value);
   }; 
   //Set initial states
   useEffect(() => {
@@ -155,7 +179,7 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
         teamID: apiResponse?.teamID,
         teamName: teamName,
       };
-      await captainservice.UpdateTeamInfo(apiToken, data).then(res => { setOldName(teamName); setShowTeamInfoAlert(false);  })
+      await captainservice.UpdateTeamInfo(apiToken, data).then(res => { setOldName(teamName); setShowTeamInfoAlert(false); setEditing(false);  })
       .catch(err => { 
         console.log(err.response);
         if(err.response.status != 400)
@@ -219,8 +243,8 @@ const toggleNotify = () => SetNotify(!notify);
                     <Card.Body className="">
                       <h2 className="font-weight-bold">SUBMIT MATCH</h2>
                       <Form.Group className="">
-                        <Form.Control type="text" placeholder="Match ID..." className="mb-2" onChange={handleChange} />
-                        <Button variant="primary" size="lg" block onClick={handleSubmit} disabled={matchID.length > 5 ? false : true}>Submit</Button>
+                        <Form.Control type="number" placeholder="Match ID..." className="mb-2" onChange={handleChange} maxLength={10}/>
+                        <Button variant="primary" size="lg" block onClick={handleSubmit}>Submit</Button>
                       </Form.Group>
                       <Row><Col><SubmissionAlert /></Col></Row>
                     </Card.Body>
