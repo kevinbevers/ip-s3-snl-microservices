@@ -53,7 +53,7 @@ namespace team_microservice
                 dbContextOptions => dbContextOptions
                     .UseMySql(
                         // Replace with your connection string.
-                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_Division_DB",
+                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_Team_DB",
                         // Replace with your server version and type.
                         // For common usages, see pull request #1233.
                         new MySqlServerVersion(new Version(8, 0, 22)),
