@@ -36,6 +36,7 @@ jobs:
           cd smitenoobleague-microservices
           dotnet test smitenoobleague-microservices.sln
   deploy:
+    needs: test
 
     runs-on: ubuntu-latest
 
