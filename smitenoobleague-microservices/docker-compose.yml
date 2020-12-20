@@ -40,6 +40,8 @@ services:
         - Smite_Api_AuthKey=${AuthKey}
     depends_on:
       - db
+    volumes:
+      - ./team-microservice/images:/app/images
       
 
   ocelot-api-gateway:
