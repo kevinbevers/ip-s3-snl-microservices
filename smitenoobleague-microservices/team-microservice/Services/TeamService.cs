@@ -357,7 +357,7 @@ namespace team_microservice.Services
                         {
                             TeamID = team.TeamId,
                             TeamName = team.TeamName,
-                            DivisionID = (int)team.TeamDivisionId,
+                            DivisionID = team.TeamDivisionId,
                             TeamLogoPath = team.TeamLogoPath
                         });
                     }
@@ -393,7 +393,7 @@ namespace team_microservice.Services
                         {
                             TeamID = team.TeamId,
                             TeamName = team.TeamName,
-                            DivisionID = (int)team.TeamDivisionId,
+                            DivisionID = team.TeamDivisionId,
                             TeamLogoPath = team.TeamLogoPath
                         });
                     }
@@ -448,7 +448,7 @@ namespace team_microservice.Services
                         {
                             TeamID = team.TeamId,
                             TeamName = team.TeamName,
-                            DivisionID = (int)team.TeamDivisionId,
+                            DivisionID = team.TeamDivisionId,
                             TeamMembers = members,
                             TeamLogoPath = team.TeamLogoPath
                         });
@@ -505,7 +505,7 @@ namespace team_microservice.Services
                             TeamID = foundTeam.TeamId,
                             TeamName = foundTeam.TeamName,
                             TeamMembers = members,
-                            DivisionID = (int)foundTeam.TeamDivisionId,
+                            DivisionID = foundTeam.TeamDivisionId,
                             TeamLogoPath = foundTeam.TeamLogoPath
 
                         };
