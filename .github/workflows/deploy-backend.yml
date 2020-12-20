@@ -6,11 +6,11 @@ on:
       - master
     paths:
       - smitenoobleague-microservices/**
-  pull_request:     
-    branches: 
-      - master
-    paths:
-      - smitenoobleague-microservices/**
+  # pull_request:     
+  #   branches: 
+  #     - master
+  #   paths:
+  #     - smitenoobleague-microservices/**
 
 jobs:
   test:
