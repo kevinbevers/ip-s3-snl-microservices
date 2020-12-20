@@ -36,8 +36,6 @@ services:
     environment:
         - ASPNETCORE_ENVIRONMENT=Production
         - DB_Password=${DB_PASS}
-        - Smite_Api_DevId=${DevId}
-        - Smite_Api_AuthKey=${AuthKey}
     depends_on:
       - db
     volumes:
