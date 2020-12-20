@@ -36,7 +36,6 @@ namespace team_microservice
         }
 
         public IConfiguration Configuration { get; }
-        string dbpass = Environment.GetEnvironmentVariable("DB_Password");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -47,12 +46,14 @@ namespace team_microservice
 
 
             services.AddControllers();
+
+            string dbpass = Environment.GetEnvironmentVariable("DB_Password");
             // Replace "YourDbContext" with the name of your own DbContext derived class.
             services.AddDbContextPool<SNL_Team_DBContext>(
                 dbContextOptions => dbContextOptions
                     .UseMySql(
                         // Replace with your connection string.
-                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_Team_DB",
+                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_Division_DB",
                         // Replace with your server version and type.
                         // For common usages, see pull request #1233.
                         new MySqlServerVersion(new Version(8, 0, 22)),
