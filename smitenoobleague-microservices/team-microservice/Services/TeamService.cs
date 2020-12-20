@@ -63,7 +63,7 @@ namespace team_microservice.Services
                                             TeamMemberName = teamSubmisssion.Captain.TeamCaptainPlayerName,
                                             TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
                                             TeamMemberPlatformId = teamSubmisssion.Captain.TeamCaptainPlatformID,
-                                            TeamMemberDivisionId = (int)teamSubmisssion.TeamDivisionID,
+                                            TeamMemberDivisionId = teamSubmisssion.TeamDivisionID,
                                             TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1
                                         };
 
@@ -130,7 +130,7 @@ namespace team_microservice.Services
                             TeamMemberName = teamSubmisssion.Captain.TeamCaptainPlayerName,
                             TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
                             TeamMemberPlatformId = teamSubmisssion.Captain.TeamCaptainPlatformID,
-                            TeamMemberDivisionId = (int)teamSubmisssion.TeamDivisionID,
+                            TeamMemberDivisionId = teamSubmisssion.TeamDivisionID,
                             TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1
                         };
 
@@ -215,7 +215,7 @@ namespace team_microservice.Services
                                         TableTeamMember teamMember = new TableTeamMember
                                         {
                                             TeamMemberTeamId = teamMemberSubmission.TeamID,
-                                            TeamMemberDivisionId = (int)await _db.TableTeams.Where(t => t.TeamId == teamMemberSubmission.TeamID).Select(t => t.TeamDivisionId).FirstOrDefaultAsync(),
+                                            TeamMemberDivisionId = await _db.TableTeams.Where(t => t.TeamId == teamMemberSubmission.TeamID).Select(t => t.TeamDivisionId).FirstOrDefaultAsync(),
                                             TeamMemberName = teamMemberSubmission.PlayerName,
                                             TeamMemberPlayerId = (int)teamMemberSubmission.PlayerID,
                                             TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), teamMemberSubmission.PlatformName),
