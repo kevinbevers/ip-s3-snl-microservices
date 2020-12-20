@@ -206,14 +206,12 @@ namespace smiteapi_microservice.Services
                 string bdate = match.EntryDate.AddDays(7).ToString("dddd dd MMMM yyyy 'around' H:mm");
 
                 msg = $"{ResponseText_MatchDetailsHidden} {bdate}";
+                return new ObjectResult(msg) { StatusCode = 200 }; //OK
             }
 
-            if(msg.Contains("No match found with the given ID"))
-            {
-                return new ObjectResult(msg) { StatusCode = 404 }; //OK
-            }
+            return new ObjectResult(msg) { StatusCode = 404 }; //NOT FOUND
 
-            return new ObjectResult(msg) { StatusCode = 200 }; //OK
+
         }
 
         private async Task CallScheduleApiAsync(MatchSubmission submission, string plannedDate)//, string gatewayKey
