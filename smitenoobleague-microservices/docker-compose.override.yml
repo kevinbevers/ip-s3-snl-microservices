@@ -43,8 +43,6 @@ services:
       - node_modules:/usr/src/app/node_modules
 
   db:
-    volumes:
-        - "./db/mysql/data:/var/lib/mysql"
     ports:
         - 3308:3306
 
