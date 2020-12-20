@@ -1,5 +1,27 @@
 .PlayerRole {
     height: 4vw;
+    user-select: none;
+}
+
+.PlayerBox {
+    height: 4vw;
+    cursor: grab;
+}
+
+.ExtraInfoText {
+    font-size: 0.9vw;
+}
+
+.PlayerBoxGrapped {
+    cursor: grabbing;
+}
+
+.PlayerText {
+    font-size: 1.4vw;
+}
+
+.PlayerEdit {
+    font-size: 1vw;
 }
 
 .CaptainBadge {
@@ -7,11 +29,11 @@
 }
 
 .TeamInfoTitle {
-    font-size: 1.8vw;
+    font-size: 1.5vw;
 }
 
 .TeamInfoText {
-    font-size: 1.4vw;
+    font-size: 1vw;
 }
 
 .TeamInfoIcon {
@@ -22,14 +44,30 @@
     .TeamInfoTitle {
         font-size: 3vw;
     }
+
+    .PlayerBox {
+        height: 8vw;
+        cursor: grab;
+    }
     
     .TeamInfoText {
         font-size: 2vw;
     }
+
+    .ExtraInfoText {
+        font-size: 2vw;
+    }
+
     .TeamInfoIcon {
         font-size: 4vw;
     }
     .PlayerRole {
         height: 8vw;
+    }
+    .PlayerText {
+        font-size: 3vw;
+    }
+    .PlayerEdit {
+        font-size: 2vw;
     }
 };

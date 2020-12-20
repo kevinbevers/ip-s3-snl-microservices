@@ -8,6 +8,13 @@
   </PropertyGroup>
 
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <NoWarn></NoWarn>
+    <AllowUnsafeBlocks></AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow></CheckForOverflowUnderflow>
+    <LangVersion>Default</LangVersion>
+    <NoStdLib></NoStdLib>
+  </PropertyGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
   </ItemGroup>

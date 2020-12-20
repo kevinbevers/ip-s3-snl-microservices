@@ -44,13 +44,14 @@ namespace division_microservice.Services
                 {
                     List<Division> returnDivisions = new List<Division>();
 
-                    allDivisions.ForEach(async (division) =>
+                    foreach (var division in allDivisions)
                     {
 
                         Division returnDivision = new Division { DivisionID = division.DivisionId, DivisionName = division.DivisionName };
+                        returnDivision.CurrentScheduleID = await GetCurrentSchedule(returnDivision.DivisionID);
                         returnDivision.DivisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(division.DivisionId);
                         returnDivisions.Add(returnDivision);
-                    });
+                    }
 
                     return new ObjectResult(returnDivisions) { StatusCode = 200 }; //OK
                 }
@@ -137,7 +138,7 @@ namespace division_microservice.Services
             try
             {
                 //get row in database
-                TableDivision foundDivision = await _db.TableDivisions.FindAsync(divisionID);
+                TableDivision foundDivision = await _db.TableDivisions.Where(d => d.DivisionId == divisionID).FirstOrDefaultAsync();
                 //check if an object was returned
                 if (foundDivision == null)
                 {
@@ -146,6 +147,7 @@ namespace division_microservice.Services
                 else
                 {
                     Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
+                    returnDivision.CurrentScheduleID = await GetCurrentSchedule(returnDivision.DivisionID);
                     returnDivision.DivisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(foundDivision.DivisionId);
 
                     return new ObjectResult(returnDivision) { StatusCode = 200 }; //OK
@@ -174,12 +176,12 @@ namespace division_microservice.Services
                 {
                     List<Division> returnDivisions = new List<Division>();
 
-                    allDivisions.ForEach(division =>
-                    {
-
+                    foreach(var division in allDivisions)
+                    { 
                         Division returnDivision = new Division { DivisionID = division.DivisionId, DivisionName = division.DivisionName };
+                        returnDivision.CurrentScheduleID = await GetCurrentSchedule(division.DivisionId);
                         returnDivisions.Add(returnDivision);
-                    });
+                    };
 
 
                     return new ObjectResult(returnDivisions) { StatusCode = 200 }; //OK
@@ -199,7 +201,7 @@ namespace division_microservice.Services
             try
             {
                     //update row in database and save
-                    TableDivision foundDivision = await _db.TableDivisions.FindAsync(division?.DivisionID);
+                    TableDivision foundDivision = await _db.TableDivisions.Where( d => d.DivisionId == division.DivisionID).FirstOrDefaultAsync();
 
                     if (foundDivision == null)
                     {
@@ -216,6 +218,8 @@ namespace division_microservice.Services
                         await _db.SaveChangesAsync();
 
                         Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
+                        returnDivision.CurrentScheduleID = await GetCurrentSchedule(returnDivision.DivisionID);
+
                         return new ObjectResult(returnDivision) { StatusCode = 200 }; //OK
                     }
             }
@@ -238,6 +242,15 @@ namespace division_microservice.Services
         }
 
         #region methods
+        private async Task<int?> GetCurrentSchedule(int divisionID)
+        {
+            var Today = DateTime.Now;
+            //check if given date overlaps with already existing schedules
+            var currentSchedule = await _db.TableSchedules.Where(s => Today >= s.ScheduleStartDate && Today <= s.ScheduleEndDate && s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
+
+            return currentSchedule?.ScheduleId;
+        }
+
         private async Task<bool> DeleteAllSchedulesForDivisionByIdAsync(int divisionID)
         {
             //no try catch neccesary let it throw exception when something goes wrong and catch it in the parent method

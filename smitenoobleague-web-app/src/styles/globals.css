@@ -49,7 +49,7 @@ body {
   /* Set the fixed height of the footer here */
   height: 60px;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  line-height: 59px; /* Vertically center the text there */
   margin-top: 5%;
 }
 
@@ -125,4 +125,12 @@ body {
 
 .MhTeamImg {
   height: 70px;
+}
+
+.Clickable {
+  cursor: pointer;
+}
+
+.Disabled {
+  cursor: not-allowed;
 }

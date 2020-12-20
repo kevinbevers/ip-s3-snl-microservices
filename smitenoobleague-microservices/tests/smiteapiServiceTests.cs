@@ -193,7 +193,7 @@ namespace service_tests
             //Assert
             var response = Assert.IsAssignableFrom<ActionResult>(result) as ObjectResult;
             //check if the response code is correct
-            Assert.Equal(200, response.StatusCode);
+            Assert.Equal(404, response.StatusCode);
             //check if the response message is as expected
             Assert.Contains("No match found with the given ID", response.Value.ToString());
         }

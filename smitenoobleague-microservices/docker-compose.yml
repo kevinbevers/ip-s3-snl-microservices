@@ -26,6 +26,20 @@ services:
         - Smite_Api_AuthKey=${AuthKey}
     depends_on:
       - db
+
+  team-microservice:
+    image: ${DOCKER_REGISTRY-}teammicroservice
+    container_name: teammicroservice
+    restart: always
+    build:
+      context: ./team-microservice/
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Production
+        - DB_Password=${DB_PASS}
+        - Smite_Api_DevId=${DevId}
+        - Smite_Api_AuthKey=${AuthKey}
+    depends_on:
+      - db
       
 
   ocelot-api-gateway:
@@ -36,6 +50,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTPS_PORT=443
+      - Domain=${Domain}
     restart: always
     ports:
         - 80:80
@@ -43,6 +58,7 @@ services:
     depends_on:
       - division-microservice
       - smiteapi-microservice
+      - team-microservice
 
   nodeschedule-microservice:
     image: ${DOCKER_REGISTRY-}nodeschedulemicroservice
@@ -69,4 +85,5 @@ services:
         MYSQL_ROOT_PASSWORD: ${DB_PASS}
     volumes:
         - ./db/mysql/init:/docker-entrypoint-initdb.d/:ro
-        
+
+

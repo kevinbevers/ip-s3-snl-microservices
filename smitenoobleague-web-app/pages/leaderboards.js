@@ -13,8 +13,11 @@ import ListGroup from "react-bootstrap/ListGroup";
 import LeaderBoardStatCard from "src/components/LeaderboardStatCard";
 //chart
 import {Pie, Bar} from "react-chartjs-2";
+//Auth
+import helpers from "utils/helpers";
 
-export default function leaderboards() {
+
+export default function leaderboards({LoginSession}) {
 
   const [Top10Array, setTop10Array] = useState([
     {standing: 1,player: "playername", statvalue: "9999999999"},
@@ -122,7 +125,7 @@ const options = {
   // question#1 should all the data be pulled on page load and drippled down to the components or should each component make it"s own call.
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       <Container fluid className="mt-4">
         <Row>
           <Col md={9}>
@@ -193,4 +196,15 @@ const options = {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

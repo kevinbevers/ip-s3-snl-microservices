@@ -17,7 +17,7 @@ export default function TeamCard(){
             <Row className="">
               <Col md={10} className="p-0 mx-auto">
                 <Row>
-                  <Col md={2} className="p-0 align-items-left"><Image src="https://web2.hirez.com/esports/teams/ssg-70x70.png" className="MhTeamImg"></Image></Col>
+                  <Col md={2} className="p-0 align-items-left"><Image src="https://web2.hirez.com/esports/teams/ssg-70x70.png" className="MhTeamImg" draggable={false}></Image></Col>
                   <Col md={9} className="my-auto pt-2"><h3 className="text-center mb-0">Spacestation Gaming</h3>
                   <p>Godlike division</p>
                   </Col>

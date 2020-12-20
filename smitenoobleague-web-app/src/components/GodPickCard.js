@@ -17,7 +17,7 @@ export default function GodPickCard(){
       </Row>
        <Row>
          <Col md={4} xs={4}>
-         <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgPick mr-1 mb-2" rounded />
+         <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgPick mr-1 mb-2" rounded draggable={false}/>
          </Col>
          <Col md={8} xs={8}>
          <Row>

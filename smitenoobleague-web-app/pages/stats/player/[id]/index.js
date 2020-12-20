@@ -11,8 +11,10 @@ import { Badge, Image, Modal, Button, Jumbotron, Container, Row, Col } from "rea
 import {Doughnut} from "react-chartjs-2";
 //custom components
 
+//Auth
+import helpers from "utils/helpers";
 
-export default function PlayerStat({ postData }) {
+export default function PlayerStat({ postData, LoginSession }) {
 
     const data = {
         labels: [
@@ -77,17 +79,17 @@ export default function PlayerStat({ postData }) {
 
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       {/* {postData} */}
       <Container fluid className="mt-2">
           {/* Team Header */}
           <Row className="">
               <Col md={2} xl={1} xs={3} className="my-auto">
-                  <Image src="/images/roles/Jungle_Logo.png" className="MainRoleImage"></Image>
+                  <Image src="/images/roles/Jungle_Logo.png" className="MainRoleImage" draggable={false}></Image>
               </Col>
               <Col md={4} xl={5} xs={9} className="pb-0 my-auto">
               <Row className="">
-                 <Col md={12} className="d-flex"><Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="SmallTeamImage mr-1 my-auto"></Image><h4 className="mb-0 PlayerStatTeamTitle my-auto">Spacestation Gaming</h4></Col>
+                 <Col md={12} className="d-flex"><Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="SmallTeamImage mr-1 my-auto" draggable={false}></Image><h4 className="mb-0 PlayerStatTeamTitle my-auto">Spacestation Gaming</h4></Col>
               </Row>
               <Row className="">
                 <Col md={12} className=""><h3 className="PlayerStatTitle my-auto">lolliepoep</h3></Col>
@@ -105,16 +107,16 @@ export default function PlayerStat({ postData }) {
                   <Row><Col><h4 className="font-weight-bold PlayerBannerStatTitle text-center">RECENT PICKS</h4></Col></Row>
                   <Row className="mb-1">
                     <Col className="d-flex justify-content-center">                      
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded draggable={false}/>
                     </Col>
                 </Row>
                 <Row>
                     <Col  className="d-flex justify-content-center">                      
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg mr-1" rounded draggable={false}/>
                     </Col>
                 </Row>
              </Col> 
@@ -198,11 +200,11 @@ export default function PlayerStat({ postData }) {
                 </Row>
                 <Row className="mb-4">
                     <Col>                      
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
                     </Col>
                 </Row>
                 <Row className="">
@@ -210,11 +212,11 @@ export default function PlayerStat({ postData }) {
                 </Row>
                 <Row className="mb-4">
                     <Col>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
                     </Col>
                 </Row>
                 <Row className="">
@@ -222,11 +224,11 @@ export default function PlayerStat({ postData }) {
                 </Row>
                 <Row className="mb-4">
                 <Col>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
+                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
                     </Col>
                 </Row>
                
@@ -248,4 +250,15 @@ export default function PlayerStat({ postData }) {
     </>
   );
 
+}
+
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

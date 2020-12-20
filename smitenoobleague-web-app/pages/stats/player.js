@@ -7,11 +7,13 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Container, Card, Image, FormControl, InputGroup } from "react-bootstrap";
 import PlayerCard from "src/components/PlayerCard";
+//Auth
+import helpers from "utils/helpers";
 
-export default function player() {
+export default function player({LoginSession}) {
     return (
       <>      
-        <NavBar />
+        <NavBar LoginSession={LoginSession}/>
         <Container className="mt-4">
         <Row>
           <Col></Col>
@@ -35,4 +37,14 @@ export default function player() {
         <Footer />
       </>
     );
+}
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

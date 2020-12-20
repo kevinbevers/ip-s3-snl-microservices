@@ -11,11 +11,13 @@ import Button from "react-bootstrap/Button";
 import { Container, Image } from "react-bootstrap";
 //custom implements
 import MatchHistoryCard from "src/components/MatchHistoryCard";
+//Auth
+import helpers from "utils/helpers";
 
-export default function matchhistory() {
+export default function matchhistory({LoginSession}) {
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       <Container className="mt-4">
         <MatchHistoryCard team1_name={"Spacestation Gaming"} total_score={"2 - 0"} team2_name={"Ghost gaming"} matchID={5234534}/>
         <MatchHistoryCard team1_name={"Spacestation Gaming"} total_score={"2 - 0"} team2_name={"Ghost gaming"} matchID={5234534}/>
@@ -32,4 +34,15 @@ export default function matchhistory() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

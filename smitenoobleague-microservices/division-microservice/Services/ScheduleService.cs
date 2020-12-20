@@ -143,7 +143,7 @@ namespace division_microservice.Services
         {
             try
             {
-                TableSchedule fs = await _db.TableSchedules.FindAsync(scheduleID);
+                TableSchedule fs = await _db.TableSchedules.Where(s => s.ScheduleId == scheduleID).FirstOrDefaultAsync();
 
                 if (fs == null)
                 {
@@ -155,7 +155,7 @@ namespace division_microservice.Services
 
                     Schedule schedule = new Schedule
                         {
-                            ScheduleID = fs.ScheduleDivisionId,
+                            ScheduleID = fs.ScheduleId,
                             ScheduleName = fs.ScheduleName,
                             ScheduleStartDate = fs.ScheduleStartDate,
                             DivisionID = fs.ScheduleDivisionId,
@@ -179,7 +179,7 @@ namespace division_microservice.Services
         {
             try
             {
-                TableSchedule scheduleToDelete = await _db.TableSchedules.FindAsync(scheduleID);
+                TableSchedule scheduleToDelete = await _db.TableSchedules.Where(s => s.ScheduleId == scheduleID).FirstOrDefaultAsync();
 
                 if (scheduleToDelete == null)
                 {
@@ -206,7 +206,7 @@ namespace division_microservice.Services
         #region methods
         private int GetCurrentWeek(DateTime startDate)
         {
-            return (DateTime.Now - startDate).Days / 7; //number of weeks gone by. remainder of 6 days
+            return (DateTime.Now - startDate).Days / 7 + 1; //number of weeks gone by. remainder of 6 days //add one to not be 0 on week 1 etc..
         }
         private async Task<IEnumerable<Matchup>> GetMatchups(int scheduleID, IList<Team> divisionTeams)
         {

@@ -29,7 +29,7 @@ export default function ScoreTable(props) {
               <tbody>
                 <tr>
                   {/* <td>1</td> */}
-                  <td className="TeamStanding">1. <img src="https://web2.hirez.com/esports/teams/ssg-70x70.png" alt="SSG" className="LogoStanding" />Spacestation Gaming</td>
+                  <td className="TeamStanding">1. <img src="https://web2.hirez.com/esports/teams/ssg-70x70.png" alt="SSG" className="LogoStanding" draggable={false}/>Spacestation Gaming</td>
                   <td>5</td>
                   <td>5</td>
                   <td>0</td>
@@ -44,7 +44,7 @@ export default function ScoreTable(props) {
                 </tr>
                 <tr>
                   {/* <td>2</td> */}
-                  <td className="TeamStanding">2. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" /> Teamname</td>
+                  <td className="TeamStanding">2. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
                   <td>5</td>
                   <td>4</td>
                   <td>1</td>
@@ -59,7 +59,7 @@ export default function ScoreTable(props) {
                 </tr>
                 <tr>
                   {/* <td>3</td> */}
-                  <td className="TeamStanding">3. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" /> Teamname</td>
+                  <td className="TeamStanding">3. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
                   <td>5</td>
                   <td>3</td>
                   <td>2</td>
@@ -74,7 +74,7 @@ export default function ScoreTable(props) {
                 </tr>
                 <tr>
                   {/* <td>4</td> */}
-                  <td className="TeamStanding">4. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" /> Teamname</td>
+                  <td className="TeamStanding">4. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
                   <td>5</td>
                   <td>3</td>
                   <td>2</td>
@@ -89,7 +89,7 @@ export default function ScoreTable(props) {
                 </tr>
                 <tr>
                   {/* <td>5</td> */}
-                  <td className="TeamStanding">5. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" /> Teamname</td>
+                  <td className="TeamStanding">5. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
                   <td>5</td>
                   <td>2</td>
                   <td>3</td>
@@ -104,7 +104,7 @@ export default function ScoreTable(props) {
                 </tr>
                 <tr>
                   {/* <td>6</td> */}
-                  <td className="TeamStanding">6. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" /> Teamname</td>
+                  <td className="TeamStanding">6. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
                   <td>5</td>
                   <td>2</td>
                   <td>3</td>
@@ -119,7 +119,7 @@ export default function ScoreTable(props) {
                 </tr>
                 <tr>
                   {/* <td>7</td> */}
-                  <td className="TeamStanding">7. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" /> Teamname</td>
+                  <td className="TeamStanding">7. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
                   <td>5</td>
                   <td>1</td>
                   <td>4</td>
@@ -134,7 +134,7 @@ export default function ScoreTable(props) {
                 </tr>
                 <tr>
                   {/* <td>8</td> */}
-                  <td className="TeamStanding">8. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" /> Teamname</td>
+                  <td className="TeamStanding">8. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
                   <td>5</td>
                   <td>0</td>
                   <td>5</td>

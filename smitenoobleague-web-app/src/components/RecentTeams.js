@@ -19,7 +19,7 @@ export default function RecentTeams(props){
               <Col md={10} xs={10} className="p-0 mx-auto">
                 <Row className="">
                   <Col md={12} xs={12} className="align-items-left d-flex">
-                    <Image src="https://web2.hirez.com/esports/teams/ghost-70x70.png" className="RecentTeamLogo mr-2"></Image>
+                    <Image src="https://web2.hirez.com/esports/teams/ghost-70x70.png" className="RecentTeamLogo mr-2" draggable={false}></Image>
                     <h3 className="text-center my-auto RecentTeamTitle font-weight-bold">Ghost Gaming</h3>
                   </Col>
                 </Row>

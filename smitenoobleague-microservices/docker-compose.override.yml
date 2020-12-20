@@ -1,4 +1,4 @@
-﻿version: '3.4'
+version: '3.4'
 
 services:
   division-microservice:
@@ -10,6 +10,14 @@ services:
       - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
 
   smiteapi-microservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ~/.aspnet/https:/root/.aspnet/https:ro
+      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+
+  team-microservice:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
@@ -36,9 +44,10 @@ services:
 
   db:
     volumes:
-        - ./db/mysql/data:/var/lib/mysql
+        - "./db/mysql/data:/var/lib/mysql"
     ports:
         - 3308:3306
 
 volumes:
   node_modules:
+

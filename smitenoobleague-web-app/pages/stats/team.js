@@ -7,12 +7,13 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Container, Card, Image, FormControl, InputGroup } from "react-bootstrap";
 import TeamCard from "src/components/TeamCard";
+//Auth
+import helpers from "utils/helpers";
 
-
-export default function team() {
+export default function team({LoginSession}) {
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       <Container className="mt-4">
         <Row>
           <Col></Col>
@@ -48,4 +49,15 @@ export default function team() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
+
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
 }

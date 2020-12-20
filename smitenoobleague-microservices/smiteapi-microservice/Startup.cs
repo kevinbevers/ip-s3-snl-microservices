@@ -21,6 +21,8 @@ using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 //swagger
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace smiteapi_microservice
 {
@@ -39,6 +41,10 @@ namespace smiteapi_microservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAntiforgery(o => {
+                o.Cookie.Name = "X-CSRF-TOKEN";
+            });
+
             services.AddControllers();
             // Replace "YourDbContext" with the name of your own DbContext derived class.
             services.AddDbContextPool<SNL_Smiteapi_DBContext>(
@@ -64,6 +70,21 @@ namespace smiteapi_microservice
             services.AddScoped<IHirezApiService, HirezApiService>();
             services.AddScoped<IMatchService, MatchService>();
 
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+
+                    options.Authority = "https://smitenoobleague.eu.auth0.com/";
+                    options.Audience = "smitenoobleague";
+                                // If the access token does not have a `sub` claim, `User.Identity.Name` will be `null`. Map it to a different claim by setting the NameClaimType below.
+                                options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "Role",
+                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                    };
+                });
+
             //add swagger
             services.AddSwaggerGen(c =>
             {
@@ -79,9 +100,11 @@ namespace smiteapi_microservice
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

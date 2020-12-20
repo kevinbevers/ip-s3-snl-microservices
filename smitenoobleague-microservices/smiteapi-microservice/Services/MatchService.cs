@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -26,7 +26,7 @@ namespace smiteapi_microservice.Services
         //private readonly GatewayKey _gatewayKey;
         //return messages, move to static class
         private readonly string ResponeText_alreadySubmitted = "gameID is already submitted";
-        private readonly string ResponeText_gameIdEmpty = "gameID can't be empty";
+        private readonly string ResponeText_gameIdEmpty = "Invalid gameID submitted";
         private readonly string ResponseText_MatchDetailsHidden = "Matchdata not yet available. The data will be added once it becomes available at"; //Date will be added after this
         private readonly string ResponseText_MatchDetailsAdded = "Matchdata was added to our database";
 
@@ -63,32 +63,39 @@ namespace smiteapi_microservice.Services
         {
             try
             {
-                //if gameID is already submitted
-                if (await _db.TableQueues.Where(game => game.GameId == submission.gameID).CountAsync() > 0)
+                if (submission.teamID != null)
                 {
-                    return new ObjectResult(ResponeText_alreadySubmitted) { StatusCode = 200 }; //OK
-                }
-                else
-                {
-                    if (submission.gameID == 0)
+                    //if gameID is already submitted
+                    if (await _db.TableQueues.Where(game => game.GameId == submission.gameID).CountAsync() > 0)
                     {
-                        return new ObjectResult(ResponeText_gameIdEmpty) { StatusCode = 400 }; //BAD REQUEST
+                        return new ObjectResult(ResponeText_alreadySubmitted) { StatusCode = 400 }; //OK
                     }
                     else
                     {
-                        //try and get matchdata from smiteapi
-                        MatchData match = await _hirezApi.GetMatchDetailsAsync(submission.gameID);
-
-                        //check return message from api. if the return msg is null the match is valid
-                        if (match.ret_msg != null)
+                        if (submission.gameID == null)
                         {
-                            return await ProcessReturnMessageFromSmiteApiAsync(submission, match);
+                            return new ObjectResult(ResponeText_gameIdEmpty) { StatusCode = 400 }; //BAD REQUEST
                         }
                         else
                         {
-                            return await SaveGameIdAndSendToStatsAsync(submission);
+                            //try and get matchdata from smiteapi
+                            MatchData match = await _hirezApi.GetMatchDetailsAsync((int)submission.gameID);
+
+                            //check return message from api. if the return msg is null the match is valid
+                            if (match.ret_msg != null)
+                            {
+                                return await ProcessReturnMessageFromSmiteApiAsync(submission, match);
+                            }
+                            else
+                            {
+                                return await SaveGameIdAndSendToStatsAsync(submission);
+                            }
                         }
                     }
+                }
+                else
+                {
+                    return new ObjectResult("Team identity unknown") { StatusCode = 400 }; //BAD REQUEST
                 }
             }
             catch(Exception ex)
@@ -105,7 +112,7 @@ namespace smiteapi_microservice.Services
             try
             {
                 //try and get matchdata from smiteapi
-                MatchData match = await _hirezApi.GetMatchDetailsAsync(submission.gameID);
+                MatchData match = await _hirezApi.GetMatchDetailsAsync((int)submission.gameID);
 
                 //check return message from api. if the return msg is null the match is valid
                 if (match.ret_msg != null)
@@ -171,7 +178,7 @@ namespace smiteapi_microservice.Services
             else
             {
                 //Add the match to the queue table with QueueState true so that it will never get scheduled and we can check if the match has already been submitted.
-                _db.Add(new TableQueue { GameId = submission.gameID, QueueDate = DateTime.UtcNow, QueueState = true });
+                _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = DateTime.UtcNow, QueueState = true });
             }
             await _db.SaveChangesAsync();
 
@@ -190,7 +197,7 @@ namespace smiteapi_microservice.Services
                 string plannedDate = match.EntryDate.AddDays(7).ToString("s");
 
                 //add a schedule queue object to the schedule queue database table
-                _db.Add(new TableQueue { GameId = submission.gameID, QueueDate = match.EntryDate.AddDays(7), QueueState = false });
+                _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = match.EntryDate.AddDays(7), QueueState = false });
                 await _db.SaveChangesAsync();
 
                 //call the nodejs schedule api
@@ -199,9 +206,12 @@ namespace smiteapi_microservice.Services
                 string bdate = match.EntryDate.AddDays(7).ToString("dddd dd MMMM yyyy 'around' H:mm");
 
                 msg = $"{ResponseText_MatchDetailsHidden} {bdate}";
+                return new ObjectResult(msg) { StatusCode = 200 }; //OK
             }
 
-            return new ObjectResult(msg) { StatusCode = 200 }; //OK
+            return new ObjectResult(msg) { StatusCode = 404 }; //NOT FOUND
+
+
         }
 
         private async Task CallScheduleApiAsync(MatchSubmission submission, string plannedDate)//, string gatewayKey
@@ -224,7 +234,7 @@ namespace smiteapi_microservice.Services
             catch(Exception ex)
             {
                 //log the error
-                _logger.LogError(ex, "Something went wrong getting all scheduled gameIds from the database");
+                _logger.LogError(ex, "Something went wrong calling the Scheduling Service");
             }
         }
         #endregion

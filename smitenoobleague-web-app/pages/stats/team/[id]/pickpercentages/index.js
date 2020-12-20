@@ -15,18 +15,19 @@ import { Button, FormControl, Card } from "react-bootstrap";
 import { FaReply } from "react-icons/fa";
 //custom components
 import GodPickCard from "src/components/GodPickCard";
+//Auth
+import helpers from "utils/helpers";
 
-
-export default function PickPercentages({ postData }) {
+export default function PickPercentages({ postData, LoginSession }) {
   return (
     <>
-      <NavBar />
+      <NavBar LoginSession={LoginSession}/>
       {/* {postData} */}
       <Container fluid className="mt-2">
         {/* Team Header */}
         <Row className="">
           <Col md={2} xl={1} xs={3} className="my-auto">
-            <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage"></Image>
+            <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage" draggable={false}></Image>
           </Col>
           <Col md={7} xl={8} xs={9} className="pb-0 my-auto">
             <Row className="">
@@ -92,37 +93,13 @@ export default function PickPercentages({ postData }) {
 
 }
 
-// export async function getStaticPaths() {
-//   // Return a list of possible value for id
-//   const paths = [
-//     {
-//       params: {
-//         id: ["2345", "pickpercentages"]
-//       }
-//     },
-//     {
-//       params: {
-//         id: ["1234", "pickpercentages"]
-//       }
-//     },
-//     {
-//       params: {
-//         id: ["2345", "pickpercentages"]
-//       }
-//     }
-//   ];
-//   return {
-//     paths,
-//     fallback: false
-//   }
-// }
+export async function getServerSideProps(context) {
+  
+  const loginSessionData = await helpers.GetLoginSession(context.req);
 
-// export async function getStaticProps({ params }) {
-//   // Fetch necessary data for the blog post using params.id
-//   const postData = params.id;
-//   return {
-//     props: {
-//       postData
-//     }
-//   }
-// }
+  return {
+      props: {
+          LoginSession: loginSessionData
+      },
+  };
+}

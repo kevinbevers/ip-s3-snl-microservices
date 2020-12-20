@@ -25,6 +25,7 @@ namespace ocelot_api_gateway
         }
 
         public IConfiguration Configuration { get; }
+        string domain = Environment.GetEnvironmentVariable("Domain");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -32,7 +33,20 @@ namespace ocelot_api_gateway
             services.AddControllers();
             services.AddOcelot(Configuration);
             services.AddSwaggerForOcelot(Configuration);
-        }
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowedOrigin",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000",domain);
+                    builder.AllowAnyHeader();
+                    builder.WithExposedHeaders("Token-Expired");
+                    builder.AllowAnyMethod();
+                    builder.AllowCredentials();
+                    builder.Build();
+                });
+            });
+    }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,6 +57,8 @@ namespace ocelot_api_gateway
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowedOrigin");
 
             app.UseRouting();
 
