@@ -48,6 +48,11 @@ CREATE TABLE `TableTeam` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+LOCK TABLES `TableRole` WRITE;
+/*!40000 ALTER TABLE `TableRole` DISABLE KEYS */;
+INSERT INTO `TableRole` VALUES (1,'Solo'),(2,'Jungle'),(3,'Mid'),(4,'Support'),(5,'Adc');
+/*!40000 ALTER TABLE `TableRole` ENABLE KEYS */;
+UNLOCK TABLES;
 --
 -- Table structure for table `TableTeamMember`
 --
