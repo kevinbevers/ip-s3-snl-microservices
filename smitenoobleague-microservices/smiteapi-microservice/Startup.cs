@@ -34,13 +34,14 @@ namespace smiteapi_microservice
         }
 
         public IConfiguration Configuration { get; }
-        string dbpass = Environment.GetEnvironmentVariable("DB_Password");
-        string Smite_Api_DevId = Environment.GetEnvironmentVariable("Smite_Api_DevId");
-        string Smite_Api_AuthKey = Environment.GetEnvironmentVariable("Smite_Api_AuthKey");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string dbpass = Environment.GetEnvironmentVariable("DB_Password");
+            string Smite_Api_DevId = Environment.GetEnvironmentVariable("Smite_Api_DevId");
+            string Smite_Api_AuthKey = Environment.GetEnvironmentVariable("Smite_Api_AuthKey");
+
             services.AddAntiforgery(o => {
                 o.Cookie.Name = "X-CSRF-TOKEN";
             });
