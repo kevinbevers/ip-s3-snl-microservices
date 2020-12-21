@@ -36,5 +36,5 @@ export default {
   GetTeamByID,
   UpdatePlayerRole,
   UpdateTeamInfo,
-  SubmitMatchID
+  SubmitMatchID,
 }

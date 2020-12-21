@@ -225,8 +225,20 @@ namespace team_microservice.Services
                                         _db.TableTeamMembers.Add(teamMember);
                                         await _db.SaveChangesAsync();
 
+                                        var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == teamMember.TeamMemberRole).FirstOrDefaultAsync();
+                                        bool TeamCaptainYesNo = await _db.TableTeams.Where(t => t.TeamCaptainId == teamMember.TeamMemberId).CountAsync() > 0;
 
-                                        return new ObjectResult("Team-member succesfully added to team") { StatusCode = 201 };
+                                        TeamMember returnMember = new TeamMember {
+                                            TeamMemberID = teamMember.TeamMemberId,
+                                            TeamMemberName = teamMember.TeamMemberName,
+                                            TeamMemberPlatform = ((ApiPlatformEnum)teamMember.TeamMemberPlatformId).ToString(),
+                                            TeamMemberRole = new Role {RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                                            PlayerID = teamMember.TeamMemberPlayerId,
+                                            TeamCaptain = TeamCaptainYesNo
+                                        };
+
+                                        return new ObjectResult(returnMember) { StatusCode = 201 };
+                                        //return new ObjectResult("Team-member succesfully added to team") { StatusCode = 201 };
                                     }
                                 }
                                 else
@@ -807,7 +819,20 @@ namespace team_microservice.Services
                                         _db.TableTeamMembers.Update(foundTeamMember);
                                         await _db.SaveChangesAsync();
 
-                                        return new ObjectResult("Team-member updated successfully.") { StatusCode = 200 }; //OK
+                                        var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == foundTeamMember.TeamMemberRole).FirstOrDefaultAsync();
+                                        bool TeamCaptainYesNo = await _db.TableTeams.Where(t => t.TeamCaptainId == foundTeamMember.TeamMemberId).CountAsync() > 0;
+
+                                        TeamMember returnMember = new TeamMember
+                                        {
+                                            TeamMemberID = foundTeamMember.TeamMemberId,
+                                            TeamMemberName = foundTeamMember.TeamMemberName,
+                                            TeamMemberPlatform = ((ApiPlatformEnum)foundTeamMember.TeamMemberPlatformId).ToString(),
+                                            TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                                            PlayerID = foundTeamMember.TeamMemberPlayerId,
+                                            TeamCaptain = TeamCaptainYesNo
+                                        };
+
+                                        return new ObjectResult(returnMember) { StatusCode = 200 };
                                     }
                                     else
                                     {
@@ -820,7 +845,20 @@ namespace team_microservice.Services
                                         _db.UpdateRange(swap);
                                         await _db.SaveChangesAsync();
 
-                                        return new ObjectResult("Team-member updated successfully.") { StatusCode = 200 }; //OK
+                                        var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == foundTeamMember.TeamMemberRole).FirstOrDefaultAsync();
+                                        bool TeamCaptainYesNo = await _db.TableTeams.Where(t => t.TeamCaptainId == foundTeamMember.TeamMemberId).CountAsync() > 0;
+
+                                        TeamMember returnMember = new TeamMember
+                                        {
+                                            TeamMemberID = foundTeamMember.TeamMemberId,
+                                            TeamMemberName = foundTeamMember.TeamMemberName,
+                                            TeamMemberPlatform = ((ApiPlatformEnum)foundTeamMember.TeamMemberPlatformId).ToString(),
+                                            TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                                            PlayerID = foundTeamMember.TeamMemberPlayerId,
+                                            TeamCaptain = TeamCaptainYesNo
+                                        };
+
+                                        return new ObjectResult(returnMember) { StatusCode = 200 };
                                     }
                                 }
                                 else
@@ -837,7 +875,20 @@ namespace team_microservice.Services
                                 _db.TableTeamMembers.Update(foundTeamMember);
                                 await _db.SaveChangesAsync();
 
-                                return new ObjectResult("Team-member updated successfully.") { StatusCode = 200 }; //OK
+                                var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == foundTeamMember.TeamMemberRole).FirstOrDefaultAsync();
+                                bool TeamCaptainYesNo = await _db.TableTeams.Where(t => t.TeamCaptainId == foundTeamMember.TeamMemberId).CountAsync() > 0;
+
+                                TeamMember returnMember = new TeamMember
+                                {
+                                    TeamMemberID = foundTeamMember.TeamMemberId,
+                                    TeamMemberName = foundTeamMember.TeamMemberName,
+                                    TeamMemberPlatform = ((ApiPlatformEnum)foundTeamMember.TeamMemberPlatformId).ToString(),
+                                    TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                                    PlayerID = foundTeamMember.TeamMemberPlayerId,
+                                    TeamCaptain = TeamCaptainYesNo
+                                };
+
+                                return new ObjectResult(returnMember) { StatusCode = 200 };
                             }
                         }
 
