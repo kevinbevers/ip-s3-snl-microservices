@@ -108,7 +108,7 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
 
   const updateSwap = async (event) => {
 
-    if (teamMembers[event.oldIndex]?.teamMemberID != null && teamMembers[event.newIndex]?.teamMemberID != null) {
+    if (teamMembers[event.oldIndex]?.teamMemberID != null || teamMembers[event.newIndex]?.teamMemberID != null) {
       const Roles = ["Solo", "Jungle", "Mid", "Support", "Adc"];
 
       const items = Array.from(teamMembers);
