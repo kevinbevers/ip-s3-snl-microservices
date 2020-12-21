@@ -314,7 +314,7 @@ const toggleNotify = () => SetNotify(!notify);
                           delay={200}>
 
                           {teamMembers.map((member, index) => (
-                            <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse.teamID}/>
+                            <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse?.teamID}/>
                           ))}
                         </ReactSortable>
                         <Row><Col><h6 className="text-muted float-right ExtraInfoText">Drag and drop players to swap their roles.</h6></Col></Row>
