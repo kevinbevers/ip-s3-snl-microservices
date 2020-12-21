@@ -11,3 +11,10 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/www_smitenoobleague_xyz.pfx
     volumes:
       - ./certs:/app/certs
+
+  db:
+    volumes:
+        - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

@@ -9,7 +9,8 @@ import DefaultErrorPage from "next/error";
 import { Container, Row, Col, Form, Card, Button, Image, Badge, Toast, Alert } from "react-bootstrap";
 //custom imports
 import { FaEdit, FaCheck, FaBan } from "react-icons/fa";
-import { ReactSortable, Swap, Sortable } from "react-sortablejs";
+import { ReactSortable } from "react-sortablejs";
+import PlayerManagement from "src/components/captainpage/PlayerManagement";
 //importing images
 import Jungle from "public/images/roles/Jungle_Logo.png";
 import Solo from "public/images/roles/Solo_Logo.png";
@@ -212,11 +213,6 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   };
   //#endregion
 
-//#region TeamMemberEdit&Add
-const handleAddTeamMember = () => { };
-const handleEditTeamMember = () => { };
-//#endregion
-
  //#region notify
 const [notify,SetNotify] = useState(false);
 const [note,SetNote] = useState({msg : "", type: "", title: ""});
@@ -313,15 +309,12 @@ const toggleNotify = () => SetNotify(!notify);
                           swap={true}
                           swapClass={"text-success"}
                           chosenClass={"PlayerBoxGrapped"}
-                          dragClass={"PlayerBoxGrapped"}>
+                          dragClass={"PlayerBoxGrapped"}
+                          delayOnTouchOnly={true}
+                          delay={200}>
 
                           {teamMembers.map((member, index) => (
-                            <Row className="mb-2 rounded bg-white border border-silver PlayerBox" key={index}>
-                              <Col md={10} xs={10} className="d-flex p-0">
-                                <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{member?.teamMemberName != null ? member.teamMemberName : "No player in this role yet."} {member?.teamCaptain != null && member.teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4>
-                              </Col>
-                              <Col xs={2} className="my-auto p-0 pr-2">{member?.teamMemberID != null ? <Button onClick={handleEditTeamMember(member.teamMemberID)} variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button onClick={handleAddTeamMember} variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
-                            </Row>
+                            <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse.teamID}/>
                           ))}
                         </ReactSortable>
                         <Row><Col><h6 className="text-muted float-right ExtraInfoText">Drag and drop players to swap their roles.</h6></Col></Row>
