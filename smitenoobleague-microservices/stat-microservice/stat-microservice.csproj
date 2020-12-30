@@ -2,29 +2,31 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>division_microservice</RootNamespace>
+    <RootNamespace>stat_microservice</RootNamespace>
     <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
-    <UserSecretsId>0e11edeb-a397-47c7-b308-3fcc6a81fe0a</UserSecretsId>
+    <UserSecretsId>0a3f5808-384c-4841-9c9e-ed3586776814</UserSecretsId>
   </PropertyGroup>
 
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'stat_microsesrvice' " />
   <ItemGroup>
-    <Folder Include="Classes\" />
-    <Folder Include="Models\" />
-    <Folder Include="Models\Internal\" />
-    <Folder Include="Models\External\" />
-    <Folder Include="Services\" />
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.10" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
+    <Folder Include="Models\" />
+    <Folder Include="Models\Internal\" />
+    <Folder Include="Models\External\" />
   </ItemGroup>
 </Project>

@@ -203,11 +203,18 @@ namespace smiteapi_microservice.Services
 
         public async Task<IEnumerable<Player>> SearchPlayersByNameAsync(string name)
         {
-            List<ApiPlayer> playersfound = (List<ApiPlayer>)await _hirezApi.SearchPlayerByName(name);
+            List<ApiPlayer> playersfound = await _hirezApi.SearchPlayerByName(name);
 
             List<Player> returnList = new List<Player>();
             //convert ApiPlayer model to Player model
-            playersfound.ForEach(p => returnList.Add(new Player { Playername = p.Name, Platform = p.portal_id.ToString(), PlayerID = p.player_id }));
+            if (playersfound?[0].ret_msg != null)
+            {
+                //could return message to user
+            }
+            else
+            {
+                playersfound.ForEach(p => returnList.Add(new Player { Playername = p.Name, Platform = p.portal_id.ToString(), PlayerID = p.player_id }));
+            }
 
             return returnList;
         }

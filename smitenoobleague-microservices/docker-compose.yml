@@ -8,8 +8,11 @@ services:
     build:
       context: ./division-microservice/
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - DB_Password=${DB_PASS}
+        - ASPNETCORE_ENVIRONMENT=Production
+        - DB_Password=${DB_PASS}
+        - InternalServiceKey=${InternalServiceKey}
+        - Auth0Domain=${Auth0Domain}
+        - Auth0Audience=${Auth0Audience}
     depends_on:
       - db
 
@@ -24,6 +27,28 @@ services:
         - DB_Password=${DB_PASS}
         - Smite_Api_DevId=${DevId}
         - Smite_Api_AuthKey=${AuthKey}
+        - InternalServiceKey=${InternalServiceKey}
+        - Auth0Domain=${Auth0Domain}
+        - Auth0Audience=${Auth0Audience}
+    depends_on:
+      - db
+
+  stat-microservice:
+    image: ${DOCKER_REGISTRY-}statmicroservice
+    container_name: statmicroservice
+    restart: always
+    build:
+      context: ./stat-microservice/
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Production
+        - DB_Password=${DB_PASS}
+        - InternalServiceKey=${InternalServiceKey}
+        - Auth0Domain=${Auth0Domain}
+        - Auth0Audience=${Auth0Audience}
+        - smtpMail=${smtpMail}
+        - smtpMailPass=${smtpMailPass}
+        - smtpHost=${smtpHost}
+        - smtpHostPort=${smtpHostPort}
     depends_on:
       - db
 
@@ -36,6 +61,9 @@ services:
     environment:
         - ASPNETCORE_ENVIRONMENT=Production
         - DB_Password=${DB_PASS}
+        - InternalServiceKey=${InternalServiceKey}
+        - Auth0Domain=${Auth0Domain}
+        - Auth0Audience=${Auth0Audience}
     depends_on:
       - db
     volumes:
@@ -85,6 +113,3 @@ services:
         MYSQL_ROOT_PASSWORD: ${DB_PASS}
     volumes:
         - ./db/mysql/init:/docker-entrypoint-initdb.d/:ro
-
-
-

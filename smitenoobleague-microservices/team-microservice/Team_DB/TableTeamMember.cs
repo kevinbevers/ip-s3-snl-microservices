@@ -15,5 +15,6 @@ namespace team_microservice.Team_DB
         public int? TeamMemberPlatformId { get; set; }
         public string TeamMemberAccountId { get; set; }
         public int? TeamMemberDivisionId { get; set; }
+        public string TeamMemberEmail { get; set; }
     }
 }

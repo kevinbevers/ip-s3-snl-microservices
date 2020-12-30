@@ -8,6 +8,7 @@ namespace team_microservice.Models.External
 
         public class CaptainData
         {
+            public string TeamCaptainEmail { get; set; }
             public string TeamCaptainAccountID { get; set; }
             public int? TeamCaptainPlayerID { get; set; }
             public string TeamCaptainPlayerName { get; set; }

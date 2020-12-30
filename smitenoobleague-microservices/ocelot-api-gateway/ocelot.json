@@ -20,13 +20,22 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
+          "Host": "stat-microservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/stat-service/{everything}",
+      "SwaggerKey": "stat"
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
           "Host": "team-microservice",
           "Port": 80
         }
       ],
-      "UpstreamHeaderTransform": {
-        "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-      },
       "UpstreamPathTemplate": "/team-service/{everything}",
       "SwaggerKey": "team"
     },
@@ -39,9 +48,6 @@
           "Port": 80
         }
       ],
-      "UpstreamHeaderTransform": {
-        "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-      },
       "UpstreamPathTemplate": "/division-service/{everything}",
       "SwaggerKey": "division"
     },
@@ -54,9 +60,6 @@
           "Port": 80
         }
       ],
-      "UpstreamHeaderTransform": {
-        "GatewayKey": "SUANRDQ{KK#</[4gXnJL5gL/TkiyQN_3Xqp*3MNQ~q/BGV=ot{*`D5bh`%G820S"
-      },
       "UpstreamPathTemplate": "/nodeschedule/{everything}"
     }
   ],
@@ -68,6 +71,16 @@
           "Name": "Smiteapi microservice API",
           "Version": "v1",
           "Url": "http://smiteapi-microservice/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "stat",
+      "Config": [
+        {
+          "Name": "Stat microservice API",
+          "Version": "v1",
+          "Url": "http://stat-microservice/swagger/v1/swagger.json"
         }
       ]
     },

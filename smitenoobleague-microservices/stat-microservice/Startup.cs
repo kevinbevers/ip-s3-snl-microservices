@@ -10,19 +10,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using division_microservice.Classes;
 //database
-using division_microservice.Division_DB;
+using stat_microservice.Stat_DB;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 //swagger
 using Microsoft.OpenApi.Models;
-using division_microservice.Interfaces;
-using division_microservice.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using stat_microservice.Classes;
+using stat_microservice.Interfaces;
+using stat_microservice.Services;
 
-namespace division_microservice
+namespace stat_microservice
 {
     public class Startup
     {
@@ -36,31 +36,43 @@ namespace division_microservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAntiforgery(o => {
+                o.Cookie.Name = "X-CSRF-TOKEN";
+            });
 
             services.AddControllers();
 
             string dbpass = Environment.GetEnvironmentVariable("DB_Password");
             // Replace "YourDbContext" with the name of your own DbContext derived class.
-            services.AddDbContextPool<SNL_Division_DBContext>(
+            services.AddDbContextPool<SNL_Stat_DBContext>(
                 dbContextOptions => dbContextOptions
                     .UseMySql(
                         // Replace with your connection string.
-                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_Division_DB",
+                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_Stat_DB",
                         // Replace with your server version and type.
                         // For common usages, see pull request #1233.
-                        new MySqlServerVersion(new Version(8, 0, 22)), 
+                        new MySqlServerVersion(new Version(8, 0, 22)),
                         mySqlOptions => mySqlOptions
                             .CharSetBehavior(CharSetBehavior.NeverAppend)));
 
-            //inject gatewaykey from appsettings.json
-            //services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
-            //services.AddScoped<GatewayOnly>();
+            string servicekey = Environment.GetEnvironmentVariable("InternalServiceKey");
+            //InternalServices only
+            services.AddSingleton(new InternalServicesKey { Key = servicekey }); //access internalservice key where needed
+            services.AddSingleton(new InternalServicesOnly(new InternalServicesKey { Key = servicekey }));//used for controller filter / auth of internal services
 
-            //add Scoped services
+            string smtpMail = Environment.GetEnvironmentVariable("smtpMail");
+            string smtpMailPass = Environment.GetEnvironmentVariable("smtpMailPass");
+            string smtpHost = Environment.GetEnvironmentVariable("smtpHost");
+            int smtpHostPort = Convert.ToInt32(Environment.GetEnvironmentVariable("smtpHostPort"));
+            //Email service
+            services.AddSingleton(new EmailSettings(smtpMail,smtpMailPass,smtpHost,smtpHostPort, true));
+            services.AddScoped<Email, Email>();
+
+            //add Scoped Services
+            services.AddScoped<IMatchStatService, MatchStatService>();
             services.AddScoped<IExternalServices, ExternalServices>();
-            services.AddScoped<IDivisionService, DivisionService>();
-            services.AddScoped<IScheduleService, ScheduleService>();
-            services.AddScoped<IValidationService, ValidationService>();
+            
+           
 
             //Auth
             string domain = Environment.GetEnvironmentVariable("Auth0Domain");
@@ -80,10 +92,10 @@ namespace division_microservice
                     };
                 });
 
-
+            //add swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Stat microservice API", Version = "v1" });
             });
         }
 
@@ -99,6 +111,8 @@ namespace division_microservice
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -110,7 +124,7 @@ namespace division_microservice
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Division microservice API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Stat microservice API V1");
             });
         }
     }

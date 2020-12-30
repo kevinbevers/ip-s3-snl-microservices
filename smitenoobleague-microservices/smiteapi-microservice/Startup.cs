@@ -71,15 +71,18 @@ namespace smiteapi_microservice
             services.AddScoped<IHirezApiService, HirezApiService>();
             services.AddScoped<IMatchService, MatchService>();
 
+            //Auth
+            string domain = Environment.GetEnvironmentVariable("Auth0Domain");
+            string audience = Environment.GetEnvironmentVariable("Auth0Audience");
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
 
-                    options.Authority = "https://smitenoobleague.eu.auth0.com/";
-                    options.Audience = "smitenoobleague";
-                                // If the access token does not have a `sub` claim, `User.Identity.Name` will be `null`. Map it to a different claim by setting the NameClaimType below.
-                                options.TokenValidationParameters = new TokenValidationParameters
+                    options.Authority = domain;
+                    options.Audience = audience;
+                    // If the access token does not have a `sub` claim, `User.Identity.Name` will be `null`. Map it to a different claim by setting the NameClaimType below.
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = "Role",
                         RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
