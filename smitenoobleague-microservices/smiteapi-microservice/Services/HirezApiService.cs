@@ -112,78 +112,81 @@ namespace smiteapi_microservice.Services
                             }
                         }
 
-
-                        if (matchDetails?.Count() > 9)
+                        //Fill the winner and loser list
+                        foreach (var mp in matchDetails)
                         {
-                            //Fill the winner and loser list
-                            foreach (var mp in matchDetails)
+                            //make names friendly for image url
+                            string relic1 = Regex.Replace(mp.Item_Active_1?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                            string relic2 = Regex.Replace(mp.Item_Active_2?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                            string item1 = Regex.Replace(mp.Item_Purch_1?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                            string item2 = Regex.Replace(mp.Item_Purch_2?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                            string item3 = Regex.Replace(mp.Item_Purch_3?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                            string item4 = Regex.Replace(mp.Item_Purch_4?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                            string item5 = Regex.Replace(mp.Item_Purch_5?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                            string item6 = Regex.Replace(mp.Item_Purch_6?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                            string godname = Regex.Replace(mp.Reference_Name?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+
+                            MatchData.PlayerStat playerStat = new MatchData.PlayerStat
                             {
-                                //make names friendly for image url
-                                string relic1 = Regex.Replace(mp.Item_Active_1?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                string relic2 = Regex.Replace(mp.Item_Active_2?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                string item1 = Regex.Replace(mp.Item_Purch_1?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                string item2 = Regex.Replace(mp.Item_Purch_2?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                string item3 = Regex.Replace(mp.Item_Purch_3?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                string item4 = Regex.Replace(mp.Item_Purch_4?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                string item5 = Regex.Replace(mp.Item_Purch_5?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                string item6 = Regex.Replace(mp.Item_Purch_6?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
-                                string godname = Regex.Replace(mp.Reference_Name?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                //General info //gamertag for console - playername for pc, will be empty string when other platform
+                                player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId.ToString() },
+                                IngameTeamID = mp.TaskForce,
+                                Won = mp.TaskForce == mp.Winning_TaskForce ? true : false,
+                                FirstBanSide = mp.Win_Status == mp.First_Ban_Side ? true : false,
+                                God = new God { GodId = mp.GodId, GodName = mp.Reference_Name, GodIcon = "https://web2.hirez.com/smite/god-icons/" + godname + ".jpg" },
+                                //DMG
+                                DamageDealt = mp.Damage_Player,
+                                DamageTaken = mp.Damage_Taken,
+                                DamageMitigated = mp.Damage_Mitigated,
+                                //KDA
+                                Kills = mp.Kills_Player,
+                                Deaths = mp.Deaths,
+                                Assists = mp.Assists,
+                                //General stats
+                                Level = mp.Final_Match_Level,
+                                GoldEarned = mp.Gold_Earned,
+                                GPM = mp.Gold_Per_Minute,
+                                Healing = mp.Healing,
+                                //Relics
+                                Relic1ID = mp.ActiveId1,
+                                Relic2ID = mp.ActiveId2,
+                                Relic1Icon = relic1 != "" ? "https://web2.hirez.com/smite/item-icons/" + relic1 + ".jpg" : "/images/noimage1.png",
+                                Relic2Icon = relic2 != "" ? "https://web2.hirez.com/smite/item-icons/" + relic2 + ".jpg" : "/images/noimage1.png",
+                                Relic1Name = mp.Item_Active_1,
+                                Relic2Name = mp.Item_Active_2,
+                                //Items
+                                Item1ID = mp.ItemId1,
+                                Item2ID = mp.ItemId2,
+                                Item3ID = mp.ItemId3,
+                                Item4ID = mp.ItemId4,
+                                Item5ID = mp.ItemId5,
+                                Item6ID = mp.ItemId6,
+                                Item1Icon = item1 != "" ? "https://web2.hirez.com/smite/item-icons/" + item1 + ".jpg" : "/images/noimage1.png",
+                                Item2Icon = item2 != "" ? "https://web2.hirez.com/smite/item-icons/" + item2 + ".jpg" : "/images/noimage1.png",
+                                Item3Icon = item3 != "" ? "https://web2.hirez.com/smite/item-icons/" + item3 + ".jpg" : "/images/noimage1.png",
+                                Item4Icon = item4 != "" ? "https://web2.hirez.com/smite/item-icons/" + item4 + ".jpg" : "/images/noimage1.png",
+                                Item5Icon = item5 != "" ? "https://web2.hirez.com/smite/item-icons/" + item5 + ".jpg" : "/images/noimage1.png",
+                                Item6Icon = item6 != "" ? "https://web2.hirez.com/smite/item-icons/" + item6 + ".jpg" : "/images/noimage1.png",
+                                Item1Name = mp.Item_Purch_1,
+                                Item2Name = mp.Item_Purch_2,
+                                Item3Name = mp.Item_Purch_3,
+                                Item4Name = mp.Item_Purch_4,
+                                Item5Name = mp.Item_Purch_5,
+                                Item6Name = mp.Item_Purch_6,
+                                //Map stats
+                                FireGiantsKilled = mp.Kills_Fire_Giant,
+                                GoldFuriesKilled = mp.Kills_Gold_Fury,
+                                //Extra stats
+                                FirstBlood = mp.Kills_First_Blood > 0 ? true : false,
+                                TowersDestroyed = mp.Towers_Destroyed,
+                                WardsPlaced = mp.Wards_Placed,
+                                StructureDamage = mp.Structure_Damage,
+                                MinionDamage = mp.Damage_Bot,
+                                DistanceTravelled = mp.Distance_Traveled,
+                                Region = mp.Region
+                            };
 
-                                MatchData.PlayerStat playerStat = new MatchData.PlayerStat
-                                {
-                                    //General info //gamertag for console - playername for pc, will be empty string when other platform
-                                    player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId.ToString() },
-                                    IngameTeamID = mp.TaskForce,
-                                    Won = mp.TaskForce == mp.Winning_TaskForce ? true : false,
-                                    FirstBanSide = mp.Win_Status == mp.First_Ban_Side ? true : false,
-                                    God = new God { GodId = mp.GodId, GodName = mp.Reference_Name, GodIcon = "https://web2.hirez.com/smite/god-icons/" + godname + ".jpg" },
-                                    //DMG
-                                    DamageDealt = mp.Damage_Player,
-                                    DamageTaken = mp.Damage_Taken,
-                                    DamageMitigated = mp.Damage_Mitigated,
-                                    //KDA
-                                    Kills = mp.Kills_Player,
-                                    Deaths = mp.Deaths,
-                                    Assists = mp.Assists,
-                                    //General stats
-                                    Level = mp.Final_Match_Level,
-                                    GoldEarned = mp.Gold_Earned,
-                                    GPM = mp.Gold_Per_Minute,
-                                    Healing = mp.Healing,
-                                    //Relics
-                                    Relic1ID = mp.ActiveId1,
-                                    Relic2ID = mp.ActiveId2,
-                                    Relic1Icon = relic1 != "" ? "https://web2.hirez.com/smite/item-icons/" + relic1 + ".jpg" : "/images/noimage1.png",
-                                    Relic2Icon = relic2 != "" ? "https://web2.hirez.com/smite/item-icons/" + relic2 + ".jpg" : "/images/noimage1.png",
-                                    //Items
-                                    Item1ID = mp.ItemId1,
-                                    Item2ID = mp.ItemId2,
-                                    Item3ID = mp.ItemId3,
-                                    Item4ID = mp.ItemId4,
-                                    Item5ID = mp.ItemId5,
-                                    Item6ID = mp.ItemId6,
-                                    Item1Icon = item1 != "" ? "https://web2.hirez.com/smite/item-icons/" + item1 + ".jpg" : "/images/noimage1.png",
-                                    Item2Icon = item2 != "" ? "https://web2.hirez.com/smite/item-icons/" + item2 + ".jpg" : "/images/noimage1.png",
-                                    Item3Icon = item3 != "" ? "https://web2.hirez.com/smite/item-icons/" + item3 + ".jpg" : "/images/noimage1.png",
-                                    Item4Icon = item4 != "" ? "https://web2.hirez.com/smite/item-icons/" + item4 + ".jpg" : "/images/noimage1.png",
-                                    Item5Icon = item5 != "" ? "https://web2.hirez.com/smite/item-icons/" + item5 + ".jpg" : "/images/noimage1.png",
-                                    Item6Icon = item6 != "" ? "https://web2.hirez.com/smite/item-icons/" + item6 + ".jpg" : "/images/noimage1.png",
-
-                                    //Map stats
-                                    FireGiantsKilled = mp.Kills_Fire_Giant,
-                                    GoldFuriesKilled = mp.Kills_Gold_Fury,
-                                    //Extra stats
-                                    FirstBlood = mp.Kills_First_Blood > 0 ? true : false,
-                                    TowersDestroyed = mp.Towers_Destroyed,
-                                    WardsPlaced = mp.Wards_Placed,
-                                    StructureDamage = mp.Structure_Damage,
-                                    MinionDamage = mp.Damage_Bot,
-                                    DistanceTravelled = mp.Distance_Traveled,
-                                    Region = mp.Region
-                                };
-
-                                if (mp.TaskForce == mp.Winning_TaskForce) { match.Winners.Add(playerStat); } else { match.Losers.Add(playerStat); }
-                            }
+                            if (mp.TaskForce == mp.Winning_TaskForce) { match.Winners.Add(playerStat); } else { match.Losers.Add(playerStat); }
                         }
                     }
                     //Return match when there is data available

@@ -12,6 +12,8 @@ namespace stat_microservice.Stat_DB
         public DateTime? MatchPlayedDate { get; set; }
         public int? TeamId { get; set; }
         public int? DivisionId { get; set; }
+        public int? ScheduleId { get; set; }
+        public int? MatchupId { get; set; }
         public int? RoleId { get; set; }
         public int? PlayerId { get; set; }
         public bool? PlayerIsFill { get; set; }
@@ -39,6 +41,8 @@ namespace stat_microservice.Stat_DB
         public int? IgDamageTaken { get; set; }
         public int? IgDamageMitigated { get; set; }
         public int? IgHealing { get; set; }
+        public int? IgMinionDamage { get; set; }
+        public int? IgDistanceTraveled { get; set; }
         public int? IgBan1Id { get; set; }
         public int? IgBan2Id { get; set; }
         public int? IgBan3Id { get; set; }
@@ -49,5 +53,11 @@ namespace stat_microservice.Stat_DB
         public int? IgBan8Id { get; set; }
         public int? IgBan9Id { get; set; }
         public int? IgBan10Id { get; set; }
+        public int? IgFireGiantsKilled { get; set; }
+        public int? IgGoldFuriesKilled { get; set; }
+        public int? IgWardsPlaced { get; set; }
+        public int? IgStructureDamage { get; set; }
+        public int? IgTowersDestroyed { get; set; }
+        public string IgRegion { get; set; }
     }
 }

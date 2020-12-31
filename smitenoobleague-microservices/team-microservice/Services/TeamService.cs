@@ -462,7 +462,48 @@ namespace team_microservice.Services
                 }
                 else
                 {
-                    return new ObjectResult("No team found for the given players, maybe the captain isn't linked to an account yet.") { StatusCode = 404 }; //NOT FOUND
+                    //check if maybe the captain is getting filled and get the team by the remaining 4 players.
+                    TableTeamMember teamMember = await _db.TableTeamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId)).FirstOrDefaultAsync();
+                    if (teamMember != null)
+                    {
+                        //get the team
+                        TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamCaptainId == captain.TeamMemberId).FirstOrDefaultAsync();
+                        //get all the team members
+                        List<TableTeamMember> teamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == foundTeam.TeamId).OrderBy(m => m.TeamMemberRole).ToListAsync();
+                        //create a new list of members and give each teamMember it's role and transform to external model
+                        List<TeamMember> members = new List<TeamMember>();
+
+                        foreach (var m in teamMembers)
+                        {
+                            var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == m.TeamMemberRole).FirstOrDefaultAsync();
+
+                            members.Add(new TeamMember
+                            {
+                                TeamMemberID = m.TeamMemberId,
+                                TeamCaptain = foundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
+                                TeamMemberName = m.TeamMemberName,
+                                TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
+                                TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                                PlayerID = m.TeamMemberPlayerId
+                            });
+                        }
+
+                        TeamWithDetails returnTeam = new TeamWithDetails
+                        {
+                            TeamID = foundTeam.TeamId,
+                            TeamName = foundTeam.TeamName,
+                            TeamMembers = members,
+                            DivisionID = foundTeam.TeamDivisionId,
+                            TeamLogoPath = foundTeam.TeamLogoPath
+
+                        };
+
+                        return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
+                    }
+                    else
+                    {
+                        return new ObjectResult("No team found for the given players, maybe the captain isn't linked to an account yet.") { StatusCode = 404 }; //NOT FOUND
+                    }
                 }
             }
             catch (Exception ex)

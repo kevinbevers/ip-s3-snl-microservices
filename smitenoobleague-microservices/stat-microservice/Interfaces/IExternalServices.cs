@@ -9,8 +9,8 @@ namespace stat_microservice.Interfaces
     public interface IExternalServices
     {
         Task<TeamWithDetails> GetTeamByPlayersAsync(List<int> playersInMatch);
-        Task<int> GetPlannedMatchUpByTeamIDAsync(int teamID);
-        Task<ActionResult> UpdateScoreInScheduleAsync(string score);
+        Task<Schedule> GetPlannedMatchUpByDivisionIdAsync(int divisionID);
+        Task<bool> UpdateScoreInScheduleAsync(string score, int matchupID);
         Task<string> GetCaptainEmailWithCaptainTeamMemberIDAsync(int captainTeamMemberID);
         Task<bool> SendEmailNotificationToCaptainAsync(string msg, string title, string email);
     }

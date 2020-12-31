@@ -12,5 +12,6 @@ namespace stat_microservice.Stat_DB
         public int? ScheduleMatchUpId { get; set; }
         public int? WinningTeamId { get; set; }
         public int? LosingTeamId { get; set; }
+        public DateTime? DatePlayed { get; set; }
     }
 }

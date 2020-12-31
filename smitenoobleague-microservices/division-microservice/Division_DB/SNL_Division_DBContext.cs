@@ -8,7 +8,6 @@ namespace division_microservice.Division_DB
 {
     public partial class SNL_Division_DBContext : DbContext
     {
-
         public SNL_Division_DBContext(DbContextOptions<SNL_Division_DBContext> options)
             : base(options)
         {
@@ -51,9 +50,16 @@ namespace division_microservice.Division_DB
 
                 entity.Property(e => e.AwayTeamId).HasColumnName("AwayTeamID");
 
+                entity.Property(e => e.ByeGame).HasColumnType("bit(1)");
+
                 entity.Property(e => e.HomeTeamId).HasColumnName("HomeTeamID");
 
                 entity.Property(e => e.ScheduleId).HasColumnName("ScheduleID");
+
+                entity.Property(e => e.Score)
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_unicode_ci");
             });
 
             modelBuilder.Entity<TableSchedule>(entity =>

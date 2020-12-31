@@ -5,6 +5,7 @@ namespace smiteapi_microservice.Models.External
 {
     public class MatchData
     {
+        public string patchNumber { get; set; }
         public int? GameID { get; set; }
         public DateTime EntryDate { get; set; }
         public int? MatchDurationInSeconds { get; set; } //use timespan to convert to actual time for representation
@@ -46,6 +47,8 @@ namespace smiteapi_microservice.Models.External
             public int? Relic2ID { get; set; }
             public string Relic1Icon { get; set; }
             public string Relic2Icon { get; set; }
+            public string Relic1Name { get; set; }
+            public string Relic2Name { get; set; }
             //Items
             public int? Item1ID { get; set; }
             public int? Item2ID { get; set; }
@@ -59,6 +62,12 @@ namespace smiteapi_microservice.Models.External
             public string Item4Icon { get; set; }
             public string Item5Icon { get; set; }
             public string Item6Icon { get; set; }
+            public string Item1Name { get; set; }
+            public string Item2Name { get; set; }
+            public string Item3Name { get; set; }
+            public string Item4Name { get; set; }
+            public string Item5Name { get; set; }
+            public string Item6Name { get; set; }
             //Map stats
             public int? FireGiantsKilled { get; set; }
             public int? GoldFuriesKilled { get; set; }

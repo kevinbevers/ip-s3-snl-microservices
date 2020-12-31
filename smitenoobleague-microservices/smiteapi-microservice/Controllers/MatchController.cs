@@ -36,9 +36,9 @@ namespace smiteapi_microservice.Controllers
         // POST /match
         [HttpPost]
         [Authorize(Roles = "Captain,Admin")]
-        public async Task<IActionResult> Post([FromBody] MatchSubmission submission)
+        public async Task<IActionResult> Post([FromBody] int gameID)
         {
-            return await _matchService.ProcessMatchIdAsync(submission);
+            return await _matchService.ProcessMatchIdAsync(gameID);
         }
     }
 }

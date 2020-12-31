@@ -9,7 +9,7 @@ namespace smiteapi_microservice.Interfaces
     public interface IMatchService
     {
         //User call logic
-        Task<ActionResult> ProcessMatchIdAsync(MatchSubmission submission);
+        Task<ActionResult> ProcessMatchIdAsync(int gameID);
         Task<ActionResult<MatchData>> GetRawMatchDataAsync(int gameID);
         //Schedule Api logic
         Task<ActionResult> ProcessScheduleApiRequestAsync(MatchSubmission submission);

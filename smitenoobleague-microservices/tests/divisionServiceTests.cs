@@ -58,13 +58,8 @@ namespace service_tests
             IValidationService valService = new ValidationService(_mockedDB, valLogger);
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
-
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
             
-
-            var controller = new DivisionController(new DivisionService(_mockedDB, logger, null, valService, externalServices.Object));
+            var controller = new DivisionController(new DivisionService(_mockedDB, logger, valService, externalServices.Object));
 
             //Act
             var result = await controller.GetWithTeams();
@@ -97,11 +92,7 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
-
-            var controller = new DivisionController(new DivisionService(_mockedDB, logger, null, valService, externalServices.Object));
+            var controller = new DivisionController(new DivisionService(_mockedDB, logger, valService, externalServices.Object));
 
             //Act
             var result = await controller.Get();
@@ -132,11 +123,7 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
-
-            var controller = new DivisionController(new DivisionService(_mockedDB, logger, null, valService, externalServices.Object));
+            var controller = new DivisionController(new DivisionService(_mockedDB, logger, valService, externalServices.Object));
 
             //Act
             var result = await controller.Get(1);
@@ -167,11 +154,7 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
-
-            var controller = new DivisionController(new DivisionService(_mockedDB, logger, null, valService, externalServices.Object));
+            var controller = new DivisionController(new DivisionService(_mockedDB, logger, valService, externalServices.Object));
 
             //Act
             var result = await controller.Get(4);
@@ -201,11 +184,7 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
-
-            var controller = new DivisionController(new DivisionService(_mockedDB, logger, null, valService, externalServices.Object));
+            var controller = new DivisionController(new DivisionService(_mockedDB, logger, valService, externalServices.Object));
 
             //Act
             var result = await controller.Post("New division");
@@ -240,9 +219,8 @@ namespace service_tests
 
             var mock3 = new Mock<ILogger<ScheduleService>>();
             ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
 
-            var controller = new DivisionController(new DivisionService(_mockedDB, logger, null, valService, externalServices.Object));
+            var controller = new DivisionController(new DivisionService(_mockedDB, logger, valService, externalServices.Object));
 
             //Act
             var result = await controller.Post("Test division 1");
@@ -273,11 +251,7 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
-
-            var controller = new DivisionController(new DivisionService(_mockedDB, logger, null, valService, externalServices.Object));
+            var controller = new DivisionController(new DivisionService(_mockedDB, logger, valService, externalServices.Object));
 
             //Act
             var result = await controller.Put(new Division {DivisionID = 1, DivisionName = "Test division 1 Edit" });
@@ -308,11 +282,7 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
-
-            var controller = new DivisionController(new DivisionService(_mockedDB, logger, null, valService, externalServices.Object));
+            var controller = new DivisionController(new DivisionService(_mockedDB, logger, valService, externalServices.Object));
 
             //Act
             var result = await controller.Delete(2);
@@ -343,11 +313,7 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
-
-            var controller = new DivisionController(new DivisionService(_mockedDB, logger, null, valService, externalServices.Object));
+            var controller = new DivisionController(new DivisionService(_mockedDB, logger, valService, externalServices.Object));
 
             //Act
             var result = await controller.Delete(10);
@@ -380,11 +346,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //Act
             var result = await controller.PostAsync(new ScheduleCreation { DivisionID = 1, ScheduleName = "Split 1", ScheduleStartDate = DateTime.Now });
@@ -412,11 +378,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //Act
             var result = await controller.PostAsync(new ScheduleCreation { DivisionID = 14, ScheduleName = "Split 1", ScheduleStartDate = DateTime.Now });
@@ -444,11 +410,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //test data
             await controller.PostAsync(new ScheduleCreation { DivisionID = 1, ScheduleName = "Split 1", ScheduleStartDate = DateTime.Now });
@@ -479,11 +445,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //Act
             var result = await controller.PostAsync(new ScheduleCreation { DivisionID = 4, ScheduleName = "Split 1", ScheduleStartDate = DateTime.Now });
@@ -511,11 +477,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //create test data
             await controller.PostAsync(new ScheduleCreation { DivisionID = 1, ScheduleName = "Split 1", ScheduleStartDate = DateTime.Now });
@@ -551,11 +517,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //Act
             var result = await controller.GetByDivisionID(1);
@@ -584,11 +550,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //Act      
             var result = await controller.GetByDivisionID(50);
@@ -617,11 +583,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //create test data
             await controller.PostAsync(new ScheduleCreation { DivisionID = 1, ScheduleName = "Split 1", ScheduleStartDate = DateTime.Now });
@@ -653,11 +619,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //Act        
             var result = await controller.GetListOfScheduleIds(50);
@@ -686,11 +652,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
             //create test data
             await controller.PostAsync(new ScheduleCreation { DivisionID = 1, ScheduleName = "Split 1", ScheduleStartDate = DateTime.Now });
 
@@ -722,11 +688,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //Act
             var result = await controller.GetByScheduleID(50);
@@ -755,11 +721,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
             //create test data
             await controller.PostAsync(new ScheduleCreation { DivisionID = 1, ScheduleName = "Split 1", ScheduleStartDate = DateTime.Now });
 
@@ -790,11 +756,11 @@ namespace service_tests
 
             Mock<IExternalServices> externalServices = CreateMockExternalServices();
 
-            var mock3 = new Mock<ILogger<ScheduleService>>();
-            ILogger<ScheduleService> schedLogger = mock3.Object;
-            IScheduleService scheduleService = new ScheduleService(_mockedDB, schedLogger, valService, externalServices.Object);
+            var mock3 = new Mock<ILogger<DivisionService>>();
+            ILogger<DivisionService> divLogger = mock3.Object;
+            IDivisionService divisionService = new DivisionService(_mockedDB, divLogger, valService, externalServices.Object);
 
-            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object));
+            var controller = new ScheduleController(new ScheduleService(_mockedDB, logger, valService, externalServices.Object, divisionService));
 
             //Act
             var result = await controller.Delete(1);

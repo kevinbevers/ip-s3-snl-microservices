@@ -8,7 +8,7 @@ namespace stat_microservice.Interfaces
 {
     public interface IMatchStatService
     {
-        Task<ActionResult> SaveMatchStats(MatchData match);
-        Task<ActionResult> GetMatchStatByGameID(int gameID);
+        Task<ActionResult> ValidateAndSaveMatchStatsAsync(MatchData match);
+        Task<ActionResult> GetMatchStatByGameIDAsync(int gameID);
     }
 }

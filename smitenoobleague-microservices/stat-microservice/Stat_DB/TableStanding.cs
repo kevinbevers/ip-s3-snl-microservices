@@ -9,6 +9,7 @@ namespace stat_microservice.Stat_DB
     {
         public int StandingId { get; set; }
         public int? DivisionId { get; set; }
+        public int? TeamId { get; set; }
         public int? ScheduleId { get; set; }
         public int? StandingScore { get; set; }
         public int? StandingWins { get; set; }

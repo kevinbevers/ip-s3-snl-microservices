@@ -8,7 +8,6 @@ namespace smiteapi_microservice.Smiteapi_DB
 {
     public partial class SNL_Smiteapi_DBContext : DbContext
     {
-
         public SNL_Smiteapi_DBContext(DbContextOptions<SNL_Smiteapi_DBContext> options)
             : base(options)
         {
@@ -29,13 +28,18 @@ namespace smiteapi_microservice.Smiteapi_DB
 
                 entity.ToTable("TableQueue");
 
-                entity.Property(e => e.QueueId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("QueueID");
+                entity.Property(e => e.QueueId).HasColumnName("QueueID");
 
                 entity.Property(e => e.GameId).HasColumnName("GameID");
 
+                entity.Property(e => e.PatchVersion)
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
                 entity.Property(e => e.QueueDate).HasColumnType("datetime");
+
+                entity.Property(e => e.QueueState).HasColumnType("bit(1)");
             });
 
             OnModelCreatingPartial(modelBuilder);

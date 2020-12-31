@@ -19,13 +19,6 @@ namespace stat_microservice.Controllers
             _externalServices = externalServices;
         }
 
-        // GET: api/values
-        [HttpGet]
-        public async Task<bool> Get()
-        {
-            return await _externalServices.SendEmailNotificationToCaptainAsync("<b>Submitted Match ID:</b> 1234567890 <br /><b>Game:</b> 1 <br /> <b>Opponent:</b> Spacestation gaming. <br /><br /> The match was played on 3 January 2021 19:35 GMT", "Match ID submitted successfully", "kevin.bevers@hotmail.com");
-        }
-
         // GET api/values/5
         [HttpGet("{id}")]
         [ServiceFilter(typeof(InternalServicesOnly))]

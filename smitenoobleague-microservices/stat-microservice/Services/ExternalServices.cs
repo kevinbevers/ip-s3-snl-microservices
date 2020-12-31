@@ -44,9 +44,27 @@ namespace stat_microservice.Services
             }
         }
 
-        public Task<int> GetPlannedMatchUpByTeamIDAsync(int teamID)
+        public async Task<Schedule> GetPlannedMatchUpByDivisionIdAsync(int divisionID)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+
+                using (var response = await httpClient.GetAsync($"http://division-microservice/schedule/currentschedulebydivisionid/{divisionID}"))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<Schedule>(json);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
         }
 
         public async Task<TeamWithDetails> GetTeamByPlayersAsync(List<int> playersInMatch)
@@ -80,9 +98,30 @@ namespace stat_microservice.Services
             return await _Email.SendMail(email, msg, title);
         }
 
-        public async Task<ActionResult> UpdateScoreInScheduleAsync(string score)
+        public async Task<bool> UpdateScoreInScheduleAsync(string score, int matchupID)
         {
-            throw new NotImplementedException();
+            UpdateMatchScore updateMatchScore = new UpdateMatchScore { MatchupID = matchupID, ScoreText = score };
+            //body for the post request
+            var stringContent = new StringContent(JsonConvert.SerializeObject(updateMatchScore));
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+
+                using (var response = await httpClient.PostAsync($"http://division-microservice/schedule/updatematchupscore", stringContent))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
         }
     }
 }

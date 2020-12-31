@@ -61,6 +61,7 @@ CREATE TABLE `TableMatchResult` (
   `ScheduleMatchUpID` int DEFAULT NULL,
   `WinningTeamID` int DEFAULT NULL,
   `LosingTeamID` int DEFAULT NULL,
+  `DatePlayed` datetime DEFAULT NULL,
   PRIMARY KEY (`MatchResultID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -75,6 +76,7 @@ DROP TABLE IF EXISTS `TableStanding`;
 CREATE TABLE `TableStanding` (
   `StandingID` int NOT NULL AUTO_INCREMENT,
   `DivisionID` int DEFAULT NULL,
+  `TeamID` int DEFAULT NULL,
   `ScheduleID` int DEFAULT NULL,
   `StandingScore` int DEFAULT NULL,
   `StandingWins` int DEFAULT NULL,
@@ -96,6 +98,8 @@ CREATE TABLE `TableStat` (
   `MatchPlayedDate` datetime DEFAULT NULL,
   `TeamID` int DEFAULT NULL,
   `DivisionID` int DEFAULT NULL,
+  `ScheduleID` int DEFAULT NULL,
+  `MatchupID` int DEFAULT NULL,
   `RoleID` int DEFAULT NULL,
   `PlayerID` int DEFAULT NULL,
   `PlayerIsFill` tinyint(1) DEFAULT NULL,
@@ -123,6 +127,8 @@ CREATE TABLE `TableStat` (
   `IG_DamageTaken` int DEFAULT NULL,
   `IG_DamageMitigated` int DEFAULT NULL,
   `IG_Healing` int DEFAULT NULL,
+  `IG_MinionDamage` int DEFAULT NULL,
+  `IG_DistanceTraveled` int DEFAULT NULL,
   `IG_Ban1ID` int DEFAULT NULL,
   `IG_Ban2ID` int DEFAULT NULL,
   `IG_Ban3ID` int DEFAULT NULL,
@@ -133,6 +139,12 @@ CREATE TABLE `TableStat` (
   `IG_Ban8ID` int DEFAULT NULL,
   `IG_Ban9ID` int DEFAULT NULL,
   `IG_Ban10ID` int DEFAULT NULL,
+  `IG_FireGiantsKilled` int DEFAULT NULL,
+  `IG_GoldFuriesKilled` int DEFAULT NULL,
+  `IG_WardsPlaced` int DEFAULT NULL,
+  `IG_StructureDamage` int DEFAULT NULL,
+  `IG_TowersDestroyed` int DEFAULT NULL,
+  `IG_Region` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`StatID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -146,4 +158,4 @@ CREATE TABLE `TableStat` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-29 15:52:46
+-- Dump completed on 2020-12-31 17:21:08
