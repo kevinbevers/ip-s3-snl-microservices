@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service-tests", "tests\serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "team-microservice", "team-microservice\team-microservice.csproj", "{088D67EC-2F49-48EE-B6CD-83C7956A3531}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stat-microservice", "stat-microservice\stat-microservice.csproj", "{C1EB047E-80E4-4882-AA00-02A3F782EDA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,5 +45,9 @@ Global
 		{088D67EC-2F49-48EE-B6CD-83C7956A3531}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{088D67EC-2F49-48EE-B6CD-83C7956A3531}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{088D67EC-2F49-48EE-B6CD-83C7956A3531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1EB047E-80E4-4882-AA00-02A3F782EDA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1EB047E-80E4-4882-AA00-02A3F782EDA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1EB047E-80E4-4882-AA00-02A3F782EDA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1EB047E-80E4-4882-AA00-02A3F782EDA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

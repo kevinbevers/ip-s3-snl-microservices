@@ -169,7 +169,7 @@ const handleEditPlayer = async() => {
                                 </InputGroup>
                             </Col>
                             </Row>
-                            {FoundPlayers?.length > 0 ? <> 
+                            {FoundPlayers?.length > 0 ? <>
                                 <Row>
                                 <Col>  
                                     <Form.Group controlId="SelectPlayer">

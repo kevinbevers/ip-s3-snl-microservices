@@ -24,25 +24,33 @@ namespace division_microservice.Controllers
             _scheduleService = scheduleService;
         }
 
-        // GET:  /schedule/{divisionID}
+        // GET:  /all-bydivisionid/{divisionID}
         [HttpGet("all-bydivisionid/{divisionID}")]
         public async Task<ActionResult<IEnumerable<Schedule>>> GetByDivisionID(int divisionID)
         {
             return ModelState.IsValid ? await _scheduleService.GetAllSchedulesByDivisionIdAsync(divisionID) : BadRequest(ModelState);
         }
-        // GET:  /schedule/{divisionID}
+        // GET:  /allids-bydivisionid/{divisionID}
         [HttpGet("allids-bydivisionid/{divisionID}")]
         public async Task<ActionResult<IEnumerable<int>>> GetListOfScheduleIds(int divisionID)
         {
             return ModelState.IsValid ? await _scheduleService.GetAllScheduleIDsByDivisionIdAsync(divisionID) : BadRequest(ModelState);
         }
 
-        // GET /schedule/{scheduleID}
+        // GET /byscheduleid/{scheduleID}
         [HttpGet("byscheduleid/{scheduleID}")]
         public async Task<ActionResult<Schedule>> GetByScheduleID(int scheduleID)
         {
             return ModelState.IsValid ? await _scheduleService.GetScheduleByIdAsync(scheduleID) : BadRequest(ModelState);
         }
+
+        // GET:  /currentschedulebydivisionid/{divisionID}
+        [HttpGet("currentschedulebydivisionid/{divisionID}")]
+        public async Task<ActionResult<Schedule>> GetCurrentScheduleByDivisionID(int divisionID)
+        {
+            return ModelState.IsValid ? await _scheduleService.GetCurrentScheduleByDivisionIdAsync(divisionID) : BadRequest(ModelState);
+        }
+
         // DELETE /schedule/{scheduleID}
         [HttpDelete("byscheduleid/{scheduleID}")]
         public async Task<ActionResult<Schedule>> Delete(int scheduleID)
@@ -55,6 +63,13 @@ namespace division_microservice.Controllers
         public async Task<ActionResult> PostAsync([FromBody] ScheduleCreation values)
         {
             return ModelState.IsValid ? await _scheduleService.CreateScheduleForDivisionAsync(values) :  BadRequest(ModelState);
+        }
+
+        // POST schedule/updatematchupscore updateMatchScore{MatchupID, ScoreText}
+        [HttpPost("updatematchupscore")]
+        public async Task<ActionResult> PostMatchupScore([FromBody] UpdateMatchScore updateMatchScore)
+        {
+            return ModelState.IsValid ? await _scheduleService.UpdateMatchUpScoreAsync(updateMatchScore.MatchupID, updateMatchScore.ScoreText) : BadRequest(ModelState);
         }
     }
 }

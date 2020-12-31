@@ -58,6 +58,14 @@ namespace team_microservice.Controllers
             return await _teamService.GetTeamWithDetailsByCaptainAccountIdAsync(captainID);
         }
 
+        // POST team-service/captainmail
+        [HttpGet("captainmailbyid/{captainTeamMemberID}")]
+        [ServiceFilter(typeof(InternalServicesOnly))]
+        public async Task<ActionResult<string>> GetCaptainEmailWithCaptainTeamMemberID([FromQuery] int captainTeamMemberID)
+        {
+            return await _teamService.GetCaptainEmailAsync(captainTeamMemberID);
+        }
+
         // POST team-service
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -65,7 +73,7 @@ namespace team_microservice.Controllers
         {
             return ModelState.IsValid ? await _teamService.AddTeamAsync(teamSubmission) : BadRequest(ModelState);
         }
-        // POST team-service
+        // POST team-service/setdivisionforteams
         [HttpPost("setdivisionforteams")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Team>> PostTeamDivisions([FromBody] SetDivisionTeams divisionTeams)
@@ -79,6 +87,14 @@ namespace team_microservice.Controllers
         public async Task<ActionResult<Team>> Post([FromBody] TeamMemberSubmission teamMemberSubmission)
         {
             return ModelState.IsValid ? await _teamService.AddTeamMemberToTeamAsync(teamMemberSubmission) : BadRequest(ModelState);
+        }
+
+        // POST team-service/findteam
+        [HttpPost("findteam")]
+        [ServiceFilter(typeof(InternalServicesOnly))]
+        public async Task<ActionResult<TeamWithDetails>> PostListOfPlayersToFindTeam([FromBody] List<int> playersInMatch)
+        {
+            return ModelState.IsValid ? await _teamService.GetTeamByMatchPlayersAsync(playersInMatch) : BadRequest(ModelState);
         }
 
         // PUT team-service

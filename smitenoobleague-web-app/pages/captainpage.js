@@ -26,7 +26,7 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
 
   //#region SubmitMatch
   const [matchID, setMatchID] = useState(0);
-  const [submissionMsg, setSubmissionMsg] = useState({text: "Submission msg here...", color: "danger"});
+  const [submissionMsg, setSubmissionMsg] = useState({ text: "Submission msg here...", color: "danger" });
   const [showSubmissionAlert, setShowSubmissionAlert] = useState(false);
   function SubmissionAlert() {
     if (showSubmissionAlert) {
@@ -42,50 +42,46 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   };
 
   const handleChange = (event) => {
-    if(event.target?.value != null)
-    {
-      if(event.target.value.length <= 10)
-      {
+    if (event.target?.value != null) {
+      if (event.target.value.length <= 10) {
         setShowSubmissionAlert(false);
         setMatchID(event.target.value);
       }
-      
-      if(event.target.value.length > 10)
-      {
-        setSubmissionMsg({text: "gameID to long to be valid. a maximum of 10 characters is allowed", color: "danger"})
+
+      if (event.target.value.length > 10) {
+        setSubmissionMsg({ text: "gameID to long to be valid. a maximum of 10 characters is allowed", color: "danger" })
         setShowSubmissionAlert(true);
       }
 
     }
   };
-  const handleSubmit = async(event) => {
+  const handleSubmit = async (event) => {
 
     const id = Number(matchID);
     const team = Number(apiResponse.teamID);
-    
+
     console.log(id);
 
-    if(matchID != null && matchID != "" && matchID.length >= 5 && matchID.length <= 10)
-    {
-    setShowSubmissionAlert(false);
-    await captainservice.SubmitMatchID(apiToken, {gameID: id, teamID: team})
-    .then(res => { 
-      setSubmissionMsg({text: res.data, color: "success"})
-      setShowSubmissionAlert(true); 
-    })
-    .catch(err => { 
-      setSubmissionMsg({text: err.response.data, color: "danger"})
+    if (matchID != null && matchID != "" && matchID.length >= 5 && matchID.length <= 10) {
+      setShowSubmissionAlert(false);
+      await captainservice.SubmitMatchID(apiToken, { gameID: id, teamID: team })
+        .then(res => {
+          setSubmissionMsg({ text: res.data, color: "success" })
+          setShowSubmissionAlert(true);
+        })
+        .catch(err => {
+          setSubmissionMsg({ text: err.response.data, color: "danger" })
+          setShowSubmissionAlert(true);
+        });
+    }
+    else if (matchID != null && matchID && matchID.length < 5) {
+      setSubmissionMsg({ text: "gameID to short to be valid. a minimum of 5 characters is required", color: "danger" })
       setShowSubmissionAlert(true);
-    });
-  }
-  else if(matchID != null && matchID && matchID.length < 5){
-    setSubmissionMsg({text: "gameID to short to be valid. a minimum of 5 characters is required", color: "danger"})
-    setShowSubmissionAlert(true);
-  }
-  else if(matchID != null && matchID && matchID.length > 10) {
-    setSubmissionMsg({text: "gameID to long to be valid. a maximum of 10 characters is allowed", color: "danger"})
-    setShowSubmissionAlert(true);
-  }
+    }
+    else if (matchID != null && matchID && matchID.length > 10) {
+      setSubmissionMsg({ text: "gameID to long to be valid. a maximum of 10 characters is allowed", color: "danger" })
+      setShowSubmissionAlert(true);
+    }
   };
   //#endregion
 
@@ -96,15 +92,15 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   useEffect(() => {
     const team = [];
     const solo = apiResponse?.teamMembers.filter(member => member.teamMemberRole.roleID == 1)[0];
-    team.push(solo != undefined ? solo : { teamMemberRole: { playerID: null,teamCaptain: null,teamMemberID: null,teamMemberName: null,teamMemberPlatform: null,teamMemberRole: {roleID: 4, roleName: "Support"} } }); //SOLO
+    team.push(solo != undefined ? solo : { teamMemberRole: { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 4, roleName: "Support" } } }); //SOLO
     const jungle = apiResponse?.teamMembers.filter(member => member.teamMemberRole.roleID == 2)[0]
-    team.push(jungle != undefined ? jungle : {playerID: null,teamCaptain: null,teamMemberID: null,teamMemberName: null,teamMemberPlatform: null, teamMemberRole: { roleID: 2, roleName: "Jungle" } }); //JUNGLE
+    team.push(jungle != undefined ? jungle : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 2, roleName: "Jungle" } }); //JUNGLE
     const mid = apiResponse?.teamMembers.filter(member => member.teamMemberRole.roleID == 3)[0];
-    team.push(mid != undefined ? mid : {playerID: null,teamCaptain: null,teamMemberID: null,teamMemberName: null,teamMemberPlatform: null, teamMemberRole: { roleID: 3, roleName: "Mid" } }); //MID
+    team.push(mid != undefined ? mid : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 3, roleName: "Mid" } }); //MID
     const support = apiResponse?.teamMembers.filter(member => member.teamMemberRole.roleID == 4)[0];
-    team.push(support != undefined ? support : {playerID: null,teamCaptain: null,teamMemberID: null,teamMemberName: null,teamMemberPlatform: null, teamMemberRole: { roleID: 4, roleName: "Support" } }); //SUPPORT
+    team.push(support != undefined ? support : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 4, roleName: "Support" } }); //SUPPORT
     const adc = apiResponse?.teamMembers.filter(member => member.teamMemberRole.roleID == 5)[0];
-    team.push(adc != undefined ? adc : {playerID: null,teamCaptain: null,teamMemberID: null,teamMemberName: null,teamMemberPlatform: null, teamMemberRole: { roleID: 5, roleName: "Adc" } }); //ADC
+    team.push(adc != undefined ? adc : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 5, roleName: "Adc" } }); //ADC
 
     setTeamMembers(team);
 
@@ -112,56 +108,56 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
 
   const updateSwap = async (event) => {
 
-    const Roles = ["Solo","Jungle","Mid","Support","Adc"];
+    if (teamMembers[event.oldIndex]?.teamMemberID != null || teamMembers[event.newIndex]?.teamMemberID != null) {
+      const Roles = ["Solo", "Jungle", "Mid", "Support", "Adc"];
 
-    const items = Array.from(teamMembers);
-    //Set correct roles. swapping them in the array doesn't change the object value. 
-    items[event.oldIndex].teamMemberRole.roleID = event.newIndex + 1;
-    items[event.newIndex].teamMemberRole.roleID = event.oldIndex + 1;
-    items[event.oldIndex].teamMemberRole.roleName = Roles[event.newIndex];
-    items[event.newIndex].teamMemberRole.roleName = Roles[event.oldIndex];
-    //swap items at index
-    items[event.newIndex] = teamMembers[event.oldIndex];
-    items[event.oldIndex] = teamMembers[event.newIndex];
+      const items = Array.from(teamMembers);
+      //Set correct roles. swapping them in the array doesn't change the object value. 
+      items[event.oldIndex].teamMemberRole.roleID = event.newIndex + 1;
+      items[event.newIndex].teamMemberRole.roleID = event.oldIndex + 1;
+      items[event.oldIndex].teamMemberRole.roleName = Roles[event.newIndex];
+      items[event.newIndex].teamMemberRole.roleName = Roles[event.oldIndex];
+      //swap items at index
+      items[event.newIndex] = teamMembers[event.oldIndex];
+      items[event.oldIndex] = teamMembers[event.newIndex];
 
-    if(event.oldIndex != event.newIndex)
-    {
-      if(items[event.newIndex].teamMemberID != null)
-      {
-        const data = {
-          teamMemberID: items[event.newIndex].teamMemberID,
-          roleID: items[event.newIndex].teamMemberRole.roleID
-        };
-        //api call to update role
-        await captainservice.UpdatePlayerRole(apiToken, data).then(res => {  }).catch(err => { SetNote({msg: err.response, type: "bg-danger"}); SetNotify(true); });
+      if (event.oldIndex != event.newIndex) {
+        if (items[event.newIndex].teamMemberID != null) {
+          const data = {
+            teamMemberID: items[event.newIndex].teamMemberID,
+            roleID: items[event.newIndex].teamMemberRole.roleID
+          };
+          //api call to update role
+          await captainservice.UpdatePlayerRole(apiToken, data).then(res => { }).catch(err => { SetNote({ msg: err.response, type: "bg-danger" }); SetNotify(true); });
+        }
+        else if (items[event.oldIndex].teamMemberID != null) {
+          const data = {
+            teamMemberID: items[event.oldIndex].teamMemberID,
+            roleID: items[event.oldIndex].teamMemberRole.roleID
+          };
+          //api call to update role
+          await captainservice.UpdatePlayerRole(apiToken, data).then(res => { }).catch(err => { SetNote({ msg: err.response, type: "bg-danger" }); SetNotify(true); });
+        }
       }
-      else if(items[event.oldIndex].teamMemberID != null){
-        const data = {
-          teamMemberID: items[event.oldIndex].teamMemberID,
-          roleID: items[event.oldIndex].teamMemberRole.roleID
-        };
-        //api call to update role
-        await captainservice.UpdatePlayerRole(apiToken, data).then(res => {  }).catch(err => { SetNote({msg: err.response, type: "bg-danger"}); SetNotify(true); });
-      }
+
+      setTeamMembers(items);
     }
-
-    setTeamMembers(items);
   };
   //#endregion
 
   //#region EditTeamName
-  const [editing,setEditing] = useState(false);
-  const [teamName,setTeamName] = useState("");
-  const[oldName,setOldName] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [teamName, setTeamName] = useState("");
+  const [oldName, setOldName] = useState("");
   //handle change
   const handleEditTeamName = (event) => {
-      setTeamName(event.target.value);
-  }; 
+    setTeamName(event.target.value);
+  };
   //Set initial states
   useEffect(() => {
     setTeamName(apiResponse != null ? apiResponse.teamName : "Api Unavailable");
     setOldName(apiResponse != null ? apiResponse.teamName : "Api Unavailable");
-  }, []); 
+  }, []);
   //Buttons
   const editTeamName = () => {
     setEditing(true);
@@ -171,33 +167,31 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
     setTeamName(oldName);
     setShowTeamInfoAlert(false);
   };
-  const confirmNameEdit = async() => {
-    if(teamName != apiResponse.teamName)
-    {
+  const confirmNameEdit = async () => {
+    if (teamName != apiResponse.teamName) {
       //call api to update team
       const data = {
         teamID: apiResponse?.teamID,
         teamName: teamName,
       };
-      await captainservice.UpdateTeamInfo(apiToken, data).then(res => { setOldName(teamName); setShowTeamInfoAlert(false); setEditing(false);  })
-      .catch(err => { 
-        console.log(err.response);
-        if(err.response.status != 400)
-        {
-          SetNote({title: "Error", msg: "Oh oh something went wrong trying to update the teamname.", type: "bg-danger"}); 
-          SetNotify(true); 
-        }
-        else {
-          setMsgTeamInfo(err.response.data.TeamName[0]);
-          setShowTeamInfoAlert(true);
-        }
-      });
+      await captainservice.UpdateTeamInfo(apiToken, data).then(res => { setOldName(teamName); setShowTeamInfoAlert(false); setEditing(false); })
+        .catch(err => {
+          console.log(err.response);
+          if (err.response.status != 400) {
+            SetNote({ title: "Error", msg: "Oh oh something went wrong trying to update the teamname.", type: "bg-danger" });
+            SetNotify(true);
+          }
+          else {
+            setMsgTeamInfo(err.response.data.TeamName[0]);
+            setShowTeamInfoAlert(true);
+          }
+        });
     }
     else {
       setEditing(false);
     }
   };
-  const [msgTeamInfo,setMsgTeamInfo] = useState("Error msg");
+  const [msgTeamInfo, setMsgTeamInfo] = useState("Error msg");
   const [showTeamInfoAlert, setShowTeamInfoAlert] = useState(false);
   function TeamInfoAlert() {
     if (showTeamInfoAlert) {
@@ -213,11 +207,11 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   };
   //#endregion
 
- //#region notify
-const [notify,SetNotify] = useState(false);
-const [note,SetNote] = useState({msg : "", type: "", title: ""});
-const toggleNotify = () => SetNotify(!notify);
- //#endregion
+  //#region notify
+  const [notify, SetNotify] = useState(false);
+  const [note, SetNote] = useState({ msg: "", type: "", title: "" });
+  const toggleNotify = () => SetNotify(!notify);
+  //#endregion
 
   if (status != null) {
     return (<><DefaultErrorPage statusCode={status} title={errMsg} /></>);
@@ -238,7 +232,7 @@ const toggleNotify = () => SetNotify(!notify);
                     <Card.Body className="">
                       <h2 className="font-weight-bold">SUBMIT MATCH</h2>
                       <Form.Group className="">
-                        <Form.Control type="number" placeholder="Match ID..." className="mb-2" onChange={handleChange} maxLength={10}/>
+                        <Form.Control type="number" placeholder="Match ID..." className="mb-2" onChange={handleChange} maxLength={10} />
                         <Button variant="primary" size="lg" block onClick={handleSubmit}>Submit</Button>
                       </Form.Group>
                       <Row><Col><SubmissionAlert /></Col></Row>
@@ -256,18 +250,18 @@ const toggleNotify = () => SetNotify(!notify);
                           <Col md={3} xs={3} className="my-auto p-0"><h5 className="font-weight-bold mb-0 TeamInfoTitle">Name:</h5></Col>
                           <Col md={7} xs={7} className="my-auto p-0">
                             <Form.Group className="my-auto" controlId="validationCustom01">
-                              <Form.Control type="text" value={teamName} onChange={handleEditTeamName} placeholder={"Teamname..."} className="TeamInfoText" disabled={!editing} required/>
+                              <Form.Control type="text" value={teamName} onChange={handleEditTeamName} placeholder={"Teamname..."} className="TeamInfoText" disabled={!editing} required />
                             </Form.Group>
                           </Col>
                           <Col className="my-auto p-0 ml-2">
-                            <a className="TeamInfoIcon my-auto Clickable">{editing ? <FaCheck color={"green"} className="mr-1" onClick={confirmNameEdit}/> : <FaEdit onClick={editTeamName}/>}</a>{editing ?  <a onClick={cancelNameEdit} className="TeamInfoIcon my-auto Clickable"><FaBan color={"red"}/></a> : <></>}
+                            <a className="TeamInfoIcon my-auto Clickable">{editing ? <FaCheck color={"green"} className="mr-1" onClick={confirmNameEdit} /> : <FaEdit onClick={editTeamName} />}</a>{editing ? <a onClick={cancelNameEdit} className="TeamInfoIcon my-auto Clickable"><FaBan color={"red"} /></a> : <></>}
                           </Col>
                         </Row>
                         <Row>
                           <Col md={3} xs={3} className="my-auto p-0"><h5 className="font-weight-bold mb-0 TeamInfoTitle">Logo:</h5></Col>
                           <Col md={7} xs={7} className="my-auto p-0"><Image src={TeamBadge} className="MainTeamImage" draggable={false}></Image></Col>
                           <Col className="my-auto p-0 ml-2">
-                            <a className="TeamInfoIcon my-auto Disabled"><FaEdit color={"grey"}/></a>
+                            <a className="TeamInfoIcon my-auto Disabled"><FaEdit color={"grey"} /></a>
                           </Col>
                         </Row>
                         <Row><Col><TeamInfoAlert /></Col></Row>
@@ -314,7 +308,7 @@ const toggleNotify = () => SetNotify(!notify);
                           delay={200}>
 
                           {teamMembers.map((member, index) => (
-                            <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse?.teamID}/>
+                            <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse?.teamID} />
                           ))}
                         </ReactSortable>
                         <Row><Col><h6 className="text-muted float-right ExtraInfoText">Drag and drop players to swap their roles.</h6></Col></Row>
@@ -334,7 +328,7 @@ const toggleNotify = () => SetNotify(!notify);
         <Footer />
         {/* Notification Toast */}
 
-        <Toast show={notify} onClose={() => SetNotify(false)} delay={3000} autohide style={{position: 'fixed',top: 5,right: 5,}}>
+        <Toast show={notify} onClose={() => SetNotify(false)} delay={3000} autohide style={{ position: 'fixed', top: 5, right: 5, }}>
           <Toast.Header className={"text-white " + note?.type}>
             <img
               src="/images/SNL_Navbar_Logo.png"

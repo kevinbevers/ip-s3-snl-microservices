@@ -29,8 +29,9 @@ CREATE TABLE `TableQueue` (
   `GameID` int NOT NULL,
   `QueueState` bit(1) NOT NULL,
   `QueueDate` datetime NOT NULL,
+  `PatchVersion` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`QueueID`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -42,4 +43,4 @@ CREATE TABLE `TableQueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-03 17:04:12
+-- Dump completed on 2020-12-31 17:02:59

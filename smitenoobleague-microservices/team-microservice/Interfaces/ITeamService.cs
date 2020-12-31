@@ -19,6 +19,9 @@ namespace team_microservice.Interfaces
         Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByTeamIdAsync(int teamID);
         Task<ActionResult> UpdateTeamAsCaptainSync(TeamSubmission teamSubmisssion);
         Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByCaptainAccountIdAsync(string captainID);
+        //used for match stats saving
+        Task<ActionResult<TeamWithDetails>> GetTeamByMatchPlayersAsync(List<int> playersInMatch);
+        Task<ActionResult<string>> GetCaptainEmailAsync(int captainTeamMemberID);
 
         //Admin functions
         Task<ActionResult> UpdateTeamAsAdminAsync(TeamSubmissionAdmin teamSubmisssion);
@@ -29,6 +32,6 @@ namespace team_microservice.Interfaces
         Task<ActionResult> UpdateTeamMemberRole(UpdateRole update);
         Task<ActionResult> AddTeamMemberToTeamAsync(TeamMemberSubmission teamMemberSubmission);
         Task<ActionResult> UpdateTeamMemberToTeamAsync(TeamMemberSubmission teamMemberSubmission);
-        Task<ActionResult> DeleteTeamMemberFromTeamSync(int teamMemberID);
+        Task<ActionResult> DeleteTeamMemberFromTeamSync(int teamMemberID); 
     }
 }

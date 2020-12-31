@@ -16,15 +16,13 @@ namespace division_microservice.Services
     public class DivisionService : IDivisionService
     {
         private readonly SNL_Division_DBContext _db;
-        private readonly IScheduleService _scheduleService;
         private readonly ILogger<DivisionService> _logger;
         private readonly IValidationService _validationService;
         private readonly IExternalServices _externalServices;
 
-        public DivisionService(SNL_Division_DBContext db, ILogger<DivisionService> logger, IScheduleService scheduleService, IValidationService validationService, IExternalServices externalServices)
+        public DivisionService(SNL_Division_DBContext db, ILogger<DivisionService> logger, IValidationService validationService, IExternalServices externalServices)
         {
             _db = db;
-            _scheduleService = scheduleService;
             _logger = logger;
             _validationService = validationService;
             _externalServices = externalServices;
@@ -253,23 +251,19 @@ namespace division_microservice.Services
 
         private async Task<bool> DeleteAllSchedulesForDivisionByIdAsync(int divisionID)
         {
-            //no try catch neccesary let it throw exception when something goes wrong and catch it in the parent method
-            List<TableSchedule> schedulestoDelete = await _db.TableSchedules.Where(s => s.ScheduleDivisionId == divisionID).ToListAsync();
-            if (schedulestoDelete == null || schedulestoDelete.Count() == 0)
+            try
             {
-                return true; //no schedules found
-            }
-            else
-            {
-                _db.RemoveRange(schedulestoDelete);
-                //get all schedule ids from the scheduleservice
-                ActionResult<IEnumerable<int>> actionResult = await _scheduleService.GetAllScheduleIDsByDivisionIdAsync(divisionID);
-                //if response was OK. then the response is valid to use
-                ObjectResult Result = actionResult.Result as ObjectResult;
-                if (Result.StatusCode == 200)
+                //no try catch neccesary let it throw exception when something goes wrong and catch it in the parent method
+                List<TableSchedule> schedulestoDelete = await _db.TableSchedules.Where(s => s.ScheduleDivisionId == divisionID).ToListAsync();
+                if (schedulestoDelete == null || schedulestoDelete.Count() == 0)
                 {
+                    return true; //no schedules found
+                }
+                else
+                {
+                    _db.RemoveRange(schedulestoDelete);
                     //for each schedule that was found remove the matchups from the matchup table
-                    IEnumerable<int> scheduleIds = (IEnumerable<int>)Result.Value;
+                    IEnumerable<int> scheduleIds = await _db.TableSchedules.Where(s => s.ScheduleDivisionId == divisionID).Select(s => s.ScheduleId).ToListAsync();
                     foreach (int id in scheduleIds)
                     {
                         List<TableMatchup> matchupsToDelete = await _db.TableMatchups.Where(m => m.ScheduleId == id).ToListAsync();
@@ -283,10 +277,10 @@ namespace division_microservice.Services
 
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+            }
+            catch
+            {
+                return false;
             }
         }
         #endregion

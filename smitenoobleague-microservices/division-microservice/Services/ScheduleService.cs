@@ -19,13 +19,15 @@ namespace division_microservice.Services
         private readonly ILogger<ScheduleService> _logger;
         private readonly IValidationService _validationService;
         private readonly IExternalServices _externalServices;
+        private readonly IDivisionService _divisionService;
 
-        public ScheduleService(SNL_Division_DBContext db, ILogger<ScheduleService> logger, IValidationService validationService, IExternalServices externalServices)
+        public ScheduleService(SNL_Division_DBContext db, ILogger<ScheduleService> logger, IValidationService validationService, IExternalServices externalServices, IDivisionService divisionService)
         {
             _db = db;
             _logger = logger;
             _validationService = validationService;
             _externalServices = externalServices;
+            _divisionService = divisionService;
         }
 
         public async Task<ActionResult> CreateScheduleForDivisionAsync(ScheduleCreation values)
@@ -203,6 +205,86 @@ namespace division_microservice.Services
                 return new ObjectResult("Something went wrong trying to delete a schedule by id") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
+
+        public async Task<ActionResult<Schedule>> GetCurrentScheduleByDivisionIdAsync(int divisionID)
+        {
+            try
+            {
+
+                ActionResult<Division> response = await _divisionService.GetDivisionByIdAsync(divisionID);
+                var processedResult = response.Result as ObjectResult;
+                if (processedResult.StatusCode == 200)
+                {
+                    //can't be null if statusscode is 200
+                    Division division = (Division)processedResult.Value;
+
+                    int scheduleID = (int)division.CurrentScheduleID;
+
+                    TableSchedule fs = await _db.TableSchedules.Where(s => s.ScheduleId == scheduleID).FirstOrDefaultAsync();
+
+                    if (fs == null)
+                    {
+                        return new ObjectResult("No schedule found with the divisions currentScheduleID") { StatusCode = 404 };//NOT FOUND
+                    }
+                    else
+                    {
+                        IList<Team> divisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(fs.ScheduleDivisionId);
+
+                        Schedule schedule = new Schedule
+                        {
+                            ScheduleID = fs.ScheduleId,
+                            ScheduleName = fs.ScheduleName,
+                            ScheduleStartDate = fs.ScheduleStartDate,
+                            DivisionID = fs.ScheduleDivisionId,
+                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate), //number of weeks gone by. remainder of 6 days
+                            Matchups = await GetMatchups(fs.ScheduleId, divisionTeams)
+                        };
+
+                        return new ObjectResult(schedule) { StatusCode = 200 };//OK
+                    }
+                }
+                else
+                {
+                    return new ObjectResult("No division found for the given divisionID") { StatusCode = 404 };//NOT FOUND
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get a schedule by divisionID");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get a schedule by divisionID") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
+        public async Task<ActionResult> UpdateMatchUpScoreAsync(int matchupID, string scoreText)
+        {
+            try
+            {
+                TableMatchup matchup = await _db.TableMatchups.Where(mup => mup.MatchupId == matchupID).FirstOrDefaultAsync();
+
+                if (matchup != null)
+                {
+                    matchup.Score = scoreText;
+                    _db.TableMatchups.Update(matchup);
+                    await _db.SaveChangesAsync();
+
+                    return new ObjectResult("Matchup score text updated successfully") { StatusCode = 200 };//OK
+                }
+                else
+                {
+                    return new ObjectResult("no matchup found for the given matchupID") { StatusCode = 404 };//NOT FOUND
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to update matchup score text");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to update matchup score text") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
         #region methods
         private int GetCurrentWeek(DateTime startDate)
         {
@@ -211,6 +293,7 @@ namespace division_microservice.Services
         private async Task<IEnumerable<Matchup>> GetMatchups(int scheduleID, IList<Team> divisionTeams)
         {
             List<TableMatchup> foundMatchups = await _db.TableMatchups.Where(matchup => matchup.ScheduleId == scheduleID).OrderBy(m => m.WeekNumber).ToListAsync();
+
             //get all the teams for this division
             List<Matchup> matchupsToReturn = new List<Matchup>();
 
@@ -219,7 +302,7 @@ namespace division_microservice.Services
                 {
                     MatchupID = fs.MatchupId,
                     ByeWeek = fs.ByeGame,
-                    Score = "0 - 0", //calculate later. probably store it in the matchup table
+                    Score = fs.Score, //calculate later. probably store it in the matchup table
                     WeekNumber = fs.WeekNumber,
                     HomeTeam = divisionTeams.Where(t => t.TeamID == fs.HomeTeamId).First(),
                     AwayTeam = divisionTeams.Where(t => t.TeamID == fs.AwayTeamId).First()

@@ -25,22 +25,22 @@ app.post('/schedulematch', function (req, res) {
 
   const date = new Date(req.body.time);
   const id = req.body.id;
-  console.log(date);
+  const patch = req.body.patch;
 
-  ScheduleGame(date, id);
+  ScheduleGame(date, patch, id);
 
   res.send(`Game with ID: ${id} added to scheduling. Date: ${date}`);
 });
 
 //get version of scheduling expected: /schedulematch/1111111111/year-month-dayT00:00:00 //this get's called by the smite api 
 //date should be in the future.
-app.get('/schedulematch/:id/:time', function (req, res) {
+app.get('/schedulematch/:id/:patch/:time', function (req, res) {
 
   const date = new Date(req.params.time);
   const id = req.params.id;
-  console.log(date);
+  const patch = req.params.patch;
 
-  ScheduleGame(date, id);
+  ScheduleGame(date, patch, id);
 
   res.send(`Game with ID: ${id} added to scheduling. Date: ${date}`);
 });
@@ -50,19 +50,17 @@ const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port: ${port}`));
 
 //Methods / functions
-function ScheduleGame(date, id) {
+function ScheduleGame(date, patch, id) {
   schedule.scheduleJob(date, function () {
-    //teamid part not implemented yet
-    teamid = 0;
     //send the gameID to the smiteapi microservice
-    CallSmiteApi(id, teamid, date);
+    CallSmiteApi(id, patch, date);
   });
 }
 
-function CallSmiteApi(id, teamid, date) {
+function CallSmiteApi(id, patch, date) {
   axios.post(process.env.API_URL + '/queuedmatch', {
     gameID: id,
-    teamID: teamid
+    patchNumber: patch
   })
     .then(res => {
       //log the response
@@ -78,7 +76,7 @@ function CallSmiteApi(id, teamid, date) {
 
       //reschedule with + 2 hours
       date = date.addHours(2);
-      ScheduleGame(date, id);
+      ScheduleGame(date, patch, id);
     }).catch(error => { console.error(error); });
 }
 
@@ -95,15 +93,16 @@ function GetJobsFromDB() {
 
         const id = game.gameID;
         const date = new Date(game.scheduleTime);
+        const patch = game.patchNumber;
         //still something wrong with this date sorting.
         if (Date.parse(date) <= Date.now()) {
           console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
           //make api call to get matchdata. in that call it will also update the database
-          CallSmiteApi(id, 0, date); //teamid not yet implemented
+          CallSmiteApi(id, patch, date);
         }
         else {
           console.log("Added " + id + " as scheduled job @: " + date);
-          ScheduleGame(date, id);
+          ScheduleGame(date, patch, id);
         }
       });
     })

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using team_microservice.Classes;
 //database
 using team_microservice.Team_DB;
 using Microsoft.EntityFrameworkCore;
@@ -60,18 +61,26 @@ namespace team_microservice
                         mySqlOptions => mySqlOptions
                             .CharSetBehavior(CharSetBehavior.NeverAppend)));
 
+            string servicekey = Environment.GetEnvironmentVariable("InternalServiceKey");
+            //InternalServices only
+            services.AddSingleton(new InternalServicesKey { Key = servicekey }); //access internalservice key where needed
+            services.AddSingleton(new InternalServicesOnly(new InternalServicesKey { Key = servicekey }));//used for controller filter / auth of internal services
+
             //add services
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IValidationService, ValidationService>();
             services.AddScoped<IExternalServices, ExternalServices>();
 
+            //Auth
+            string domain = Environment.GetEnvironmentVariable("Auth0Domain");
+            string audience = Environment.GetEnvironmentVariable("Auth0Audience");
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    
-                    options.Authority = "https://smitenoobleague.eu.auth0.com/";
-                    options.Audience = "smitenoobleague";
+
+                    options.Authority = domain;
+                    options.Audience = audience;
                     // If the access token does not have a `sub` claim, `User.Identity.Name` will be `null`. Map it to a different claim by setting the NameClaimType below.
                     options.TokenValidationParameters = new TokenValidationParameters
                     {

@@ -11,5 +11,6 @@ namespace smiteapi_microservice.Smiteapi_DB
         public int GameId { get; set; }
         public bool QueueState { get; set; }
         public DateTime QueueDate { get; set; }
+        public string PatchVersion { get; set; }
     }
 }

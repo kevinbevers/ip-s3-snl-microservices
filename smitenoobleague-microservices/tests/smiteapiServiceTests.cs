@@ -164,7 +164,7 @@ namespace service_tests
             var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
 
             //Act
-            var result = await controller.Post(new MatchSubmission {gameID = 1234, teamID = 0 });
+            var result = await controller.Post(1234);
 
             //Assert
             var response = Assert.IsAssignableFrom<ActionResult>(result) as ObjectResult;
@@ -188,7 +188,7 @@ namespace service_tests
             var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
 
             //Act
-            var result = await controller.Post(new MatchSubmission { gameID = 12323124, teamID = 0 });
+            var result = await controller.Post(12323124);
 
             //Assert
             var response = Assert.IsAssignableFrom<ActionResult>(result) as ObjectResult;
@@ -212,7 +212,7 @@ namespace service_tests
             var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger));
 
             //Act
-            var result = await controller.Post(new MatchSubmission { gameID = 5432, teamID = 0 });
+            var result = await controller.Post(5432);
 
             //Assert
             var response = Assert.IsAssignableFrom<ActionResult>(result) as ObjectResult;

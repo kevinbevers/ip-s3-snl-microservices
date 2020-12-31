@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using smiteapi_microservice.Classes;
 using Microsoft.Extensions.Options;
+using smiteapi_microservice.Models.Internal;
 //#optimize / make it cleaner in the future
 namespace smiteapi_microservice.Services
 {
@@ -59,44 +60,41 @@ namespace smiteapi_microservice.Services
             }
         }
 
-        public async Task<ActionResult> ProcessMatchIdAsync(MatchSubmission submission)
+        public async Task<ActionResult> ProcessMatchIdAsync(int gameID)
         {
             try
             {
-                if (submission.teamID != null)
-                {
+
                     //if gameID is already submitted
-                    if (await _db.TableQueues.Where(game => game.GameId == submission.gameID).CountAsync() > 0)
+                    if (await _db.TableQueues.Where(game => game.GameId == gameID).CountAsync() > 0)
                     {
                         return new ObjectResult(ResponeText_alreadySubmitted) { StatusCode = 400 }; //OK
                     }
                     else
                     {
-                        if (submission.gameID == null)
+                        if (gameID == null)
                         {
                             return new ObjectResult(ResponeText_gameIdEmpty) { StatusCode = 400 }; //BAD REQUEST
                         }
                         else
                         {
                             //try and get matchdata from smiteapi
-                            MatchData match = await _hirezApi.GetMatchDetailsAsync((int)submission.gameID);
-
+                            MatchData match = await _hirezApi.GetMatchDetailsAsync((int)gameID);
+                            ApiPatchInfo patch = await _hirezApi.GetCurrentPatchInfoAsync();
+                            MatchSubmission ms = new MatchSubmission { gameID = gameID, patchNumber = patch.version_string };
+                       
+                       
                             //check return message from api. if the return msg is null the match is valid
                             if (match.ret_msg != null)
                             {
-                                return await ProcessReturnMessageFromSmiteApiAsync(submission, match);
+                                return await ProcessReturnMessageFromSmiteApiAsync(ms, match);
                             }
                             else
                             {
-                                return await SaveGameIdAndSendToStatsAsync(submission);
+                                return await SaveGameIdAndSendToStatsAsync(ms, match);
                             }
                         }
                     }
-                }
-                else
-                {
-                    return new ObjectResult("Team identity unknown") { StatusCode = 400 }; //BAD REQUEST
-                }
             }
             catch(Exception ex)
             {
@@ -123,7 +121,7 @@ namespace smiteapi_microservice.Services
                 }
                 else
                 {
-                    return await SaveGameIdAndSendToStatsAsync(submission);
+                    return await SaveGameIdAndSendToStatsAsync(submission, match);
                 }
             }
             catch(Exception ex)
@@ -148,7 +146,7 @@ namespace smiteapi_microservice.Services
                     //if it hasn't been ran yet.
                     if (m.QueueState == false)
                     {
-                        queuedMatches.Add(new QueuedMatch { gameID = m.GameId, scheduleTime = m.QueueDate });
+                        queuedMatches.Add(new QueuedMatch { gameID = m.GameId, scheduleTime = m.QueueDate, patchNumber = m.PatchVersion });
                     }
                 }
 
@@ -164,7 +162,7 @@ namespace smiteapi_microservice.Services
         }
 
         #region Methods
-        private async Task<ActionResult> SaveGameIdAndSendToStatsAsync(MatchSubmission submission)
+        private async Task<ActionResult> SaveGameIdAndSendToStatsAsync(MatchSubmission submission, MatchData match)
         {
             //Add or update the submission entry in the database
             TableQueue entry = await _db.TableQueues.Where(entry => entry.GameId == submission.gameID).FirstOrDefaultAsync();
@@ -178,7 +176,7 @@ namespace smiteapi_microservice.Services
             else
             {
                 //Add the match to the queue table with QueueState true so that it will never get scheduled and we can check if the match has already been submitted.
-                _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = DateTime.UtcNow, QueueState = true });
+                _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = DateTime.UtcNow, QueueState = true, PatchVersion = submission.patchNumber });
             }
             await _db.SaveChangesAsync();
 
@@ -197,7 +195,7 @@ namespace smiteapi_microservice.Services
                 string plannedDate = match.EntryDate.AddDays(7).ToString("s");
 
                 //add a schedule queue object to the schedule queue database table
-                _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = match.EntryDate.AddDays(7), QueueState = false });
+                _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = match.EntryDate.AddDays(7), QueueState = false, PatchVersion = submission.patchNumber });
                 await _db.SaveChangesAsync();
 
                 //call the nodejs schedule api

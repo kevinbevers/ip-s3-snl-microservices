@@ -19,6 +19,8 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.OpenApi.Models;
 using division_microservice.Interfaces;
 using division_microservice.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace division_microservice
 {
@@ -59,7 +61,25 @@ namespace division_microservice
             services.AddScoped<IDivisionService, DivisionService>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<IValidationService, ValidationService>();
-            
+
+            //Auth
+            string domain = Environment.GetEnvironmentVariable("Auth0Domain");
+            string audience = Environment.GetEnvironmentVariable("Auth0Audience");
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+
+                    options.Authority = domain;
+                    options.Audience = audience;
+                    // If the access token does not have a `sub` claim, `User.Identity.Name` will be `null`. Map it to a different claim by setting the NameClaimType below.
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "Role",
+                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                    };
+                });
+
 
             services.AddSwaggerGen(c =>
             {

@@ -5,5 +5,6 @@ namespace smiteapi_microservice.Models.External
     {
         public int gameID { get; set; }
         public DateTime scheduleTime { get; set; }
+        public string patchNumber { get; set; }
     }
 }
