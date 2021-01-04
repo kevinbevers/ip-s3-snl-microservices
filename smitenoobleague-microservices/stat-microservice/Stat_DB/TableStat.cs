@@ -59,5 +59,14 @@ namespace stat_microservice.Stat_DB
         public int? IgStructureDamage { get; set; }
         public int? IgTowersDestroyed { get; set; }
         public string IgRegion { get; set; }
+        public bool? IgFirstBlood { get; set; }
+        public int? IgHighestMultiKill { get; set; }
+        public int? IgObjectiveAssists { get; set; }
+        public int? IgPhoenixesDestroyed { get; set; }
+        public int? IgTimeSpentDeathInSeconds { get; set; }
+        public int? IgPentas { get; set; }
+        public int? IgQuadras { get; set; }
+        public int? IgTriples { get; set; }
+        public int? IgDoubles { get; set; }
     }
 }

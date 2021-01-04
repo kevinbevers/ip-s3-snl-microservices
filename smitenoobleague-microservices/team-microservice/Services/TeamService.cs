@@ -467,7 +467,7 @@ namespace team_microservice.Services
                     if (teamMember != null)
                     {
                         //get the team
-                        TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamCaptainId == captain.TeamMemberId).FirstOrDefaultAsync();
+                        TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == teamMember.TeamMemberTeamId).FirstOrDefaultAsync();
                         //get all the team members
                         List<TableTeamMember> teamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == foundTeam.TeamId).OrderBy(m => m.TeamMemberRole).ToListAsync();
                         //create a new list of members and give each teamMember it's role and transform to external model

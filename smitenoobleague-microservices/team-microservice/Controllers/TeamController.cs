@@ -61,7 +61,7 @@ namespace team_microservice.Controllers
         // POST team-service/captainmail
         [HttpGet("captainmailbyid/{captainTeamMemberID}")]
         [ServiceFilter(typeof(InternalServicesOnly))]
-        public async Task<ActionResult<string>> GetCaptainEmailWithCaptainTeamMemberID([FromQuery] int captainTeamMemberID)
+        public async Task<ActionResult<string>> GetCaptainEmailWithCaptainTeamMemberID(int captainTeamMemberID)
         {
             return await _teamService.GetCaptainEmailAsync(captainTeamMemberID);
         }

@@ -60,16 +60,17 @@ namespace smiteapi_microservice
                             .CharSetBehavior(CharSetBehavior.NeverAppend)));
 
             //add API dev authorization
-            //services.AddSingleton<IHirezApiContext>(new HirezApiContextV2 (Configuration.GetSection("Credentials").Get<ApiCredentials>()));
             services.AddSingleton<IHirezApiContext>(new HirezApiContextV2(new ApiCredentials { DevId = Smite_Api_DevId, AuthKey = Smite_Api_AuthKey }));
 
-            //inject gatewaykey from appsettings.json UNUSED if api's are not exposed
-            //services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
-            //services.AddScoped<GatewayOnly>();
+            string servicekey = Environment.GetEnvironmentVariable("InternalServiceKey");
+            //InternalServices only
+            services.AddSingleton(new InternalServicesKey { Key = servicekey }); //access internalservice key where needed
+            services.AddSingleton(new InternalServicesOnly(new InternalServicesKey { Key = servicekey }));//used for controller filter / auth of internal services
 
             //add Scoped Services
             services.AddScoped<IHirezApiService, HirezApiService>();
             services.AddScoped<IMatchService, MatchService>();
+            services.AddScoped<IExternalServices, ExternalServices>();
 
             //Auth
             string domain = Environment.GetEnvironmentVariable("Auth0Domain");

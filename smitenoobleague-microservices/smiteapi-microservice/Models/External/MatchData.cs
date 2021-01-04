@@ -74,15 +74,19 @@ namespace smiteapi_microservice.Models.External
             //Extra stats
             public bool FirstBlood { get; set; }
             public int? TowersDestroyed { get; set; }
+            public int? PhoenixesDestroyed { get; set; }
             public int? WardsPlaced { get; set; }
             public int? StructureDamage { get; set; }
             public int? MinionDamage { get; set; }
             public int? DistanceTravelled { get; set; }
             public string Region { get; set; }
-
-
-
-
+            public int? HighestMultiKill { get; set; }
+            public int? ObjectiveAssists { get; set; }
+            public int? TimeSpentDeathInSeconds { get; set; }
+            public int? Pentas { get; set; }
+            public int? Quadras { get; set; }
+            public int? Triples { get; set; }
+            public int? Doubles { get; set; }
         }
     }
 }

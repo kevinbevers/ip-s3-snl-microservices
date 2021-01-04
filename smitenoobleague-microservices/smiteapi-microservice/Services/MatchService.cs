@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,6 +21,7 @@ namespace smiteapi_microservice.Services
         //services
         private readonly SNL_Smiteapi_DBContext _db;
         private readonly IHirezApiService _hirezApi;
+        private readonly IExternalServices _externalServices;
         //logging
         private readonly ILogger<MatchService> _logger;
         //gateway key
@@ -31,7 +32,7 @@ namespace smiteapi_microservice.Services
         private readonly string ResponseText_MatchDetailsHidden = "Matchdata not yet available. The data will be added once it becomes available at"; //Date will be added after this
         private readonly string ResponseText_MatchDetailsAdded = "Matchdata was added to our database";
 
-        public MatchService(SNL_Smiteapi_DBContext db, IHirezApiService hirezApi, ILogger<MatchService> logger) //, IOptions<GatewayKey> gatewayKey
+        public MatchService(SNL_Smiteapi_DBContext db, IHirezApiService hirezApi, ILogger<MatchService> logger, IExternalServices externalServices)
         {
             //database
             _db = db;
@@ -39,19 +40,20 @@ namespace smiteapi_microservice.Services
             _hirezApi = hirezApi;
             //logger
             _logger = logger;
-            //key to access api's
-            //_gatewayKey = gatewayKey.Value;
+            //external services
+            _externalServices = externalServices;
+
         }
 
-        public async Task<ActionResult<MatchData>> GetRawMatchDataAsync(int gameID)
+        public async Task<ActionResult<MatchData>> GetRawMatchDataAsync(int? gameID)
         {
             try
             {
-                var match = await _hirezApi.GetMatchDetailsAsync(gameID);
+                var match = await _hirezApi.GetMatchDetailsAsync((int)gameID);
 
                 return match;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //log the error
                 _logger.LogError(ex, "Something went wrong trying to process a submitted gameID");
@@ -60,43 +62,42 @@ namespace smiteapi_microservice.Services
             }
         }
 
-        public async Task<ActionResult> ProcessMatchIdAsync(int gameID)
+        public async Task<ActionResult> ProcessMatchIdAsync(int? gameID)
         {
             try
             {
-
-                    //if gameID is already submitted
-                    if (await _db.TableQueues.Where(game => game.GameId == gameID).CountAsync() > 0)
+                //if gameID is already submitted
+                if (await _db.TableQueues.Where(game => game.GameId == gameID).CountAsync() > 0)
+                {
+                    return new ObjectResult(ResponeText_alreadySubmitted) { StatusCode = 400 }; //OK
+                }
+                else
+                {
+                    if (gameID == null)
                     {
-                        return new ObjectResult(ResponeText_alreadySubmitted) { StatusCode = 400 }; //OK
+                        return new ObjectResult(ResponeText_gameIdEmpty) { StatusCode = 400 }; //BAD REQUEST
                     }
                     else
                     {
-                        if (gameID == null)
+                        //try and get matchdata from smiteapi
+                        MatchData match = await _hirezApi.GetMatchDetailsAsync((int)gameID);
+                        ApiPatchInfo patch = await _hirezApi.GetCurrentPatchInfoAsync();
+                        MatchSubmission ms = new MatchSubmission { gameID = gameID, patchNumber = patch.version_string };
+
+
+                        //check return message from api. if the return msg is null the match is valid
+                        if (match.ret_msg != null)
                         {
-                            return new ObjectResult(ResponeText_gameIdEmpty) { StatusCode = 400 }; //BAD REQUEST
+                            return await ProcessReturnMessageFromSmiteApiAsync(ms, match);
                         }
                         else
                         {
-                            //try and get matchdata from smiteapi
-                            MatchData match = await _hirezApi.GetMatchDetailsAsync((int)gameID);
-                            ApiPatchInfo patch = await _hirezApi.GetCurrentPatchInfoAsync();
-                            MatchSubmission ms = new MatchSubmission { gameID = gameID, patchNumber = patch.version_string };
-                       
-                       
-                            //check return message from api. if the return msg is null the match is valid
-                            if (match.ret_msg != null)
-                            {
-                                return await ProcessReturnMessageFromSmiteApiAsync(ms, match);
-                            }
-                            else
-                            {
-                                return await SaveGameIdAndSendToStatsAsync(ms, match);
-                            }
+                            return await SaveGameIdAndSendToStatsAsync(ms, match);
                         }
                     }
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //log the error
                 _logger.LogError(ex, "Something went wrong trying to process a submitted gameID");
@@ -113,7 +114,7 @@ namespace smiteapi_microservice.Services
                 MatchData match = await _hirezApi.GetMatchDetailsAsync((int)submission.gameID);
 
                 //check return message from api. if the return msg is null the match is valid
-                if (match.ret_msg != null)
+                if (match.ret_msg != null && match.ret_msg != "Not all playerdata is available for this match because 1 of the players has their profile hidden.")
                 {
                     //something went wrong even when the matchData should have been available. because it is 7 days later
                     return new ObjectResult(match.ret_msg) { StatusCode = 404 }; //BAD REQUEST
@@ -124,7 +125,7 @@ namespace smiteapi_microservice.Services
                     return await SaveGameIdAndSendToStatsAsync(submission, match);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //log the error
                 _logger.LogError(ex, "Something went wrong trying execute scheduledjob");
@@ -152,7 +153,7 @@ namespace smiteapi_microservice.Services
 
                 return queuedMatches;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //log the error
                 _logger.LogError(ex, "Something went wrong getting all scheduled gameIds from the database");
@@ -181,8 +182,9 @@ namespace smiteapi_microservice.Services
             await _db.SaveChangesAsync();
 
             //send data to stat service
+            return await _externalServices.SaveMatchdataToStatService(match);
 
-            return new ObjectResult(ResponseText_MatchDetailsAdded) { StatusCode = 201 }; //CREATED
+            //return new ObjectResult(ResponseText_MatchDetailsAdded) { StatusCode = 201 }; //CREATED
         }
 
         private async Task<ActionResult> ProcessReturnMessageFromSmiteApiAsync(MatchSubmission submission, MatchData match)
@@ -229,7 +231,7 @@ namespace smiteapi_microservice.Services
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //log the error
                 _logger.LogError(ex, "Something went wrong calling the Scheduling Service");

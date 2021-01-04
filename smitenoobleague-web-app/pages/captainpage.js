@@ -58,13 +58,12 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   const handleSubmit = async (event) => {
 
     const id = Number(matchID);
-    const team = Number(apiResponse.teamID);
 
     console.log(id);
 
     if (matchID != null && matchID != "" && matchID.length >= 5 && matchID.length <= 10) {
       setShowSubmissionAlert(false);
-      await captainservice.SubmitMatchID(apiToken, { gameID: id, teamID: team })
+      await captainservice.SubmitMatchID(apiToken, id)
         .then(res => {
           setSubmissionMsg({ text: res.data, color: "success" })
           setShowSubmissionAlert(true);

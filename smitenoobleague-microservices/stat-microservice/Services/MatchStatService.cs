@@ -48,7 +48,7 @@ namespace stat_microservice.Services
                 List<int> IdsOfPlayerInMatchLosers = new List<int>();
                 //Add All player ids to 1 array of ints
                 match.Winners.ForEach(p => IdsOfPlayerInMatchWinners.Add((int)p.player.PlayerID));
-                match.Winners.ForEach(p => IdsOfPlayerInMatchLosers.Add((int)p.player.PlayerID));
+                match.Losers.ForEach(p => IdsOfPlayerInMatchLosers.Add((int)p.player.PlayerID));
                 //Call team service to get the teams that where in this match.
                 TeamWithDetails winnerTeam = await _externalServices.GetTeamByPlayersAsync(IdsOfPlayerInMatchWinners);
                 TeamWithDetails loserTeam = await _externalServices.GetTeamByPlayersAsync(IdsOfPlayerInMatchLosers);
@@ -70,22 +70,46 @@ namespace stat_microservice.Services
                     string loserCaptainMail = await _externalServices.GetCaptainEmailWithCaptainTeamMemberIDAsync(idLoser);
                     #endregion
 
+                    #region check if there is a ret_msg from the match. 
+                    if (match.ret_msg != null)
+                    {
+                        string reason = match.ret_msg.ToString();
+                        await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, reason);
+
+                        return new ObjectResult(match.ret_msg) { StatusCode = 400 }; //ex. Not all playerdata is available for this match because 1 of the players has their profile hidden.
+                    }
+                    #endregion
+
                     #region check if the played match is a conquest game with drafts
                     //check if the match is a custom conquest match.
                     if (match.GamemodeID != 429)
                     {
+                        string reason = "The submitted match is not a custom conquest match with drafts";
+                        await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, reason);
+
                         return new ObjectResult("The submitted match is not a custom conquest match with drafts") { StatusCode = 400 };
                     }
                     #endregion
 
                     #region check if one of the teams is using more fills than allowed.
                     //Check for fills
-                    bool winnerTeamUsedMoreFillsThanAllowed = await checkForFillsAsync(winnerTeam, winnerCaptainMail, loserCaptainMail, IdsOfPlayerInMatchWinners, match);
-                    bool loserTeamUsedMoreFillsThanAllowed = await checkForFillsAsync(loserTeam, loserCaptainMail, winnerCaptainMail, IdsOfPlayerInMatchLosers, match);
+                    bool winnerTeamUsedMoreFillsThanAllowed = checkForFillsAsync(winnerTeam, IdsOfPlayerInMatchWinners);
+                    bool loserTeamUsedMoreFillsThanAllowed = checkForFillsAsync(loserTeam, IdsOfPlayerInMatchLosers);
 
-                    if (winnerTeamUsedMoreFillsThanAllowed || loserTeamUsedMoreFillsThanAllowed)
+                    if (winnerTeamUsedMoreFillsThanAllowed && loserTeamUsedMoreFillsThanAllowed)
                     {
-                        return new ObjectResult("One of the teams is using more fills then allowed, max 1 fill per team per match.") { StatusCode = 400 };
+                        await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"Both teams used more fills then allowed, only 1 fill is allowed per team per match.");
+                        return new ObjectResult("Both of the teams are using more fills then allowed, max 1 fill per team per match.") { StatusCode = 400 };
+                    }
+                    else if(winnerTeamUsedMoreFillsThanAllowed)
+                    {
+                        await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"{winnerTeam.TeamName} used more fills then allowed, only 1 fill is allowed per team per match.");
+                        return new ObjectResult($"{winnerTeam.TeamName} used more fills then allowed, max 1 fill per team per match.") { StatusCode = 400 };
+                    }
+                    else if(loserTeamUsedMoreFillsThanAllowed)
+                    {
+                        await SendErrorEmail(match,winnerTeam,loserTeam,winnerCaptainMail,loserCaptainMail, $"{loserTeam.TeamName} used more fills then allowed, only 1 fill is allowed per team per match.");
+                        return new ObjectResult($"{loserTeam.TeamName} used more fills then allowed, max 1 fill per team per match.") { StatusCode = 400 };
                     }
                     #endregion
 
@@ -94,12 +118,17 @@ namespace stat_microservice.Services
                     ScheduledMatch validMatchup = await ValidateMatchupAndGetMatchupAsync(winnerTeam, loserTeam, match);
                     Matchup m = validMatchup?.matchup;
                     //if there is no matchup found for the 2 teams
-                    if (m == null)
+                    if (validMatchup == null)
                     {
-                        return new ObjectResult("There was no scheduled matchup found between these teams") { StatusCode = 404 };
+                        await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"There was no scheduled matchup found between these teams.");
+                        return new ObjectResult("There was no scheduled matchup found between these teams.") { StatusCode = 404 };
+                    }
+                    else if(m == null)
+                    {
+                        await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"There was no valid matchup found between these teams. <br /> A match can't be played before it's scheduled. <br /> Missed a match? you have 2 weeks max to catch up.");
+                        return new ObjectResult("There was no valid matchup found between these teams.") { StatusCode = 404 };
                     }
                     #endregion
-
 
                     #region check if teams already played a game prior to this one or if this is the first for the matchup. and act upon it
                     List<TableMatchResult> previousMatchupResults = await _db.TableMatchResults.Where(mr => mr.ScheduleMatchUpId == m.MatchupID).ToListAsync();
@@ -126,6 +155,7 @@ namespace stat_microservice.Services
                         //one of the teams already has 2 wins. in a best of 3 that means you already won the matchup
                         if(homeTeamWinCount > 1 || awayTeamWinCount > 1)
                         {
+                            await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"The submitted match was useless the matchup is already completed.");
                             return new ObjectResult("The submitted match was useless the matchup is already completed.") { StatusCode = 400 };
                         }
                         else
@@ -148,6 +178,10 @@ namespace stat_microservice.Services
                             await SaveMatchStatsToDatabaseAsync(match, winnerTeam, loserTeam, validMatchup);
 
                             //send email to both captains the match has been added
+                            int gameNumber = homeTeamWinCount + awayTeamWinCount;
+                            string gameDate = match.EntryDate.ToString("dddd dd MMMM yyyy 'at' H:mm");
+                            string coolMailMessage = $"The match was played on {gameDate}. <br /> The match took {match.MatchDuration}.";
+                            await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage);
 
                             return new ObjectResult("Match stats successfully saved") { StatusCode = 200 };
                         }
@@ -163,6 +197,10 @@ namespace stat_microservice.Services
                         await SaveMatchStatsToDatabaseAsync(match, winnerTeam, loserTeam, validMatchup);
 
                         //send email to both captains the match has been added
+                        int gameNumber = 1;
+                        string gameDate = match.EntryDate.ToString("dddd dd MMMM yyyy 'at' H:mm");
+                        string coolMailMessage = $"The match was played on {gameDate}. <br /> The match took {match.MatchDuration}.";
+                        await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage);
 
                         return new ObjectResult("Match stats successfully saved") { StatusCode = 200 };
 
@@ -178,10 +216,6 @@ namespace stat_microservice.Services
                 return new ObjectResult("Something went wrong trying to Save Match stats.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
-
-
-
-
 
         #region methods
         private async Task SaveMatchStatsToDatabaseAsync(MatchData match, TeamWithDetails winnerTeam, TeamWithDetails loserTeam, ScheduledMatch validMatchup)
@@ -207,64 +241,77 @@ namespace stat_microservice.Services
             //add all banned gods to the list
             allGodsInTheMatch.AddRange(match.BannedGods);
 
+            List<TableGodDetail> godsToAdd = new List<TableGodDetail>();
+
             foreach (var god in allGodsInTheMatch)
             {
                 //make sure the god contains the data we need
-                if (god.GodId != null && god.GodIcon != null && god.GodName != null)
+                if (god.GodId != null && god.GodId != 0 && god.GodIcon != null && god.GodName != null)
                 {
                     //if the god isn't in the database, add
                     if (await _db.TableGodDetails.Where(g => g.GodId == god.GodId).CountAsync() == 0)
                     {
-                        _db.TableGodDetails.Add(new TableGodDetail
+                        if (godsToAdd.Where(g => g.GodId == (int)god.GodId).Count() == 0)
                         {
-                            GodId = (int)god.GodId,
-                            GodIconUrl = god.GodIcon,
-                            GodName = god.GodName
-                        });
+                            godsToAdd.Add(new TableGodDetail
+                            {
+                                GodId = (int)god.GodId,
+                                GodIconUrl = god.GodIcon,
+                                GodName = god.GodName
+                            });
+                        }
                     }
                 }
             }
 
             List<Item> allItemsInTheMatch = new List<Item>();
             //get all gods that where in the losing team
-            allItemsInTheMatch.AddRange((IEnumerable<Item>)match.Winners.Select(i => new {
-                i.Relic1ID, i.Relic1Name, i.Relic1Icon,
-                i.Relic2ID, i.Relic2Name, i.Relic2Icon,
-                i.Item1ID, i.Item1Name, i.Item1Icon,
-                i.Item2ID, i.Item2Name, i.Item2Icon,
-                i.Item3ID, i.Item3Name, i.Item3Icon,
-                i.Item4ID, i.Item4Name, i.Item4Icon,
-                i.Item5ID, i.Item5Name, i.Item5Icon,
-                i.Item6ID, i.Item6Name, i.Item6Icon
-            }).ToList());
+           match.Winners.ForEach(i => {
+               allItemsInTheMatch.Add(new Item { ItemID = i.Relic1ID, ItemName = i.Relic1Name, ItemIcon = i.Relic1Icon });
+               allItemsInTheMatch.Add(new Item { ItemID = i.Relic2ID, ItemName = i.Relic2Name, ItemIcon = i.Relic2Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item1ID, ItemName = i.Item1Name, ItemIcon = i.Item1Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item2ID, ItemName = i.Item2Name, ItemIcon = i.Item2Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item3ID, ItemName = i.Item3Name, ItemIcon = i.Item3Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item4ID, ItemName = i.Item4Name, ItemIcon = i.Item4Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item5ID, ItemName = i.Item5Name, ItemIcon = i.Item5Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item6ID, ItemName = i.Item6Name, ItemIcon = i.Item6Icon });
+            });
 
-            allItemsInTheMatch.AddRange((IEnumerable<Item>)match.Losers.Select(i => new {
-                i.Relic1ID, i.Relic1Name, i.Relic1Icon,
-                i.Relic2ID, i.Relic2Name, i.Relic2Icon,
-                i.Item1ID, i.Item1Name, i.Item1Icon,
-                i.Item2ID, i.Item2Name, i.Item2Icon,
-                i.Item3ID, i.Item3Name, i.Item3Icon,
-                i.Item4ID, i.Item4Name, i.Item4Icon,
-                i.Item5ID, i.Item5Name, i.Item5Icon,
-                i.Item6ID, i.Item6Name, i.Item6Icon
-            }).ToList());
+            match.Losers.ForEach(i => {
+                allItemsInTheMatch.Add(new Item { ItemID = i.Relic1ID, ItemName = i.Relic1Name, ItemIcon = i.Relic1Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Relic2ID, ItemName = i.Relic2Name, ItemIcon = i.Relic2Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item1ID, ItemName = i.Item1Name, ItemIcon = i.Item1Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item2ID, ItemName = i.Item2Name, ItemIcon = i.Item2Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item3ID, ItemName = i.Item3Name, ItemIcon = i.Item3Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item4ID, ItemName = i.Item4Name, ItemIcon = i.Item4Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item5ID, ItemName = i.Item5Name, ItemIcon = i.Item5Icon });
+                allItemsInTheMatch.Add(new Item { ItemID = i.Item6ID, ItemName = i.Item6Name, ItemIcon = i.Item6Icon });
+            });
+
+            List<TableItemDetail> itemsToAdd = new List<TableItemDetail>();
 
             foreach (var item in allItemsInTheMatch)
             {
-                if (item.ItemID != null && item.ItemName != null && item.ItemIcon != null)
+                if (item.ItemID != null && item.ItemID != 0 && item.ItemName != null && item.ItemIcon != null)
                 {
                     //if the god isn't in the database, add
                     if (await _db.TableItemDetails.Where(i => i.ItemId == item.ItemID).CountAsync() == 0)
                     {
-                        _db.TableItemDetails.Add(new TableItemDetail
+                        if (itemsToAdd.Where(i => i.ItemId == (int)item.ItemID).Count() == 0)
                         {
-                            ItemId = (int)item.ItemID,
-                            ItemName = item.ItemName,
-                            ItemIconUrl = item.ItemIcon,
-                        });
+                            itemsToAdd.Add(new TableItemDetail
+                            {
+                                ItemId = (int)item.ItemID,
+                                ItemName = item.ItemName,
+                                ItemIconUrl = item.ItemIcon,
+                            });
+                        }
                     }
                 }
             }
+            //add the new items to the database
+            await _db.TableGodDetails.AddRangeAsync(godsToAdd);
+            await _db.TableItemDetails.AddRangeAsync(itemsToAdd);
             //save changes godtable and itemtable to database
             await _db.SaveChangesAsync();
             #endregion
@@ -300,9 +347,18 @@ namespace stat_microservice.Services
                     IgDamageTaken = p.DamageTaken,
                     IgFireGiantsKilled = p.FireGiantsKilled,
                     IgGoldFuriesKilled = p.GoldFuriesKilled,
+                    IgObjectiveAssists = p.ObjectiveAssists,
                     IgStructureDamage = p.StructureDamage,
                     IgMinionDamage = p.MinionDamage,
                     IgTowersDestroyed = p.TowersDestroyed,
+                    IgPhoenixesDestroyed = p.PhoenixesDestroyed,
+                    IgFirstBlood = p.FirstBlood,
+                    IgHighestMultiKill = p.HighestMultiKill,
+                    IgDoubles = p.Doubles,
+                    IgTriples = p.Triples,
+                    IgQuadras = p.Quadras,
+                    IgPentas = p.Pentas,
+                    IgTimeSpentDeathInSeconds = p.TimeSpentDeathInSeconds,
                     IgWardsPlaced = p.WardsPlaced,
                     IgRegion = p.Region,
                     IgDistanceTraveled = p.DistanceTravelled,
@@ -330,6 +386,7 @@ namespace stat_microservice.Services
                     IgBan8Id = match.BannedGods[7].GodId,
                     IgBan9Id = match.BannedGods[8].GodId,
                     IgBan10Id = match.BannedGods[9].GodId,
+                    
                 };
 
                 convertedStats.Add(stat);
@@ -496,17 +553,11 @@ namespace stat_microservice.Services
             }
         }
 
-        private async Task<bool> checkForFillsAsync(TeamWithDetails teamToCheck,string captainMail, string otherCaptainMail, List<int> playersInMatch, MatchData match)
+        private bool checkForFillsAsync(TeamWithDetails teamToCheck, List<int> playersInMatch)
         {
             int originalTeamCount = teamToCheck.TeamMembers.Where(tm => playersInMatch.Contains(tm.PlayerID)).Count();
             if (originalTeamCount < 4)
             {
-                string title = "Match was not accepted";
-                string message = $"<b>Submitted Match ID:</b> {match.GameID} <br /><br /> <b>Reason:</b><br />{teamToCheck.TeamName} used more fills then allowed, only 1 fill is allowed per team per match. <br /><br /> Disagree with the verdict? reply to this email explaining why you think the verdict is incorrect.";
-
-                await _externalServices.SendEmailNotificationToCaptainAsync(message, title, captainMail);
-                await _externalServices.SendEmailNotificationToCaptainAsync(message, title, otherCaptainMail);
-
                 return true;
             }
             else
@@ -543,6 +594,27 @@ namespace stat_microservice.Services
                 }
             }
         }
+
+        private async Task SendErrorEmail(MatchData match, TeamWithDetails winnerTeam, TeamWithDetails loserTeam, string winnerCaptainMail, string loserCaptainMail, string reason)
+        {
+            string title = "Match was not accepted";
+            string messageWinner = $"<b>Submitted Match ID:</b> {match.GameID} <br /><br /><b>Opponent:</b> {loserTeam.TeamName} <br /><br /> <b>Reason:</b><br />{reason} <br /><br /> Disagree with the verdict? reply to this email explaining why you think the verdict is incorrect.";
+            string messageLoser = $"<b>Submitted Match ID:</b> {match.GameID} <br /><br /><b>Opponent:</b> {winnerTeam.TeamName} <br /><br /> <b>Reason:</b><br />{reason} <br /><br /> Disagree with the verdict? reply to this email explaining why you think the verdict is incorrect.";
+
+            await _externalServices.SendEmailNotificationToCaptainAsync(messageWinner, title, winnerCaptainMail);
+            await _externalServices.SendEmailNotificationToCaptainAsync(messageLoser, title, loserCaptainMail);
+        }
+
+        private async Task SendSuccessMail(MatchData match, TeamWithDetails winnerTeam, TeamWithDetails loserTeam, string winnerCaptainMail, string loserCaptainMail, int gameNumber, string msg)
+        {
+            string title = "Match submitted successfully";
+            string messageWinner = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {loserTeam.TeamName} <br /><br /> {msg} <br />";
+            string messageLoser = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {winnerTeam.TeamName} <br /><br /> {msg} <br />";
+
+            await _externalServices.SendEmailNotificationToCaptainAsync(messageWinner, title, winnerCaptainMail);
+            await _externalServices.SendEmailNotificationToCaptainAsync(messageLoser, title, loserCaptainMail);
+        }
+
         #endregion
     }
 }
