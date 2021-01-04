@@ -72,7 +72,7 @@ namespace stat_microservice.Services
 
                     #region check if the played match is a conquest game with drafts
                     //check if the match is a custom conquest match.
-                    if (match.GamemodeID != 427)
+                    if (match.GamemodeID != 429)
                     {
                         return new ObjectResult("The submitted match is not a custom conquest match with drafts") { StatusCode = 400 };
                     }
