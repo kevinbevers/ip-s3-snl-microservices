@@ -91,7 +91,7 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   useEffect(() => {
     const team = [];
     const solo = apiResponse?.teamMembers.filter(member => member.teamMemberRole.roleID == 1)[0];
-    team.push(solo != undefined ? solo : { teamMemberRole: { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 4, roleName: "Support" } } }); //SOLO
+    team.push(solo != undefined ? solo : { teamMemberRole: { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 1, roleName: "Solo" } } }); //SOLO
     const jungle = apiResponse?.teamMembers.filter(member => member.teamMemberRole.roleID == 2)[0]
     team.push(jungle != undefined ? jungle : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 2, roleName: "Jungle" } }); //JUNGLE
     const mid = apiResponse?.teamMembers.filter(member => member.teamMemberRole.roleID == 3)[0];
