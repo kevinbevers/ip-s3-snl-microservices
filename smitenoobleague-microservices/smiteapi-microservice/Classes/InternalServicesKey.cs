@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace smiteapi_microservice.Classes
 {
-    public class GatewayKey
+    public class InternalServicesKey
     {
         public string Key { get; set; }
     }

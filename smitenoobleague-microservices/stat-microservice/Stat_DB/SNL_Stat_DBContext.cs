@@ -157,7 +157,11 @@ namespace stat_microservice.Stat_DB
 
                 entity.Property(e => e.IgDistanceTraveled).HasColumnName("IG_DistanceTraveled");
 
+                entity.Property(e => e.IgDoubles).HasColumnName("IG_Doubles");
+
                 entity.Property(e => e.IgFireGiantsKilled).HasColumnName("IG_FireGiantsKilled");
+
+                entity.Property(e => e.IgFirstBlood).HasColumnName("IG_FirstBlood");
 
                 entity.Property(e => e.IgGodName)
                     .HasColumnType("varchar(45)")
@@ -172,6 +176,8 @@ namespace stat_microservice.Stat_DB
                 entity.Property(e => e.IgGpm).HasColumnName("IG_GPM");
 
                 entity.Property(e => e.IgHealing).HasColumnName("IG_Healing");
+
+                entity.Property(e => e.IgHighestMultiKill).HasColumnName("IG_HighestMultiKill");
 
                 entity.Property(e => e.IgItem1Id).HasColumnName("IG_Item1ID");
 
@@ -191,11 +197,19 @@ namespace stat_microservice.Stat_DB
 
                 entity.Property(e => e.IgMinionDamage).HasColumnName("IG_MinionDamage");
 
+                entity.Property(e => e.IgObjectiveAssists).HasColumnName("IG_ObjectiveAssists");
+
+                entity.Property(e => e.IgPentas).HasColumnName("IG_Pentas");
+
+                entity.Property(e => e.IgPhoenixesDestroyed).HasColumnName("IG_PhoenixesDestroyed");
+
                 entity.Property(e => e.IgPlayerLevel)
                     .HasColumnType("varchar(45)")
                     .HasColumnName("IG_PlayerLevel")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_unicode_ci");
+
+                entity.Property(e => e.IgQuadras).HasColumnName("IG_Quadras");
 
                 entity.Property(e => e.IgRegion)
                     .HasColumnType("varchar(45)")
@@ -211,7 +225,11 @@ namespace stat_microservice.Stat_DB
 
                 entity.Property(e => e.IgTaskforce).HasColumnName("IG_Taskforce");
 
+                entity.Property(e => e.IgTimeSpentDeathInSeconds).HasColumnName("IG_TimeSpentDeathInSeconds");
+
                 entity.Property(e => e.IgTowersDestroyed).HasColumnName("IG_TowersDestroyed");
+
+                entity.Property(e => e.IgTriples).HasColumnName("IG_Triples");
 
                 entity.Property(e => e.IgWardsPlaced).HasColumnName("IG_WardsPlaced");
 

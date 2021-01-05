@@ -26,8 +26,8 @@ DROP TABLE IF EXISTS `TableGodDetail`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `TableGodDetail` (
   `GodID` int NOT NULL,
-  `GodName` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `GodIconUrl` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `GodName` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `GodIconUrl` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`GodID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,9 +41,9 @@ DROP TABLE IF EXISTS `TableItemDetail`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `TableItemDetail` (
   `ItemID` int NOT NULL,
-  `ItemName` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ItemDescription` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ItemIconUrl` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ItemName` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ItemDescription` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ItemIconUrl` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`ItemID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -104,12 +104,12 @@ CREATE TABLE `TableStat` (
   `PlayerID` int DEFAULT NULL,
   `PlayerIsFill` tinyint(1) DEFAULT NULL,
   `GodPlayedID` int DEFAULT NULL,
-  `PatchNumber` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `PatchNumber` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `WinStatus` tinyint(1) DEFAULT NULL,
   `IG_Taskforce` int DEFAULT NULL,
   `IG_MatchLengthInSeconds` int DEFAULT NULL,
-  `IG_GodName` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `IG_PlayerLevel` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `IG_GodName` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `IG_PlayerLevel` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `IG_Kills` int DEFAULT NULL,
   `IG_Deaths` int DEFAULT NULL,
   `IG_Assists` int DEFAULT NULL,
@@ -144,7 +144,16 @@ CREATE TABLE `TableStat` (
   `IG_WardsPlaced` int DEFAULT NULL,
   `IG_StructureDamage` int DEFAULT NULL,
   `IG_TowersDestroyed` int DEFAULT NULL,
-  `IG_Region` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `IG_Region` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `IG_FirstBlood` tinyint(1) DEFAULT NULL,
+  `IG_HighestMultiKill` int DEFAULT NULL,
+  `IG_ObjectiveAssists` int DEFAULT NULL,
+  `IG_PhoenixesDestroyed` int DEFAULT NULL,
+  `IG_TimeSpentDeathInSeconds` int DEFAULT NULL,
+  `IG_Pentas` int DEFAULT NULL,
+  `IG_Quadras` int DEFAULT NULL,
+  `IG_Triples` int DEFAULT NULL,
+  `IG_Doubles` int DEFAULT NULL,
   PRIMARY KEY (`StatID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -158,4 +167,4 @@ CREATE TABLE `TableStat` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-31 17:21:08
+-- Dump completed on 2021-01-04 20:31:42

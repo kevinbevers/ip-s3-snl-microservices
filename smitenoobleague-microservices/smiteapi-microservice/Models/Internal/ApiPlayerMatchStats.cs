@@ -117,6 +117,7 @@ namespace smiteapi_microservice.Models.Internal
         public int? Team2Score { get; set; }
         public int? TeamId { get; set; }
         public string Team_Name { get; set; }
+        public int? Time_Dead_Seconds { get; set; }
         public int? Time_In_Match_Seconds { get; set; }
         public int? Towers_Destroyed { get; set; }
         public int? Wards_Placed { get; set; }

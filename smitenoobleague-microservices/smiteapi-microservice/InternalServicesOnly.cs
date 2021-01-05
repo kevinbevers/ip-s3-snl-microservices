@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using smiteapi_microservice.Classes;
 using Microsoft.Extensions.Options;
 
-public class GatewayOnly : ActionFilterAttribute
+public class InternalServicesOnly : ActionFilterAttribute
 {
-    private readonly GatewayKey _gatewayKey;
+    private readonly InternalServicesKey _serviceKey;
 
-    public GatewayOnly(IOptions<GatewayKey> gatewayKey)
+    public InternalServicesOnly(InternalServicesKey serviceKey)
     {
-        _gatewayKey = gatewayKey.Value;
+        _serviceKey = serviceKey;
     }
 
     public override void OnActionExecuting(ActionExecutingContext filterContext)
     { 
-        if (filterContext.HttpContext.Request.Headers["GatewayKey"].ToString() != _gatewayKey.Key)
+        if (filterContext.HttpContext.Request.Headers["ServiceKey"].ToString() != _serviceKey.Key)
         {
             filterContext.Result = new UnauthorizedResult();
         }

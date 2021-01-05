@@ -28,7 +28,7 @@ namespace smiteapi_microservice.Controllers
 
         // GET: /match/134314134141
         [HttpGet("{gameID}")]
-        public async Task<ActionResult<MatchData>> Get(int gameID)
+        public async Task<ActionResult<MatchData>> Get(int? gameID)
         {
             return await _matchService.GetRawMatchDataAsync(gameID);
         }
@@ -36,7 +36,7 @@ namespace smiteapi_microservice.Controllers
         // POST /match
         [HttpPost]
         [Authorize(Roles = "Captain,Admin")]
-        public async Task<IActionResult> Post([FromBody] int gameID)
+        public async Task<ActionResult> Post([FromBody] int? gameID)
         {
             return await _matchService.ProcessMatchIdAsync(gameID);
         }

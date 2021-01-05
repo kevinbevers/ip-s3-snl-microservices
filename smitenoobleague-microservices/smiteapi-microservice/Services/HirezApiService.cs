@@ -85,11 +85,12 @@ namespace smiteapi_microservice.Services
                     //should split up in little methods for a clearer view of code
                     if (matchDetails?.Count() == 10)
                     {
-                        for (int i = 0; i < 9; i++)
+                        for (int i = 0; i < 10; i++)
                         {
                             if (banNames[i] != null)
                             {
-                                var godname = Regex.Replace(banNames[i].Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+                                var godname = Regex.Replace(banNames[i]?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
+
                                 God ban = new God
                                 {
                                     GodId = bansIds[i],
@@ -179,14 +180,31 @@ namespace smiteapi_microservice.Services
                                 //Extra stats
                                 FirstBlood = mp.Kills_First_Blood > 0 ? true : false,
                                 TowersDestroyed = mp.Towers_Destroyed,
+                                PhoenixesDestroyed = mp.Kills_Phoenix,
                                 WardsPlaced = mp.Wards_Placed,
                                 StructureDamage = mp.Structure_Damage,
                                 MinionDamage = mp.Damage_Bot,
                                 DistanceTravelled = mp.Distance_Traveled,
-                                Region = mp.Region
+                                Region = mp.Region,
+                                HighestMultiKill = mp.Multi_kill_Max,
+                                TimeSpentDeathInSeconds = mp.Time_Dead_Seconds,
+                                ObjectiveAssists = mp.Objective_Assists,
+                                Doubles = mp.Kills_Double,
+                                Pentas = mp.Kills_Penta,
+                                Quadras = mp.Kills_Quadra,
+                                Triples = mp.Kills_Triple
+                                
+                                
                             };
 
                             if (mp.TaskForce == mp.Winning_TaskForce) { match.Winners.Add(playerStat); } else { match.Losers.Add(playerStat); }
+                        }
+                    }
+                    else
+                    {
+                        if (match.ret_msg == null)
+                        {
+                            match.ret_msg = "Not all playerdata is available for this match because 1 of the players has their profile hidden.";
                         }
                     }
                     //Return match when there is data available
