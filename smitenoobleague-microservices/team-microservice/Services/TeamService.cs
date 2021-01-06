@@ -928,12 +928,17 @@ namespace team_microservice.Services
                     }
                     else
                     {
-                        if (ts.PlayerID == 0 || ts.PlayerName == null || ts.PlatformName == null)
+                        if (ts.PlayerID == 0 || ts.PlayerID == null || ts.PlayerName == null || ts.PlatformName == null)
                         {
                             return new ObjectResult("Player data was incomplete or empty") { StatusCode = 400 }; //OK
                         }
                         else
                         {
+                            if (await _db.TableTeamMembers.Where(tm => tm.TeamMemberPlayerId == ts.PlayerID).CountAsync() > 0)
+                            {
+                                return new ObjectResult("Player is already in a team.") { StatusCode = 400 }; //OK
+                            }
+
                             if (ts.RoleID != null)
                             {
                                 if (await _db.TableRoles.Where(r => r.RoleId == ts.RoleID).CountAsync() > 0)
