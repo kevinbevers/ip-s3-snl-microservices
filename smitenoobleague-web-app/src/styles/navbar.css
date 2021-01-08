@@ -1,0 +1,17 @@
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(0,0,0,.8);
+}
+
+.navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
+    color: rgba(0,0,0,.5);
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    color: rgba(0,0,0,.5);
+    text-decoration: none;
+    background-color: white;
+}
+
+.smallfootertext {
+    font-size: 12px;
+}
