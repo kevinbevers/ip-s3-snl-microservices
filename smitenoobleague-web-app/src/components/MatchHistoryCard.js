@@ -31,7 +31,7 @@ export default function MatchHistoryCard(props){
             </Row>
             <Row>
             <Col className="mt-4 mt-md-0">
-            <Button className="my-auto" variant="primary" href={`/matchdetails/${props.matchID}`}>See match details</Button>
+            <Button className="my-auto" variant="primary" href={`/matchhistory/${props.matchID}`}>See match details</Button>
             </Col>
             </Row>
             </Container>

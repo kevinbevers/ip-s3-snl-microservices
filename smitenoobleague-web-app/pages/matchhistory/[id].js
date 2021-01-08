@@ -33,7 +33,7 @@ export default function matchdetails({received, LoginSession}) {
   {
     return <DefaultErrorPage statusCode={received.status} />
   }
-  else if(received.data.ret_msg != ""){
+  else if(received.data.ret_msg != null){
     return <DefaultErrorPage statusCode={404} />
   }
   else {
@@ -46,7 +46,7 @@ export default function matchdetails({received, LoginSession}) {
           <Row>
             <Col></Col>
             <Col xl={3} md={5} xs={12} className="">
-              <Nav variant="pills" className="nav-justified" id="pillNav"> {/*flex and justify center to have the nav links be in the middle of the object */}
+              <Nav variant="pills" className="nav-justified"> {/*flex and justify center to have the nav links be in the middle of the object, grey color: id="pillNav" */}
                 <Nav.Item className="secondary">
                   <Nav.Link eventKey="Game1" >Game 1</Nav.Link>
                 </Nav.Item>
@@ -125,12 +125,14 @@ export default function matchdetails({received, LoginSession}) {
   }
 }
 
-export async function getServerSideProps({params}) {
+export async function getServerSideProps(context) {
   
   const loginSessionData = await helpers.GetLoginSession(context.req);
 
 try {
-  const response = await axios.get("http://localhost:5000/smiteapi-service/Match/" + params.id);
+  const apiurl = process.env.NEXT_PUBLIC_BASE_API_URL;
+  const response = await axios.get(apiurl + "/smiteapi-service/Match/" + context.params.id);
+
   const received = {
     status: response.status,
     data: response.data,

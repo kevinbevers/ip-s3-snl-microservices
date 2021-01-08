@@ -5,6 +5,7 @@
 @import "pickpercentage.css";
 @import "stats.css";
 @import "captain.css";
+@import "navbar.css";
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap');
 
@@ -99,7 +100,7 @@ body {
 .faq-banner {
   color: white;
   text-align: center;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) ,url(/images/thoth_banner.png);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) ,url(/images/thoth_banner.jpg);
   background-repeat: no-repeat;
   background-size: cover;
 }
