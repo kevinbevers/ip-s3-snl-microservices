@@ -29,17 +29,18 @@ export default function PlayerManagement({member, apiToken, teamID}) {
         setFoundPlayers([]);
         setSelectedPlayer(null);
         setSearchName("");
+        setMsgPlayerInfo("");
+        setShowPlayerInfoAlert(false);
     };
     const handleShow = () => {
         setPlayerModal(true);
-    
     };
 
 const handleSearchPlayer = async() => { 
     if(SearchName != null)
     {
         const name = SearchName;
-        await manageteamservices.GetPlayersByName(apiToken, name)
+        manageteamservices.GetPlayersByName(apiToken, name)
         .then(res => {
             setFoundPlayers(res.data); 
             if(res.data.length > 0) 
@@ -47,7 +48,10 @@ const handleSearchPlayer = async() => {
                 setSelectedPlayer(res.data[0]);
             }
         })
-        .catch(err => {console.log(err)});
+        .catch(err => {
+            setMsgPlayerInfo(err?.response?.data);
+            setShowPlayerInfoAlert(true);
+        });
     }
 };
 const handleSelectPlayer = (event) => {
@@ -57,56 +61,76 @@ const handleSelectPlayer = (event) => {
 
 
 const handleAddPlayer = async() => {
-if(SelectedPlayer?.playerID != null)
-{
-    const playerToAdd = {
-        playerID: SelectedPlayer.playerID,
-        platformName: SelectedPlayer.platform,
-        teamID: teamID,
-        playerName: SelectedPlayer.playername,
-        roleID: member.teamMemberRole.roleID
-      };
+    if(SelectedPlayer?.playerID != null)
+    {
+        const playerToAdd = {
+            playerID: SelectedPlayer.playerID,
+            platformName: SelectedPlayer.platform,
+            teamID: teamID,
+            playerName: SelectedPlayer.playername,
+            roleID: member.teamMemberRole.roleID
+        };
 
-      await manageteamservices.AddPlayerToTeam(apiToken, playerToAdd)
-      .then(res => {
-          member.teamMemberName = res.data.teamMemberName;
-          member.teamMemberID = res.data.teamMemberID;
-          member.teamMemberRole = res.data.teamMemberRole;
-          member.teamMemberPlatform = res.data.teamMemberPlatform;
-          memmber.playerID = res.data.playerID;
-    })
-      .catch(err => {console.log(err.response);});
-    //close modal
-    handleClose();
-}
-
-
-
+        manageteamservices.AddPlayerToTeam(apiToken, playerToAdd)
+        .then(res => {
+            member.teamMemberName = res.data.teamMemberName;
+            member.teamMemberID = res.data.teamMemberID;
+            member.teamMemberRole = res.data.teamMemberRole;
+            member.teamMemberPlatform = res.data.teamMemberPlatform;
+            member.playerID = res.data.playerID;
+            //close modal
+            handleClose();
+        })
+        .catch(err => {
+            setMsgPlayerInfo(err?.response?.data);
+            setShowPlayerInfoAlert(true);
+        });
+    }
 };
+
 const handleEditPlayer = async() => {
     if(SelectedPlayer?.playerID != null)
-{
-    const playerToEdit = {
-        teamMemberID: member.teamMemberID,
-        playerID: SelectedPlayer.playerID,
-        platformName: SelectedPlayer.platform,
-        teamID: teamID,
-        playerName: SelectedPlayer.playername,
-        roleID: member.teamMemberRole.roleID
-      };
+    {
+        const playerToEdit = {
+            teamMemberID: member.teamMemberID,
+            playerID: SelectedPlayer.playerID,
+            platformName: SelectedPlayer.platform,
+            teamID: teamID,
+            playerName: SelectedPlayer.playername,
+            roleID: member.teamMemberRole.roleID
+        };
 
-      await manageteamservices.UpdatePlayerToTeam(apiToken, playerToEdit)
-      .then(res => {
-          member.teamMemberName = res.data.teamMemberName;
-          member.teamMemberID = res.data.teamMemberID;
-          member.teamMemberRole = res.data.teamMemberRole;
-          member.teamMemberPlatform = res.data.teamMemberPlatform;
-          memmber.playerID = res.data.playerID;
-    })
-      .catch(err => {console.log(err.response);});
-    //close modal
-    handleClose();
-}
+        manageteamservices.UpdatePlayerToTeam(apiToken, playerToEdit)
+        .then(res => {
+            console.log(res);
+            member.teamMemberName = res.data.teamMemberName;
+            member.teamMemberID = res.data.teamMemberID;
+            member.teamMemberRole = res.data.teamMemberRole;
+            member.teamMemberPlatform = res.data.teamMemberPlatform;
+            member.playerID = res.data.playerID;
+            //close modal
+            handleClose();
+        })
+        .catch(err => { 
+            setMsgPlayerInfo(err?.response?.data);
+            setShowPlayerInfoAlert(true);
+           });
+    }
+};
+
+const [msgPlayerInfo, setMsgPlayerInfo] = useState("Error msg");
+const [showPlayerInfoAlert, setShowPlayerInfoAlert] = useState(false);
+function PlayerInfoAlert() {
+  if (showPlayerInfoAlert) {
+    return (
+      <Alert className="" variant="danger" onClose={() => setShowPlayerInfoAlert(false)} dismissible>
+        <p className="my-auto">
+          {msgPlayerInfo}
+        </p>
+      </Alert>
+    );
+  }
+  return <> </>;
 };
 
     return (
@@ -184,7 +208,7 @@ const handleEditPlayer = async() => {
                             </Row>
                             </> : <> </>}
                             <Row>
-                                <Col><h6></h6></Col>
+                                <Col><PlayerInfoAlert /></Col>
                             </Row>
                         </Col>
                     </Row>
@@ -250,7 +274,7 @@ const handleEditPlayer = async() => {
                             </Row>
                             </> : <> </>}
                             <Row>
-                                <Col><h6></h6></Col>
+                                <Col><PlayerInfoAlert /></Col>
                             </Row>
                         </Col>
                     </Row>

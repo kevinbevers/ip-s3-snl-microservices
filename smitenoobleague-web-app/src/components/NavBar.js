@@ -4,6 +4,9 @@ import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 //nextjs router hook
 import { useRouter } from "next/router";
+//optimized images
+import Img from 'react-optimized-image';
+import Logo from "public/images/SNL_Navbar_Logo.png";
 
 export default function NavBar({LoginSession}) {
     
@@ -12,7 +15,7 @@ export default function NavBar({LoginSession}) {
     return (
             <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
                 <Navbar.Brand href="/" className="p-0" className={router?.pathname == "/" ? "active" : ""}>
-                <img src="/images/SNL_Navbar_Logo.png" width="60" height="60" className="d-inline-block align-top" alt="Smitenoobleague logo" draggable={false}/>
+                <Img src={Logo} webp sizes={[60, 120]} width="60" height="60" className="d-inline-block align-top" alt="Smitenoobleague logo" draggable={false}/>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
