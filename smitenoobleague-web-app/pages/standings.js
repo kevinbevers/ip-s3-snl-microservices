@@ -15,7 +15,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 //import background component and the image for it
 import FullBackground from "../src/components/FullBackground"
-import BG from "../public/images/dark_bg.png"
+import BG from "../public/images/dark_bg.jpg"
 import ScoreTable from "src/components/ScoreTable";
 //Auth
 import helpers from "utils/helpers";
