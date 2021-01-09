@@ -1,23 +1,10 @@
-.navbar-light .navbar-nav .nav-link.darktext {
+.navbar-light.darktext .navbar-nav .nav-link {
     color: rgba(0,0,0,.8);
 }
 
-.navbar-light .navbar-nav .nav-link.darktext:hover {
+.navbar-light.darktext .navbar-nav .nav-link:hover {
     color: rgba(0,0,0,.6);
 }
-
-#collapsible-nav-dropdown {
-    color: rgba(0,0,0,.8);
-}
-
-#collapsible-nav-dropdown:hover {
-    color: rgba(0,0,0,.6);
-}
-
-#collapsible-nav-dropdown.active {
-    color: rgba(0,0,0,.6);
-}
-
 
 .navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
     color: rgba(0,0,0,.5);

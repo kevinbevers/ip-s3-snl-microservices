@@ -13,7 +13,7 @@ export default function NavBar({LoginSession}) {
     const router = useRouter();
 
     return (
-            <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+            <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="darktext">
                 <Navbar.Brand href="/" className="p-0" className={router?.pathname == "/" ? "active" : ""}>
                 <Img src={Logo} webp sizes={[60, 120]} width="60" height="60" className="d-inline-block align-top" alt="Smitenoobleague logo" draggable={false}/>
                 </Navbar.Brand>
@@ -21,7 +21,7 @@ export default function NavBar({LoginSession}) {
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mr-auto">
                     {LoginSession?.isCaptain ? <><Nav.Link href="/captainpage" className={router?.pathname == "/captainpage" ? "active darktext" : "darktext"}>Captain page</Nav.Link></> : <> </>}
-                    <NavDropdown title="Stats" id={router?.pathname.includes("/stats") ? "collapsible-nav-dropdown active" : "collapsible-nav-dropdown"}>
+                    <NavDropdown title="Stats" id={"collapsible-nav-dropdown"} className={router?.pathname.includes("/stats")  ? "active" : ""}>
                         <NavDropdown.Item href="/stats/team" className={router?.pathname.includes("/stats/team") ? "active darktext" : "darktext"}>Team stats</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item href="/stats/player" className={router?.pathname.includes("/stats/player")  ? "active darktext" : "darktext"}>Player stats</NavDropdown.Item>
