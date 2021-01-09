@@ -2,6 +2,10 @@
     color: rgba(0,0,0,.8);
 }
 
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(0,0,0,.8);
+}
+
 .navbar-light.darktext .navbar-nav .nav-link:hover {
     color: rgba(0,0,0,.6);
 }
