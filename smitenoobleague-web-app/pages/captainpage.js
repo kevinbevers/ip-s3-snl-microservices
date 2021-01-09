@@ -258,7 +258,7 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
                         </Row>
                         <Row>
                           <Col md={3} xs={3} className="my-auto p-0"><h5 className="font-weight-bold mb-0 TeamInfoTitle">Logo:</h5></Col>
-                          <Col md={7} xs={7} className="my-auto p-0"><Image src={TeamBadge} className="MainTeamImage" draggable={false}></Image></Col>
+                          <Col md={7} xs={7} className="my-auto p-0"><Image src={TeamBadge} className="MainTeamImage" draggable={false} alt="Team logo"></Image></Col>
                           <Col className="my-auto p-0 ml-2">
                             <a className="TeamInfoIcon my-auto Disabled"><FaEdit color={"grey"} /></a>
                           </Col>
@@ -278,19 +278,19 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
                     <Row>
                       <Col md={1} xs={2}>
                         <Row className="mb-2">
-                          <Image src={Solo} className="PlayerRole my-auto" draggable={false}></Image>
+                          <Image src={Solo} className="PlayerRole my-auto" draggable={false} alt="Solo"></Image>
                         </Row>
                         <Row className="mb-2">
-                          <Image src={Jungle} className="PlayerRole my-auto" draggable={false}></Image>
+                          <Image src={Jungle} className="PlayerRole my-auto" draggable={false} alt="Jungle"></Image>
                         </Row>
                         <Row className="mb-2">
-                          <Image src={Mid} className="PlayerRole my-auto" draggable={false}></Image>
+                          <Image src={Mid} className="PlayerRole my-auto" draggable={false} alt="Mid"></Image>
                         </Row>
                         <Row className="mb-2">
-                          <Image src={Support} className="PlayerRole my-auto" draggable={false}></Image>
+                          <Image src={Support} className="PlayerRole my-auto" draggable={false} alt="Support"></Image>
                         </Row>
                         <Row className="mb-2">
-                          <Image src={Adc} className="PlayerRole my-auto" draggable={false}></Image>
+                          <Image src={Adc} className="PlayerRole my-auto" draggable={false} alt="Adc"></Image>
                         </Row>
                       </Col>
                       <Col md={1} xs={0} className="d-none d-sm-none d-md-block"></Col>
