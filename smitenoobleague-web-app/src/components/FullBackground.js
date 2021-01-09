@@ -2,7 +2,7 @@ import React from "react";
 // Full page responsive background image
 const bgStyle = {
     minHeight: "100%",
-    minWidth: " 1024px",
+    minWidth: "1920px",
     width: "100%",
     height: "auto",
     position: "fixed",
@@ -14,6 +14,6 @@ const bgStyle = {
 export default function FullBackground(props) {
 
   return (
-    <img webp src={props.src} style={bgStyle} draggable={false}/>
+    <img webp src={props.src} style={bgStyle} draggable={false} alt="BG"/>
   );
 }
