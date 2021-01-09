@@ -10,7 +10,7 @@ import { CardColumns, Container } from "react-bootstrap";
 import NewsCard from "src/components/NewsCard";
 //import background component and the image for it
 import FullBackground from "../src/components/FullBackground"
-import BG from "public/images/News_Background.jpg";
+import BG from "public/images/News_Background.jpg?webp";
 //Auth
 import helpers from "utils/helpers";
 

@@ -6,7 +6,7 @@ import Footer from "../src/components/Footer";
 
 //import background component and the image for it
 import FullBackground from "../src/components/FullBackground";
-import BG from "../public/images/dark_bg.jpg";
+import BG from "../public/images/dark_bg.jpg?webp";
 //Auth
 import helpers from "utils/helpers";
 

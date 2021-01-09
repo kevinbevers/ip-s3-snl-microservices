@@ -14,6 +14,6 @@ const bgStyle = {
 export default function FullBackground(props) {
 
   return (
-    <img src={props.src} style={bgStyle} draggable={false}/>
+    <img webp src={props.src} style={bgStyle} draggable={false}/>
   );
 }

@@ -13,10 +13,10 @@ import Form from "react-bootstrap/Form";
 //page imports
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import ScoreTable from "src/components/ScoreTable";
 //import background component and the image for it
 import FullBackground from "../src/components/FullBackground"
-import BG from "../public/images/dark_bg.jpg"
-import ScoreTable from "src/components/ScoreTable";
+import BG from "../public/images/dark_bg.jpg?webp"
 //Auth
 import helpers from "utils/helpers";
 
