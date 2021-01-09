@@ -71,7 +71,7 @@ export default function TeamStat({ postData, LoginSession }) {
     <>
       <NavBar LoginSession={LoginSession}/>
       {/* {postData} */}
-      <Container fluid className="mt-2">
+      <Container fluid className="">
           {/* Team Header */}
           <Row className="">
               <Col md={2} xl={1} xs={3} className="my-auto">

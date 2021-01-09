@@ -10,8 +10,7 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <meta name="description" content="Smitenoobleague is a website where teams can sign up, compete and see there stats"/>
-          <title>Smitenoobleague</title>
-          <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
+          <title>Smitenoobleague 📊</title>
         </Head>
         <body>
           <Main />
