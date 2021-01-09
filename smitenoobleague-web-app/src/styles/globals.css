@@ -7,13 +7,25 @@
 @import "captain.css";
 @import "navbar.css";
 
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap');
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Roboto'), url('./fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans';
+  font-style: normal;
+  font-weight: normal;
+  src: local('OpenSans'), url('./fonts/OpenSans-Regular.ttf') format('truetype');
+}
 
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Roboto' !important; font-weight:400 !important; font-style:regular !important;
+  font-family: 'Roboto', 'OpenSans' !important; font-weight:400 !important; font-style:regular !important;
 }
 
 html,
