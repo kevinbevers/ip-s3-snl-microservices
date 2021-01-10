@@ -14,9 +14,8 @@ import Form from "react-bootstrap/Form";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import ScoreTable from "src/components/ScoreTable";
-//import background component and the image for it
-import FullBackground from "../src/components/FullBackground"
-import BG from "../public/images/dark_bg.jpg?webp"
+//import background component
+import FullBackground from "../src/components/FullBackground";
 //Auth
 import helpers from "utils/helpers";
 
@@ -44,7 +43,7 @@ export default function standings({LoginSession}) {
 
   return (
     <>
-      <FullBackground src={BG} />
+      <FullBackground src={"dark_bg"} />
       <NavBar LoginSession={LoginSession}/>
       <Container>
         <Row className="mt-4">

@@ -9,16 +9,15 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
-//import background component and the image for it
-import FullBackground from "../src/components/FullBackground"
-import BG from "public/images/Rules_Background.jpg";
+//import background component
+import FullBackground from "../src/components/FullBackground";
 //Auth
 import auth0 from "utils/auth0";
 
 export default function rules({LoginSession}) {
   return (
     <>
-        <FullBackground src={BG} />
+        <FullBackground src={"rules_bg"} />
       <NavBar LoginSession={LoginSession}/>
       <Container className="mt-4">
         <Row>
