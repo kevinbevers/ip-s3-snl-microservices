@@ -4,9 +4,8 @@ import React, { useState } from "react";
 import NavBar from "../src/components/NavBar";
 import Footer from "../src/components/Footer";
 
-//import background component and the image for it
+//import background component
 import FullBackground from "../src/components/FullBackground";
-import BG from "../public/images/dark_bg.jpg?webp";
 //Auth
 import helpers from "utils/helpers";
 
@@ -14,7 +13,7 @@ function Home({LoginSession}) {
 
   return (
     <>
-    <FullBackground src={BG} />
+    <FullBackground src={"dark_bg"} />
     <NavBar LoginSession={LoginSession}/>
   <div className="jumbotron-fluid">
     {/* render body here */}

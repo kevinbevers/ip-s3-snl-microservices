@@ -23,25 +23,11 @@
   src: local('Roboto-Bold'), url('./fonts/Roboto/Roboto-Bold.ttf') format('truetype');
 }
 
-@font-face {
-  font-family: 'OpenSans';
-  font-style: normal;
-  font-weight: normal;
-  src: local('OpenSans'), url('./fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'OpenSans';
-  font-style: normal;
-  font-weight: bold;
-  src: local('OpenSans-Bold'), url('./fonts/Open_Sans/OpenSans-Bold.ttf') format('truetype');
-}
-
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Roboto', 'OpenSans' !important;
+  font-family: 'Roboto' !important;
 }
 
 html,

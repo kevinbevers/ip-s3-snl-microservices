@@ -1,4 +1,6 @@
 import React from "react";
+import Img from 'react-optimized-image';
+import fallBackSrc from "public/images/dark_bg.jpg"
 // Full page responsive background image
 const bgStyle = {
     minHeight: "100%",
@@ -11,9 +13,15 @@ const bgStyle = {
     zIndex: "-1",
   };
 
-export default function FullBackground(props) {
+export default function FullBackground({src}) {
 
   return (
-    <img webp src={props.src} style={bgStyle} draggable={false} alt="BG"/>
+    <>
+    {src == "dark_bg" ? <Img webp height={100} width={100} sizes={[1920, 480]} src={require("public/images/dark_bg.jpg")} style={bgStyle} draggable={false} alt="BG"/> 
+    : src == "news_bg" ? <Img webp height={100} width={100} sizes={[1920, 480]} src={require("public/images/news_bg.jpg")} style={bgStyle} draggable={false} alt="BG"/> 
+    : src == "rules_bg" ? <Img webp height={100} width={100} sizes={[1920, 480]} src={require("public/images/rules_bg.jpg")} style={bgStyle} draggable={false} alt="BG"/>
+    : <Img webp height={100} width={100} sizes={[1920, 480]} src={require("public/images/dark_bg.jpg")} style={bgStyle} draggable={false} alt="BG"/>}
+    </>
+    
   );
 }
