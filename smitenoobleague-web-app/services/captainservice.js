@@ -7,6 +7,11 @@ const GetTeamByID = async(apiToken, data) => {
     return apiClient.get(baseServiceAddress + "/team/" + data);
 };
 
+const GetTeamByCaptainID = async(apiToken, data) => {
+  const apiClient = await BuildApiClient(apiToken);
+  return apiClient.get(baseServiceAddress + "/team/bycaptainid/" + data, { timeout: 5000 });
+};
+
 const UpdatePlayerRole = async(apiToken, data) => {
   const apiClient = await BuildApiClient(apiToken);
   return apiClient.put(baseServiceAddress + "/team/updaterole", data);
@@ -37,4 +42,5 @@ export default {
   UpdatePlayerRole,
   UpdateTeamInfo,
   SubmitMatchID,
+  GetTeamByCaptainID
 }

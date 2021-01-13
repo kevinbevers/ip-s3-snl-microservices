@@ -1,5 +1,4 @@
-  
-import auth0 from "utils/auth0";
+ import auth0 from "utils/auth0";
 import axios from "axios";
 
 const GetLoginSession = async(req) => {

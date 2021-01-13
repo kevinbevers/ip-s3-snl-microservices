@@ -23,7 +23,6 @@ import helpers from "utils/helpers";
 import captainservice from "services/captainservice";
 
 export default function captainpage({ LoginSession, apiResponse, status, errMsg, apiToken }) {
-
   //#region SubmitMatch
   const [matchID, setMatchID] = useState(0);
   const [submissionMsg, setSubmissionMsg] = useState({ text: "Submission msg here...", color: "danger" });
@@ -31,8 +30,8 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   function SubmissionAlert() {
     if (showSubmissionAlert) {
       return (
-        <Alert className="" variant={submissionMsg?.color} onClose={() => setShowSubmissionAlert(false)} dismissible>
-          <p className="my-auto">
+        <Alert className="" variant={submissionMsg?.color} onClose={() => setShowSubmissionAlert(false)} dismissible data-testid="captainPageMatchAlert">
+          <p className="my-auto" data-testid="captainPageMatchAlertText">
             {submissionMsg?.text}
           </p>
         </Alert>
@@ -43,29 +42,31 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
 
   const handleChange = (event) => {
     if (event.target?.value != null) {
+      //update matchID
+      setMatchID(event.target.value);
+      //show messag during typing
       if (event.target.value.length <= 10) {
         setShowSubmissionAlert(false);
-        setMatchID(event.target.value);
       }
 
       if (event.target.value.length > 10) {
-        setSubmissionMsg({ text: "gameID to long to be valid. a maximum of 10 characters is allowed", color: "danger" })
+        setSubmissionMsg({ text: "gameID too long to be valid. a maximum of 10 characters is allowed", color: "danger" })
         setShowSubmissionAlert(true);
       }
-
+    }
+    else {
+      setShowSubmissionAlert(false);
+      setMatchID(0);
     }
   };
   const handleSubmit = async (event) => {
 
-    const id = Number(matchID);
-
-    console.log(id);
-
-    if (matchID != null && matchID != "" && matchID.length >= 5 && matchID.length <= 10) {
+    if (matchID != null && matchID != "" && matchID?.length >= 5 && matchID?.length <= 10) {
       setShowSubmissionAlert(false);
+      const id = Number(matchID);
       await captainservice.SubmitMatchID(apiToken, id)
         .then(res => {
-          setSubmissionMsg({ text: res.data, color: "success" })
+          setSubmissionMsg({ text: res.data, color: "success" });
           setShowSubmissionAlert(true);
         })
         .catch(err => {
@@ -73,12 +74,16 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
           setShowSubmissionAlert(true);
         });
     }
-    else if (matchID != null && matchID && matchID.length < 5) {
-      setSubmissionMsg({ text: "gameID to short to be valid. a minimum of 5 characters is required", color: "danger" })
+    else if(matchID?.length == 0 || matchID == "" || matchID == null){
+      setSubmissionMsg({ text: "gameID not filled in.", color: "warning" })
       setShowSubmissionAlert(true);
     }
-    else if (matchID != null && matchID && matchID.length > 10) {
-      setSubmissionMsg({ text: "gameID to long to be valid. a maximum of 10 characters is allowed", color: "danger" })
+    else if (matchID?.length < 5) {
+      setSubmissionMsg({ text: "gameID too short to be valid. a minimum of 5 characters is required", color: "danger" })
+      setShowSubmissionAlert(true);
+    }
+    else if (matchID?.length > 10) {
+      setSubmissionMsg({ text: "gameID too long to be valid. a maximum of 10 characters is allowed", color: "danger" })
       setShowSubmissionAlert(true);
     }
   };
@@ -195,8 +200,8 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   function TeamInfoAlert() {
     if (showTeamInfoAlert) {
       return (
-        <Alert className="" variant="danger" onClose={() => setShowTeamInfoAlert(false)} dismissible>
-          <p className="my-auto">
+        <Alert className="" variant="danger" onClose={() => setShowTeamInfoAlert(false)} dismissible data-testid="captainPageTeamAlert">
+          <p className="my-auto" data-testid="captainPageTeamAlertText">
             {msgTeamInfo}
           </p>
         </Alert>
@@ -231,8 +236,8 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
                     <Card.Body className="">
                       <h2 className="font-weight-bold">SUBMIT MATCH</h2>
                       <Form.Group className="">
-                        <Form.Control type="number" placeholder="Match ID..." className="mb-2" onChange={handleChange} maxLength={10} />
-                        <Button variant="primary" size="lg" block onClick={handleSubmit}>Submit</Button>
+                        <Form.Control type="number" placeholder="Match ID..." className="mb-2" onChange={handleChange} maxLength={10} data-testid="captainPageMatchIdInput"/>
+                        <Button variant="primary" size="lg" block onClick={handleSubmit} data-testid="captainPageSubmitButton">Submit</Button>
                       </Form.Group>
                       <Row><Col><SubmissionAlert /></Col></Row>
                     </Card.Body>
@@ -350,9 +355,9 @@ export async function getServerSideProps({ req, params, res }) {
   const loginSessionData = await helpers.GetLoginSession(req);
 
   if (loginSessionData.user != null) {
-    const httpClient = await helpers.GetSecureApi(req, res);
+    const apiTokenForClient = await helpers.GetAccessTokenForClient(req, req);
     let response = { data: null, statusCode: null, errMsg: null };
-    await httpClient.get("team-service/team/bycaptainid/" + loginSessionData.user.sub, { timeout: 5000 })
+    await captainservice.GetTeamByCaptainID(apiTokenForClient,loginSessionData.user.sub)
       .then(res => {
         response.data = res.data;
       })
@@ -374,7 +379,7 @@ export async function getServerSideProps({ req, params, res }) {
         apiResponse: response.data,
         status: response.statusCode,
         errMsg: response.errMsg,
-        apiToken: await helpers.GetAccessTokenForClient(req, req)
+        apiToken: apiTokenForClient
       }
     }
   }
