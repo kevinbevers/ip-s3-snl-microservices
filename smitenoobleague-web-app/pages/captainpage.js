@@ -218,7 +218,7 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
   //#endregion
 
   if (status != null) {
-    return (<><DefaultErrorPage statusCode={status} title={errMsg} /></>);
+    return (<><DefaultErrorPage statusCode={status} title={errMsg} data-testid="captainPageError"/></>);
   }
   else {
 

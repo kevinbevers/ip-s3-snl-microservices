@@ -46,7 +46,7 @@ describe("Test gameID submission", () => {
             playerID: 1234
           }
         ]
-      },
+      }
     });
     //#endregion
   });
@@ -204,11 +204,11 @@ describe("Test gameID submission", () => {
 
 });
 
-describe("Test userinput on the captainpage", () => {
+describe("Test page error capturing", () => {
 
-  test("Pressing submit where gameID is invalid and api returns a 400, should return a error msg to user", async () => {
-    expect.assertions(4);
-    //#region Setup the mocks
+  test("API returns that no team was found with the given account ID", async () => {
+    //number of expects that should be completed
+    expect.assertions(1);
     //Mock login        
     helpers.GetLoginSession.mockResolvedValue({
       user: { sub: "captainuserid" },
@@ -217,58 +217,40 @@ describe("Test userinput on the captainpage", () => {
     //Mock accessToken
     helpers.GetAccessTokenForClient.mockResolvedValue("hello");
     //Mock getting api data
-    captainservice.GetTeamByCaptainID.mockResolvedValue({
-      status: 200,
-      data: {
-        teamID: 1,
-        teamName: "teamname",
-        divisionID: 1,
-        teamLogoPath: "imagelocation",
-        teamMembers: [
-          {
-            teamMemberID: 1,
-            teamMemberName: "captainname",
-            teamMemberRole: {
-              roleID: 1,
-              roleName: "Solo"
-            },
-            teamCaptain: true,
-            teamMemberPlatform: "PS4",
-            playerID: 1234
-          }
-        ]
-      }
-    });
-    //Mock api SubmitMatchID
-    captainservice.SubmitMatchID.mockRejectedValue({
+    captainservice.GetTeamByCaptainID.mockRejectedValue({
       response: {
-        status: 400,
-        data: "The submitted match is not a custom conquest match with drafts."
-      }
+      status: 404,
+      data: "No captain found with the given Account ID."
+    }
     });
-    //#endregion
-
     //use get serversideprops.
     const { props } = await CaptainPage.getServerSideProps("", "", "");
     //render the page with the given props
     render(<Captain LoginSession={props.LoginSession} apiResponse={props.apiResponse} apiToken={props.apiToken} errMsg={props.errMsg} status={props.status} />);
+    //error page should show
+    const errorText = await screen.findByText("404");
+    expect(errorText).toBeInTheDocument();
+  });
 
-    //check if the captainPage match input is rendered
-    const inputField = await screen.findByTestId("captainPageMatchIdInput");
-    fireEvent.change(inputField, { target: { value: 1234567 } });
-    expect(inputField.value).toBe("1234567");
-    //user clicks on the submit button without entering data in the inputfield
-    const submitButton = await screen.findByTestId("captainPageSubmitButton");
-    fireEvent.click(submitButton);
-    //user expects error message to show
-    const alertBox = await screen.findByTestId("captainPageMatchAlert");
-    expect(alertBox).toBeInTheDocument();
-    //expect red background for error
-    expect(alertBox.className).toContain("alert-danger");
-    //user expects error message to show
-    const alertBoxText = await screen.findByTestId("captainPageMatchAlertText");
-    //textContext to select the text within the <p>
-    expect(alertBoxText.textContent).toBe("The submitted match is not a custom conquest match with drafts.");
+  test("API doesn't responsed which results in a response null and shows service unavailable to the user", async () => {
+    //number of expects that should be completed
+    expect.assertions(1);
+    //Mock login        
+    helpers.GetLoginSession.mockResolvedValue({
+      user: { sub: "captainuserid" },
+      isCaptain: true
+    });
+    //Mock accessToken
+    helpers.GetAccessTokenForClient.mockResolvedValue("hello");
+    //Mock getting api data
+    captainservice.GetTeamByCaptainID.mockRejectedValue({response: null});
+    //use get serversideprops.
+    const { props } = await CaptainPage.getServerSideProps("", "", "");
+    //render the page with the given props
+    render(<Captain LoginSession={props.LoginSession} apiResponse={props.apiResponse} apiToken={props.apiToken} errMsg={props.errMsg} status={props.status} />);
+    //error page should show
+    const errorText = await screen.findByText("503");
+    expect(errorText).toBeInTheDocument();
   });
 
 });
