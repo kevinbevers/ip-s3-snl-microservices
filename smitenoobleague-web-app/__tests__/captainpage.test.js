@@ -253,4 +253,24 @@ describe("Test page error capturing", () => {
     expect(errorText).toBeInTheDocument();
   });
 
+  test("navigate to captainpage without being logged in, redirect to login url", async () => {
+    //number of expects that should be completed
+    expect.assertions(1);
+    //Mock login        
+    helpers.GetLoginSession.mockResolvedValue({
+      user: null,
+      isCaptain: false
+    });
+    //mock res for usage in the ssr
+    const res = {
+      setHeader: jest.fn()
+    };
+    //use get serversideprops.
+    const { props } = await CaptainPage.getServerSideProps({req: {}, params: "", res: res});
+    //render the page with the given props
+    render(<Captain LoginSession={props.LoginSession} apiResponse={props.apiResponse} apiToken={props.apiToken} errMsg={props.errMsg} status={props.status} />);
+    //error page should show
+    expect(res.setHeader).toHaveBeenLastCalledWith('Location', `/api/login`);
+  });
+
 });

@@ -354,7 +354,7 @@ export async function getServerSideProps({ req, params, res }) {
 
   const loginSessionData = await helpers.GetLoginSession(req);
 
-  if (loginSessionData.user != null) {
+  if (loginSessionData?.user != null) {
     const apiTokenForClient = await helpers.GetAccessTokenForClient(req, req);
     let response = { data: null, statusCode: null, errMsg: null };
     await captainservice.GetTeamByCaptainID(apiTokenForClient,loginSessionData.user.sub)
