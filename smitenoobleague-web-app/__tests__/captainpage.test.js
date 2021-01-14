@@ -55,7 +55,7 @@ describe("Test gameID submission", () => {
     //use get serversideprops.
     const { props } = await CaptainPage.getServerSideProps("", "", "");
     //render the page with the given props
-    render(<Captain LoginSession={props.LoginSession} apiResponse={props.apiResponse} apiToken={props.apiToken} errMsg={props.errMsg} status={props.status} />);
+    render(<Captain {...props} />);
   });
 
   test("Pressing submit where gameID is empty, should return a warning msg to the user", async () => {
@@ -227,8 +227,8 @@ describe("Test page error capturing", () => {
     const { props } = await CaptainPage.getServerSideProps("", "", "");
     //render the page with the given props
     render(<Captain LoginSession={props.LoginSession} apiResponse={props.apiResponse} apiToken={props.apiToken} errMsg={props.errMsg} status={props.status} />);
-    //error page should show
-    const errorText = await screen.findByText("404");
+    //error page should show //give regex for matching
+    const errorText = await screen.findByText(/No captain found with the given Account ID./);
     expect(errorText).toBeInTheDocument();
   });
 
@@ -266,11 +266,12 @@ describe("Test page error capturing", () => {
       setHeader: jest.fn()
     };
     //use get serversideprops.
-    const { props } = await CaptainPage.getServerSideProps({req: {}, params: "", res: res});
+    const { props } = await CaptainPage.getServerSideProps({req: {}, params: "", res});
     //render the page with the given props
-    render(<Captain LoginSession={props.LoginSession} apiResponse={props.apiResponse} apiToken={props.apiToken} errMsg={props.errMsg} status={props.status} />);
+    render(<Captain {...props} />);
     //error page should show
     expect(res.setHeader).toHaveBeenLastCalledWith('Location', `/api/login`);
+    //check if login page is rendered
   });
 
 });

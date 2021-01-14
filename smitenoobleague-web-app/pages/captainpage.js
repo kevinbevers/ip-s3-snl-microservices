@@ -22,7 +22,7 @@ import TeamBadge from "public/images/teamBadge.png"
 import helpers from "utils/helpers";
 import captainservice from "services/captainservice";
 
-export default function captainpage({ LoginSession, apiResponse, status, errMsg, apiToken }) {
+export default function captainpage({ LoginSession, apiResponse, status, errMsg, apiToken, ...props }) {
   //#region SubmitMatch
   const [matchID, setMatchID] = useState(0);
   const [submissionMsg, setSubmissionMsg] = useState({ text: "Submission msg here...", color: "danger" });
