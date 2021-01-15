@@ -607,6 +607,98 @@ namespace team_microservice.Services
             }
         }
 
+        public async Task<ActionResult<IEnumerable<Team>>> GetTeamsThatAreNotInADivision()
+        {
+            try
+            {
+                List<TableTeam> foundTeams = await _db.TableTeams.Where(t => t.TeamDivisionId == null).ToListAsync();
+                if (foundTeams.Count() == 0)
+                {
+                    return new ObjectResult("No teams found without division.") { StatusCode = 404 }; //NOT FOUND
+                }
+                else
+                {
+                    List<Team> returnTeams = new List<Team>();
+
+                    foreach (var team in foundTeams)
+                    {
+                        returnTeams.Add(new TeamWithDetails
+                        {
+                            TeamID = team.TeamId,
+                            TeamName = team.TeamName,
+                            DivisionID = team.TeamDivisionId,
+                            TeamLogoPath = team.TeamLogoPath
+                        });
+                    }
+
+                    return new ObjectResult(returnTeams) { StatusCode = 200 }; //OK
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get teams without division.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get teams without division.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
+        public async Task<ActionResult<IEnumerable<TeamWithDetails>>> GetTeamsThatAreNotInADivisionWithDetailsAsync()
+        {
+            try
+            {
+                List<TableTeam> foundTeams = await _db.TableTeams.Where(t => t.TeamDivisionId == null).ToListAsync();
+                if (foundTeams.Count() == 0)
+                {
+                    return new ObjectResult("No teams found without division") { StatusCode = 404 }; //NOT FOUND
+                }
+                else
+                {
+                    List<TeamWithDetails> returnTeams = new List<TeamWithDetails>();
+
+                    foreach (var team in foundTeams)
+                    {
+                        List<TableTeamMember> teamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == team.TeamId).ToListAsync();
+
+                        List<TeamMember> members = new List<TeamMember>();
+
+                        foreach (var m in teamMembers)
+                        {
+                            var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == m.TeamMemberRole).FirstOrDefaultAsync();
+
+                            members.Add(new TeamMember
+                            {
+                                TeamMemberID = m.TeamMemberId,
+                                TeamCaptain = team.TeamCaptainId == m.TeamMemberId ? true : false,
+                                TeamMemberName = m.TeamMemberName,
+                                TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
+                                TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                                PlayerID = m.TeamMemberPlayerId
+                            });
+                        }
+
+                        returnTeams.Add(new TeamWithDetails
+                        {
+                            TeamID = team.TeamId,
+                            TeamName = team.TeamName,
+                            DivisionID = team.TeamDivisionId,
+                            TeamMembers = members,
+                            TeamLogoPath = team.TeamLogoPath
+                        });
+                    }
+
+                    return new ObjectResult(returnTeams) { StatusCode = 200 }; //OK
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get teams without division.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get teams without division.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
         public async Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByCaptainAccountIdAsync(string captainID)
         {
             try

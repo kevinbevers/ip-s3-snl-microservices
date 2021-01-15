@@ -9,7 +9,6 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Container, Form } from "react-bootstrap";
 //custom components
-import ScheduleItem from "src/components/ScheduleItem";
 import ScheduleBlock from "src/components/ScheduleBlock";
 //Auth
 import helpers from "utils/helpers";
@@ -103,8 +102,8 @@ export async function getServerSideProps(context) {
   const loginSessionData = await helpers.GetLoginSession(context.req);
 
   //Get division names and id and get the currentschedule for the first division in the list
-  let listOfDivisions = null;
-  let listOfSchedules = null;
+  let listOfDivisions = [];
+  let listOfSchedules = [];
   let ScheduleData = null;
 
   //Get division data from api
