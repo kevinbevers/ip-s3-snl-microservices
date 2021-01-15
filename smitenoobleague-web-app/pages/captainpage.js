@@ -180,7 +180,6 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
       };
       await captainservice.UpdateTeamInfo(apiToken, data).then(res => { setOldName(teamName); setShowTeamInfoAlert(false); setEditing(false); })
         .catch(err => {
-          console.log(err.response);
           if (err.response.status != 400) {
             SetNote({ title: "Error", msg: "Oh oh something went wrong trying to update the teamname.", type: "bg-danger" });
             SetNotify(true);
