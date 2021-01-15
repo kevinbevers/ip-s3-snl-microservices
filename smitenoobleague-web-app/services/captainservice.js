@@ -1,41 +1,32 @@
 import axios from "axios";
+import helpers from "utils/helpers";
 
 const baseServiceAddress = "team-service"
 
 const GetTeamByID = async(apiToken, data) => {
-    const apiClient = await BuildApiClient(apiToken);
+    const apiClient = await helpers.BuildApiClient(apiToken);
     return apiClient.get(baseServiceAddress + "/team/" + data);
 };
 
 const GetTeamByCaptainID = async(apiToken, data) => {
-  const apiClient = await BuildApiClient(apiToken);
+  const apiClient = await helpers.BuildApiClient(apiToken);
   return apiClient.get(baseServiceAddress + "/team/bycaptainid/" + data, { timeout: 5000 });
 };
 
 const UpdatePlayerRole = async(apiToken, data) => {
-  const apiClient = await BuildApiClient(apiToken);
+  const apiClient = await helpers.BuildApiClient(apiToken);
   return apiClient.put(baseServiceAddress + "/team/updaterole", data);
 };
 
 const UpdateTeamInfo = async(apiToken, data) => {
-  const apiClient = await BuildApiClient(apiToken);
+  const apiClient = await helpers.BuildApiClient(apiToken);
   return apiClient.put(baseServiceAddress + "/team", data);
 };
 
 const SubmitMatchID = async(apiToken, data) => {
-  const apiClient = await BuildApiClient(apiToken);
+  const apiClient = await helpers.BuildApiClient(apiToken);
   return apiClient.post("smiteapi-service/match", data);
 };
-
-const BuildApiClient = async(apiToken) => {
-    return axios.create({
-      baseURL: process.env.NEXT_PUBLIC_BASE_API_URL + "/",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${apiToken}`,
-      },
-    });
-  };
 
 export default {
   GetTeamByID,

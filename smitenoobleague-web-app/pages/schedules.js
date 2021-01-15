@@ -127,7 +127,7 @@ export async function getServerSideProps(context) {
         .then((res) => {
           ScheduleData = res.data;
         })
-        .catch((error) => {
+        .catch((error) => { 
         });
     }
   }
