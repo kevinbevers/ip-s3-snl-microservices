@@ -22,7 +22,7 @@ const GetLoginSession = async(req) => {
           isCaptain: Captain
         };
 };
-
+//used in server side for autorized calls
 const GetSecureApi = async(req, res) => {
 
   const tokenCache = auth0.tokenCache(req, res);
@@ -36,7 +36,7 @@ const GetSecureApi = async(req, res) => {
     },
   });
 };
-
+//token for client side
 const GetAccessTokenForClient = async(req, res) => {
 
   const tokenCache = auth0.tokenCache(req, res);
@@ -44,9 +44,21 @@ const GetAccessTokenForClient = async(req, res) => {
 
   return accessToken;
 };
+//used in client side for authorized calls
+const BuildApiClient = async(apiToken) => {
+  return axios.create({
+    baseURL: process.env.NEXT_PUBLIC_BASE_API_URL + "/",
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${apiToken}`,
+    },
+  });
+};
+
 
 export default {
   GetLoginSession,
   GetSecureApi,
-  GetAccessTokenForClient
+  GetAccessTokenForClient,
+  BuildApiClient
 }

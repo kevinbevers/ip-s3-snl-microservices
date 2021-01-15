@@ -312,7 +312,7 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
                           delay={200}>
 
                           {teamMembers.map((member, index) => (
-                            <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse?.teamID} />
+                            <PlayerManagement key={index} player={member} apiToken={apiToken} teamID={apiResponse?.teamID} />
                           ))}
                         </ReactSortable>
                         <Row><Col><h6 className="text-muted float-right ExtraInfoText">Drag and drop players to swap their roles.</h6></Col></Row>
