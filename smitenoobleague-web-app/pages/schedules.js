@@ -13,8 +13,9 @@ import ScheduleItem from "src/components/ScheduleItem";
 import ScheduleBlock from "src/components/ScheduleBlock";
 //Auth
 import helpers from "utils/helpers";
-//service
+//services
 import scheduleservice from "services/scheduleservice";
+import divisionservice from "services/divisionservice";
 
 export default function schedules({ LoginSession, DivisionList, SchedulesForFirstDivision, CurrentScheduleDataForFirstDivision }) {
   //Divisions for dropdown
@@ -107,7 +108,7 @@ export async function getServerSideProps(context) {
   let ScheduleData = null;
 
   //Get division data from api
-  await scheduleservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {listOfDivisions = [{divisionID: 0, divisionName: "No divisions", currentScheduleID: 0}]; });
+  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {listOfDivisions = [{divisionID: 0, divisionName: "No divisions", currentScheduleID: 0}]; });
 
   //check if there are divisions, if yes check if the first division has a schedule and get it
   if (listOfDivisions?.length > 0) {
