@@ -25,12 +25,11 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
   const [Schedule, setSchedule] = useState(CurrentScheduleDataForFirstDivision);
 
   //Select Division
-  const [SelectedDivisionID, setSelectedDivisionID] = useState(Divisions[0]?.divisionID);
+  const [SelectedDivisionID, setSelectedDivisionID] = useState(DivisionList[0]?.divisionID);
   const changeDivision = async(evt) => {
     setSelectedDivisionID(evt.target.value);
 
     const selectedDivision = Divisions.filter(d => d.divisionID == evt.target.value)[0];
-    console.log(selectedDivision);
     //Get all schedules for the selected division
     await scheduleservice.GetListOfSchedulesByDivisionID(evt.target.value)
     .then(res => { setSchedules(res.data);}).catch(err => { setSchedules([{scheduleID: 0, scheduleName: "No schedules"}]);});
@@ -43,7 +42,7 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
   const [SelectedPeriod, setSelectedPeriod] = useState(DivisionList[0]?.currentScheduleID);
   const changePeriod = async(evt) => {
     setSelectedPeriod(evt.target.value);
-    await scheduleservice.GetScheduleDetailsByScheduleID(evt.target.value).then(res => {  setSchedule(res.data);}).catch(err => {});
+    await scheduleservice.GetScheduleDetailsByScheduleID(evt.target.value).then(res => {  setSchedule(res.data);}).catch(err => { setSchedule(null)});
   }
 
 
@@ -108,16 +107,17 @@ export async function getServerSideProps(context) {
   let ScheduleData = null;
 
   //Get division data from api
-  await scheduleservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {setSchedules([{divisionID: 0, divisionName: "No divisions"}]); });
+  await scheduleservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {listOfDivisions = [{divisionID: 0, divisionName: "No divisions", currentScheduleID: 0}]; });
 
   //check if there are divisions, if yes check if the first division has a schedule and get it
-  if (listOfDivisions.length > 0) {
+  if (listOfDivisions?.length > 0) {
     //get schedule data from api
     await scheduleservice.GetListOfSchedulesByDivisionID(listOfDivisions[0]?.divisionID)
       .then((res) => {
         listOfSchedules = res.data;
       })
       .catch((error) => {
+        listOfSchedules = [{scheduleID: 0, scheduleName: "No schedules"}];
       });
 
 
