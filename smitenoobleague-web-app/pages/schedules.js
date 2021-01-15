@@ -81,7 +81,7 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
           </Col>
         </Row>
         {/* The interactive current selected schedule */}
-        {Schedule?.length > 0 ? <ScheduleBlock Schedule={Schedule} /> : 
+        {Schedule != null ? <ScheduleBlock Schedule={Schedule} /> : 
         <>        
           <Row className="mt-5">
             <Col md={3}></Col>
