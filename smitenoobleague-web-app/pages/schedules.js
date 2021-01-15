@@ -9,6 +9,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Container, Form } from "react-bootstrap";
 //custom components
+
 import ScheduleBlock from "src/components/ScheduleBlock";
 //Auth
 import helpers from "utils/helpers";
@@ -25,7 +26,7 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
   const [Schedule, setSchedule] = useState(CurrentScheduleDataForFirstDivision);
 
   //Select Division
-  const [SelectedDivisionID, setSelectedDivisionID] = useState(DivisionList[0]?.divisionID);
+  const [SelectedDivisionID, setSelectedDivisionID] = useState(DivisionList?.length > 0 ? DivisionList[0]?.divisionID : 0);
   const changeDivision = async(evt) => {
     setSelectedDivisionID(evt.target.value);
 
@@ -39,7 +40,7 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
  
   }
   //Select Schedule
-  const [SelectedPeriod, setSelectedPeriod] = useState(DivisionList[0]?.currentScheduleID);
+  const [SelectedPeriod, setSelectedPeriod] = useState(DivisionList?.length > 0 ? DivisionList[0]?.currentScheduleID : 0);
   const changePeriod = async(evt) => {
     setSelectedPeriod(evt.target.value);
     await scheduleservice.GetScheduleDetailsByScheduleID(evt.target.value).then(res => {  setSchedule(res.data);}).catch(err => { setSchedule(null)});
@@ -58,9 +59,9 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
                 <Form>
                   <Form.Group controlId="selectDivision">
                     <Form.Control as="select" custom onChange={changeDivision} value={SelectedDivisionID}>
-                      {Divisions.map((d, index) => (
+                      {Divisions?.length > 0 ? Divisions.map((d, index) => (
                         <option key={index} disabled={d.divisionID == 0 && d.divisionName == "No divisions"} value={d.divisionID}>{d.divisionName}</option>
-                      ))}
+                      )) : <option disabled value={0}>{ "No divisions"}</option>}
                     </Form.Control>
                   </Form.Group>
                 </Form>
@@ -69,9 +70,9 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
                 <Form>
                   <Form.Group controlId="selectSplit">
                     <Form.Control as="select" custom onChange={changePeriod} value={SelectedPeriod}>
-                      {Schedules.map((s, index) => (          
+                      {Schedules?.length > 0 ? Schedules.map((s, index) => (          
                         <option key={index} disabled={s.scheduleID == 0 && s.scheduleName == "No schedules"} value={s.scheduleID}>{s.scheduleName}</option>
-                      ))}
+                      )) : <option disabled value={0}>{"No schedules"}</option>}
                     </Form.Control>
                   </Form.Group>
                 </Form>
@@ -80,7 +81,7 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
           </Col>
         </Row>
         {/* The interactive current selected schedule */}
-        {Schedule != null ? <ScheduleBlock Schedule={Schedule} /> : 
+        {Schedule?.length > 0 ? <ScheduleBlock Schedule={Schedule} /> : 
         <>        
           <Row className="mt-5">
             <Col md={3}></Col>
@@ -107,7 +108,7 @@ export async function getServerSideProps(context) {
   let ScheduleData = null;
 
   //Get division data from api
-  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {listOfDivisions = [{divisionID: 0, divisionName: "No divisions", currentScheduleID: 0}]; });
+  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {});
 
   //check if there are divisions, if yes check if the first division has a schedule and get it
   if (listOfDivisions?.length > 0) {
@@ -117,7 +118,6 @@ export async function getServerSideProps(context) {
         listOfSchedules = res.data;
       })
       .catch((error) => {
-        listOfSchedules = [{scheduleID: 0, scheduleName: "No schedules"}];
       });
 
 

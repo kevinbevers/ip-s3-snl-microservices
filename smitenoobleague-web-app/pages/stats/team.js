@@ -22,7 +22,7 @@ export default function team({LoginSession, DivisionList, TeamList}) {
     const [TeamsToShow, setTeamsToShow] = useState(TeamList);
 
     //Select Division
-    const [SelectedDivisionID, setSelectedDivisionID] = useState(DivisionList[0]?.divisionID);
+    const [SelectedDivisionID, setSelectedDivisionID] = useState(DivisionList?.length > 0 ? DivisionList[0]?.divisionID : 0);
     const changeDivision = async(evt) => {
       setSelectedDivisionID(evt.target.value);
 
@@ -42,7 +42,10 @@ export default function team({LoginSession, DivisionList, TeamList}) {
 
     useEffect(() => {
       //Add the teams without division
-            setDivisions(Divisions.concat({divisionID: 0, divisionName: "Division-less Teams"}));
+        if(Divisions?.length > 0)
+        {
+          setDivisions(Divisions.concat({divisionID: 0, divisionName: "Division-less Teams"}));
+        }
     }, []);
 
 
@@ -55,9 +58,9 @@ export default function team({LoginSession, DivisionList, TeamList}) {
           <Col></Col>
           <Col md={4} xl={3} className="d-flex justify-content-center">
               <Form.Control as="select" custom onChange={changeDivision} value={SelectedDivisionID}>
-                {Divisions.map((d, index) => (
+                {Divisions?.length > 0 ? Divisions.map((d, index) => (
                   <option key={index} disabled={d.divisionID == 0 && d.divisionName == "No divisions"} value={d.divisionID}>{d.divisionName}</option>
-                ))}
+                )) : <option disabled value={0}>{ "No divisions"}</option>}
               </Form.Control>
           </Col>
           <Col></Col>
@@ -94,7 +97,7 @@ export async function getServerSideProps(context) {
     let listOfDivisions = [];
     let listOfTeams = null;
     //Get division data from api
-    await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {listOfDivisions = [{divisionID: 0, divisionName: "No divisions", currentScheduleID: 0}]; });
+    await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {});
     
       //check if there are divisions, if yes check if the first division has teams
   if (listOfDivisions?.length > 0) {

@@ -6,8 +6,7 @@ import Footer from "src/components/Footer";
 //bootstrap components
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import { Container, Card, Image, FormControl, InputGroup, Form } from "react-bootstrap";
+import { Container, FormControl, Form } from "react-bootstrap";
 //component
 import PlayerCard from "src/components/PlayerCard";
 //Auth
@@ -44,7 +43,7 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
       };
   
       //Select Division
-      const [SelectedDivisionID, setSelectedDivisionID] = useState(DivisionList[0]?.divisionID);
+      const [SelectedDivisionID, setSelectedDivisionID] = useState(DivisionList?.length > 0 ? DivisionList[0]?.divisionID: 0);
       const changeDivision = async(evt) => {
         setSelectedDivisionID(evt.target.value);
         setSearchValue("");
@@ -63,8 +62,11 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
       };
   
       useEffect(() => {
-        //Add the teams without division
-        setDivisions(Divisions.concat({divisionID: 0, divisionName: "Division-less Players"}));
+        if(Divisions?.length > 0)
+        {
+          //Add the teams without division
+          setDivisions(Divisions.concat({divisionID: 0, divisionName: "Division-less Players"}));
+        }
       }, []);
     return (
       <>      
@@ -77,9 +79,9 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
                 <Form>
                   <Form.Group controlId="selectDivision">
                     <Form.Control as="select" custom onChange={changeDivision} value={SelectedDivisionID}>
-                      {Divisions.map((d, index) => (
+                      {Divisions?.length > 0 ? Divisions.map((d, index) => (
                         <option key={index} disabled={d.divisionID == 0 && d.divisionName == "No divisions"} value={d.divisionID}>{d.divisionName}</option>
-                      ))}
+                      )): <option disabled value={0}>{ "No divisions"}</option>}
                     </Form.Control>
                   </Form.Group>
                 </Form>
@@ -129,7 +131,7 @@ export async function getServerSideProps(context) {
     let listOfDivisions = [];
     let listOfPlayers = null;
     //Get division data from api
-    await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {listOfDivisions = [{divisionID: 0, divisionName: "No divisions", currentScheduleID: 0}]; });
+    await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => { });
     
       //check if there are divisions, if yes check if the first division has teams
   if (listOfDivisions?.length > 0) {
