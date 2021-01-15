@@ -31,10 +31,10 @@ namespace division_microservice.Controllers
             return ModelState.IsValid ? await _scheduleService.GetAllSchedulesByDivisionIdAsync(divisionID) : BadRequest(ModelState);
         }
         // GET:  /allids-bydivisionid/{divisionID}
-        [HttpGet("allids-bydivisionid/{divisionID}")]
-        public async Task<ActionResult<IEnumerable<int>>> GetListOfScheduleIds(int divisionID)
+        [HttpGet("allids&names-bydivisionid/{divisionID}")]
+        public async Task<ActionResult<IEnumerable<SimpleSchedule>>> GetListOfScheduleIds(int divisionID)
         {
-            return ModelState.IsValid ? await _scheduleService.GetAllScheduleIDsByDivisionIdAsync(divisionID) : BadRequest(ModelState);
+            return ModelState.IsValid ? await _scheduleService.GetSimpleListOfAllSchedulesByDivisionIdAsync(divisionID) : BadRequest(ModelState);
         }
 
         // GET /byscheduleid/{scheduleID}
@@ -56,6 +56,13 @@ namespace division_microservice.Controllers
         public async Task<ActionResult<Schedule>> Delete(int scheduleID)
         {
             return ModelState.IsValid ? await _scheduleService.RemoveScheduleByIdAsync(scheduleID) : BadRequest(ModelState);
+        }
+
+        // PUT /schedule/{scheduleID}
+        [HttpPut]
+        public async Task<ActionResult<Schedule>> Put([FromBody] SimpleSchedule values)
+        {
+            return ModelState.IsValid ? await _scheduleService.UpdateScheduleForDivisionAsync(values) : BadRequest(ModelState);
         }
 
         // POST schedule/ scheduleSubmission{Name, Division, startDate}

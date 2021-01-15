@@ -6,6 +6,7 @@
     "dev": "NODE_TLS_REJECT_UNAUTHORIZED='0' next dev",
     "build": "next build",
     "start": "next start -H 0.0.0.0 -p ${PORT:-8080}",
+    "devstart": "NODE_TLS_REJECT_UNAUTHORIZED='0' next start -H 0.0.0.0 -p ${PORT:-3000}",
     "prod": "next export",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -16,11 +17,10 @@
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
     "axios": "^0.21.1",
-    "babel-jest": "^26.6.0",
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
     "install": "^0.13.0",
-    "next": "^10.0.1",
+    "next": "^10.0.3",
     "next-compose-plugins": "^2.2.1",
     "next-optimized-images": "^3.0.0-canary.10",
     "object-path": "^0.11.5",
@@ -34,8 +34,11 @@
     "sortablejs": "^1.12.0"
   },
   "devDependencies": {
+    "@testing-library/dom": "^7.29.4",
+    "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.1.0",
-    "jest-canvas-mock": "^2.3.0",
-    "jest": "^26.6.0"
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "jest-canvas-mock": "^2.3.0"
   }
 }

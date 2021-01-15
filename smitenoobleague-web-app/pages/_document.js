@@ -8,7 +8,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html lang={"en-EN"}>
         <Head>
         <meta name="description" content="Smitenoobleague is a website where teams can sign up, compete and see there stats" />
           </Head>

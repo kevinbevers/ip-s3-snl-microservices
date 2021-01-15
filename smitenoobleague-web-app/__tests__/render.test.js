@@ -14,6 +14,8 @@ import News from "../pages/news";
 import Rules from "../pages/rules";
 import Schedules from "../pages/schedules";
 import Standings from "../pages/standings";
+import TeamList from "../pages/stats/team";
+import PlayerList from "../pages/stats/player";
 
 describe("Render all pages", () => {
     it("Landing page - index.js", () => {
@@ -42,5 +44,11 @@ describe("Render all pages", () => {
     });
     it("Standing page - standings.js", () => {
         render(<Standings />);
+    });
+    it("Standing page - standings.js", () => {
+        render(<TeamList />);
+    });
+    it("Standing page - standings.js", () => {
+        render(<PlayerList />);
     });
 });

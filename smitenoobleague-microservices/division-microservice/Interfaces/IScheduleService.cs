@@ -13,8 +13,9 @@ namespace division_microservice.Interfaces
         Task<ActionResult<Schedule>> GetScheduleByIdAsync(int scheduleID);
         Task<ActionResult<Schedule>> RemoveScheduleByIdAsync(int scheduleID);
         Task<ActionResult> CreateScheduleForDivisionAsync(ScheduleCreation values);  //int divisionID, DateTime scheduleStartDate, string scheduleName
+        Task<ActionResult> UpdateScheduleForDivisionAsync(SimpleSchedule values);
         Task<ActionResult<IEnumerable<Schedule>>> GetAllSchedulesByDivisionIdAsync(int divisionID);
-        Task<ActionResult<IEnumerable<int>>> GetAllScheduleIDsByDivisionIdAsync(int divisionID);
+        Task<ActionResult<IEnumerable<SimpleSchedule>>> GetSimpleListOfAllSchedulesByDivisionIdAsync(int divisionID);
         Task<ActionResult<Schedule>> GetCurrentScheduleByDivisionIdAsync(int divisionID);
         Task<ActionResult> UpdateMatchUpScoreAsync(int matchupID, string scoreText);
 

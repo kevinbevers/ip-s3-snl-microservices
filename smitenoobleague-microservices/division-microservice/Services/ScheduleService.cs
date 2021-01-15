@@ -36,15 +36,15 @@ namespace division_microservice.Services
             {
                 if (!await _validationService.DivisionExistsAsync(values.DivisionID))
                 {
-                    return new ObjectResult("Can't create a schedule if the division doesn't exist") { StatusCode = 400 }; //CREATED
+                    return new ObjectResult("Can't create a schedule if the division doesn't exist") { StatusCode = 400 }; //BAD REQUEST
                 }
                 else
                 {
                     //get teams from teams service
                     List<Team> divisionTeams = (List<Team>)await _externalServices.GetDivisionTeamsByIdAsync(values.DivisionID);
-                    if (divisionTeams.Count() == 0 || divisionTeams == null)
+                    if (divisionTeams?.Count() == 0 || divisionTeams == null)
                     {
-                        return new ObjectResult("Can't create a schedule if the division has no teams") { StatusCode = 400 }; //CREATED
+                        return new ObjectResult("Can't create a schedule if the division has no teams") { StatusCode = 400 }; //BAD REQUEST
                     }
 
                     //enddate of the double round robin is amount of teams - 1 (don't play yourself) & that * 2 because it's a double round robin
@@ -113,7 +113,7 @@ namespace division_microservice.Services
             }
         }
 
-        public async Task<ActionResult<IEnumerable<int>>> GetAllScheduleIDsByDivisionIdAsync(int divisionID)
+        public async Task<ActionResult<IEnumerable<SimpleSchedule>>> GetSimpleListOfAllSchedulesByDivisionIdAsync(int divisionID)
         {
             try
             {
@@ -126,8 +126,8 @@ namespace division_microservice.Services
                 else
                 {
                     //add all scheduleid's to the int list
-                    List<int> divisionScheduleIds = new List<int>();
-                    foundSchedules.ForEach(fs => divisionScheduleIds.Add(fs.ScheduleId));
+                    List<SimpleSchedule> divisionScheduleIds = new List<SimpleSchedule>();
+                    foundSchedules.ForEach(fs => divisionScheduleIds.Add( new SimpleSchedule {ScheduleID = fs.ScheduleId, ScheduleName = fs.ScheduleName }));
 
                     return new ObjectResult(divisionScheduleIds) { StatusCode = 200 };//OK
                 }
@@ -285,6 +285,34 @@ namespace division_microservice.Services
             }
         }
 
+        public async Task<ActionResult> UpdateScheduleForDivisionAsync(SimpleSchedule values)
+        {
+            try
+            {
+                TableSchedule schedule = await _db.TableSchedules.Where(s => s.ScheduleId == values.ScheduleID).FirstOrDefaultAsync();
+                if(schedule != null)
+                {
+                    schedule.ScheduleName = values.ScheduleName;
+
+                    _db.TableSchedules.Update(schedule);
+                    await _db.SaveChangesAsync();
+
+                    return new ObjectResult("Schedule updated successfully.") { StatusCode = 200 }; //OK
+                }
+                else
+                {
+                    return new ObjectResult("No schedule found with the given ID.") { StatusCode = 404 }; //NOT FOUND
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went trying to update a schedule.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to update a schedule.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
         #region methods
         private int GetCurrentWeek(DateTime startDate)
         {
@@ -304,8 +332,8 @@ namespace division_microservice.Services
                     ByeWeek = fs.ByeGame,
                     Score = fs.Score, //calculate later. probably store it in the matchup table
                     WeekNumber = fs.WeekNumber,
-                    HomeTeam = divisionTeams.Where(t => t.TeamID == fs.HomeTeamId).First(),
-                    AwayTeam = divisionTeams.Where(t => t.TeamID == fs.AwayTeamId).First()
+                    HomeTeam = divisionTeams.Where(t => t.TeamID == fs.HomeTeamId).FirstOrDefault(),
+                    AwayTeam = divisionTeams.Where(t => t.TeamID == fs.AwayTeamId).FirstOrDefault()
                 });
             });
 

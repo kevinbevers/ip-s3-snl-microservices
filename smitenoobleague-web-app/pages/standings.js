@@ -22,8 +22,8 @@ import helpers from "utils/helpers";
 
 export default function standings({LoginSession}) {
 
+  //Select Division
   const [SelectedDivision, setSelectedDivision] = useState({id: 1, name: "Godlike division"});
-
   const changeDivision = (evt) => {
     var id = evt.target.value;
     // - 1 array index always starts at 0
@@ -32,8 +32,8 @@ export default function standings({LoginSession}) {
     console.log(SelectedDivision);
   }
 
+  //Select Schedule
   const [SelectedPeriod, setSelectedPeriod] = useState("Split 1 2020");
-
   const changePeriod = (evt) => {
     setSelectedPeriod(evt.target.value);
     console.log(evt.target.value);
@@ -47,7 +47,7 @@ export default function standings({LoginSession}) {
       <NavBar LoginSession={LoginSession}/>
       <Container>
         <Row className="mt-4">
-          <Col md={6} className="mx-auto">
+          <Col md={8} xl={6} className="mx-auto">
             <Row>
           <Col md={6} className="mx-auto">
             <Form>

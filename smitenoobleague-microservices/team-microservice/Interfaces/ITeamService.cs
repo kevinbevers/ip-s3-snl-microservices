@@ -10,7 +10,9 @@ namespace team_microservice.Interfaces
     {
         //team for division
         Task<ActionResult<IEnumerable<Team>>> GetTeamsByDivisionIdAsync(int divisionID);
+        Task<ActionResult<IEnumerable<Team>>> GetTeamsThatAreNotInADivisionAsync();
         Task<ActionResult<IEnumerable<TeamWithDetails>>> GetTeamsByDivisionIdWithDetailsAsync(int divisionID);
+        Task<ActionResult<IEnumerable<TeamWithDetails>>> GetTeamsThatAreNotInADivisionWithDetailsAsync();
         Task<ActionResult> DeleteTeamsByDivisionIdAsync(int divisionID);
         Task<ActionResult> SetDivisionTeams(SetDivisionTeams divisionTeams);
 
