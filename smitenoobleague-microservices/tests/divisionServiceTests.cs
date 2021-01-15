@@ -596,12 +596,12 @@ namespace service_tests
             var result = await controller.GetListOfScheduleIds(1);
 
             //Assert
-            var response = Assert.IsAssignableFrom<ActionResult<IEnumerable<int>>>(result).Result as ObjectResult;
+            var response = Assert.IsAssignableFrom<ActionResult<IEnumerable<SimpleSchedule>>>(result).Result as ObjectResult;
             //check if something got returned
             Assert.True(response != null);
             Assert.Equal(200, response.StatusCode);
             //check response message
-            Assert.True((response.Value as IEnumerable<int>).Count() > 0);
+            Assert.True((response.Value as IEnumerable<SimpleSchedule>).Count() > 0);
         }
 
         [Fact]
@@ -629,7 +629,7 @@ namespace service_tests
             var result = await controller.GetListOfScheduleIds(50);
 
             //Assert
-            var response = Assert.IsAssignableFrom<ActionResult<IEnumerable<int>>>(result).Result as ObjectResult;
+            var response = Assert.IsAssignableFrom<ActionResult<IEnumerable<SimpleSchedule>>>(result).Result as ObjectResult;
             //check if something got returned
             Assert.True(response != null);
             Assert.Equal(404, response.StatusCode);
