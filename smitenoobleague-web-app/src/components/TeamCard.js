@@ -11,7 +11,7 @@ import Link from "next/link";
 export default function TeamCard({Team}){
 
     return (
-        <Link href="/stats/team/2345">
+        <Link href={"/stats/team/" + Team?.teamID}>
           <a className="link-unstyled">
         <Card className="text-center mb-2">
         <Card.Body className="pb-0 pt-1">

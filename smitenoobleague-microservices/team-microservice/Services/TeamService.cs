@@ -607,7 +607,7 @@ namespace team_microservice.Services
             }
         }
 
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeamsThatAreNotInADivision()
+        public async Task<ActionResult<IEnumerable<Team>>> GetTeamsThatAreNotInADivisionAsync()
         {
             try
             {

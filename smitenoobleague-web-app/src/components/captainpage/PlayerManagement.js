@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {Row, Col, Button, Badge, Modal, Container, Form, InputGroup, FormControl, Alert} from "react-bootstrap";
+//Icons
 import {FaTimes, FaPlaystation, FaXbox, FaSteam} from "react-icons/fa";
 import {RiSwitchFill} from "react-icons/ri";
 import {GiPc} from "react-icons/gi";
+import {SiEpicgames} from "react-icons/si";
+//services
 import manageteamservice from "services/manageteamservice";
 
 
@@ -134,8 +137,7 @@ function PlayerInfoAlert() {
         <>
             <Row className="mb-2 rounded bg-white border border-silver PlayerBox">
                 <Col md={10} xs={10} className="d-flex p-0">
-                    <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{playerState?.teamMemberName != null ? playerState.teamMemberName + " " : "No player in this role yet. "} 
-                                                {(playerState.teamMemberPlatform == "PS4" &&
+                    <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{(playerState.teamMemberPlatform == "PS4" &&
                                                     <FaPlaystation />)
                                                 || (playerState?.teamMemberPlatform == "Steam" &&
                                                     <FaSteam />)
@@ -145,10 +147,13 @@ function PlayerInfoAlert() {
                                                     <GiPc />)
                                                 || (playerState.teamMemberPlatform == "Switch" &&
                                                     <RiSwitchFill />)
+                                                || (playerState.teamMemberPlatform == "Epic_Games" && 
+                                                    <SiEpicgames />)
                                                 ||
                                                 playerState.teamMemberPlatform
 
-                                                } {playerState?.teamCaptain != null && playerState.teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4>
+                                                } {playerState?.teamMemberName != null ? playerState.teamMemberName + " " : "No player in this role yet. "} 
+                                                 {playerState?.teamCaptain != null && playerState.teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4>
                 </Col>
                 <Col xs={2} className="my-auto p-0 pr-2">{playerState?.teamMemberID != null ? <Button onClick={handleShow} variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button onClick={handleShow} variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
             </Row>

@@ -41,7 +41,7 @@ namespace team_microservice.Controllers
         [HttpGet("divisionless")]
         public async Task<ActionResult<IEnumerable<Team>>> GetTeamsWithoutDivision()
         {
-            return await _teamService.GetTeamsThatAreNotInADivision();
+            return await _teamService.GetTeamsThatAreNotInADivisionAsync();
         }
 
         // GET: team-service/division-lesswithdetails
