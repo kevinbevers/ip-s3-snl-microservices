@@ -114,7 +114,7 @@ namespace smiteapi_microservice.Services
                 MatchData match = await _hirezApi.GetMatchDetailsAsync((int)submission.gameID);
 
                 //check return message from api. if the return msg is null the match is valid
-                if (match.ret_msg != null && match.ret_msg != "Not all playerdata is available for this match because 1 of the players has their profile hidden.")
+                if (match.ret_msg != null && match.ret_msg.ToString() != "Not all playerdata is available for this match because 1 of the players has their profile hidden.")
                 {
                     //something went wrong even when the matchData should have been available. because it is 7 days later
                     return new ObjectResult(match.ret_msg) { StatusCode = 404 }; //BAD REQUEST
