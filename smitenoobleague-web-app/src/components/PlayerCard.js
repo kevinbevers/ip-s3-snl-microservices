@@ -29,7 +29,7 @@ export default function PlayerCard({Player,Team}){
             <Row className="">
               <Col md={12} className="p-0 mx-auto">
                 <Row>
-                  <Col md={2} className="p-0 align-items-left"><Image src={require("public/images/roles/" + Player.teamMemberRole.roleName + "_Logo.png")} className="MhTeamImg" draggable={false}></Image></Col>
+                  <Col md={2} className="p-0 align-items-left"><Image alt={Player?.teamMemberRole?.roleName} src={require("public/images/roles/" + Player.teamMemberRole.roleName + "_Logo.png")} className="MhTeamImg" draggable={false}></Image></Col>
                   <Col md={6} className="my-auto pl-0 pr-0"><h3 className="text-md-left text-center mb-0">{(Player.teamMemberPlatform == "PS4" &&
                                                     <FaPlaystation />)
                                                 || (Player?.teamMemberPlatform == "Steam" &&
@@ -49,7 +49,7 @@ export default function PlayerCard({Player,Team}){
                   <Col md={4} className="my-auto">
                     <Row className="">
                       <Col className="d-flex justify-content-center justify-content-md-start">
-                        <Image src={Team?.teamLogoPath != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/" + Team?.teamLogoPath : require("public/images/teamBadge.png")} className="SmallTeamImage" draggable={false}></Image><h6 className="ml-2 my-auto">{Team?.teamName}</h6>
+                        <Image alt={Team?.teamName} src={Team?.teamLogoPath != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/" + Team?.teamLogoPath : require("public/images/teamBadge.png")} className="SmallTeamImage" draggable={false}></Image><p className="ml-2 my-auto">{Team?.teamName}</p>
                     </Col>
                     </Row>
                   </Col>

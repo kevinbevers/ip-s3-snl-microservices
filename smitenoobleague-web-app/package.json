@@ -6,6 +6,7 @@
     "dev": "NODE_TLS_REJECT_UNAUTHORIZED='0' next dev",
     "build": "next build",
     "start": "next start -H 0.0.0.0 -p ${PORT:-8080}",
+    "devstart": "NODE_TLS_REJECT_UNAUTHORIZED='0' next start -H 0.0.0.0 -p ${PORT:-3000}",
     "prod": "next export",
     "test": "jest",
     "test:watch": "jest --watch",

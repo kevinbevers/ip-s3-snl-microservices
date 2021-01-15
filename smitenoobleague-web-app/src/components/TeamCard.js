@@ -19,7 +19,7 @@ export default function TeamCard({Team}){
             <Row className="">
               <Col md={10} className="p-0 mx-auto">
                 <Row>
-                  <Col md={2} className="p-0 align-items-left"><Image src={Team?.teamLogoPath != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/" + Team?.teamLogoPath : require("public/images/teamBadge.png")} className="MhTeamImg" draggable={false}></Image></Col>
+                  <Col md={2} className="p-0 align-items-left"><Image alt={Team?.teamName} src={Team?.teamLogoPath != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/" + Team?.teamLogoPath : require("public/images/teamBadge.png")} className="MhTeamImg" draggable={false}></Image></Col>
                   <Col md={8} className="my-auto pt-2"><h3 className="text-center mb-0">{Team?.teamName}</h3>
                   <p className="text-muted smallfootertext">Click to see team stats</p>
                   </Col>

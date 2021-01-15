@@ -64,7 +64,7 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
   
       useEffect(() => {
         //Add the teams without division
-              setDivisions(Divisions.concat({divisionID: 0, divisionName: "Division-less Players"}));
+        setDivisions(Divisions.concat({divisionID: 0, divisionName: "Division-less Players"}));
       }, []);
     return (
       <>      
