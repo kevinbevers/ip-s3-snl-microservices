@@ -149,7 +149,7 @@ function PlayerInfoAlert() {
                                                     <GiPc />)
                                                 || (member.teamMemberPlatform == "Switch" &&
                                                     <RiSwitchFill />)
-                                                || (Player.teamMemberPlatform == "Epic_Games" && 
+                                                || (member.teamMemberPlatform == "Epic_Games" && 
                                                     <SiEpicgames />)
                                                 ||
                                                 
