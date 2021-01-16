@@ -9,7 +9,7 @@ import DefaultErrorPage from "next/error";
 import { Container, Row, Col, Form, Card, Button, Image, Badge, Toast, Alert } from "react-bootstrap";
 //custom imports
 import { FaEdit, FaCheck, FaBan } from "react-icons/fa";
-import { ReactSortable } from "react-sortablejs";
+import { ReactSortable, Sortable, Swap } from "react-sortablejs";
 import PlayerManagement from "src/components/captainpage/PlayerManagement";
 //importing images
 import Jungle from "public/images/roles/Jungle_Logo.png";
@@ -311,7 +311,7 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
                           delay={200}>
 
                           {teamMembers.map((member, index) => (
-                            <PlayerManagement key={index} player={member} apiToken={apiToken} teamID={apiResponse?.teamID} />
+                            <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse?.teamID} />
                           ))}
                         </ReactSortable>
                         <Row><Col><h6 className="text-muted float-right ExtraInfoText">Drag and drop players to swap their roles.</h6></Col></Row>

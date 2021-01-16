@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {Row, Col, Button, Badge, Modal, Container, Form, InputGroup, FormControl, Alert} from "react-bootstrap";
-//Icons
 import {FaTimes, FaPlaystation, FaXbox, FaSteam} from "react-icons/fa";
 import {RiSwitchFill} from "react-icons/ri";
 import {GiPc} from "react-icons/gi";
 import {SiEpicgames} from "react-icons/si";
-//services
 import manageteamservice from "services/manageteamservice";
 
 
 
 
-export default function PlayerManagement({player, apiToken, teamID}) {
+export default function PlayerManagement({member, apiToken, teamID}) {
     const [PlayerModal, setPlayerModal] = useState(false);
     const [FoundPlayers, setFoundPlayers] = useState([]);
     const [SelectedPlayer, setSelectedPlayer] = useState();
     const [SearchName, setSearchName] = useState("");
-    const [playerState, setPlayerState] = useState(player);
 
     const updateSearchName = (event) => {
         if(event.target.value != null)
@@ -59,7 +56,7 @@ const handleSearchPlayer = async() => {
     }
 };
 const handleSelectPlayer = (event) => {
-    const playerSelected = FoundPlayers?.filter(playerState => playerState.playerID == event.target.value)[0];
+    const playerSelected = FoundPlayers?.filter(member => member.playerID == event.target.value)[0];
     setSelectedPlayer(playerSelected);
  };
 
@@ -72,12 +69,16 @@ const handleAddPlayer = async() => {
             platformName: SelectedPlayer.platform,
             teamID: teamID,
             playerName: SelectedPlayer.playername,
-            roleID: playerState.teamMemberRole.roleID
+            roleID: member.teamMemberRole.roleID
         };
 
-        await manageteamservice.AddPlayerToTeam(apiToken, playerToAdd)
+        manageteamservice.AddPlayerToTeam(apiToken, playerToAdd)
         .then(res => {
-            setPlayerState(res.data);
+            member.teamMemberName = res.data.teamMemberName;
+            member.teamMemberID = res.data.teamMemberID;
+            member.teamMemberRole = res.data.teamMemberRole;
+            member.teamMemberPlatform = res.data.teamMemberPlatform;
+            member.playerID = res.data.playerID;
             //close modal
             handleClose();
         })
@@ -92,22 +93,22 @@ const handleEditPlayer = async() => {
     if(SelectedPlayer?.playerID != null)
     {
         const playerToEdit = {
-            teamMemberID: playerState.teamMemberID,
+            teamMemberID: member.teamMemberID,
             playerID: SelectedPlayer.playerID,
             platformName: SelectedPlayer.platform,
             teamID: teamID,
             playerName: SelectedPlayer.playername,
-            roleID: playerState.teamMemberRole.roleID
+            roleID: member.teamMemberRole.roleID
         };
 
         manageteamservice.UpdatePlayerToTeam(apiToken, playerToEdit)
         .then(res => {
-            setPlayerState(res.data);
-            // member.teamMemberName = res.data.teamMemberName;
-            // member.teamMemberID = res.data.teamMemberID;
-            // member.teamMemberRole = res.data.teamMemberRole;
-            // member.teamMemberPlatform = res.data.teamMemberPlatform;
-            // member.playerID = res.data.playerID;
+            console.log(res);
+            member.teamMemberName = res.data.teamMemberName;
+            member.teamMemberID = res.data.teamMemberID;
+            member.teamMemberRole = res.data.teamMemberRole;
+            member.teamMemberPlatform = res.data.teamMemberPlatform;
+            member.playerID = res.data.playerID;
             //close modal
             handleClose();
         })
@@ -137,30 +138,31 @@ function PlayerInfoAlert() {
         <>
             <Row className="mb-2 rounded bg-white border border-silver PlayerBox">
                 <Col md={10} xs={10} className="d-flex p-0">
-                    <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{(playerState.teamMemberPlatform == "PS4" &&
+                    <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{member?.teamMemberName != null ? member.teamMemberName + " " : "No player in this role yet. "} 
+                                                {(member.teamMemberPlatform == "PS4" &&
                                                     <FaPlaystation />)
-                                                || (playerState?.teamMemberPlatform == "Steam" &&
+                                                || (member?.teamMemberPlatform == "Steam" &&
                                                     <FaSteam />)
-                                                || (playerState.teamMemberPlatform == "Xbox" &&
+                                                || (member.teamMemberPlatform == "Xbox" &&
                                                     <FaXbox />)
-                                                || (playerState.teamMemberPlatform == "HiRez" &&
+                                                || (member.teamMemberPlatform == "HiRez" &&
                                                     <GiPc />)
-                                                || (playerState.teamMemberPlatform == "Switch" &&
+                                                || (member.teamMemberPlatform == "Switch" &&
                                                     <RiSwitchFill />)
-                                                || (playerState.teamMemberPlatform == "Epic_Games" && 
+                                                || (Player.teamMemberPlatform == "Epic_Games" && 
                                                     <SiEpicgames />)
                                                 ||
-                                                playerState.teamMemberPlatform
+                                                
+                                                member.teamMemberPlatform
 
-                                                } {playerState?.teamMemberName != null ? playerState.teamMemberName + " " : "No player in this role yet. "} 
-                                                 {playerState?.teamCaptain != null && playerState.teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4>
+                                                } {member?.teamCaptain != null && member.teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4>
                 </Col>
-                <Col xs={2} className="my-auto p-0 pr-2">{playerState?.teamMemberID != null ? <Button onClick={handleShow} variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button onClick={handleShow} variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
+                <Col xs={2} className="my-auto p-0 pr-2">{member?.teamMemberID != null ? <Button onClick={handleShow} variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button onClick={handleShow} variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
             </Row>
 
             {/* Modal */}
             <Modal show={PlayerModal} onHide={handleClose}>
-                {playerState?.teamMemberID == null ? <> 
+                {member?.teamMemberID == null ? <> 
                     <Container className="p-3">
                         {/* Header */}
                     <Row className="mb-2">
