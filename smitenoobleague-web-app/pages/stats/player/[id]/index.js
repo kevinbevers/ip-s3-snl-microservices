@@ -254,11 +254,14 @@ export default function PlayerStat({ postData, LoginSession }) {
 
 export async function getServerSideProps(context) {
   
+  const playerID = context.params.id;
+  console.log(playerID);
   const loginSessionData = await helpers.GetLoginSession(context.req);
 
   return {
       props: {
           LoginSession: loginSessionData
+
       },
   };
 }
