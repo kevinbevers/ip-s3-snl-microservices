@@ -71,6 +71,7 @@ namespace stat_microservice
             //add Scoped Services
             services.AddScoped<IMatchStatService, MatchStatService>();
             services.AddScoped<IPlayerStatService, PlayerStatService>();
+            services.AddScoped<ITeamStatService, TeamStatService>();
             services.AddScoped<IExternalServices, ExternalServices>();
             
            

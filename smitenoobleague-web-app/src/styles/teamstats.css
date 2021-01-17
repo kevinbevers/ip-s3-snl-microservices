@@ -1,5 +1,6 @@
 .MainTeamImage {
-    max-height: 120px;
+    height: 120px;
+    width: 120px;
     /* height: 100px; */
 }
 
@@ -51,7 +52,8 @@
         font-weight: 700;
     }
     .MainTeamImage {
-        max-height: 23vw;
+        height: 23vw;
+        width: 23vw;
         /* height: 100px; */
     }
   }

@@ -11,19 +11,19 @@ using stat_microservice.Models.External;
 namespace stat_microservice.Controllers
 {
     [Route("[controller]")]
-    public class PlayerStatController : Controller
+    public class TeamStatController : Controller
     {
-        private readonly IPlayerStatService _playerStatService;
+        private readonly ITeamStatService _teamStatService;
 
-        public PlayerStatController(IPlayerStatService playerStatService)
+        public TeamStatController(ITeamStatService teamStatService)
         {
-            _playerStatService = playerStatService;
+            _teamStatService = teamStatService;
         }
         // GET: stat-service/playerstat/byid
-        [HttpGet("byplayerid/{playerID}")]
-        public async Task<ActionResult<PlayerStatistics>> Get(int? playerID)
+        [HttpGet("byteamid/{teamID}")]
+        public async Task<ActionResult<TeamStatistics>> Get(int? teamID)
         {
-            return await _playerStatService.GetPlayerStatsByPlayerIdAsync(playerID);
+            return await _teamStatService.GetTeamStatsByTeamIdAsync(teamID);
         }
     }
 }

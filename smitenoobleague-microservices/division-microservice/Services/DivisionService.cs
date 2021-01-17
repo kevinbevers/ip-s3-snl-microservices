@@ -131,6 +131,32 @@ namespace division_microservice.Services
             }
         }
 
+        public async Task<ActionResult<string>> GetDivisionNameByIdAsync(int divisionID)
+        {
+            try
+            {
+                //get row in database
+                TableDivision foundDivision = await _db.TableDivisions.Where(d => d.DivisionId == divisionID).FirstOrDefaultAsync();
+                //check if an object was returned
+                if (foundDivision == null)
+                {
+                    return new ObjectResult("No division found with the given divisionID") { StatusCode = 404 }; //NOT FOUND
+                }
+                else
+                {
+                    //return name string
+                    return new ObjectResult(foundDivision.DivisionName) { StatusCode = 200 }; //OK
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get division name by id.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get division name by id.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
         public async Task<ActionResult<Division>> GetDivisionByIdAsync(int divisionID)
         {
             try

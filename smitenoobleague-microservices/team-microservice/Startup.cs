@@ -71,6 +71,7 @@ namespace team_microservice
             services.AddScoped<IValidationService, ValidationService>();
             services.AddScoped<IExternalServices, ExternalServices>();
             services.AddScoped<IPlayerService, PlayerService>();
+ 
 
             //Auth
             string domain = Environment.GetEnvironmentVariable("Auth0Domain");

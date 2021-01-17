@@ -12,42 +12,43 @@ using stat_microservice.Models.Internal;
 
 namespace stat_microservice.Services
 {
-    public class PlayerStatService : IPlayerStatService
+    public class TeamStatService : ITeamStatService
     {
         private readonly SNL_Stat_DBContext _db;
         private readonly ILogger<PlayerStatService> _logger;
         private readonly IExternalServices _externalServices;
 
-        public PlayerStatService(SNL_Stat_DBContext db, ILogger<PlayerStatService> logger, IExternalServices externalServices)
+        public TeamStatService(SNL_Stat_DBContext db, ILogger<PlayerStatService> logger, IExternalServices externalServices)
         {
             _db = db;
             _logger = logger;
             _externalServices = externalServices;
         }
 
-        public async Task<ActionResult<PlayerStatistics>> GetPlayerStatsByPlayerIdAsync(int? playerID)
+        public async Task<ActionResult<TeamStatistics>> GetTeamStatsByTeamIdAsync(int? teamID)
         {
             try
             {
-                PlayerWithTeamInfo foundPlayer = await _externalServices.GetPlayerWithTeamInfoByPlayerIdAsync(playerID);
-                if(foundPlayer != null)
+                TeamWithDetails foundTeam = await _externalServices.GetTeamWithDetailsByTeamId(teamID);
+                if (foundTeam != null)
                 {
                     //List<TableStat> foundStats = await _db.TableStats.Where(ts => ts.PlayerId == playerID).ToListAsync();
                     //Get stats, probably best to calculate stats with sql as much as possible to make it faster
+                    string divisionName = await _externalServices.GetDivisionNameByDivisionID(foundTeam?.DivisionID);
 
-                    PlayerStatistics playerStats = new PlayerStatistics
+                    TeamStatistics teamStats = new TeamStatistics
                     {
-                        Player = foundPlayer?.Player,
-                        Team = foundPlayer?.Team,
+                        Team = foundTeam,
+                        DivisionName = divisionName
 
                     };
 
-                    return new ObjectResult(playerStats) { StatusCode = 200 }; //OK
+                    return new ObjectResult(teamStats) { StatusCode = 200 }; //OK
                 }
                 else
                 {
                     return new ObjectResult("No player found with the given ID.") { StatusCode = 404 }; //OK
-                }  
+                }
             }
             catch (Exception ex)
             {

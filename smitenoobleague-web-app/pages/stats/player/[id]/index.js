@@ -23,6 +23,8 @@ import Image from "next/image";
 
 export default function PlayerStat({LoginSession, PlayerStats, status, errMsg }) {
 
+  const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + PlayerStats?.team?.teamLogoPath;
+
     const data = {
         labels: [
             "Ratatoskr",
@@ -84,8 +86,6 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
           }
       };
 
-      console.log(PlayerStats);
-
       if (status != null) {
         return (<><DefaultErrorPage statusCode={status} title={errMsg} data-testid="playerpageErrorPage"/></>);
       }
@@ -103,7 +103,7 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
               <Col md={4} xl={5} xs={9} className="pb-0 my-auto">
               <Row className="">
                  <Col md={12} className="d-flex">
-                 {PlayerStats.team?.teamLogoPath != null ? <Image height={30} width={30} alt={PlayerStats.team?.teamName} src={process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + PlayerStats.team?.teamLogoPath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image>  : 
+                 {PlayerStats.team?.teamLogoPath != null ? <Image height={30} width={30} alt={PlayerStats.team?.teamName} src={imagePath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image>  : 
                         <Img alt={PlayerStats.team?.teamName} src={require("public/images/teamBadge.png")} className="SmallTeamImage mr-1 my-auto" draggable={false}></Img>
                       }
                    <h4 className="mb-0 PlayerStatTeamTitle my-auto">{PlayerStats?.team?.teamName}</h4>
@@ -268,7 +268,7 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
                 <Row className="mb-4">
                 <Col className="">
                     {/* Link to pick percentages of team */}
-                <Button href="/stats/player/343532/pickpercentages" className="StatSubTitle">Click to see player pick percentages</Button>
+                <Button href="/stats/player/343532/pickpercentages" className="StatNumbers">Click to see player pick percentages</Button>
                 </Col>
                 </Row>
                 </Col >

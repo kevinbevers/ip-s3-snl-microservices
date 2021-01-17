@@ -5,8 +5,8 @@ using stat_microservice.Models.External;
 
 namespace stat_microservice.Interfaces
 {
-    public interface IPlayerStatService
+    public interface ITeamStatService
     {
-        Task<ActionResult<PlayerStatistics>> GetPlayerStatsByPlayerIdAsync(int? playerID);
+        Task<ActionResult<TeamStatistics>> GetTeamStatsByTeamIdAsync(int? teamID);
     }
 }

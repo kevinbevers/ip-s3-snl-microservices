@@ -21,11 +21,17 @@ const GetListOfTeamsByDivisionID = async(divisionID) => {
     return apiClient.get("team-service/Team/divisionlesswithdetails");
   };
 
+  const GetTeamStatisticsByTeamID = async(teamID) => {
+    const apiClient = await helpers.BuildApiClient(null);
+    return apiClient.get("stat-service/teamstat/byteamid/" + teamID);
+  };
+
   
 
 export default {
     GetListOfTeamsByDivisionID,
     GetListOfTeamsWithDetailsByDivisionID,
     GetListOfTeamsWithoutDivisions,
-    GetListOfTeamsWithDetailsWithoutDivisions
+    GetListOfTeamsWithDetailsWithoutDivisions,
+    GetTeamStatisticsByTeamID
 }

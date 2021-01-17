@@ -34,6 +34,13 @@ namespace division_microservice.Controllers
             return await _divisionService.GetDivisionsWithTeamsAsync();
         }
 
+        // GET /division/getnamebyid{divisionID}
+        [HttpGet("getnamebyid/{divisionID}")]
+        public async Task<ActionResult<string>> GetDivisionName(int divisionID) //return 1 division object
+        {
+            return await _divisionService.GetDivisionNameByIdAsync(divisionID);
+        }
+
         // GET /division/{divisionID}
         [HttpGet("{divisionID}")]
         public async Task<ActionResult<Division>> Get(int divisionID) //return 1 division object
