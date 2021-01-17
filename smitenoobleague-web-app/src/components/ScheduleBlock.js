@@ -28,7 +28,7 @@ export default function ScheduleBlock({Schedule}) {
     weekStartDate.setDate(weekStartDate.getDate() + (weekNumber - 1) * 7);
     let weekEndDate =  new Date(Schedule.scheduleStartDate);
     weekEndDate.setDate(weekEndDate.getDate() + (weekNumber * 7) - 1);
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
     const weekDateString = <><b> {weekStartDate.toLocaleDateString('en-EN', options)} </b> until <b>{weekEndDate.toLocaleDateString('en-EN', options)}</b></>;
 
     return weekDateString;
