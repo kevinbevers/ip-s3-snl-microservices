@@ -1,7 +1,28 @@
-import Accordion from "react-bootstrap/Accordion"
-import Card from "react-bootstrap/Card"
+import React, {useContext} from "react";
+import Accordion from "react-bootstrap/Accordion";
+import AccordionContext from "react-bootstrap/AccordionContext";
+import Card from "react-bootstrap/Card";
+import {FaAngleUp, FaAngleDown} from "react-icons/fa";
 
 export default function DivisionQuestions() {
+
+    function ContextAwareToggle({ children, eventKey, callback }) {
+        const currentEventKey = useContext(AccordionContext);
+      
+        const isCurrentEventKey = currentEventKey === eventKey;
+      
+        return (
+            <>
+            <div className="d-flex">
+          <h5 className="m-0">
+            {children}
+          </h5>
+          {isCurrentEventKey ? <FaAngleUp className="ml-auto"/> : <FaAngleDown className="ml-auto"/>}
+          </div>
+          </>
+        );
+      }
+
 return (
     <>
         <h3 className="font-weight-bold">Division questions</h3>
@@ -10,7 +31,7 @@ return (
         
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="0">
-            <h5 className="m-0">How many teams are in a division?</h5>
+            <ContextAwareToggle eventKey="0">How many teams are in a division?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="0">
             <Card.Body>
@@ -21,7 +42,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="1">
-            <h5 className="m-0">How do points get calculated for the division standings?</h5>
+            <ContextAwareToggle eventKey="1">How do points get calculated for the division standings?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="1">
             <Card.Body>
@@ -33,7 +54,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="2">
-            <h5 className="m-0">How many games do you play per week?</h5>
+            <ContextAwareToggle eventKey="2">How many games do you play per week?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="2">
             <Card.Body>
@@ -45,7 +66,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="3">
-            <h5 className="m-0">How many weeks do you play per split</h5>
+            <ContextAwareToggle eventKey="3">How many weeks do you play per split</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="3">
             <Card.Body>

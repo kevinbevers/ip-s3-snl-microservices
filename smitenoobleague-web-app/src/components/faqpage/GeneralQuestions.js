@@ -1,16 +1,38 @@
-import Accordion from "react-bootstrap/Accordion"
-import Card from "react-bootstrap/Card"
+import React, {useContext} from "react";
+import Accordion from "react-bootstrap/Accordion";
+import AccordionContext from "react-bootstrap/AccordionContext";
+import Card from "react-bootstrap/Card";
+import {FaAngleUp, FaAngleDown} from "react-icons/fa";
 
 export default function GeneralQuestions() {
+
+
+    function ContextAwareToggle({ children, eventKey, callback }) {
+        const currentEventKey = useContext(AccordionContext);
+      
+        const isCurrentEventKey = currentEventKey === eventKey;
+      
+        return (
+            <>
+            <div className="d-flex">
+          <h5 className="m-0">
+            {children}
+          </h5>
+          {isCurrentEventKey ? <FaAngleUp className="ml-auto"/> : <FaAngleDown className="ml-auto"/>}
+          </div>
+          </>
+        );
+      }
+
 return (
     <>
         <h3 className="font-weight-bold">General questions</h3>
         <hr />
         <Accordion>
         
-        <Card>
+        <Card className="Clickable">
         <Accordion.Toggle as={Card.Header} eventKey="0">
-            <h5 className="m-0">How long does it take for played games to show up?</h5>
+            <ContextAwareToggle eventKey={"0"}>How long does it take for played games to show up?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="0">
             <Card.Body>
@@ -22,7 +44,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="1">
-            <h5 className="m-0">What is smitenoobleague.com?</h5>
+            <ContextAwareToggle eventKey="1">What is smitenoobleague.com?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="1">
             <Card.Body>
@@ -37,7 +59,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="2">
-            <h5 className="m-0">How do i sign up as a team?</h5>
+            <ContextAwareToggle eventKey="2">How do i sign up as a team?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="2">
             <Card.Body>
@@ -54,7 +76,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="3">
-            <h5 className="m-0">How do the stats get collected?</h5>
+            <ContextAwareToggle eventKey="3">How do the stats get collected?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="3">
             <Card.Body>
@@ -67,7 +89,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="4">
-            <h5 className="m-0">How many games are played per match?</h5>
+            <ContextAwareToggle eventKey="4">How many games are played per match?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="4">
             <Card.Body>
