@@ -8,7 +8,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Badge, Image, Modal, Button } from "react-bootstrap";
+import { Badge, Modal, Button } from "react-bootstrap";
 //icons
 import { FaBox, FaInfoCircle } from "react-icons/fa";
 //chart
@@ -17,8 +17,15 @@ import {Line} from "react-chartjs-2";
 import RecentTeams from "src/components/RecentTeams";
 //Auth
 import helpers from "utils/helpers";
+//services
+import teamservice from "services/teamservice";
+//image optimization
+import Img from 'react-optimized-image';
+import Image from "next/image";
 
-export default function TeamStat({ postData, LoginSession }) {
+export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
+
+    const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + TeamStats?.team?.teamLogoPath;
 
     // RPP recent peformance points. a calculation done in the back-end based on gametime, kills, win or loss, gold earned and a few more stats. combined into a algorithm
     const data = {
@@ -67,6 +74,13 @@ export default function TeamStat({ postData, LoginSession }) {
 // Modal for info about linechart
       const [rppShow, setRPPShow] = useState(false);
 
+      console.log(TeamStats);
+
+      if (status != null) {
+        return (<><DefaultErrorPage statusCode={status} title={errMsg} data-testid="playerpageErrorPage"/></>);
+      }
+      else {
+
   return (
     <>
       <NavBar LoginSession={LoginSession}/>
@@ -74,19 +88,24 @@ export default function TeamStat({ postData, LoginSession }) {
       <Container fluid className="">
           {/* Team Header */}
           <Row className="">
-              <Col md={2} xl={1} xs={3} className="my-auto">
-                  <Image src="https://web2.hirez.com/smite-esports/dev/teams/SSG.png" className="MainTeamImage" draggable={false}></Image>
+              <Col md={2} xl={1} xs={3} className="my-auto pl-1">
+              {TeamStats.team?.teamLogoPath != null ? <div className="MainTeamImage position-relative"><Image layout={"fill"} alt={TeamStats.team?.teamName} src={imagePath} draggable={false}></Image></div>  : 
+                        <Img alt={TeamStats.team?.teamName} src={require("public/images/teamBadge.png")} className="MainTeamImage" draggable={false}></Img>
+                      }
               </Col>
               <Col md={7} xl={8} xs={9} className="pb-0 my-auto">
               <Row className="">
-                  <Col md={12} className=""> <h3 className="TeamStatTitle">Spacestation Gaming</h3></Col>
+                  <Col md={12} className="pl-1"> <h3 className="TeamStatTitle">{TeamStats?.team?.teamName}</h3></Col>
               </Row>
               <Row>
-                <Col md={12} xl={10} xs={12} className="">
+                <Col md={12} xl={11} xs={12} className="pl-1">
                     <Row>
-                    <Col className="pr-0"><h5 className="mb-0 TeamBannerStats"><b>Games played:</b> 5000</h5></Col>
-                    <Col className="pl-0 pr-0"><h5 className="mb-0 TeamBannerStats"><b>Win percentage:</b> 100%</h5></Col>
-                    <Col className="pl-0 pr-0"><h5 className="mb-0 TeamBannerStats"><b>Current division:</b> Godlike</h5></Col>
+                    <Col xl={4} md={4} xs={4} className="pr-0"><h5 className="mb-0 TeamBannerStats"><b>Games played:</b> {TeamStats?.gamesPlayed}</h5></Col>
+                    <Col xl={8} md={8} xs={8} className="pl-0 pr-0 d-flex">
+                        <h5 className="mb-0 TeamBannerStats mr-md-3 mr-1"><b>Win percentage:</b> {TeamStats?.winPercentage}%</h5>
+                        <h5 className="mb-0 TeamBannerStats"><b>Current division:</b> {TeamStats?.divisionName}</h5>
+                    </Col>
+                    {/* <Col xl={5} md={5} xs={4} className="pl-0 pr-0"></Col> */}
                     </Row>
                 </Col>
               </Row>
@@ -113,74 +132,72 @@ export default function TeamStat({ postData, LoginSession }) {
                     </Row>
                     <Row className="mb-2">
                     <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team kills:</h4></Col>
-                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">{TeamStats?.totalKills}</h4></Col>
                     </Row>
                     <Row className="mb-2">
                     <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team deaths:</h4></Col>
-                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">{TeamStats?.totalDeaths}</h4></Col>
                     </Row>
                     <Row className="mb-2">
                     <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team assists:</h4></Col>
-                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">{TeamStats?.totalAssists}</h4></Col>
                     </Row>
                     <Row className="mb-2">
                     <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage dealt:</h4></Col>
-                    <Col className=""><h4 className="StatNumbers">1.000.000.000</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">{TeamStats?.totalDamageDealt}</h4></Col>
                     </Row>
                     <Row className="mb-2">
                     <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage taken:</h4></Col>
-                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">{TeamStats?.totalDamageTaken}</h4></Col>
                     </Row>
                     <Row className="mb-2">
                     <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team damage mitigated:</h4></Col>
-                    <Col className=""><h4 className="StatNumbers">1.999.999.999</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">{TeamStats?.totalDamageMitigated}</h4></Col>
                     </Row>
                     <Row className="mb-2">
                     <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team healing:</h4></Col>
-                    <Col className=""><h4 className="StatNumbers">99.999.999</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">{TeamStats?.totalHealing}</h4></Col>
                     </Row>
-                    <Row className="mb-4">
-                <Col className="text-center">
-                    {/* Link to pick percentages of team */}
-                <Button href="/stats/team/2345/pickpercentages" className="StatSubTitle">Click to see team pick percentages</Button>
-                </Col>
-                </Row>
                 </Col>
                 {/* Pick stats and Star player */}
                 <Col md={3} className="border-right">
-                <Row className="">
-                    <Col><h2 className="font-weight-bold StatTitle">MOST PLAYED</h2></Col>
-                </Row>
-                <Row className="mb-4">
-                    <Col>                      
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                    </Col>
-                </Row>
-                <Row className="">
-                    <Col><h2 className="font-weight-bold StatTitle">MOST BANNED</h2></Col>
-                </Row>
-                <Row className="mb-4">
-                    <Col>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                      <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="GodImgStats mr-1" rounded draggable={false}/>
-                    </Col>
-                </Row>
                 <Row className="">
                     <Col><h2 className="font-weight-bold StatTitle">STAR PLAYER</h2></Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">STAR PLAYER NAME</h3>
+                    </Col>
+                </Row>  
+                <Row className="">
+                    <Col><h2 className="font-weight-bold StatTitle">MOST PLAYED</h2></Col>
+                </Row>
+                <Row className="mb-4">
+                    <Col className="d-flex">                      
+                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
                     </Col>
                 </Row>
+                <Row className="">
+                    <Col><h2 className="font-weight-bold StatTitle">MOST BANNED</h2></Col>
+                </Row>
+                <Row className="mb-4">
+                    <Col className="d-flex">
+                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                    </Col>
+                </Row>
+                <Row className="mb-4">
+                <Col className="">
+                    {/* Link to pick percentages of team */}
+                <Button href="/stats/team/2345/pickpercentages" className="StatNumbers">Click to see team pick percentages</Button>
+                </Col>
+                </Row>              
                
                 </Col >
                 {/* Roster */}
@@ -189,31 +206,31 @@ export default function TeamStat({ postData, LoginSession }) {
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Solo_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">verylonglonglongname</h3><Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[0]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[0]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[1]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[1]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Mid_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[2]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[2]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Support_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[3]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[3]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <img src="/images/roles/Adc_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">lolliepoep</h3>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[4]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[4]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 </Col>
@@ -257,6 +274,7 @@ export default function TeamStat({ postData, LoginSession }) {
       </Modal>
     </>
   );
+}
 
 }
 
@@ -264,9 +282,30 @@ export async function getServerSideProps(context) {
   
     const loginSessionData = await helpers.GetLoginSession(context.req);
   
-    return {
-        props: {
-            LoginSession: loginSessionData
-        },
-    };
+  //id from url
+  const teamID = context.params.id;
+  //object to fill
+  let response = { data: null, statusCode: null, errMsg: null };
+  //call api for the data
+  await teamservice.GetTeamStatisticsByTeamID(teamID)
+  .then(res => {response.data = res.data})
+  .catch(err => {
+    if (err.response == null) {
+      response.statusCode = 503;
+      response.errMsg = "SNL API unavailable";
+    }
+    else {
+      response.statusCode = JSON.stringify(err?.response?.status);
+      response.errMsg = err?.response?.data;
+    }
+  });
+
+  return {
+      props: {
+          LoginSession: loginSessionData,
+          TeamStats: response.data,
+          status: response.statusCode,
+          errMsg: response.errMsg,
+      },
+  };
   }

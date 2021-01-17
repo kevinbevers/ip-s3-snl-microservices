@@ -1,5 +1,6 @@
 .GodImgStats {
     height: 3.6vw;
+    width: 3.6vw;
 }
 
 .StatTitle {
@@ -21,6 +22,7 @@
   @media (max-width: 767px) {
     .GodImgStats {
         height: 16vw;
+        width: 16vw;
     }
     
     .StatTitle {

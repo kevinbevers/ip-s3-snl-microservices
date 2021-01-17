@@ -1,7 +1,28 @@
-import Accordion from "react-bootstrap/Accordion"
-import Card from "react-bootstrap/Card"
+import React, {useContext} from "react";
+import Accordion from "react-bootstrap/Accordion";
+import AccordionContext from "react-bootstrap/AccordionContext";
+import Card from "react-bootstrap/Card";
+import {FaAngleUp, FaAngleDown} from "react-icons/fa";
 
 export default function PlayerQuestions() {
+
+    function ContextAwareToggle({ children, eventKey, callback }) {
+        const currentEventKey = useContext(AccordionContext);
+      
+        const isCurrentEventKey = currentEventKey === eventKey;
+      
+        return (
+            <>
+            <div className="d-flex">
+          <h5 className="m-0">
+            {children}
+          </h5>
+          {isCurrentEventKey ? <FaAngleUp className="ml-auto"/> : <FaAngleDown className="ml-auto"/>}
+          </div>
+          </>
+        );
+      }
+
 return (
     <>
         <h3 className="font-weight-bold">Player questions</h3>
@@ -10,7 +31,7 @@ return (
         
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="0">
-            <h5 className="m-0">Can I substitute for a team I play against next week?</h5>
+            <ContextAwareToggle eventKey="0">Can I substitute for a team I play against next week?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="0">
             <Card.Body>
@@ -22,7 +43,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="1">
-            <h5 className="m-0">Can I leave a team as a player?</h5>
+            <ContextAwareToggle eventKey="1">Can I leave a team as a player?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="1">
             <Card.Body>

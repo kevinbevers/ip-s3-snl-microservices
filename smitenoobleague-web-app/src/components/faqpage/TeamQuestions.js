@@ -1,7 +1,28 @@
-import Accordion from "react-bootstrap/Accordion"
-import Card from "react-bootstrap/Card"
+import React, {useContext} from "react";
+import Accordion from "react-bootstrap/Accordion";
+import AccordionContext from "react-bootstrap/AccordionContext";
+import Card from "react-bootstrap/Card";
+import {FaAngleUp, FaAngleDown} from "react-icons/fa";
 
 export default function TeamQuestions() {
+
+    function ContextAwareToggle({ children, eventKey, callback }) {
+        const currentEventKey = useContext(AccordionContext);
+      
+        const isCurrentEventKey = currentEventKey === eventKey;
+      
+        return (
+            <>
+            <div className="d-flex">
+          <h5 className="m-0">
+            {children}
+          </h5>
+          {isCurrentEventKey ? <FaAngleUp className="ml-auto"/> : <FaAngleDown className="ml-auto"/>}
+          </div>
+          </>
+        );
+      }
+
 return (
     <>
         <h3 className="font-weight-bold">Team questions</h3>
@@ -10,11 +31,11 @@ return (
         
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="0">
-            <h5 className="m-0">How many substitute players are allowed? (fills)</h5>
+            <ContextAwareToggle eventKey="0">How many substitute players are allowed? (fills)</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="0">
             <Card.Body>
-            <p className="m-0">When a player in your team can"t play, you can result to a substitute player.
+            <p className="m-0">When a player in your team can't play, you can result to a substitute player.
             There is only <b>1 substitute</b> allowed per team ensuring the original team is mostly intact.</p>
             </Card.Body>
         </Accordion.Collapse>
@@ -22,7 +43,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="1">
-            <h5 className="m-0">How do i join a team?</h5>
+            <ContextAwareToggle  eventKey="1">How do i join a team?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="1">
             <Card.Body>
@@ -34,7 +55,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="2">
-            <h5 className="m-0">How many players are in a team?</h5>
+            <ContextAwareToggle eventKey="2">How many players are in a team?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="2">
             <Card.Body>

@@ -138,8 +138,7 @@ function PlayerInfoAlert() {
         <>
             <Row className="mb-2 rounded bg-white border border-silver PlayerBox">
                 <Col md={10} xs={10} className="d-flex p-0">
-                    <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{member?.teamMemberName != null ? member.teamMemberName + " " : "No player in this role yet. "} 
-                                                {(member.teamMemberPlatform == "PS4" &&
+                    <h4 className="my-auto font-weight-bold p-auto pl-2 PlayerText">{(member.teamMemberPlatform == "PS4" &&
                                                     <FaPlaystation />)
                                                 || (member?.teamMemberPlatform == "Steam" &&
                                                     <FaSteam />)
@@ -155,7 +154,8 @@ function PlayerInfoAlert() {
                                                 
                                                 member.teamMemberPlatform
 
-                                                } {member?.teamCaptain != null && member.teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4>
+                                                } {member?.teamMemberName != null ? member.teamMemberName + " " : "No player in this role yet. "} 
+                                                 {member?.teamCaptain != null && member.teamCaptain == true ? <Badge variant="secondary">Captain</Badge> : <></>}</h4>
                 </Col>
                 <Col xs={2} className="my-auto p-0 pr-2">{member?.teamMemberID != null ? <Button onClick={handleShow} variant="primary" size="sm" className="PlayerEdit" block>Edit</Button> : <Button onClick={handleShow} variant="success" size="sm" className="PlayerEdit" block>Add</Button>}</Col>
             </Row>

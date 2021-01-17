@@ -793,6 +793,7 @@ namespace team_microservice.Services
                     TeamWithDetails returnTeam = new TeamWithDetails
                     {
                         TeamID = foundTeam.TeamId,
+                        DivisionID = foundTeam.TeamDivisionId,
                         TeamName = foundTeam.TeamName,
                         TeamMembers = members,
                         TeamLogoPath = foundTeam.TeamLogoPath

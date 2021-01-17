@@ -22,14 +22,14 @@ namespace team_microservice.Controllers
             _teamService = teamService;
         }
 
-        // GET: team-service/bydivision/{divisionID}
+        // GET: team-service/team/bydivision/{divisionID}
         [HttpGet("bydivision/{divisionID}")]
         public async Task<ActionResult<IEnumerable<Team>>> GetTeams(int divisionID)
         {
             return await _teamService.GetTeamsByDivisionIdAsync(divisionID);
         }
 
-        // GET: team-service/bydivisionwithdetails/{divisionID}
+        // GET: team-service/team/bydivisionwithdetails/{divisionID}
         [HttpGet("bydivisionwithdetails/{divisionID}")]
         public async Task<ActionResult<IEnumerable<TeamWithDetails>>> GetTeamsWithDetails(int divisionID)
         {
@@ -51,14 +51,14 @@ namespace team_microservice.Controllers
             return await _teamService.GetTeamsThatAreNotInADivisionWithDetailsAsync();
         }
 
-        // GET: team-service/{divisionID}
+        // GET: team-service/team
         [HttpGet]
         public async Task<ActionResult<Team>> Get()
         {
             return await _teamService.GetAllTeamsAsync();
         }
 
-        // GET: team-service/{divisionID}
+        // GET: team-service/team/{teamID}
         [HttpGet("{teamID}")]
         public async Task<ActionResult<TeamWithDetails>> Get(int teamID)
         {

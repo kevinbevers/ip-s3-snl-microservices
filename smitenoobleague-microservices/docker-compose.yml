@@ -98,6 +98,7 @@ services:
       PORT: 80
       TZ: UTC
       API_URL: http://smiteapi-microservice
+      InternalServiceKey: ${InternalServiceKey}
     depends_on:
       - smiteapi-microservice
 

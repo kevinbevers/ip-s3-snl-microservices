@@ -45,6 +45,30 @@ namespace stat_microservice.Services
             }
         }
 
+        public async Task<string> GetDivisionNameByDivisionID(int? divisionID)
+        {
+            //getnamebyid
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+
+                using (var response = await httpClient.GetAsync($"http://division-microservice/division/getnamebyid/{divisionID}"))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return json;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
         public async Task<Schedule> GetPlannedMatchUpByDivisionIdAsync(int divisionID)
         {
             using (var httpClient = new HttpClient())
@@ -68,6 +92,29 @@ namespace stat_microservice.Services
             }
         }
 
+        public async Task<PlayerWithTeamInfo> GetPlayerWithTeamInfoByPlayerIdAsync(int? playerID)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+
+                using (var response = await httpClient.GetAsync($"http://team-microservice/player/byplayerid/{playerID}"))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<PlayerWithTeamInfo>(json);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
         public async Task<TeamWithDetails> GetTeamByPlayersAsync(List<int> playersInMatch)
         {
             //body for the post request
@@ -81,6 +128,29 @@ namespace stat_microservice.Services
                 stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                 using (var response = await httpClient.PostAsync($"http://team-microservice/team/findteam", stringContent))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<TeamWithDetails>(json);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
+        public async Task<TeamWithDetails> GetTeamWithDetailsByTeamId(int? teamID)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+
+                using (var response = await httpClient.GetAsync($"http://team-microservice/team/{teamID}"))
                 {
                     string json = await response.Content.ReadAsStringAsync();
                     if (response.IsSuccessStatusCode)

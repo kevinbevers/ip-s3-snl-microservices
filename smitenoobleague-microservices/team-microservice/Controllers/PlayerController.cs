@@ -23,9 +23,15 @@ namespace team_microservice.Controllers
 
         // GET team-service/player/bydivision/{id}
         [HttpGet("bydivision/{divisionID}")]
-        public async Task<ActionResult<IEnumerable<PlayerWithTeamInfo>>> Get(int? divisionID)
+        public async Task<ActionResult<IEnumerable<PlayerWithTeamInfo>>> GetPlayersList(int? divisionID)
         {
             return await _playerService.GetPlayersByDivisionIdAsync(divisionID);
+        }
+        // GET team-service/player/bydivision/{id}
+        [HttpGet("byplayerid/{playerID}")]
+        public async Task<ActionResult<PlayerWithTeamInfo>> GetPlayer(int? playerID)
+        {
+            return await _playerService.GetPlayerWithTeamInfoByPlayerID(playerID);
         }
     }
 }
