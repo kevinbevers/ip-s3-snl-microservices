@@ -9,7 +9,7 @@ import DefaultErrorPage from "next/error";
 import { Container, Row, Col, Form, Card, Button, Image, Badge, Toast, Alert } from "react-bootstrap";
 //custom imports
 import { FaEdit, FaCheck, FaBan } from "react-icons/fa";
-import { ReactSortable, Sortable, Swap } from "react-sortablejs";
+import { ReactSortable} from "react-sortablejs";
 import PlayerManagement from "src/components/captainpage/PlayerManagement";
 //importing images
 import Jungle from "public/images/roles/Jungle_Logo.png";
