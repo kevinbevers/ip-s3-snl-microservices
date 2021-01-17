@@ -31,6 +31,7 @@ namespace smiteapi_microservice.Controllers
 
         // POST: /queuedmatch
         [HttpPost]
+        [ServiceFilter(typeof(InternalServicesOnly))]
         public async Task<IActionResult> Post([FromBody] MatchSubmission submission)
         {
             return await _matchService.ProcessScheduleApiRequestAsync(submission);

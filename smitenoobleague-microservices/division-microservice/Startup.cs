@@ -19,7 +19,10 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.OpenApi.Models;
 using division_microservice.Interfaces;
 using division_microservice.Services;
+//Auth
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 
 namespace division_microservice
@@ -55,6 +58,10 @@ namespace division_microservice
             //inject gatewaykey from appsettings.json
             //services.Configure<GatewayKey>(Configuration.GetSection("GatewayKey"));
             //services.AddScoped<GatewayOnly>();
+            string servicekey = Environment.GetEnvironmentVariable("InternalServiceKey");
+            //InternalServices only
+            services.AddSingleton(new InternalServicesKey { Key = servicekey }); //access internalservice key where needed
+            services.AddSingleton(new InternalServicesOnly(new InternalServicesKey { Key = servicekey }));//used for controller filter / auth of internal services
 
             //add Scoped services
             services.AddScoped<IExternalServices, ExternalServices>();
@@ -81,9 +88,33 @@ namespace division_microservice
                 });
 
 
+            //add swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Division microservice API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+                    }
+                });
             });
         }
 
@@ -98,6 +129,8 @@ namespace division_microservice
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

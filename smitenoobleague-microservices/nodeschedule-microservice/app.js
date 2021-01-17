@@ -61,7 +61,7 @@ function CallSmiteApi(id, patch, date) {
   axios.post(process.env.API_URL + '/queuedmatch', {
     gameID: id,
     patchNumber: patch
-  })
+  },{headers: {"ServiceKey":process.env.InternalServiceKey}})
     .then(res => {
       //log the response
       console.log("scheduled job ran successfull with the following data: {" + "id: " + id + " @: " + date + "}");
@@ -81,7 +81,7 @@ function CallSmiteApi(id, patch, date) {
 }
 
 function GetJobsFromDB() {
-  axios.get(process.env.API_URL + '/queuedmatch')
+  axios.get(process.env.API_URL + '/queuedmatch',{headers: {"ServiceKey":process.env.InternalServiceKey}})
     .then(res =>
     // The whole response has been received. Print out the result.
     {

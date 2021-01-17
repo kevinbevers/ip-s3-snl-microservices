@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using division_microservice.Division_DB;
 using division_microservice.Models.External;
 using division_microservice.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -53,6 +54,7 @@ namespace division_microservice.Controllers
 
         // DELETE /schedule/{scheduleID}
         [HttpDelete("byscheduleid/{scheduleID}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Schedule>> Delete(int scheduleID)
         {
             return ModelState.IsValid ? await _scheduleService.RemoveScheduleByIdAsync(scheduleID) : BadRequest(ModelState);
@@ -60,6 +62,7 @@ namespace division_microservice.Controllers
 
         // PUT /schedule/{scheduleID}
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Schedule>> Put([FromBody] SimpleSchedule values)
         {
             return ModelState.IsValid ? await _scheduleService.UpdateScheduleForDivisionAsync(values) : BadRequest(ModelState);
@@ -67,6 +70,7 @@ namespace division_microservice.Controllers
 
         // POST schedule/ scheduleSubmission{Name, Division, startDate}
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> PostAsync([FromBody] ScheduleCreation values)
         {
             return ModelState.IsValid ? await _scheduleService.CreateScheduleForDivisionAsync(values) :  BadRequest(ModelState);
@@ -74,6 +78,7 @@ namespace division_microservice.Controllers
 
         // POST schedule/updatematchupscore updateMatchScore{MatchupID, ScoreText}
         [HttpPost("updatematchupscore")]
+        [ServiceFilter(typeof(InternalServicesOnly))]
         public async Task<ActionResult> PostMatchupScore([FromBody] UpdateMatchScore updateMatchScore)
         {
             return ModelState.IsValid ? await _scheduleService.UpdateMatchUpScoreAsync(updateMatchScore.MatchupID, updateMatchScore.ScoreText) : BadRequest(ModelState);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using division_microservice.Interfaces;
 using division_microservice.Models.External;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -42,6 +43,7 @@ namespace division_microservice.Controllers
 
         // POST /division
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Division>> Post([FromBody] string divisionName) //return created division object
         {
             return ModelState.IsValid ? await _divisionService.CreateDivisionAsync(divisionName) : BadRequest(ModelState);
@@ -49,6 +51,7 @@ namespace division_microservice.Controllers
 
         // PUT /division
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Division>> Put([FromBody] Division updatedDivision) //return updated division object
         {
             return ModelState.IsValid ? await _divisionService.UpdateDivisionAsync(updatedDivision) : BadRequest(ModelState);
@@ -56,6 +59,7 @@ namespace division_microservice.Controllers
 
         // DELETE /division/{divisionID}
         [HttpDelete("{divisionID}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<int>> Delete(int divisionID) //return int with amount of deleted divisions by that id. should return 1 when successfull
         {
             return ModelState.IsValid ? await _divisionService.DeleteDivisionByIdAsync(divisionID) : BadRequest(ModelState);
