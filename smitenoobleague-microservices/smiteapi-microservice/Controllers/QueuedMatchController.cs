@@ -24,6 +24,7 @@ namespace smiteapi_microservice.Controllers
 
         // GET: /queuedmatch
         [HttpGet]
+        [ServiceFilter(typeof(InternalServicesOnly))]
         public async Task<ActionResult<List<QueuedMatch>>> Get()
         {
             return await _matchService.GetScheduledGamesFromDbAsync();
