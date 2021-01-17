@@ -1,5 +1,7 @@
 ﻿using System;
-namespace team_microservice.Models.External
+using stat_microservice.Models.Internal;
+
+namespace stat_microservice.Models.Internal
 {
     public class PlayerWithTeamInfo
     {

@@ -104,7 +104,7 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
             {/*Player cards */}
             {PlayersToShow != null ? <>
               {PlayersMatched?.length > 0 ? PlayersMatched.map((p, index) => (
-                <PlayerCard key={index} Player={p.teamMember} Team={p.team}/>
+                <PlayerCard key={index} Player={p.player} Team={p.team}/>
               )): 
               <Row className="mt-5">
               <Col md={3}></Col>

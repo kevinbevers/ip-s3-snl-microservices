@@ -1,14 +1,17 @@
 .SmallTeamImage {
     height: 30px;
+    width: 30px;
 }
 
 .SmallRoleImage {
     height: 30px;
+    width: 30px;
 }
 
 .MainRoleImage {
     /* max-height: 12vw; */
     max-height: 120px;
+    max-width: 120px;
     /* height: 100px; */
 }
 
@@ -22,6 +25,7 @@
 
 .PlayerRecentPickImg {
     height: 3vw;
+    width: 3vw;
 }
 
 .PlayerStatTitle {
@@ -69,5 +73,6 @@
   @media (max-width: 768px) {
     .PlayerRecentPickImg {
         height: 5vw;
+        width: 5vw;
     }
    };

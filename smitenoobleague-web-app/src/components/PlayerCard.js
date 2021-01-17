@@ -19,7 +19,7 @@ import Image from "next/image";
 
 export default function PlayerCard({Player,Team}){
 
-  Team.teamLogoPath = "images/teamBadge.png"
+    const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + Team?.teamLogoPath;
     //Player.playerID for link
 
     return (
@@ -52,7 +52,7 @@ export default function PlayerCard({Player,Team}){
                   <Col md={4} className="my-auto">
                     <Row className="">
                       <Col className="d-flex justify-content-center justify-content-md-start">
-                      {Team?.teamLogoPath != null ? <Image height={30} width={30} alt={Team?.teamName} src={"https://localhost:5000/team-service/images/teamBadge.png"} className="SmallTeamImage" draggable={false}></Image>  : 
+                      {Team?.teamLogoPath != null ? <Image height={30} width={30} alt={Team?.teamName} src={imagePath} className="SmallTeamImage" draggable={false}></Image>  : 
                         <Img alt={Team?.teamName} src={require("public/images/teamBadge.png")} className="SmallTeamImage" draggable={false}></Img>
                       }
                         <p className="ml-2 my-auto">{Team?.teamName}</p>

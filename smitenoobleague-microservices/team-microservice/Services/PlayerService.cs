@@ -16,8 +16,6 @@ namespace team_microservice.Services
     {
         private readonly SNL_Team_DBContext _db;
         private readonly ILogger<PlayerService> _logger;
-        private readonly IValidationService _validationService;
-        private readonly IExternalServices _externalServices;
 
         public PlayerService(SNL_Team_DBContext db, ILogger<PlayerService> logger)
         {
@@ -52,7 +50,7 @@ namespace team_microservice.Services
                                 DivisionID = team.TeamDivisionId,
                                 TeamLogoPath = team.TeamLogoPath
                             },
-                            TeamMember = new TeamMember
+                            Player = new TeamMember
                             {
                                 TeamMemberID = p.TeamMemberId,
                                 TeamCaptain = team.TeamCaptainId == p.TeamMemberId,
@@ -73,6 +71,53 @@ namespace team_microservice.Services
                 _logger.LogError(ex, "Something went wrong trying to get players with division ID.");
                 //return result to client
                 return new ObjectResult("Something went wrong trying to get players with division ID.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
+        public async Task<ActionResult<PlayerWithTeamInfo>> GetPlayerWithTeamInfoByPlayerID(int? playerID)
+        {
+            try
+            {
+                TableTeamMember foundPlayer = await _db.TableTeamMembers.Where(tm => tm.TeamMemberPlayerId == playerID).FirstOrDefaultAsync();
+                if (foundPlayer == null)
+                {
+                    return new ObjectResult("No players found with the given player ID") { StatusCode = 404 }; //NOT FOUND
+                }
+                else
+                {
+                    TableRole PlayerRole = await _db.TableRoles.Where(r => r.RoleId == foundPlayer.TeamMemberRole).FirstOrDefaultAsync();
+                    //could first pull all teams that are in the list and use them in here. but this will also do the job.
+                    TableTeam team = await _db.TableTeams.Where(t => t.TeamId == foundPlayer.TeamMemberTeamId).FirstOrDefaultAsync();
+
+                    PlayerWithTeamInfo returnPlayer = new PlayerWithTeamInfo
+                    {
+                        Team = new Team
+                        {
+                            TeamID = team.TeamId,
+                            TeamName = team.TeamName,
+                            DivisionID = team.TeamDivisionId,
+                            TeamLogoPath = team.TeamLogoPath
+                        },
+                        Player = new TeamMember
+                        {
+                            TeamMemberID = foundPlayer.TeamMemberId,
+                            TeamCaptain = team.TeamCaptainId == foundPlayer.TeamMemberId,
+                            TeamMemberName = foundPlayer.TeamMemberName,
+                            TeamMemberPlatform = ((ApiPlatformEnum)foundPlayer.TeamMemberPlatformId).ToString(),
+                            TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                            PlayerID = foundPlayer.TeamMemberPlayerId
+                        }
+                    };
+
+                    return new ObjectResult(returnPlayer) { StatusCode = 200 }; //OK
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get player with player ID.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get player with player ID.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
     }
