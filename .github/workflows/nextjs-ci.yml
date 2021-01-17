@@ -34,7 +34,7 @@ jobs:
       run: yarn install --frozen-lockfile
       working-directory: smitenoobleague-web-app
     - name: Build
-      run: yarn run build --if-present
+      run: yarn run build
       working-directory: smitenoobleague-web-app
        
     - name: Test
