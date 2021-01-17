@@ -38,7 +38,7 @@ namespace ocelot_api_gateway
                 options.AddPolicy("AllowedOrigin",
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000",domain);
+                    builder.WithOrigins("http://localhost:3000", "http://localhost:8080", domain); //accept only the configured domains. 2 local for development env variable for production.
                     builder.AllowAnyHeader();
                     builder.WithExposedHeaders("Token-Expired");
                     builder.AllowAnyMethod();
