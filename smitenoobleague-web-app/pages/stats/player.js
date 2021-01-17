@@ -56,7 +56,7 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
         else 
         {         
           //Get teams from selected division
-          await playerservice.GetListOfPlayersByDivisionID(evt.target.value).then((res) => {setPlayersToShow(res.data);}).catch((error) => {setPlayersToShow(null)});
+          await playerservice.GetListOfPlayersByDivisionID(evt.target.value).then((res) => {setPlayersToShow(res.data); setPlayersMatched(res.data);}).catch((error) => {setPlayersToShow(null); setPlayersMatched([]);});
         }
   
       };
@@ -103,9 +103,16 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
           <Col md={12} xl={8} className="mx-auto">
             {/*Player cards */}
             {PlayersToShow != null ? <>
-              {PlayersMatched.map((p, index) => (
+              {PlayersMatched?.length > 0 ? PlayersMatched.map((p, index) => (
                 <PlayerCard key={index} Player={p.teamMember} Team={p.team}/>
-              ))}
+              )): 
+              <Row className="mt-5">
+              <Col md={3}></Col>
+              <Col md={6} className="d-inline-flex justify-content-center">
+                <h3 className="ml-2 mr-2 mb-0 align-self-center font-weight-bold">No players found</h3>
+              </Col>
+              <Col md={3}></Col>
+            </Row> }
              </> : 
              <> 
               <Row className="mt-5">
