@@ -108,10 +108,7 @@ function GetJobsFromDB() {
     })
     .catch(err => {
       console.log("Error: " + err);
-      if(err.response?.status != 500)
-      {
         setTimeout(GetJobsFromDB, 5000);
-      }
     });
 }
 
