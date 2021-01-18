@@ -3,8 +3,11 @@ import React, { useState } from "react";
 //bootstrap components
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Container, Card, Image } from "react-bootstrap";
+import { Container, Card } from "react-bootstrap";
 import Link from "next/link";
+//image optimization
+import Img from 'react-optimized-image';
+import Image from "next/image";
 
 export default function ScheduleItem({homeTeam, awayTeam, matchupID, byeWeek, score}) {
 
