@@ -29,11 +29,12 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
 
         if(evt.target.value?.length > 0)
         {
+          console.log(PlayersToShow);
           setPlayersMatched(PlayersToShow.filter(p => 
-            p.teamMember.teamMemberName.toLowerCase().includes(evt.target.value.toLowerCase()) ||
-            p.teamMember.teamMemberRole.roleName.toLowerCase().includes(evt.target.value.toLowerCase()) ||
-            p.team.teamName.toLowerCase().includes(evt.target.value.toLowerCase()) ||
-            p.teamMember.teamMemberPlatform.toLowerCase().includes(evt.target.value.toLowerCase())
+            p.player?.teamMemberName.toLowerCase().includes(evt.target.value.toLowerCase()) ||
+            p.player?.teamMemberRole.roleName.toLowerCase().includes(evt.target.value.toLowerCase()) ||
+            p.team?.teamName.toLowerCase().includes(evt.target.value.toLowerCase()) ||
+            p.player?.teamMemberPlatform.toLowerCase().includes(evt.target.value.toLowerCase())
           ));
         }
         else 
