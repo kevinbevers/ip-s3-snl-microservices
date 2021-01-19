@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using smiteapi_microservice.Classes;
 using smiteapi_microservice.Interfaces;
 using smiteapi_microservice.Models.External;
+using smiteapi_microservice.Models.Internal;
 
 namespace smiteapi_microservice.Services
 {
@@ -19,6 +20,30 @@ namespace smiteapi_microservice.Services
         {
             _servicekey = serviceKey;
         }
+
+        public async Task<TeamWithDetails> GetTeamWithDetailsByIdAsync(int teamID)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+
+                using (var response = await httpClient.GetAsync($"http://team-microservice/team/{teamID}"))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<TeamWithDetails>(json);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
         public async Task<ObjectResult> SaveMatchdataToStatService(MatchData match)
         {
             //body for the post request
@@ -26,7 +51,7 @@ namespace smiteapi_microservice.Services
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.Timeout = TimeSpan.FromSeconds(15); //timeout after 15 seconds. higher timeout because on first run this could be slow
+                httpClient.Timeout = TimeSpan.FromSeconds(15); //timeout after 15 seconds. higher timeout because on first run this could be slow.
                 //Add internal service header. so that the requests passes auth
                 httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
                 stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");

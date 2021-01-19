@@ -172,13 +172,13 @@ namespace stat_microservice.Services
 
         public async Task<bool> UpdateScoreInScheduleAsync(string score, int matchupID)
         {
-            UpdateMatchScore updateMatchScore = new UpdateMatchScore { MatchupID = matchupID, ScoreText = score };
             //body for the post request
-            var stringContent = new StringContent(JsonConvert.SerializeObject(updateMatchScore));
+            var stringContent = new StringContent(JsonConvert.SerializeObject(new UpdateMatchScore { MatchupID = matchupID, ScoreText = score }));
+            stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                httpClient.Timeout = TimeSpan.FromSeconds(10); //timeout after 10 seconds
                 //Add internal service header. so that the requests passes auth
                 httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
 

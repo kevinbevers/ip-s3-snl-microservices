@@ -540,7 +540,7 @@ namespace stat_microservice.Services
                 ScheduledMatch scheduledMatch = new ScheduledMatch { ScheduleID = foundSchedule.ScheduleID };
                 //Get the 2 matchups that are scheduled for these 2 teams
                 Matchup matchup1 = foundSchedule.Matchups.Where(mup => mup.HomeTeam.TeamID == winnerTeam.TeamID && mup.AwayTeam.TeamID == loserTeam.TeamID).FirstOrDefault();
-                Matchup matchup2 = foundSchedule.Matchups.Where(mup => mup.HomeTeam.TeamID == winnerTeam.TeamID && mup.AwayTeam.TeamID == loserTeam.TeamID).FirstOrDefault();
+                Matchup matchup2 = foundSchedule.Matchups.Where(mup => mup.HomeTeam.TeamID == loserTeam.TeamID && mup.AwayTeam.TeamID == winnerTeam.TeamID).FirstOrDefault();
                 List<Matchup> matchups = new List<Matchup> { matchup1, matchup2 };
                 //Get the matchup that is already past the currentWeek / the same and check if the matchup is not older then 2 weeks. 2 weeks is the catchup time.
                 scheduledMatch.matchup = matchups.Where(mup => mup.WeekNumber <= foundSchedule.CurrentWeek && Math.Abs(mup.WeekNumber - foundSchedule.CurrentWeek) <= 2).FirstOrDefault();

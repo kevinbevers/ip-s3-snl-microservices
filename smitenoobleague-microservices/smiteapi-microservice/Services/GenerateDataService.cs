@@ -1,46 +1,182 @@
-﻿using smiteapi_microservice.Models.Internal;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using smiteapi_microservice.Interfaces;
 using smiteapi_microservice.Models.External;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
+using smiteapi_microservice.Models.Internal;
+using smiteapi_microservice.Smiteapi_DB;
 
 namespace smiteapi_microservice.Services
 {
-    public class HirezApiService : IHirezApiService
+    public class GenerateDataService : IGenerateDataService
     {
+        //services
+        private readonly SNL_Smiteapi_DBContext _db;
         private readonly IHirezApiContext _hirezApi;
+        private readonly IExternalServices _externalServices;
+        //logging
+        private readonly ILogger<GenerateDataService> _logger;
 
-        public HirezApiService(IHirezApiContext hirezApi)
+        public GenerateDataService(SNL_Smiteapi_DBContext db, IHirezApiContext hirezApi, ILogger<GenerateDataService> logger, IExternalServices externalServices)
         {
+            //database
+            _db = db;
+            //api service
             _hirezApi = hirezApi;
-        }
-        public async Task<ApiPatchInfo> GetCurrentPatchInfoAsync()
-        {
-            ApiPatchInfo patchInfo = await _hirezApi.GetPatchInfo();
+            //logger
+            _logger = logger;
+            //external services
+            _externalServices = externalServices;
 
-            return patchInfo;
-        }
-
-        public async Task<IEnumerable<ApiGod>> GetGodsAsync()
-        {
-           return await _hirezApi.GetAllGods();
         }
 
-        public async Task<IEnumerable<ApiItem>> GetItemsAsync()
+        public async Task<ActionResult> GenerateMatchDataForMatchupWithTeamIds(int winningTeamId, int losingTeamId, DateTime? playedDate, bool? faultyQueueID, bool? hiddenPlayersChance, int? numberOfFillsWinners, int? numberOfFillsLosers)
         {
-            return await _hirezApi.GetAllItems();
+            DateTime yesterday = DateTime.Today.AddDays(-1);
+            List<ApiMatchList> rankedMatchesFound = await _hirezApi.GetListOfMatchIdsByQueueID(451, yesterday, "15,20");
+            if (rankedMatchesFound != null)
+            {
+                if (rankedMatchesFound[0]?.ret_msg != null)
+                {
+                    return new ObjectResult(rankedMatchesFound[0]?.ret_msg) { StatusCode = 400 }; //NOT FOUND
+                }
+                else
+                {
+                    Random random = new Random();
+                    int indexToSelect = random.Next(0, rankedMatchesFound.Count() - 1);
+                    int matchIdToUse = (int)rankedMatchesFound[indexToSelect].Match;
+                    //Get actual matchdata
+                    MatchData matchToChange = await GetMatchDetailsAsync(matchIdToUse);
+                    //set patch number
+                    matchToChange.patchNumber = (await _hirezApi.GetPatchInfo()).version_string;
+
+                    OptionalMatchManipulation(playedDate, faultyQueueID, hiddenPlayersChance, matchToChange);
+
+                    if (matchToChange.ret_msg != null)
+                    {
+                        return new ObjectResult("Something went wrong: " + matchToChange.ret_msg.ToString()) { StatusCode = 400 };
+                    }
+
+                    MatchData manipulatedMatchData = await ReplaceMatchDataPlayers(matchToChange, numberOfFillsWinners, numberOfFillsLosers, winningTeamId, losingTeamId);
+
+                    return await _externalServices.SaveMatchdataToStatService(manipulatedMatchData);
+                }
+            }
+            else
+            {
+                return new ObjectResult("No ranked matches found to generate data from") { StatusCode = 404 }; //NOT FOUND
+            }
         }
 
-        public async Task<MatchData> GetMatchDetailsAsync(int MatchID)
+
+        #region methods
+        private static void OptionalMatchManipulation(DateTime? playedDate, bool? faultyQueueID, bool? hiddenPlayersChance, MatchData matchToChange)
         {
-            //var pong = await _hirezApi.PingAPI();
-            //if (pong != null || pong != "")
-            //{
+            var nullDate = new DateTime();
+            //set the match entry date
+            if (playedDate != nullDate)
+            {
+                matchToChange.EntryDate = (DateTime)playedDate;
+            }
+
+
+            if (faultyQueueID != null)
+            {
+                //change gamemodeid so it is valid
+                if (!(bool)faultyQueueID)
+                {
+                    matchToChange.GamemodeID = 429;
+                }
+            }
+            else
+            {
+                matchToChange.GamemodeID = 429;
+            }
+
+            if (hiddenPlayersChance != null)
+            {
+                //change ret_msg so that there are no hidden players in the match
+                if (!(bool)hiddenPlayersChance)
+                {
+                    if (matchToChange.ret_msg != null)
+                    {
+                        if (matchToChange.ret_msg.ToString().Contains("Privacy"))
+                        {
+                            matchToChange.ret_msg = null;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (matchToChange.ret_msg != null)
+                {
+                    if (matchToChange.ret_msg.ToString().Contains("Privacy"))
+                    {
+                        matchToChange.ret_msg = null;
+                    }
+                }
+            }
+        }
+
+        private async Task<MatchData> ReplaceMatchDataPlayers(MatchData match, int? numberOfFillsWinners, int? numberOfFillsLosers, int winningTeamId, int losingTeamId)
+        {
+            //Replace the matchdata with that of the teams that where submitted
+            TeamWithDetails winningTeam = await _externalServices.GetTeamWithDetailsByIdAsync(winningTeamId);
+            TeamWithDetails losingTeam = await _externalServices.GetTeamWithDetailsByIdAsync(losingTeamId);
+
+
+            //loop through each 5 member of each team
+            for (int memberCount = 0; memberCount < 5; memberCount++)
+            {
+                //set the number of players ingame that should be replaced, members will be replaced until the threshold is reached.
+                if (numberOfFillsWinners != null)
+                {
+                    if (memberCount < (5 - numberOfFillsWinners))
+                    {
+                        //winner
+                        match.Winners[memberCount].player.Playername = winningTeam.TeamMembers[memberCount].TeamMemberName;
+                        match.Winners[memberCount].player.PlayerID = winningTeam.TeamMembers[memberCount].PlayerID;
+                        match.Winners[memberCount].player.Platform = winningTeam.TeamMembers[memberCount].TeamMemberPlatform;
+                    }
+                }
+                else
+                {
+                    //winner
+                    match.Winners[memberCount].player.Playername = winningTeam.TeamMembers[memberCount].TeamMemberName;
+                    match.Winners[memberCount].player.PlayerID = winningTeam.TeamMembers[memberCount].PlayerID;
+                    match.Winners[memberCount].player.Platform = winningTeam.TeamMembers[memberCount].TeamMemberPlatform;
+                }
+
+                if (numberOfFillsLosers != null)
+                {
+                    if (memberCount < (5 - numberOfFillsLosers))
+                    {
+                        //loser
+                        match.Losers[memberCount].player.Playername = losingTeam.TeamMembers[memberCount].TeamMemberName;
+                        match.Losers[memberCount].player.PlayerID = losingTeam.TeamMembers[memberCount].PlayerID;
+                        match.Losers[memberCount].player.Platform = losingTeam.TeamMembers[memberCount].TeamMemberPlatform;
+                    }
+                }
+                else
+                {
+                    //loser
+                    match.Losers[memberCount].player.Playername = losingTeam.TeamMembers[memberCount].TeamMemberName;
+                    match.Losers[memberCount].player.PlayerID = losingTeam.TeamMembers[memberCount].PlayerID;
+                    match.Losers[memberCount].player.Platform = losingTeam.TeamMembers[memberCount].TeamMemberPlatform;
+                }
+            }
+
+
+            return match;
+        }
+
+        private async Task<MatchData> GetMatchDetailsAsync(int MatchID)
+        {
             List<ApiPlayerMatchStat> matchDetails = await _hirezApi.GetMatchDetailsByMatchID(MatchID);
 
             if (matchDetails?[0]?.ret_msg != null && !(bool)matchDetails?[0]?.ret_msg.ToString().Contains("Privacy"))
@@ -117,7 +253,7 @@ namespace smiteapi_microservice.Services
                         foreach (var mp in matchDetails)
                         {
                             //if a player is hidden it will be put in the match's ret_msg
-                            if(mp.ret_msg != null)
+                            if (mp.ret_msg != null)
                             {
                                 //check for hidden to make 100% sure
                                 if (mp.ret_msg.ToString().Contains("Privacy"))
@@ -145,23 +281,23 @@ namespace smiteapi_microservice.Services
                             else
                             {
                                 //make sure to get general match info from one of the players. this is a backup if the first player returned is hidden and can not provide the general info
-                                if (match.GamemodeID == null)
+                                if(match.GamemodeID == null)
                                 {
                                     match.GamemodeID = (int)mp.match_queue_id;
                                 }
 
-                                if (match.MatchDurationInSeconds == null)
+                                if(match.MatchDurationInSeconds == null)
                                 {
                                     match.MatchDurationInSeconds = (int)ms?.Match_Duration;
                                 }
 
-                                if (match.MatchDuration == null)
+                                if(match.MatchDuration == null)
                                 {
                                     TimeSpan t = TimeSpan.FromSeconds((int)mp.Match_Duration);
                                     match.MatchDuration = $"{t:mm} min {t:ss} sec";
                                 }
 
-                                if (match.EntryDate == null)
+                                if(match.EntryDate == null)
                                 {
                                     match.EntryDate = (DateTime)ms?.Entry_Datetime;
                                 }
@@ -245,8 +381,8 @@ namespace smiteapi_microservice.Services
                                 Pentas = mp.Kills_Penta,
                                 Quadras = mp.Kills_Quadra,
                                 Triples = mp.Kills_Triple
-                                
-                                
+
+
                             };
 
                             if (mp.TaskForce == mp.Winning_TaskForce) { match.Winners.Add(playerStat); } else { match.Losers.Add(playerStat); }
@@ -267,29 +403,7 @@ namespace smiteapi_microservice.Services
                     return new MatchData { ret_msg = "No match found with the given ID" };
                 }
             }
-            //}
-            //else
-            //{
-            //    return new MatchData { ret_msg = "pinging smite api failed" };
-            //}
         }
-
-        public async Task<IEnumerable<Player>> SearchPlayersByNameAsync(string name)
-        {
-            List<ApiPlayer> playersfound = await _hirezApi.SearchPlayerByName(name);
-
-            List<Player> returnList = new List<Player>();
-            //convert ApiPlayer model to Player model
-            if (playersfound?[0].ret_msg != null)
-            {
-                //could return message to user
-            }
-            else
-            {
-                playersfound.ForEach(p => returnList.Add(new Player { Playername = p.Name, Platform = p.portal_id.ToString(), PlayerID = p.player_id }));
-            }
-
-            return returnList;
-        }
+        #endregion
     }
 }

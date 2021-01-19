@@ -5,6 +5,7 @@ namespace stat_microservice.Models.Internal
 {
     public class MatchData
     {
+        //public bool? sendEmail { get; set; } //fill this when saving the match so we can extract if we need to send an email or not, used when match is instantly available
         public string patchNumber { get; set; }
         public int? GameID { get; set; }
         public DateTime EntryDate { get; set; }
@@ -72,6 +73,7 @@ namespace stat_microservice.Models.Internal
             public int? FireGiantsKilled { get; set; }
             public int? GoldFuriesKilled { get; set; }
             //Extra stats
+            public int? KillingSpree { get; set; }
             public bool FirstBlood { get; set; }
             public int? TowersDestroyed { get; set; }
             public int? PhoenixesDestroyed { get; set; }
