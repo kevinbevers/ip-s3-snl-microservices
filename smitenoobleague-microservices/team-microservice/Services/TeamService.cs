@@ -366,7 +366,7 @@ namespace team_microservice.Services
 
                     foreach (var team in foundTeams)
                     {
-                        returnTeams.Add(new TeamWithDetails
+                        returnTeams.Add(new Team
                         {
                             TeamID = team.TeamId,
                             TeamName = team.TeamName,
@@ -384,6 +384,37 @@ namespace team_microservice.Services
                 _logger.LogError(ex, "Something went wrong trying to get teams all teams");
                 //return result to client
                 return new ObjectResult("Something went wrong trying to get teams all teams.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
+        public async Task<ActionResult<Team>> GetBasicTeamInfoByTeamIdAsync(int teamID)
+        {
+            try
+            {
+                TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == teamID).FirstOrDefaultAsync();
+                if (foundTeam == null)
+                {
+                    return new ObjectResult("No team found with the given teamID.") { StatusCode = 404 }; //NOT FOUND
+                }
+                else
+                {
+                    Team returnTeam = new Team
+                    {
+                        TeamID = foundTeam.TeamId,
+                        TeamName = foundTeam.TeamName,
+                        DivisionID = foundTeam.TeamDivisionId,
+                        TeamLogoPath = foundTeam.TeamLogoPath
+                    };
+
+                    return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get team by id");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get team by id") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
 

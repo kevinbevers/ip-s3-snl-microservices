@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using stat_microservice.Interfaces;
+using stat_microservice.Models.External;
 using stat_microservice.Models.Internal;
 using stat_microservice.Stat_DB;
 
@@ -25,7 +26,7 @@ namespace stat_microservice.Services
 
         }
 
-        public async Task<ActionResult> GetMatchStatByGameIDAsync(int gameID)
+        public async Task<ActionResult> GetMatchStatByGameIdAsync(int gameID)
         {
             try
             {
@@ -37,6 +38,90 @@ namespace stat_microservice.Services
                 _logger.LogError(ex, "Something went wrong trying to Get Match stats by gameID.");
                 //return result to client
                 return new ObjectResult("Something went wrong trying to Get Match stats by gameID.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
+        public async Task<ActionResult<MatchHistoryDetails>> GetMatchHistoryByMatchupIdAsync(int matchupID)
+        {
+            try
+            {
+
+                List<TableMatchResult> matchResults = await _db.TableMatchResults.Where(mr => mr.ScheduleMatchUpId == matchupID).OrderBy(mr => mr.DatePlayed).ToListAsync();
+
+                if(matchResults?.Count() > 0)
+                {
+                    MatchHistoryDetails matchHistoryDetails = new MatchHistoryDetails { MatchupID = matchResults[0].ScheduleMatchUpId, MatchResults = new List<MatchDataWithRole>() };
+
+                    foreach(TableMatchResult matchResult in matchResults)
+                    {
+                        List<TableStat> matchStats = await _db.TableStats.Where(ts => ts.GameId == matchResult.GameId).ToListAsync();
+
+                        TimeSpan time = TimeSpan.FromSeconds((int)matchStats?[0]?.IgMatchLengthInSeconds);
+                        var ms = matchStats?[0];
+
+                        MatchDataWithRole matchData = new MatchDataWithRole
+                        {
+                            GameID = matchStats?[0]?.GameId,
+                            EntryDate = (DateTime)matchStats?[0]?.MatchPlayedDate,
+                            MatchDurationInSeconds = matchStats?[0]?.IgMatchLengthInSeconds,
+                            patchNumber = matchStats?[0]?.PatchNumber,
+                            BannedGods = new List<God>(),
+                            Winners = new List<MatchDataWithRole.PlayerStat>(),
+                            Losers = new List<MatchDataWithRole.PlayerStat>(),
+                            MatchDuration = $"{time:mm} min {time:ss} sec",
+                        };
+
+                        //set the bans
+                        List<int?> bansIds = new List<int?> { ms.IgBan1Id, ms.IgBan2Id, ms.IgBan3Id, ms.IgBan4Id, ms.IgBan5Id, ms.IgBan6Id, ms.IgBan7Id, ms.IgBan8Id, ms.IgBan9Id, ms.IgBan10Id };
+
+                        for (int i = 0; i < 10; i++)
+                        {
+                            if (bansIds[i] != null)
+                            {
+                                TableGodDetail god = await _db.TableGodDetails.Where(tg => tg.GodId == bansIds[i]).FirstOrDefaultAsync();
+
+                                God ban = new God
+                                {
+                                    GodId = bansIds[i],
+                                    GodName = god.GodName,
+                                    GodIcon = god.GodIconUrl
+                                };
+                                //add to list of bans
+                                matchData.BannedGods.Add(ban);
+                            }
+                            else
+                            {
+                                //passed ban
+                                God ban = new God
+                                {
+                                    GodId = bansIds[i],
+                                    GodIcon = null,
+                                };
+                                matchData.BannedGods.Add(ban);
+                            }
+                        }
+
+                        //Get roles used to assign players to their ingame roles
+                        List<Role> roles = await _externalServices.GetRolesAsync();
+
+                        await FillWinnerAndLoserListWithMatchData(matchStats, roles);
+
+                        matchHistoryDetails.MatchResults.Add(matchData);
+                    }
+
+                    return new ObjectResult(matchHistoryDetails) { StatusCode = 200 };
+                }
+                else
+                {
+                    return new ObjectResult("No matchhistory found for the given matchupID") { StatusCode = 404 };
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to Get matchhistory with matchupID.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to Get matchhistory with matchupID.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
 
@@ -337,11 +422,13 @@ namespace stat_microservice.Services
                     WinStatus = p.Won,
                     RoleId = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.player.PlayerID).Select(tm => tm.TeamMemberRole.RoleID).FirstOrDefault(),
                     PlayerId = p.player.PlayerID,
+                    PlayerName = p.player.Playername,
+                    PlayerPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), p.player.Platform),
                     PatchNumber = match.patchNumber,
                     IgTaskforce = p.IngameTeamID,
                     GodPlayedId = p.God.GodId,
                     IgGodName = p.God.GodName,
-                    IgPlayerLevel = p.Level?.ToString(),
+                    IgPlayerLevel = p.Level,
                     IgDamageDealt = p.DamageDealt,
                     IgDamageMitigated = p.DamageMitigated,
                     IgDamageTaken = p.DamageTaken,
@@ -615,6 +702,192 @@ namespace stat_microservice.Services
             await _externalServices.SendEmailNotificationToCaptainAsync(messageLoser, title, loserCaptainMail);
         }
 
+        private async Task FillWinnerAndLoserListWithMatchData(List<TableStat> matchStats, List<Role> roles)
+        {
+            //Winners
+            foreach (var p in matchStats.Where(ms => ms.WinStatus == true))
+            {
+                //Get the played god data from the database
+                TableGodDetail god = await _db.TableGodDetails.Where(tg => tg.GodId == p.GodPlayedId).FirstOrDefaultAsync();
+
+                God playedGod = new God
+                {
+                    GodId = p.GodPlayedId,
+                    GodName = god.GodName,
+                    GodIcon = god.GodIconUrl
+                };
+
+                //Get all 6 items and the 2 relics from the DB
+                TableItemDetail item1 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem1Id).FirstOrDefaultAsync();
+                TableItemDetail item2 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem2Id).FirstOrDefaultAsync();
+                TableItemDetail item3 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem3Id).FirstOrDefaultAsync();
+                TableItemDetail item4 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem4Id).FirstOrDefaultAsync();
+                TableItemDetail item5 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem5Id).FirstOrDefaultAsync();
+                TableItemDetail item6 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem6Id).FirstOrDefaultAsync();
+                TableItemDetail relic1 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgRelic1Id).FirstOrDefaultAsync();
+                TableItemDetail relic2 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgRelic2Id).FirstOrDefaultAsync();
+
+                //construct the playerStat
+                MatchDataWithRole.PlayerStat player = new MatchDataWithRole.PlayerStat
+                {
+                    //KDA
+                    Kills = p.IgKills,
+                    Deaths = p.IgDeaths,
+                    Assists = p.IgAssists,
+                    //other stats
+                    DamageDealt = p.IgDamageDealt,
+                    DamageMitigated = p.IgDamageMitigated,
+                    DamageTaken = p.IgDamageTaken,
+                    DistanceTravelled = p.IgDistanceTraveled,
+                    FireGiantsKilled = p.IgFireGiantsKilled,
+                    FirstBlood = (bool)p.IgFirstBlood,
+                    God = playedGod,
+                    GoldEarned = p.IgGoldEarned,
+                    GoldFuriesKilled = p.IgGoldFuriesKilled,
+                    GPM = p.IgGpm,
+                    Healing = p.IgHealing,
+                    HighestMultiKill = p.IgHighestMultiKill,
+                    IngameTeamID = p.IgTaskforce,
+                    MinionDamage = p.IgMinionDamage,
+                    WardsPlaced = p.IgWardsPlaced,
+                    StructureDamage = p.IgStructureDamage,
+                    TimeSpentDeathInSeconds = p.IgTimeSpentDeathInSeconds,
+                    TowersDestroyed = p.IgTowersDestroyed,
+                    Won = (bool)p.WinStatus,
+                    Level = p.IgPlayerLevel,
+                    ObjectiveAssists = p.IgObjectiveAssists,
+                    Doubles = p.IgDoubles,
+                    Triples = p.IgTriples,
+                    Quadras = p.IgQuadras,
+                    Pentas = p.IgPentas,
+                    Region = p.IgRegion,
+                    KillingSpree = p.IgKillingSpree,
+                    PhoenixesDestroyed = p.IgPhoenixesDestroyed,
+                    //items
+                    Item1Icon = item1?.ItemIconUrl,
+                    Item1ID = item1?.ItemId,
+                    Item1Name = item1?.ItemName,
+                    Item2Icon = item2?.ItemIconUrl,
+                    Item2ID = item2?.ItemId,
+                    Item2Name = item2?.ItemName,
+                    Item3Icon = item3?.ItemIconUrl,
+                    Item3ID = item3?.ItemId,
+                    Item3Name = item3?.ItemName,
+                    Item4Icon = item4?.ItemIconUrl,
+                    Item4ID = item4?.ItemId,
+                    Item4Name = item4?.ItemName,
+                    Item5Icon = item5?.ItemIconUrl,
+                    Item5ID = item5?.ItemId,
+                    Item5Name = item5?.ItemName,
+                    Item6Icon = item6?.ItemIconUrl,
+                    Item6ID = item6?.ItemId,
+                    Item6Name = item6?.ItemName,
+                    //relics
+                    Relic1Icon = relic1?.ItemIconUrl,
+                    Relic1ID = relic1?.ItemId,
+                    Relic1Name = relic1?.ItemName,
+                    Relic2Icon = relic2?.ItemIconUrl,
+                    Relic2ID = relic2?.ItemId,
+                    Relic2Name = relic2?.ItemName,
+                    //Player & Role
+                    Player = new Player { PlayerID = p.PlayerId, Playername = p.PlayerName, Platform = ((ApiPlatformEnum)p.PlayerPlatformId).ToString() },
+                    Role = roles.Where(r => r.RoleID == p.RoleId).FirstOrDefault(),
+                    FirstBanSide = p.IgTaskforce == 1 //taskforce 1 is order, order is always the first ban side
+                };
+            }
+
+            //Losers
+            foreach (var p in matchStats.Where(ms => ms.WinStatus == false))
+            {
+                //Get the played god data from the database
+                TableGodDetail god = await _db.TableGodDetails.Where(tg => tg.GodId == p.GodPlayedId).FirstOrDefaultAsync();
+
+                God playedGod = new God
+                {
+                    GodId = p.GodPlayedId,
+                    GodName = god.GodName,
+                    GodIcon = god.GodIconUrl
+                };
+
+                //Get all 6 items and the 2 relics from the DB
+                TableItemDetail item1 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem1Id).FirstOrDefaultAsync();
+                TableItemDetail item2 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem2Id).FirstOrDefaultAsync();
+                TableItemDetail item3 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem3Id).FirstOrDefaultAsync();
+                TableItemDetail item4 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem4Id).FirstOrDefaultAsync();
+                TableItemDetail item5 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem5Id).FirstOrDefaultAsync();
+                TableItemDetail item6 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem6Id).FirstOrDefaultAsync();
+                TableItemDetail relic1 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgRelic1Id).FirstOrDefaultAsync();
+                TableItemDetail relic2 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgRelic2Id).FirstOrDefaultAsync();
+
+                //construct the playerStat
+                MatchDataWithRole.PlayerStat player = new MatchDataWithRole.PlayerStat
+                {
+                    //KDA
+                    Kills = p.IgKills,
+                    Deaths = p.IgDeaths,
+                    Assists = p.IgAssists,
+                    //other stats
+                    DamageDealt = p.IgDamageDealt,
+                    DamageMitigated = p.IgDamageMitigated,
+                    DamageTaken = p.IgDamageTaken,
+                    DistanceTravelled = p.IgDistanceTraveled,
+                    FireGiantsKilled = p.IgFireGiantsKilled,
+                    FirstBlood = (bool)p.IgFirstBlood,
+                    God = playedGod,
+                    GoldEarned = p.IgGoldEarned,
+                    GoldFuriesKilled = p.IgGoldFuriesKilled,
+                    GPM = p.IgGpm,
+                    Healing = p.IgHealing,
+                    HighestMultiKill = p.IgHighestMultiKill,
+                    IngameTeamID = p.IgTaskforce,
+                    MinionDamage = p.IgMinionDamage,
+                    WardsPlaced = p.IgWardsPlaced,
+                    StructureDamage = p.IgStructureDamage,
+                    TimeSpentDeathInSeconds = p.IgTimeSpentDeathInSeconds,
+                    TowersDestroyed = p.IgTowersDestroyed,
+                    Won = (bool)p.WinStatus,
+                    Level = p.IgPlayerLevel,
+                    ObjectiveAssists = p.IgObjectiveAssists,
+                    Doubles = p.IgDoubles,
+                    Triples = p.IgTriples,
+                    Quadras = p.IgQuadras,
+                    Pentas = p.IgPentas,
+                    Region = p.IgRegion,
+                    KillingSpree = p.IgKillingSpree,
+                    PhoenixesDestroyed = p.IgPhoenixesDestroyed,
+                    //items
+                    Item1Icon = item1?.ItemIconUrl,
+                    Item1ID = item1?.ItemId,
+                    Item1Name = item1?.ItemName,
+                    Item2Icon = item2?.ItemIconUrl,
+                    Item2ID = item2?.ItemId,
+                    Item2Name = item2?.ItemName,
+                    Item3Icon = item3?.ItemIconUrl,
+                    Item3ID = item3?.ItemId,
+                    Item3Name = item3?.ItemName,
+                    Item4Icon = item4?.ItemIconUrl,
+                    Item4ID = item4?.ItemId,
+                    Item4Name = item4?.ItemName,
+                    Item5Icon = item5?.ItemIconUrl,
+                    Item5ID = item5?.ItemId,
+                    Item5Name = item5?.ItemName,
+                    Item6Icon = item6?.ItemIconUrl,
+                    Item6ID = item6?.ItemId,
+                    Item6Name = item6?.ItemName,
+                    //relics
+                    Relic1Icon = relic1?.ItemIconUrl,
+                    Relic1ID = relic1?.ItemId,
+                    Relic1Name = relic1?.ItemName,
+                    Relic2Icon = relic2?.ItemIconUrl,
+                    Relic2ID = relic2?.ItemId,
+                    Relic2Name = relic2?.ItemName,
+                    //Player & Role
+                    Player = new Player { PlayerID = p.PlayerId, Playername = p.PlayerName, Platform = ((ApiPlatformEnum)p.PlayerPlatformId).ToString() },
+                    Role = roles.Where(r => r.RoleID == p.RoleId).FirstOrDefault(),
+                    FirstBanSide = p.IgTaskforce == 1 //taskforce 1 is order, order is always the first ban side
+                };
+            }
+        }
         #endregion
     }
 }

@@ -65,6 +65,13 @@ namespace team_microservice.Controllers
             return await _teamService.GetTeamWithDetailsByTeamIdAsync(teamID);
         }
 
+        // GET: team-service/team/basic/{teamID}
+        [HttpGet("basic/{teamID}")]
+        public async Task<ActionResult<Team>> GetBasicTeamInfo(int teamID)
+        {
+            return await _teamService.GetBasicTeamInfoByTeamIdAsync(teamID);
+        }
+
         // GET: team-service/{divisionID}
         [HttpGet("bycaptainid/{captainID}")]
         [Authorize(Roles = "Captain,Admin")]
@@ -91,7 +98,7 @@ namespace team_microservice.Controllers
         // POST team-service/setdivisionforteams
         [HttpPost("setdivisionforteams")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Team>> PostTeamDivisions([FromBody] SetDivisionTeams divisionTeams)
+        public async Task<ActionResult> PostTeamDivisions([FromBody] SetDivisionTeams divisionTeams)
         {
             return ModelState.IsValid ? await _teamService.SetDivisionTeams(divisionTeams) : BadRequest(ModelState);
         }
@@ -99,7 +106,7 @@ namespace team_microservice.Controllers
         // POST team-service/teammember
         [HttpPost("teammember")]
         [Authorize(Roles = "Captain,Admin")]
-        public async Task<ActionResult<Team>> Post([FromBody] TeamMemberSubmission teamMemberSubmission)
+        public async Task<ActionResult> Post([FromBody] TeamMemberSubmission teamMemberSubmission)
         {
             return ModelState.IsValid ? await _teamService.AddTeamMemberToTeamAsync(teamMemberSubmission) : BadRequest(ModelState);
         }

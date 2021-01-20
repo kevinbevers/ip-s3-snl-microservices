@@ -191,6 +191,8 @@ namespace stat_microservice.Stat_DB
 
                 entity.Property(e => e.IgItem6Id).HasColumnName("IG_Item6ID");
 
+                entity.Property(e => e.IgKillingSpree).HasColumnName("IG_KillingSpree");
+
                 entity.Property(e => e.IgKills).HasColumnName("IG_Kills");
 
                 entity.Property(e => e.IgMatchLengthInSeconds).HasColumnName("IG_MatchLengthInSeconds");
@@ -203,11 +205,7 @@ namespace stat_microservice.Stat_DB
 
                 entity.Property(e => e.IgPhoenixesDestroyed).HasColumnName("IG_PhoenixesDestroyed");
 
-                entity.Property(e => e.IgPlayerLevel)
-                    .HasColumnType("varchar(45)")
-                    .HasColumnName("IG_PlayerLevel")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_unicode_ci");
+                entity.Property(e => e.IgPlayerLevel).HasColumnName("IG_PlayerLevel");
 
                 entity.Property(e => e.IgQuadras).HasColumnName("IG_Quadras");
 
@@ -243,6 +241,13 @@ namespace stat_microservice.Stat_DB
                     .HasCollation("utf8mb4_unicode_ci");
 
                 entity.Property(e => e.PlayerId).HasColumnName("PlayerID");
+
+                entity.Property(e => e.PlayerName)
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_unicode_ci");
+
+                entity.Property(e => e.PlayerPlatformId).HasColumnName("PlayerPlatformID");
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 

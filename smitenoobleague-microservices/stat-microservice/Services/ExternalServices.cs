@@ -22,6 +22,29 @@ namespace stat_microservice.Services
             _Email = email;
         }
 
+        public async Task<Team> GetBasicTeamInfoByTeamId(int? teamID)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+
+                using (var response = await httpClient.GetAsync($"http://team-microservice/team/basic/{teamID}"))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<Team>(json);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
         public async Task<string> GetCaptainEmailWithCaptainTeamMemberIDAsync(int captainTeamMemberID)
         {
             using (var httpClient = new HttpClient())
@@ -106,6 +129,29 @@ namespace stat_microservice.Services
                     if (response.IsSuccessStatusCode)
                     {
                         return JsonConvert.DeserializeObject<PlayerWithTeamInfo>(json);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
+        public async Task<List<Role>> GetRolesAsync()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+
+                using (var response = await httpClient.GetAsync($"http://team-microservice/player/getallroles"))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<List<Role>>(json);
                     }
                     else
                     {

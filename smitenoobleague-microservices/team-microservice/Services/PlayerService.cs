@@ -42,7 +42,8 @@ namespace team_microservice.Services
                         //could first pull all teams that are in the list and use them in here. but this will also do the job.
                         TableTeam team = await _db.TableTeams.Where(t => t.TeamId == p.TeamMemberTeamId).FirstOrDefaultAsync();
 
-                        returnPlayers.Add(new PlayerWithTeamInfo {
+                        returnPlayers.Add(new PlayerWithTeamInfo
+                        {
                             Team = new Team
                             {
                                 TeamID = team.TeamId,
@@ -118,6 +119,36 @@ namespace team_microservice.Services
                 _logger.LogError(ex, "Something went wrong trying to get player with player ID.");
                 //return result to client
                 return new ObjectResult("Something went wrong trying to get player with player ID.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
+        public async Task<ActionResult<List<Role>>> GetAllRolesAsync()
+        {
+            try
+            {
+                List<TableRole> foundRoles = await _db.TableRoles.ToListAsync();
+                if (foundRoles?.Count() > 0)
+                {
+                    List<Role> roles = new List<Role>();
+
+                    foreach(var role in foundRoles)
+                    {
+                        roles.Add(new Role { RoleID = role.RoleId, RoleName = role.RoleName });
+                    }
+
+                    return new ObjectResult(roles) { StatusCode = 200 }; //OK
+                }
+                else
+                {
+                    return new ObjectResult("No roles found") { StatusCode = 404 }; //NOT FOUND
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get roles.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get roles.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
     }

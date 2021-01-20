@@ -16,6 +16,8 @@ namespace stat_microservice.Stat_DB
         public int? MatchupId { get; set; }
         public int? RoleId { get; set; }
         public int? PlayerId { get; set; }
+        public string PlayerName { get; set; }
+        public int? PlayerPlatformId { get; set; }
         public bool? PlayerIsFill { get; set; }
         public int? GodPlayedId { get; set; }
         public string PatchNumber { get; set; }
@@ -23,7 +25,7 @@ namespace stat_microservice.Stat_DB
         public int? IgTaskforce { get; set; }
         public int? IgMatchLengthInSeconds { get; set; }
         public string IgGodName { get; set; }
-        public string IgPlayerLevel { get; set; }
+        public int? IgPlayerLevel { get; set; }
         public int? IgKills { get; set; }
         public int? IgDeaths { get; set; }
         public int? IgAssists { get; set; }
@@ -68,5 +70,6 @@ namespace stat_microservice.Stat_DB
         public int? IgQuadras { get; set; }
         public int? IgTriples { get; set; }
         public int? IgDoubles { get; set; }
+        public int? IgKillingSpree { get; set; }
     }
 }

@@ -15,6 +15,8 @@ namespace stat_microservice.Interfaces
         Task<bool> SendEmailNotificationToCaptainAsync(string msg, string title, string email);
         Task<PlayerWithTeamInfo> GetPlayerWithTeamInfoByPlayerIdAsync(int? playerID);
         Task<TeamWithDetails> GetTeamWithDetailsByTeamId(int? teamID);
+        Task<Team> GetBasicTeamInfoByTeamId(int? teamID);
         Task<string> GetDivisionNameByDivisionID(int? divisionID);
+        Task<List<Role>> GetRolesAsync();
     }
 }
