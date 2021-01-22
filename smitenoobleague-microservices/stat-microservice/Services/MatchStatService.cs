@@ -63,7 +63,7 @@ namespace stat_microservice.Services
                     //could use a big join to get all data in 1 Db call
                     foreach (TableMatchResult matchResult in matchResults)
                     {
-                        List<TableStat> matchStats = await _db.TableStats.Where(ts => ts.GameId == matchResult.GameId).ToListAsync();
+                        List<TableStat> matchStats = await _db.TableStats.Where(ts => ts.GameId == matchResult.GameId && ts.MatchupId == matchResult.ScheduleMatchUpId).OrderBy(ms => ms.RoleId).ToListAsync();
 
                         TimeSpan time = TimeSpan.FromSeconds((int)matchStats?[0]?.IgMatchLengthInSeconds);
                         var ms = matchStats?[0];
@@ -480,6 +480,7 @@ namespace stat_microservice.Services
                     IgWardsPlaced = p.WardsPlaced,
                     IgRegion = p.Region,
                     IgDistanceTraveled = p.DistanceTravelled,
+                    IgKillingSpree = p.KillingSpree,
                     IgKills = p.Kills,
                     IgAssists = p.Assists,
                     IgDeaths = p.Deaths,
@@ -503,8 +504,7 @@ namespace stat_microservice.Services
                     IgBan7Id = match.BannedGods[6].GodId,
                     IgBan8Id = match.BannedGods[7].GodId,
                     IgBan9Id = match.BannedGods[8].GodId,
-                    IgBan10Id = match.BannedGods[9].GodId,
-                    
+                    IgBan10Id = match.BannedGods[9].GodId,  
                 };
 
                 convertedStats.Add(stat);
@@ -831,7 +831,7 @@ namespace stat_microservice.Services
                 listOfPlayerStats.Add(player);
             }
 
-            return listOfPlayerStats;   
+            return listOfPlayerStats; 
         }
         #endregion
     }

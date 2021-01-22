@@ -32,11 +32,24 @@
     color: white;
     font-weight: 600;
   }
-  
-.table-success2 {
-    background: #e7f9eb;
-}
 
+/* remove the ugly border color from the standard rable rows */
+.table-success, .table-success>td, .table-success>th {
+  border-color: #c3e6cb !important;
+}
+.table-success2, .table-success2>td, .table-success2>th {
+  border-color: #e7f9eb !important;
+}
+.table-danger, .table-danger>td, .table-danger>th {
+  border-color: #f5c6cb !important;
+}
+.table-danger2, .table-danger2>td, .table-danger2>th {
+  border-color: #f9e7ec !important;
+}
+/* Custom table row colors */
+.table-success2 {
+  background: #e7f9eb;
+}
 .table-danger2 {
     background: #f9e7ec;
 }
