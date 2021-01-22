@@ -56,6 +56,19 @@
 
 .GodImg {
     height: 30px;
+    width: 30px;
+  }
+
+.BanImg {
+  height: 32px;
+  width: 32px;
+}
+
+  .SmallTeamImg {
+    height: 20px;
+    width: 20px;
+    bottom: 32px;
+    left: 0px;
   }
 
   .ItemImg {
@@ -106,7 +119,6 @@
   color: #fff;
   background-color: slategrey;
 }
-
 
   /* .table-striped>tbody>tr:nth-child(odd)>td, 
 .table-striped>tbody>tr:nth-child(odd)>th {

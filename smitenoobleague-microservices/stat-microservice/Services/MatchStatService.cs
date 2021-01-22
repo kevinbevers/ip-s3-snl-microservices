@@ -83,12 +83,39 @@ namespace stat_microservice.Services
                         };
 
 
+
+                        List<MvpPlayer> mvpScores = new List<MvpPlayer>();
                         List<int?> itemsInMatch = new List<int?>();
                         //All gods played in the match
                         List<int?> godsInMatch = new List<int?>();
-                        //for each stat row in the match get the ids needed
+                        //for each stat row in the match get the ids needed and calculate mvp score
                         foreach (var player in matchStats)
                         {
+                            //calculate as double because of the 0.000 values then round up in the end to int
+                            int mvpScore = 0;
+                            mvpScore += (int)(((double)player.IgHealing) * 0.008);
+                            mvpScore += (int)(((double)player.IgDamageMitigated) * 0.006);
+                            mvpScore += (int)(((double)player.IgDamageMitigated) * 0.005);
+                            mvpScore += (int)player.IgKills * 20;
+                            mvpScore += (int)player.IgAssists * 15;
+                            mvpScore += (int)player.IgWardsPlaced * 9;
+                            mvpScore += (int)(((double)player.IgStructureDamage) * 0.2);
+                            mvpScore += (int)(((double)player.IgGoldEarned) * 0.1);
+                            mvpScore += (int)(((double)player.IgStructureDamage) / 45);
+                            //if the player died divide score by number of deaths
+                            if (player.IgDeaths > 0)
+                            {
+                                mvpScore += mvpScore / (int)player.IgDeaths;
+                            }
+                            //kill participation calculation = (kills + assists) / total kills * 100
+                            //the sum returns the total amount of kills in this match
+                            //use double because division could go under 1 with 0.8 for example
+                            double totalKills = (int)matchStats.Select(m => m.IgKills).Sum();
+                            double playerParticipation = (int)player.IgKills + (int)player.IgAssists;
+                            int killParticipationPercentage = Convert.ToInt32(playerParticipation / totalKills * 100);
+                            mvpScore += mvpScore * (int)killParticipationPercentage;
+                            mvpScores.Add(new MvpPlayer { PlayerID = (int)player.PlayerId, MvpScore = mvpScore });
+
                             //add all items to the list
                             itemsInMatch.Add(player?.IgItem1Id);
                             itemsInMatch.Add(player?.IgItem2Id);
@@ -101,6 +128,8 @@ namespace stat_microservice.Services
                             //add played god to the list
                             godsInMatch.Add(player?.GodPlayedId);
                         }
+                        //Set the mvp in the return value
+                        matchData.MvpPlayerID = mvpScores.OrderByDescending(item => item.MvpScore).First().PlayerID;
                         //All banned gods in the match
                         List<int?> bansIds = new List<int?> { ms.IgBan1Id, ms.IgBan2Id, ms.IgBan3Id, ms.IgBan4Id, ms.IgBan5Id, ms.IgBan6Id, ms.IgBan7Id, ms.IgBan8Id, ms.IgBan9Id, ms.IgBan10Id };
                         //Get all gods that where played or banned from the database

@@ -17,6 +17,7 @@ namespace stat_microservice.Models.Internal
         public List<PlayerStatWithRole> Losers { get; set; }
         public List<God> BannedGods { get; set; }
         public int? GamemodeID { get; set; } //queue_id. 427 = custom conquest. 426 normal conquest
+        public int? MvpPlayerID { get; set; }
         //return message for possible errors. ex. match not available
         public object ret_msg { get; set; }
     }
