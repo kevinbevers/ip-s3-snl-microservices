@@ -19,6 +19,7 @@
   @media (max-width: 769px) {
     .ItemImg {
       height: 1.3vw;
+      width: 1.3vw;
     }
   }
 
@@ -46,6 +47,7 @@
 
   .ItemImg {
     height: 25px;
+    width: 25px;
   }
 
 .KDAPadding {
@@ -66,6 +68,7 @@
 
 .TeamLogo {
   height: 50px;
+  width: 50px;
 }
 
 .NotPlayedText {

@@ -36,39 +36,49 @@ namespace smiteapi_microservice.Services
 
         public async Task<ActionResult> GenerateMatchDataForMatchupWithTeamIds(int winningTeamId, int losingTeamId, DateTime? playedDate, bool? faultyQueueID, bool? hiddenPlayersChance, int? numberOfFillsWinners, int? numberOfFillsLosers)
         {
-            DateTime yesterday = DateTime.Today.AddDays(-1);
-            List<ApiMatchList> rankedMatchesFound = await _hirezApi.GetListOfMatchIdsByQueueID(451, yesterday, "15,20");
-            if (rankedMatchesFound != null)
+            try
             {
-                if (rankedMatchesFound[0]?.ret_msg != null)
+                DateTime yesterday = DateTime.Today.AddDays(-1);
+                List<ApiMatchList> rankedMatchesFound = await _hirezApi.GetListOfMatchIdsByQueueID(451, yesterday, "15,20");
+                if (rankedMatchesFound != null)
                 {
-                    return new ObjectResult(rankedMatchesFound[0]?.ret_msg) { StatusCode = 400 }; //NOT FOUND
+                    if (rankedMatchesFound[0]?.ret_msg != null)
+                    {
+                        return new ObjectResult(rankedMatchesFound[0]?.ret_msg) { StatusCode = 400 }; //NOT FOUND
+                    }
+                    else
+                    {
+                        Random random = new Random();
+                        int indexToSelect = random.Next(0, rankedMatchesFound.Count() - 1);
+                        int matchIdToUse = (int)rankedMatchesFound[indexToSelect].Match;
+                        //Get actual matchdata
+                        MatchData matchToChange = await GetMatchDetailsAsync(matchIdToUse);
+                        //set patch number
+                        matchToChange.patchNumber = (await _hirezApi.GetPatchInfo()).version_string;
+
+                        OptionalMatchManipulation(playedDate, faultyQueueID, hiddenPlayersChance, matchToChange);
+
+                        if (matchToChange.ret_msg != null)
+                        {
+                            return new ObjectResult("Something went wrong: " + matchToChange.ret_msg.ToString()) { StatusCode = 400 };
+                        }
+
+                        MatchData manipulatedMatchData = await ReplaceMatchDataPlayers(matchToChange, numberOfFillsWinners, numberOfFillsLosers, winningTeamId, losingTeamId);
+
+                        return await _externalServices.SaveMatchdataToStatService(manipulatedMatchData);
+                    }
                 }
                 else
                 {
-                    Random random = new Random();
-                    int indexToSelect = random.Next(0, rankedMatchesFound.Count() - 1);
-                    int matchIdToUse = (int)rankedMatchesFound[indexToSelect].Match;
-                    //Get actual matchdata
-                    MatchData matchToChange = await GetMatchDetailsAsync(matchIdToUse);
-                    //set patch number
-                    matchToChange.patchNumber = (await _hirezApi.GetPatchInfo()).version_string;
-
-                    OptionalMatchManipulation(playedDate, faultyQueueID, hiddenPlayersChance, matchToChange);
-
-                    if (matchToChange.ret_msg != null)
-                    {
-                        return new ObjectResult("Something went wrong: " + matchToChange.ret_msg.ToString()) { StatusCode = 400 };
-                    }
-
-                    MatchData manipulatedMatchData = await ReplaceMatchDataPlayers(matchToChange, numberOfFillsWinners, numberOfFillsLosers, winningTeamId, losingTeamId);
-
-                    return await _externalServices.SaveMatchdataToStatService(manipulatedMatchData);
+                    return new ObjectResult("No ranked matches found to generate data from") { StatusCode = 404 }; //NOT FOUND
                 }
             }
-            else
+            catch(Exception ex)
             {
-                return new ObjectResult("No ranked matches found to generate data from") { StatusCode = 404 }; //NOT FOUND
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to generate matchdata. does the target team have 5 players set?");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to generate matchdata. does the target team have 5 players set?") { StatusCode = 500 }; //INTERNAL SERVER ERRORr
             }
         }
 
@@ -139,17 +149,17 @@ namespace smiteapi_microservice.Services
                     if (memberCount < (5 - numberOfFillsWinners))
                     {
                         //winner
-                        match.Winners[memberCount].player.Playername = winningTeam.TeamMembers[memberCount].TeamMemberName;
-                        match.Winners[memberCount].player.PlayerID = winningTeam.TeamMembers[memberCount].PlayerID;
-                        match.Winners[memberCount].player.Platform = winningTeam.TeamMembers[memberCount].TeamMemberPlatform;
+                        match.Winners[memberCount].Player.Playername = winningTeam?.TeamMembers?[memberCount]?.TeamMemberName;
+                        match.Winners[memberCount].Player.PlayerID = winningTeam?.TeamMembers?[memberCount]?.PlayerID;
+                        match.Winners[memberCount].Player.Platform = winningTeam?.TeamMembers?[memberCount]?.TeamMemberPlatform;
                     }
                 }
                 else
                 {
                     //winner
-                    match.Winners[memberCount].player.Playername = winningTeam.TeamMembers[memberCount].TeamMemberName;
-                    match.Winners[memberCount].player.PlayerID = winningTeam.TeamMembers[memberCount].PlayerID;
-                    match.Winners[memberCount].player.Platform = winningTeam.TeamMembers[memberCount].TeamMemberPlatform;
+                    match.Winners[memberCount].Player.Playername = winningTeam?.TeamMembers?[memberCount]?.TeamMemberName;
+                    match.Winners[memberCount].Player.PlayerID = winningTeam?.TeamMembers?[memberCount]?.PlayerID;
+                    match.Winners[memberCount].Player.Platform = winningTeam?.TeamMembers?[memberCount]?.TeamMemberPlatform;
                 }
 
                 if (numberOfFillsLosers != null)
@@ -157,17 +167,17 @@ namespace smiteapi_microservice.Services
                     if (memberCount < (5 - numberOfFillsLosers))
                     {
                         //loser
-                        match.Losers[memberCount].player.Playername = losingTeam.TeamMembers[memberCount].TeamMemberName;
-                        match.Losers[memberCount].player.PlayerID = losingTeam.TeamMembers[memberCount].PlayerID;
-                        match.Losers[memberCount].player.Platform = losingTeam.TeamMembers[memberCount].TeamMemberPlatform;
+                        match.Losers[memberCount].Player.Playername = losingTeam?.TeamMembers?[memberCount]?.TeamMemberName;
+                        match.Losers[memberCount].Player.PlayerID = losingTeam?.TeamMembers?[memberCount]?.PlayerID;
+                        match.Losers[memberCount].Player.Platform = losingTeam?.TeamMembers?[memberCount]?.TeamMemberPlatform;
                     }
                 }
                 else
                 {
                     //loser
-                    match.Losers[memberCount].player.Playername = losingTeam.TeamMembers[memberCount].TeamMemberName;
-                    match.Losers[memberCount].player.PlayerID = losingTeam.TeamMembers[memberCount].PlayerID;
-                    match.Losers[memberCount].player.Platform = losingTeam.TeamMembers[memberCount].TeamMemberPlatform;
+                    match.Losers[memberCount].Player.Playername = losingTeam?.TeamMembers?[memberCount]?.TeamMemberName;
+                    match.Losers[memberCount].Player.PlayerID = losingTeam?.TeamMembers?[memberCount]?.PlayerID;
+                    match.Losers[memberCount].Player.Platform = losingTeam?.TeamMembers?[memberCount]?.TeamMemberPlatform;
                 }
             }
 
@@ -207,8 +217,8 @@ namespace smiteapi_microservice.Services
                         EntryDate = (DateTime)ms?.Entry_Datetime,
                         GamemodeID = (int)ms?.match_queue_id,
                         ret_msg = ms?.ret_msg,
-                        Winners = new List<MatchData.PlayerStat>(),
-                        Losers = new List<MatchData.PlayerStat>(),
+                        Winners = new List<PlayerStat>(),
+                        Losers = new List<PlayerStat>(),
                         BannedGods = new List<God>(),
                     };
                     List<string> banNames = new List<string> { ms.Ban1, ms.Ban2, ms.Ban3, ms.Ban4, ms.Ban5, ms.Ban6, ms.Ban7, ms.Ban8, ms.Ban9, ms.Ban10 };
@@ -314,10 +324,10 @@ namespace smiteapi_microservice.Services
                             string item6 = Regex.Replace(mp.Item_Purch_6?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
                             string godname = Regex.Replace(mp.Reference_Name?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
 
-                            MatchData.PlayerStat playerStat = new MatchData.PlayerStat
+                            PlayerStat playerStat = new PlayerStat
                             {
                                 //General info //gamertag for console - playername for pc, will be empty string when other platform
-                                player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId.ToString() },
+                                Player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId.ToString() },
                                 IngameTeamID = mp.TaskForce,
                                 Won = mp.TaskForce == mp.Winning_TaskForce ? true : false,
                                 FirstBanSide = mp.Win_Status == mp.First_Ban_Side ? true : false,

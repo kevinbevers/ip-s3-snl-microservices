@@ -22,7 +22,7 @@ namespace stat_microservice.Controllers
         }
 
         // GET: api/values/5
-        [HttpGet("{id}")]
+        [HttpGet("getmatchstatsbygameid/{id}")]
         public async Task<ActionResult> Get(int id)
         {
             return await _matchStatService.GetMatchStatByGameIdAsync(id);
@@ -37,8 +37,8 @@ namespace stat_microservice.Controllers
         }
 
         //Something needs to fixed, swagger can't load this for some reason
-        // GET: matchstat/bymatchupid/{matchupID}
-        [HttpGet("matchhistory/{matchupID}")]
+        // GET: matchstat/matchhistorybymatchupid/{matchupID}
+        [HttpGet("matchhistorybymatchupid/{matchupID}")]
         public async Task<ActionResult<MatchHistoryDetails>> GetMatchHistory(int matchupID)
         {
             return await _matchStatService.GetMatchHistoryByMatchupIdAsync(matchupID);

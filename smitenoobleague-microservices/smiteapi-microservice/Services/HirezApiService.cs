@@ -71,8 +71,8 @@ namespace smiteapi_microservice.Services
                         EntryDate = (DateTime)ms?.Entry_Datetime,
                         GamemodeID = (int)ms?.match_queue_id,
                         ret_msg = ms?.ret_msg,
-                        Winners = new List<MatchData.PlayerStat>(),
-                        Losers = new List<MatchData.PlayerStat>(),
+                        Winners = new List<PlayerStat>(),
+                        Losers = new List<PlayerStat>(),
                         BannedGods = new List<God>(),
                     };
                     List<string> banNames = new List<string> { ms.Ban1, ms.Ban2, ms.Ban3, ms.Ban4, ms.Ban5, ms.Ban6, ms.Ban7, ms.Ban8, ms.Ban9, ms.Ban10 };
@@ -178,10 +178,10 @@ namespace smiteapi_microservice.Services
                             string item6 = Regex.Replace(mp.Item_Purch_6?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
                             string godname = Regex.Replace(mp.Reference_Name?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
 
-                            MatchData.PlayerStat playerStat = new MatchData.PlayerStat
+                            PlayerStat playerStat = new PlayerStat
                             {
                                 //General info //gamertag for console - playername for pc, will be empty string when other platform
-                                player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId.ToString() },
+                                Player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId.ToString() },
                                 IngameTeamID = mp.TaskForce,
                                 Won = mp.TaskForce == mp.Winning_TaskForce ? true : false,
                                 FirstBanSide = mp.Win_Status == mp.First_Ban_Side ? true : false,

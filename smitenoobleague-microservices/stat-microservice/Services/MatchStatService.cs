@@ -50,9 +50,18 @@ namespace stat_microservice.Services
 
                 if(matchResults?.Count() > 0)
                 {
-                    MatchHistoryDetails matchHistoryDetails = new MatchHistoryDetails { MatchupID = matchResults[0].ScheduleMatchUpId, MatchResults = new List<MatchDataWithRole>() };
+                    //Get roles used to assign players to their ingame roles
+                    List<Role> roles = await _externalServices.GetRolesAsync();
+                    //Get the 2 teams that are in this matchup
+                    List<Team> teamsInMatch = new List<Team>();
+                    teamsInMatch.Add(await _externalServices.GetBasicTeamInfoByTeamId(matchResults?[0]?.WinningTeamId));
+                    teamsInMatch.Add(await _externalServices.GetBasicTeamInfoByTeamId(matchResults?[0]?.LosingTeamId));
 
-                    foreach(TableMatchResult matchResult in matchResults)
+                    MatchHistoryDetails matchHistoryDetails = new MatchHistoryDetails { MatchupID = matchResults[0].ScheduleMatchUpId, MatchResults = new List<MatchDataWithRole>(), TeamsInMatch = teamsInMatch };
+               
+
+                    //could use a big join to get all data in 1 Db call
+                    foreach (TableMatchResult matchResult in matchResults)
                     {
                         List<TableStat> matchStats = await _db.TableStats.Where(ts => ts.GameId == matchResult.GameId).ToListAsync();
 
@@ -66,19 +75,43 @@ namespace stat_microservice.Services
                             MatchDurationInSeconds = matchStats?[0]?.IgMatchLengthInSeconds,
                             patchNumber = matchStats?[0]?.PatchNumber,
                             BannedGods = new List<God>(),
-                            Winners = new List<MatchDataWithRole.PlayerStat>(),
-                            Losers = new List<MatchDataWithRole.PlayerStat>(),
+                            Winners = new List<PlayerStatWithRole>(),
+                            Losers = new List<PlayerStatWithRole>(),
                             MatchDuration = $"{time:mm} min {time:ss} sec",
+                            WinningTeamID = matchResult.WinningTeamId,
+                            LosingTeamID = matchResult.LosingTeamId
                         };
 
-                        //set the bans
+
+                        List<int?> itemsInMatch = new List<int?>();
+                        //All gods played in the match
+                        List<int?> godsInMatch = new List<int?>();
+                        //for each stat row in the match get the ids needed
+                        foreach (var player in matchStats)
+                        {
+                            //add all items to the list
+                            itemsInMatch.Add(player?.IgItem1Id);
+                            itemsInMatch.Add(player?.IgItem2Id);
+                            itemsInMatch.Add(player?.IgItem3Id);
+                            itemsInMatch.Add(player?.IgItem4Id);
+                            itemsInMatch.Add(player?.IgItem5Id);
+                            itemsInMatch.Add(player?.IgItem6Id);
+                            itemsInMatch.Add(player?.IgRelic1Id);
+                            itemsInMatch.Add(player?.IgRelic2Id);
+                            //add played god to the list
+                            godsInMatch.Add(player?.GodPlayedId);
+                        }
+                        //All banned gods in the match
                         List<int?> bansIds = new List<int?> { ms.IgBan1Id, ms.IgBan2Id, ms.IgBan3Id, ms.IgBan4Id, ms.IgBan5Id, ms.IgBan6Id, ms.IgBan7Id, ms.IgBan8Id, ms.IgBan9Id, ms.IgBan10Id };
+                        //Get all gods that where played or banned from the database
+                        List<TableGodDetail> allGods = await _db.TableGodDetails.Where(tg => bansIds.Contains(tg.GodId) || godsInMatch.Contains(tg.GodId)).ToListAsync();
+                        List<TableItemDetail> allItems = await _db.TableItemDetails.Where(ti => itemsInMatch.Contains(ti.ItemId)).ToListAsync();
 
                         for (int i = 0; i < 10; i++)
                         {
                             if (bansIds[i] != null)
                             {
-                                TableGodDetail god = await _db.TableGodDetails.Where(tg => tg.GodId == bansIds[i]).FirstOrDefaultAsync();
+                                TableGodDetail god = allGods.Where(bg => bg.GodId == bansIds[i]).FirstOrDefault();
 
                                 God ban = new God
                                 {
@@ -101,10 +134,8 @@ namespace stat_microservice.Services
                             }
                         }
 
-                        //Get roles used to assign players to their ingame roles
-                        List<Role> roles = await _externalServices.GetRolesAsync();
-
-                        await FillWinnerAndLoserListWithMatchData(matchStats, roles);
+                        matchData.Winners = CreateListOfPlayerStatsByWinStatus(matchStats, roles, allGods, allItems, true);
+                        matchData.Losers = CreateListOfPlayerStatsByWinStatus(matchStats, roles, allGods, allItems, false);
 
                         matchHistoryDetails.MatchResults.Add(matchData);
                     }
@@ -132,8 +163,8 @@ namespace stat_microservice.Services
                 List<int> IdsOfPlayerInMatchWinners = new List<int>();
                 List<int> IdsOfPlayerInMatchLosers = new List<int>();
                 //Add All player ids to 1 array of ints
-                match.Winners.ForEach(p => IdsOfPlayerInMatchWinners.Add((int)p.player.PlayerID));
-                match.Losers.ForEach(p => IdsOfPlayerInMatchLosers.Add((int)p.player.PlayerID));
+                match.Winners.ForEach(p => IdsOfPlayerInMatchWinners.Add((int)p.Player.PlayerID));
+                match.Losers.ForEach(p => IdsOfPlayerInMatchLosers.Add((int)p.Player.PlayerID));
                 //Call team service to get the teams that where in this match.
                 TeamWithDetails winnerTeam = await _externalServices.GetTeamByPlayersAsync(IdsOfPlayerInMatchWinners);
                 TeamWithDetails loserTeam = await _externalServices.GetTeamByPlayersAsync(IdsOfPlayerInMatchLosers);
@@ -403,7 +434,7 @@ namespace stat_microservice.Services
 
         }
 
-        private IList<TableStat> ConvertMatchDataToTableStat(MatchData match, List<MatchData.PlayerStat> players, TeamWithDetails snlTeam, ScheduledMatch validMatchup)
+        private IList<TableStat> ConvertMatchDataToTableStat(MatchData match, List<PlayerStat> players, TeamWithDetails snlTeam, ScheduledMatch validMatchup)
         {
             List<TableStat> convertedStats = new List<TableStat>();
 
@@ -418,12 +449,12 @@ namespace stat_microservice.Services
                     DivisionId = snlTeam.DivisionID,
                     ScheduleId = validMatchup.ScheduleID,
                     TeamId = snlTeam.TeamID,
-                    PlayerIsFill = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.player.PlayerID).Count() <= 0,
+                    PlayerIsFill = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.Player.PlayerID).Count() <= 0,
                     WinStatus = p.Won,
-                    RoleId = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.player.PlayerID).Select(tm => tm.TeamMemberRole.RoleID).FirstOrDefault(),
-                    PlayerId = p.player.PlayerID,
-                    PlayerName = p.player.Playername,
-                    PlayerPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), p.player.Platform),
+                    RoleId = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.Player.PlayerID).Select(tm => tm.TeamMemberRole.RoleID).FirstOrDefault(),
+                    PlayerId = p.Player.PlayerID,
+                    PlayerName = p.Player.Playername,
+                    PlayerPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), p.Player.Platform),
                     PatchNumber = match.patchNumber,
                     IgTaskforce = p.IngameTeamID,
                     GodPlayedId = p.God.GodId,
@@ -702,13 +733,15 @@ namespace stat_microservice.Services
             await _externalServices.SendEmailNotificationToCaptainAsync(messageLoser, title, loserCaptainMail);
         }
 
-        private async Task FillWinnerAndLoserListWithMatchData(List<TableStat> matchStats, List<Role> roles)
+        private List<PlayerStatWithRole> CreateListOfPlayerStatsByWinStatus(List<TableStat> matchStats, List<Role> roles, List<TableGodDetail> allGods, List<TableItemDetail> allItems, bool won)
         {
-            //Winners
-            foreach (var p in matchStats.Where(ms => ms.WinStatus == true))
+            List<PlayerStatWithRole> listOfPlayerStats = new List<PlayerStatWithRole>();
+
+            //Foreach player with given winstatus
+            foreach (var p in matchStats.Where(ms => ms.WinStatus == won))
             {
                 //Get the played god data from the database
-                TableGodDetail god = await _db.TableGodDetails.Where(tg => tg.GodId == p.GodPlayedId).FirstOrDefaultAsync();
+                TableGodDetail god = allGods.Where(g => g.GodId == p.GodPlayedId).FirstOrDefault();
 
                 God playedGod = new God
                 {
@@ -718,17 +751,17 @@ namespace stat_microservice.Services
                 };
 
                 //Get all 6 items and the 2 relics from the DB
-                TableItemDetail item1 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem1Id).FirstOrDefaultAsync();
-                TableItemDetail item2 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem2Id).FirstOrDefaultAsync();
-                TableItemDetail item3 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem3Id).FirstOrDefaultAsync();
-                TableItemDetail item4 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem4Id).FirstOrDefaultAsync();
-                TableItemDetail item5 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem5Id).FirstOrDefaultAsync();
-                TableItemDetail item6 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem6Id).FirstOrDefaultAsync();
-                TableItemDetail relic1 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgRelic1Id).FirstOrDefaultAsync();
-                TableItemDetail relic2 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgRelic2Id).FirstOrDefaultAsync();
+                TableItemDetail item1 = allItems.Where(i => i.ItemId == p.IgItem1Id).FirstOrDefault();
+                TableItemDetail item2 = allItems.Where(i => i.ItemId == p.IgItem2Id).FirstOrDefault();
+                TableItemDetail item3 = allItems.Where(i => i.ItemId == p.IgItem3Id).FirstOrDefault();
+                TableItemDetail item4 = allItems.Where(i => i.ItemId == p.IgItem4Id).FirstOrDefault();
+                TableItemDetail item5 = allItems.Where(i => i.ItemId == p.IgItem5Id).FirstOrDefault();
+                TableItemDetail item6 = allItems.Where(i => i.ItemId == p.IgItem6Id).FirstOrDefault();
+                TableItemDetail relic1 = allItems.Where(i => i.ItemId == p.IgRelic1Id).FirstOrDefault();
+                TableItemDetail relic2 = allItems.Where(i => i.ItemId == p.IgRelic2Id).FirstOrDefault();
 
                 //construct the playerStat
-                MatchDataWithRole.PlayerStat player = new MatchDataWithRole.PlayerStat
+                PlayerStatWithRole player = new PlayerStatWithRole
                 {
                     //KDA
                     Kills = p.IgKills,
@@ -794,99 +827,11 @@ namespace stat_microservice.Services
                     Role = roles.Where(r => r.RoleID == p.RoleId).FirstOrDefault(),
                     FirstBanSide = p.IgTaskforce == 1 //taskforce 1 is order, order is always the first ban side
                 };
+
+                listOfPlayerStats.Add(player);
             }
 
-            //Losers
-            foreach (var p in matchStats.Where(ms => ms.WinStatus == false))
-            {
-                //Get the played god data from the database
-                TableGodDetail god = await _db.TableGodDetails.Where(tg => tg.GodId == p.GodPlayedId).FirstOrDefaultAsync();
-
-                God playedGod = new God
-                {
-                    GodId = p.GodPlayedId,
-                    GodName = god.GodName,
-                    GodIcon = god.GodIconUrl
-                };
-
-                //Get all 6 items and the 2 relics from the DB
-                TableItemDetail item1 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem1Id).FirstOrDefaultAsync();
-                TableItemDetail item2 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem2Id).FirstOrDefaultAsync();
-                TableItemDetail item3 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem3Id).FirstOrDefaultAsync();
-                TableItemDetail item4 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem4Id).FirstOrDefaultAsync();
-                TableItemDetail item5 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem5Id).FirstOrDefaultAsync();
-                TableItemDetail item6 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgItem6Id).FirstOrDefaultAsync();
-                TableItemDetail relic1 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgRelic1Id).FirstOrDefaultAsync();
-                TableItemDetail relic2 = await _db.TableItemDetails.Where(ti => ti.ItemId == p.IgRelic2Id).FirstOrDefaultAsync();
-
-                //construct the playerStat
-                MatchDataWithRole.PlayerStat player = new MatchDataWithRole.PlayerStat
-                {
-                    //KDA
-                    Kills = p.IgKills,
-                    Deaths = p.IgDeaths,
-                    Assists = p.IgAssists,
-                    //other stats
-                    DamageDealt = p.IgDamageDealt,
-                    DamageMitigated = p.IgDamageMitigated,
-                    DamageTaken = p.IgDamageTaken,
-                    DistanceTravelled = p.IgDistanceTraveled,
-                    FireGiantsKilled = p.IgFireGiantsKilled,
-                    FirstBlood = (bool)p.IgFirstBlood,
-                    God = playedGod,
-                    GoldEarned = p.IgGoldEarned,
-                    GoldFuriesKilled = p.IgGoldFuriesKilled,
-                    GPM = p.IgGpm,
-                    Healing = p.IgHealing,
-                    HighestMultiKill = p.IgHighestMultiKill,
-                    IngameTeamID = p.IgTaskforce,
-                    MinionDamage = p.IgMinionDamage,
-                    WardsPlaced = p.IgWardsPlaced,
-                    StructureDamage = p.IgStructureDamage,
-                    TimeSpentDeathInSeconds = p.IgTimeSpentDeathInSeconds,
-                    TowersDestroyed = p.IgTowersDestroyed,
-                    Won = (bool)p.WinStatus,
-                    Level = p.IgPlayerLevel,
-                    ObjectiveAssists = p.IgObjectiveAssists,
-                    Doubles = p.IgDoubles,
-                    Triples = p.IgTriples,
-                    Quadras = p.IgQuadras,
-                    Pentas = p.IgPentas,
-                    Region = p.IgRegion,
-                    KillingSpree = p.IgKillingSpree,
-                    PhoenixesDestroyed = p.IgPhoenixesDestroyed,
-                    //items
-                    Item1Icon = item1?.ItemIconUrl,
-                    Item1ID = item1?.ItemId,
-                    Item1Name = item1?.ItemName,
-                    Item2Icon = item2?.ItemIconUrl,
-                    Item2ID = item2?.ItemId,
-                    Item2Name = item2?.ItemName,
-                    Item3Icon = item3?.ItemIconUrl,
-                    Item3ID = item3?.ItemId,
-                    Item3Name = item3?.ItemName,
-                    Item4Icon = item4?.ItemIconUrl,
-                    Item4ID = item4?.ItemId,
-                    Item4Name = item4?.ItemName,
-                    Item5Icon = item5?.ItemIconUrl,
-                    Item5ID = item5?.ItemId,
-                    Item5Name = item5?.ItemName,
-                    Item6Icon = item6?.ItemIconUrl,
-                    Item6ID = item6?.ItemId,
-                    Item6Name = item6?.ItemName,
-                    //relics
-                    Relic1Icon = relic1?.ItemIconUrl,
-                    Relic1ID = relic1?.ItemId,
-                    Relic1Name = relic1?.ItemName,
-                    Relic2Icon = relic2?.ItemIconUrl,
-                    Relic2ID = relic2?.ItemId,
-                    Relic2Name = relic2?.ItemName,
-                    //Player & Role
-                    Player = new Player { PlayerID = p.PlayerId, Playername = p.PlayerName, Platform = ((ApiPlatformEnum)p.PlayerPlatformId).ToString() },
-                    Role = roles.Where(r => r.RoleID == p.RoleId).FirstOrDefault(),
-                    FirstBanSide = p.IgTaskforce == 1 //taskforce 1 is order, order is always the first ban side
-                };
-            }
+            return listOfPlayerStats;   
         }
         #endregion
     }
