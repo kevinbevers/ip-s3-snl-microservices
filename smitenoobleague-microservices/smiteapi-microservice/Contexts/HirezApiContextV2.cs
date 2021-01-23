@@ -320,6 +320,27 @@ namespace smiteapi_microservice.Contexts
         {
             throw new NotImplementedException();
         }
+
+        public async Task<List<ApiMatchList>> GetListOfMatchIdsByQueueID(int queueID, DateTime date, string hour)
+        {
+            ApiResponse response = await CallAsync("getmatchidsbyqueue", $"{queueID}/{date:yyyyMMdd}/{hour}");
+            if (response.error != null)
+            {
+                var error = new List<ApiMatchList> { new ApiMatchList { ret_msg = response.error } };
+                //set error message as ret_msg 
+                return error;
+            }
+            try
+            {
+                return JsonConvert.DeserializeObject<List<ApiMatchList>>(response.content);
+            }
+            catch
+            {
+                var error = new List<ApiMatchList> { new ApiMatchList { ret_msg = response.content } };
+                //set error message as ret_msg 
+                return error;
+            }
+        }
     }
 }
 

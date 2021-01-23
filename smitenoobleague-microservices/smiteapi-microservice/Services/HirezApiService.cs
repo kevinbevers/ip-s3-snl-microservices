@@ -41,9 +41,9 @@ namespace smiteapi_microservice.Services
             //var pong = await _hirezApi.PingAPI();
             //if (pong != null || pong != "")
             //{
-              List<ApiPlayerMatchStat> matchDetails = await _hirezApi.GetMatchDetailsByMatchID(MatchID);
+            List<ApiPlayerMatchStat> matchDetails = await _hirezApi.GetMatchDetailsByMatchID(MatchID);
 
-            if (matchDetails?[0]?.ret_msg != null)
+            if (matchDetails?[0]?.ret_msg != null && !(bool)matchDetails?[0]?.ret_msg.ToString().Contains("Privacy"))
             {
                 if (matchDetails[0].ret_msg.ToString() == "[]")
                 {
@@ -71,8 +71,8 @@ namespace smiteapi_microservice.Services
                         EntryDate = (DateTime)ms?.Entry_Datetime,
                         GamemodeID = (int)ms?.match_queue_id,
                         ret_msg = ms?.ret_msg,
-                        Winners = new List<MatchData.PlayerStat>(),
-                        Losers = new List<MatchData.PlayerStat>(),
+                        Winners = new List<PlayerStat>(),
+                        Losers = new List<PlayerStat>(),
                         BannedGods = new List<God>(),
                     };
                     List<string> banNames = new List<string> { ms.Ban1, ms.Ban2, ms.Ban3, ms.Ban4, ms.Ban5, ms.Ban6, ms.Ban7, ms.Ban8, ms.Ban9, ms.Ban10 };
@@ -116,6 +116,57 @@ namespace smiteapi_microservice.Services
                         //Fill the winner and loser list
                         foreach (var mp in matchDetails)
                         {
+                            //if a player is hidden it will be put in the match's ret_msg
+                            if(mp.ret_msg != null)
+                            {
+                                //check for hidden to make 100% sure
+                                if (mp.ret_msg.ToString().Contains("Privacy"))
+                                {
+                                    if (match.ret_msg != null)
+                                    {
+                                        if (!match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+                                        {
+                                            match.ret_msg = "Privacy flag set for one or more players.. Player(s):";
+                                            match.ret_msg += " " + mp.hz_player_name + mp.hz_gamer_tag;
+                                        }
+                                        else
+                                        {
+                                            //add the player onto the string of players that has privacy flagged toggled on
+                                            match.ret_msg += ", " + mp.hz_player_name + mp.hz_gamer_tag;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        match.ret_msg = "Privacy flag set for one or more players.. Player(s):";
+                                        match.ret_msg += " " + mp.hz_player_name + mp.hz_gamer_tag;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //make sure to get general match info from one of the players. this is a backup if the first player returned is hidden and can not provide the general info
+                                if (match.GamemodeID == null)
+                                {
+                                    match.GamemodeID = (int)mp.match_queue_id;
+                                }
+
+                                if (match.MatchDurationInSeconds == null)
+                                {
+                                    match.MatchDurationInSeconds = (int)ms?.Match_Duration;
+                                }
+
+                                if (match.MatchDuration == null)
+                                {
+                                    TimeSpan t = TimeSpan.FromSeconds((int)mp.Match_Duration);
+                                    match.MatchDuration = $"{t:mm} min {t:ss} sec";
+                                }
+
+                                if (match.EntryDate == null)
+                                {
+                                    match.EntryDate = (DateTime)ms?.Entry_Datetime;
+                                }
+
+                            }
                             //make names friendly for image url
                             string relic1 = Regex.Replace(mp.Item_Active_1?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
                             string relic2 = Regex.Replace(mp.Item_Active_2?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
@@ -127,10 +178,10 @@ namespace smiteapi_microservice.Services
                             string item6 = Regex.Replace(mp.Item_Purch_6?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
                             string godname = Regex.Replace(mp.Reference_Name?.Replace("'", ""), @"[^A-Za-z0-9_\.~]+", "-").ToLower();
 
-                            MatchData.PlayerStat playerStat = new MatchData.PlayerStat
+                            PlayerStat playerStat = new PlayerStat
                             {
                                 //General info //gamertag for console - playername for pc, will be empty string when other platform
-                                player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId.ToString() },
+                                Player = new Player { PlayerID = mp.ActivePlayerId, Playername = mp.hz_player_name + mp.hz_gamer_tag, Platform = mp.playerPortalId.ToString() },
                                 IngameTeamID = mp.TaskForce,
                                 Won = mp.TaskForce == mp.Winning_TaskForce ? true : false,
                                 FirstBanSide = mp.Win_Status == mp.First_Ban_Side ? true : false,
@@ -178,6 +229,7 @@ namespace smiteapi_microservice.Services
                                 FireGiantsKilled = mp.Kills_Fire_Giant,
                                 GoldFuriesKilled = mp.Kills_Gold_Fury,
                                 //Extra stats
+                                KillingSpree = mp.Killing_Spree,
                                 FirstBlood = mp.Kills_First_Blood > 0 ? true : false,
                                 TowersDestroyed = mp.Towers_Destroyed,
                                 PhoenixesDestroyed = mp.Kills_Phoenix,

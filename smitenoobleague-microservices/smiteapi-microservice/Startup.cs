@@ -71,6 +71,7 @@ namespace smiteapi_microservice
             services.AddScoped<IHirezApiService, HirezApiService>();
             services.AddScoped<IMatchService, MatchService>();
             services.AddScoped<IExternalServices, ExternalServices>();
+            services.AddScoped<IGenerateDataService, GenerateDataService>();
 
             //Auth
             string domain = Environment.GetEnvironmentVariable("Auth0Domain");

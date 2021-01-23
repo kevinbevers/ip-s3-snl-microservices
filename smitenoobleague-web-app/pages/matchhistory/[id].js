@@ -1,42 +1,32 @@
 //default react imports
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //default page stuff
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
 //boostrap components
-import Jumbotron from "react-bootstrap/Jumbotron";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Table from "react-bootstrap/Table";
-import Image from "react-bootstrap/Image";
-import { Alert, Tab, Nav } from "react-bootstrap";
+import { Alert, Tab, Nav, Table, Col, Row, Container, Jumbotron } from "react-bootstrap";
 //icons
 import { FaBox } from "react-icons/fa";
 //custom components
-import WinnerTeamTable from "src/components/matchdetails/WinnerTeamTable";
-import LoserTeamTable from "src/components/matchdetails/LoserTeamTable";
-import WinnerTeamTableStatic from "src/components/matchdetails/WinnerTeamTableStatic";
-import LoserTeamTableStatic from "src/components/matchdetails/LoserTeamTableStatic";
-
+import GameStats from "src/components/matchdetails/GameStats";
 import DefaultErrorPage from "next/error";
-import axios from "axios";
-
 //Auth
 import helpers from "utils/helpers";
+//services
+import matchservice from "services/matchservice";
+//image optimization
+import Img from 'react-optimized-image';
+import Image from "next/image";
 
-export default function matchdetails({received, LoginSession}) {
+export default function matchdetails({LoginSession, MatchupData, status, errMsg}) {
 
-  console.log(received);
+  console.log(MatchupData);
 
-  if(received.status != 200)
-  {
-    return <DefaultErrorPage statusCode={received.status} />
-  }
-  else if(received.data.ret_msg != null){
-    return <DefaultErrorPage statusCode={404} />
+  if (status != null) {
+    return (<><DefaultErrorPage statusCode={status} title={errMsg} data-testid="matchpageErrorPage"/></>);
   }
   else {
+    
   return (
     <>
      <NavBar LoginSession={LoginSession}/>
@@ -48,13 +38,13 @@ export default function matchdetails({received, LoginSession}) {
             <Col xl={3} md={5} xs={12} className="">
               <Nav variant="pills" className="nav-justified"> {/*flex and justify center to have the nav links be in the middle of the object, grey color: id="pillNav" */}
                 <Nav.Item className="secondary">
-                  <Nav.Link eventKey="Game1" >Game 1</Nav.Link>
+                  <Nav.Link eventKey="Game1" draggable="false">Game 1</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="Game2">Game 2</Nav.Link>
+                  <Nav.Link eventKey="Game2" draggable="false">Game 2</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="Game3">Game 3</Nav.Link>
+                  <Nav.Link eventKey="Game3" draggable="false">Game 3</Nav.Link>
                 </Nav.Item>
               </Nav>
             </Col>
@@ -62,59 +52,16 @@ export default function matchdetails({received, LoginSession}) {
           </Row>
           <Tab.Content className="mt-2">
             <Tab.Pane eventKey="Game1">
-              <Row>
-                <Col xl={2} md={0}></Col>
-                <Col xl={8} md={9} xs={12}>
-                  {/* Team 1 */}
-                  <WinnerTeamTable playerdata={received.data.winners}/>
-                  {/* Divider */}
-                  <Row><Col className="my-auto text-center"><h5 className="mb-0 font-weight-bolder">VS</h5></Col></Row>
-                  {/* Team 2 */}
-                  <LoserTeamTable playerdata={received.data.losers}/>
-                </Col>
-                <Col xl={2} md={3} className="my-auto">
-                  <Alert variant="secondary">
-                    <h5 className="font-weight-bold">Game stats</h5>
-                    <hr />
-                    <h6><b>Length:</b> {received.data.matchDuration}</h6>
-                    <h6><b>Total kills:</b> 100</h6>
-                    <h6><b>Total Distance traveled:</b> 200000 units</h6>
-                    <h6><b>Objectives taken:</b> 7</h6>
-                    <h6><b>MVP:</b> <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="SSG" className="GodImg" rounded/> lolliepoep</h6>
-                    <p className="mb-0">A little text describing the game, possibly auto generated.</p>
-                  </Alert>
-                </Col>
-              </Row>
+              {MatchupData?.matchResults.length > 0 ? <GameStats MatchResult={MatchupData?.matchResults[0]} teamsInMatch={MatchupData?.teamsInMatch}/> 
+              : <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game not played</h4></Col></Row>}
             </Tab.Pane>
             <Tab.Pane eventKey="Game2">
-            <Row>
-                <Col xl={2} md={0}></Col>
-                <Col xl={8} md={9} xs={12}>
-                  {/* Team 1 */}
-                  <WinnerTeamTableStatic />
-                  {/* Divider */}
-                  <Row><Col className="my-auto text-center"><h5 className="mb-0 font-weight-bolder">VS</h5></Col></Row>
-                  {/* Team 2 */}
-                  <LoserTeamTableStatic />
-                </Col>
-                <Col xl={2} md={3} className="my-auto">
-                <Alert variant="secondary">
-                    <h5 className="font-weight-bold">Game stats</h5>
-                    <hr />
-                    <h6><b>Length:</b> 24 min 35 sec</h6>
-                    <h6><b>Total kills:</b> 100</h6>
-                    <h6><b>Total Distance traveled:</b> 200000 units</h6>
-                    <h6><b>Objectives taken:</b> 7</h6>
-                    <h6><b>MVP:</b> <Image src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="SSG" className="GodImg" rounded/> lolliepoep</h6>
-                    <p className="mb-0">A little text describing the game, possibly auto generated.</p>
-                  </Alert>
-                </Col>
-              </Row>
+            {MatchupData?.matchResults.length > 1 ? <GameStats MatchResult={MatchupData?.matchResults[1]} teamsInMatch={MatchupData?.teamsInMatch}/> 
+              : <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game not played</h4></Col></Row>}
             </Tab.Pane>
-            <Tab.Pane eventKey="Game3">  
-            <Row>
-              <Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game not played</h4></Col>
-            </Row>
+            <Tab.Pane eventKey="Game3">
+            {MatchupData?.matchResults.length > 2 ? <GameStats MatchResult={MatchupData?.matchResults[2]} teamsInMatch={MatchupData?.teamsInMatch}/> 
+              : <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game not played</h4></Col></Row>}
             </Tab.Pane>
           </Tab.Content>
         </Tab.Container>
@@ -129,32 +76,32 @@ export async function getServerSideProps(context) {
   
   const loginSessionData = await helpers.GetLoginSession(context.req);
 
-try {
-  const apiurl = process.env.NEXT_PUBLIC_BASE_API_URL;
-  const response = await axios.get(apiurl + "/smiteapi-service/Match/" + context.params.id);
 
-  const received = {
-    status: response.status,
-    data: response.data,
-  }
+  //id from url
+  const matchupID = context.params.id;
+  //object to fill
+  let response = { data: null, statusCode: null, errMsg: null };
+
+   //call api for the data
+   await matchservice.GetMatchupHistoryByMatchupID(matchupID)
+   .then(res => {response.data = res.data})
+   .catch(err => {
+     if (err.response == null) {
+       response.statusCode = 503;
+       response.errMsg = "SNL API unavailable";
+     }
+     else {
+       response.statusCode = JSON.stringify(err?.response?.status);
+       response.errMsg = err?.response?.data;
+     }
+   });
+
   return {
     props: {
-      received,
-      LoginSession: loginSessionData
+      LoginSession: loginSessionData,
+      MatchupData: response.data,
+      status: response.statusCode,
+      errMsg: response.errMsg,
     }, // will be passed to the page component as props
   }
-}
-catch {
-  const received = {
-    status: 404,
-    data: {},
-    LoginSession: loginSessionData
-  }
-  return {
-    props: {
-      received,
-      LoginSession: loginSessionData
-    }, // will be passed to the page component as props
-  }
-}
 }

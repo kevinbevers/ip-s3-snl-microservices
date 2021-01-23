@@ -13,7 +13,7 @@ export default function NavBar({LoginSession}) {
     const router = useRouter();
 
     return (
-            <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="darktext">
+            <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="darktext font-weight-bold">
                 <Navbar.Brand href="/" className="p-0" className={router?.pathname == "/" ? "active" : ""}>
                 <Img src={Logo} webp sizes={[60, 120]} width="60" height="60" className="d-inline-block align-top" alt="SNL" draggable={false}/>
                 </Navbar.Brand>
@@ -22,9 +22,9 @@ export default function NavBar({LoginSession}) {
                     <Nav className="mr-auto">
                     {LoginSession?.isCaptain ? <><Nav.Link href="/captainpage" className={router?.pathname == "/captainpage" ? "active" : ""}>Captain page</Nav.Link></> : <> </>}
                     <NavDropdown title="Stats" id={"collapsible-nav-dropdown"} className={router?.pathname.includes("/stats")  ? "active" : ""}>
-                        <NavDropdown.Item href="/stats/team" className={router?.pathname.includes("/stats/team") ? "active" : ""}>Team stats</NavDropdown.Item>
+                        <NavDropdown.Item href="/stats/team" className={router?.pathname.includes("/stats/team") ? "active font-weight-bold" : "font-weight-bold"}>Team stats</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item href="/stats/player" className={router?.pathname.includes("/stats/player")  ? "active" : ""}>Player stats</NavDropdown.Item>
+                        <NavDropdown.Item href="/stats/player" className={router?.pathname.includes("/stats/player")  ? "active font-weight-bold" : "font-weight-bold"}>Player stats</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="/schedules" className={router?.pathname == "/schedules" ? "active" : ""}>Schedules</Nav.Link>
                     <Nav.Link href="/matchhistory" className={router?.pathname == "/matchhistory" ? "active" : ""}>Match history</Nav.Link>

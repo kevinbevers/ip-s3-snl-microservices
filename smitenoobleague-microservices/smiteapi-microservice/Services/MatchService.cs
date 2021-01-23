@@ -20,7 +20,7 @@ namespace smiteapi_microservice.Services
     {
         //services
         private readonly SNL_Smiteapi_DBContext _db;
-        private readonly IHirezApiService _hirezApi;
+        private readonly IHirezApiService _hirezApiService;
         private readonly IExternalServices _externalServices;
         //logging
         private readonly ILogger<MatchService> _logger;
@@ -32,12 +32,12 @@ namespace smiteapi_microservice.Services
         private readonly string ResponseText_MatchDetailsHidden = "Matchdata not yet available. The data will be added once it becomes available at"; //Date will be added after this
         private readonly string ResponseText_MatchDetailsAdded = "Matchdata was added to our database";
 
-        public MatchService(SNL_Smiteapi_DBContext db, IHirezApiService hirezApi, ILogger<MatchService> logger, IExternalServices externalServices)
+        public MatchService(SNL_Smiteapi_DBContext db, IHirezApiService hirezApiService, ILogger<MatchService> logger, IExternalServices externalServices)
         {
             //database
             _db = db;
             //api service
-            _hirezApi = hirezApi;
+            _hirezApiService = hirezApiService;
             //logger
             _logger = logger;
             //external services
@@ -49,7 +49,7 @@ namespace smiteapi_microservice.Services
         {
             try
             {
-                var match = await _hirezApi.GetMatchDetailsAsync((int)gameID);
+                var match = await _hirezApiService.GetMatchDetailsAsync((int)gameID);
 
                 return match;
             }
@@ -80,8 +80,8 @@ namespace smiteapi_microservice.Services
                     else
                     {
                         //try and get matchdata from smiteapi
-                        MatchData match = await _hirezApi.GetMatchDetailsAsync((int)gameID);
-                        ApiPatchInfo patch = await _hirezApi.GetCurrentPatchInfoAsync();
+                        MatchData match = await _hirezApiService.GetMatchDetailsAsync((int)gameID);
+                        ApiPatchInfo patch = await _hirezApiService.GetCurrentPatchInfoAsync();
                         MatchSubmission ms = new MatchSubmission { gameID = gameID, patchNumber = patch.version_string };
 
 
@@ -111,7 +111,7 @@ namespace smiteapi_microservice.Services
             try
             {
                 //try and get matchdata from smiteapi
-                MatchData match = await _hirezApi.GetMatchDetailsAsync((int)submission.gameID);
+                MatchData match = await _hirezApiService.GetMatchDetailsAsync((int)submission.gameID);
 
                 //check return message from api. if the return msg is null the match is valid
                 if (match.ret_msg != null && match.ret_msg.ToString() != "Not all playerdata is available for this match because 1 of the players has their profile hidden.")
@@ -180,6 +180,8 @@ namespace smiteapi_microservice.Services
                 _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = DateTime.UtcNow, QueueState = true, PatchVersion = submission.patchNumber });
             }
             await _db.SaveChangesAsync();
+            //set patch number
+            match.patchNumber = submission.patchNumber;
 
             //send data to stat service
             return await _externalServices.SaveMatchdataToStatService(match);

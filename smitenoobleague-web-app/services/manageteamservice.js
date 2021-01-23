@@ -1,4 +1,3 @@
-import axios from "axios";
 import helpers from "utils/helpers";
 
 const GetPlayersByName = async(apiToken, data) => {

@@ -4,7 +4,7 @@ const optimizedImages = require('next-optimized-images');
 const nextConfig = { 
   distDir: 'build', 
   images: {
-    domains: ['localhost',"smitenoobleague.com","static.smite.guru"],
+    domains: ['localhost',"smitenoobleague.com","static.smite.guru","web2.hirez.com"],
   } 
 };
 

@@ -6,7 +6,7 @@ import NavBar from "../src/components/NavBar";
 import Footer from "../src/components/Footer";
 import DefaultErrorPage from "next/error";
 //bootstrap components
-import { Container, Row, Col, Form, Card, Button, Image, Badge, Toast, Alert } from "react-bootstrap";
+import { Container, Row, Col, Form, Card, Button, Badge, Toast, Alert } from "react-bootstrap";
 //custom imports
 import { FaEdit, FaCheck, FaBan } from "react-icons/fa";
 import { ReactSortable} from "react-sortablejs";
@@ -21,8 +21,13 @@ import TeamBadge from "public/images/teamBadge.png"
 //Auth & API
 import helpers from "utils/helpers";
 import captainservice from "services/captainservice";
+//image optimization
+import Img from 'react-optimized-image';
+import Image from "next/image";
 
 export default function captainpage({ LoginSession, apiResponse, status, errMsg, apiToken, ...props }) {
+
+  const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + apiResponse?.teamLogoPath;
   //#region SubmitMatch
   const [matchID, setMatchID] = useState(0);
   const [submissionMsg, setSubmissionMsg] = useState({ text: "Submission msg here...", color: "danger" });
@@ -262,7 +267,11 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
                         </Row>
                         <Row>
                           <Col md={3} xs={3} className="my-auto p-0"><h5 className="font-weight-bold mb-0 TeamInfoTitle">Logo:</h5></Col>
-                          <Col md={7} xs={7} className="my-auto p-0"><Image src={TeamBadge} className="MainTeamImage" draggable={false} alt="Team logo"></Image></Col>
+                          <Col md={7} xs={7} className="my-auto p-0">
+                          {apiResponse?.teamLogoPath != null ? <div className="MainTeamImage position-relative"><Image layout={"fill"} alt={apiResponse?.teamName} src={imagePath} draggable={false}></Image></div>  : 
+                        <Img alt={apiResponse?.teamName} src={require("public/images/teamBadge.png")} className="MainTeamImage" draggable={false}></Img>
+                      }
+                            </Col>
                           <Col className="my-auto p-0 ml-2">
                             <a className="TeamInfoIcon my-auto Disabled"><FaEdit color={"grey"} /></a>
                           </Col>
@@ -282,19 +291,19 @@ export default function captainpage({ LoginSession, apiResponse, status, errMsg,
                     <Row>
                       <Col md={1} xs={2}>
                         <Row className="mb-2">
-                          <Image src={Solo} className="PlayerRole my-auto" draggable={false} alt="Solo"></Image>
+                          <Img webp src={Solo} className="PlayerRole my-auto" draggable={false} alt="Solo"></Img>
                         </Row>
                         <Row className="mb-2">
-                          <Image src={Jungle} className="PlayerRole my-auto" draggable={false} alt="Jungle"></Image>
+                          <Img webp src={Jungle} className="PlayerRole my-auto" draggable={false} alt="Jungle"></Img>
                         </Row>
                         <Row className="mb-2">
-                          <Image src={Mid} className="PlayerRole my-auto" draggable={false} alt="Mid"></Image>
+                          <Img webp src={Mid} className="PlayerRole my-auto" draggable={false} alt="Mid"></Img>
                         </Row>
                         <Row className="mb-2">
-                          <Image src={Support} className="PlayerRole my-auto" draggable={false} alt="Support"></Image>
+                          <Img webp src={Support} className="PlayerRole my-auto" draggable={false} alt="Support"></Img>
                         </Row>
                         <Row className="mb-2">
-                          <Image src={Adc} className="PlayerRole my-auto" draggable={false} alt="Adc"></Image>
+                          <Img webp src={Adc} className="PlayerRole my-auto" draggable={false} alt="Adc"></Img>
                         </Row>
                       </Col>
                       <Col md={1} xs={0} className="d-none d-sm-none d-md-block"></Col>

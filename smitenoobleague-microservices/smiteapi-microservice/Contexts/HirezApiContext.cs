@@ -399,6 +399,24 @@ namespace smiteapi_microservice.Contexts
                 }
             }
         }
+        //getmatchidsbyqueueJSON
+        public async Task<List<ApiMatchList>> GetListOfMatchIdsByQueueID(int queueID, DateTime date, string hour) //hour should be e.g. 12,20 for 12:20 until 12:29
+        {
+            await CheckSession();
+
+            string signature = GetMD5Hash(_devID + "getmatchidsbyqueue" + _authKey + timestamp);
+
+            var dataUsedHandler = new HttpClientHandler();
+            using (var httpClient = new HttpClient(dataUsedHandler, false))
+            {
+                using (var request = new HttpRequestMessage(HttpMethod.Get, $"{PCAPIurl}getmatchidsbyqueuejson/{_devID}/{signature}/{sessionResult.sessionID}/{timestamp}/{queueID}/{date:yyyyMMdd}/{hour}"))
+                {
+                    var response = await httpClient.SendAsync(request);
+                    string json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<ApiMatchList>>(json);
+                }
+            }
+        }
     }
 }
 

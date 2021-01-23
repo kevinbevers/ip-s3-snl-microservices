@@ -19,11 +19,11 @@ namespace smiteapi_microservice.Interfaces
         Task<string> GetPlayerStatus(int playerID);
         Task<List<ApiItem>> GetAllItems();
         Task<List<ApiGod>> GetAllGods();
-        Task<List<ApiPlayerMatchStat>> GetMatchDetailsByMatchID(int matchID);
-        //same as above method?! but different url Call
-        Task<List<ApiPlayerMatchStat>> GetMatchPlayerDetails(int matchID);
+        Task<List<ApiPlayerMatchStat>> GetMatchDetailsByMatchID(int matchID);//get match statistics
+        Task<List<ApiPlayerMatchStat>> GetMatchPlayerDetails(int matchID); //get player details of players in a live match
         Task<string> GetEsportsProLeagueDetails();
         Task<ApiPatchInfo> GetPatchInfo();
+        Task<List<ApiMatchList>> GetListOfMatchIdsByQueueID(int queueID, DateTime date, string hour); //get list of match ids by a queueID
         //API core functions
         Task<string> PingAPI();
         Task<string> DataUsed();
