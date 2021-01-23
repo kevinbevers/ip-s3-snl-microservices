@@ -27,7 +27,7 @@ import Image from "next/image";
 
 export default function captainpage({ LoginSession, apiResponse, status, errMsg, apiToken, ...props }) {
 
-  const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + apiResponse.teamLogoPath;
+  const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + apiResponse?.teamLogoPath;
   //#region SubmitMatch
   const [matchID, setMatchID] = useState(0);
   const [submissionMsg, setSubmissionMsg] = useState({ text: "Submission msg here...", color: "danger" });

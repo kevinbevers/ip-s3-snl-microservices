@@ -18,6 +18,8 @@ describe("Test gameID submission", () => {
   //Setup the mock
   beforeAll(async () => {
     //#region Setup the mocks
+    //mock the url to be a local image, otherwise next/image is gonna complain about the url etc.
+    process.env.NEXT_PUBLIC_BASE_API_URL = "/mock";
     //Mock login        
     helpers.GetLoginSession.mockResolvedValue({
       user: { sub: "captainuserid" },
