@@ -45,6 +45,13 @@ namespace division_microservice.Controllers
             return ModelState.IsValid ? await _scheduleService.GetScheduleByIdAsync(scheduleID) : BadRequest(ModelState);
         }
 
+        // GET /getmatchupbyid/{matchupID}
+        //[HttpGet("getmatchupbyid/{matchupID}")]
+        //public async Task<ActionResult<Matchup>> GetMatchupByID(int matchupID)
+        //{
+        //    return ModelState.IsValid ? await _scheduleService.GetMatchupByMatchupIdAsync(matchupID) : BadRequest(ModelState);
+        //}
+
         // GET:  /currentschedulebydivisionid/{divisionID}
         [HttpGet("currentschedulebydivisionid/{divisionID}")]
         public async Task<ActionResult<Schedule>> GetCurrentScheduleByDivisionID(int divisionID)

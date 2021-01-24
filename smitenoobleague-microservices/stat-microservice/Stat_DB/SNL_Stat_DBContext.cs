@@ -83,9 +83,13 @@ namespace stat_microservice.Stat_DB
 
                 entity.Property(e => e.MatchResultId).HasColumnName("MatchResultID");
 
+                entity.Property(e => e.AwayTeamId).HasColumnName("AwayTeamID");
+
                 entity.Property(e => e.DatePlayed).HasColumnType("datetime");
 
                 entity.Property(e => e.GameId).HasColumnName("GameID");
+
+                entity.Property(e => e.HomeTeamId).HasColumnName("HomeTeamID");
 
                 entity.Property(e => e.LosingTeamId).HasColumnName("LosingTeamID");
 

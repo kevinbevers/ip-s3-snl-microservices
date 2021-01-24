@@ -72,6 +72,13 @@ namespace team_microservice.Controllers
             return await _teamService.GetBasicTeamInfoByTeamIdAsync(teamID);
         }
 
+        // GET: team-service/team/basic/{teamID}
+        [HttpPost("basicbatch")]
+        public async Task<ActionResult<IEnumerable<Team>>> GetBasicTeamInfoBatch([FromBody] List<int> teamIds)
+        {
+            return await _teamService.GetBasicTeamInfoBatchWithListOfIdsAsync(teamIds);
+        }
+
         // GET: team-service/{divisionID}
         [HttpGet("bycaptainid/{captainID}")]
         [Authorize(Roles = "Captain,Admin")]

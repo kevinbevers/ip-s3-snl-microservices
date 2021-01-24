@@ -11,6 +11,7 @@ namespace stat_microservice.Interfaces
     {
         Task<ActionResult> ValidateAndSaveMatchStatsAsync(MatchData match);
         Task<ActionResult> GetMatchStatByGameIdAsync(int gameID);
+        Task<ActionResult<IEnumerable<MatchHistory>>> GetMatchHistoryOverview(int pageSize, int pageIndex);
         Task<ActionResult<MatchHistoryDetails>> GetMatchHistoryByMatchupIdAsync(int matchupID);
     }
 }

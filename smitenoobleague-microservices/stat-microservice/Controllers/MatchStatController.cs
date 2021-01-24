@@ -28,6 +28,12 @@ namespace stat_microservice.Controllers
             return await _matchStatService.GetMatchStatByGameIdAsync(id);
         }
 
+        [HttpGet("getmatchhistory/{pageSize}/{index}")]
+        public async Task<ActionResult<IEnumerable<MatchHistory>>> GetMatchHistory(int pageSize = 10, int index = 0)
+        {
+            return await _matchStatService.GetMatchHistoryOverview(pageSize, index);
+        }
+
         // POST: matchstat/savematchdata
         [HttpPost]
         [ServiceFilter(typeof(InternalServicesOnly))]

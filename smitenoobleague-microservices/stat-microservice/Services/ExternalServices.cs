@@ -45,6 +45,33 @@ namespace stat_microservice.Services
             }
         }
 
+        public async Task<IEnumerable<Team>> GetBasicTeamInfoInBatchWithTeamIdsList(IEnumerable<int> teamIDs)
+        {
+            //body for the post request
+            var stringContent = new StringContent(JsonConvert.SerializeObject(teamIDs));
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+                stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                using (var response = await httpClient.PostAsync($"http://team-microservice/team/basicbatch", stringContent))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<IEnumerable<Team>>(json);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
         public async Task<string> GetCaptainEmailWithCaptainTeamMemberIDAsync(int captainTeamMemberID)
         {
             using (var httpClient = new HttpClient())
@@ -83,6 +110,29 @@ namespace stat_microservice.Services
                     if (response.IsSuccessStatusCode)
                     {
                         return json;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
+        public async Task<Matchup> GetMatchupByMatchupIdAsync(int matchupID)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+
+                using (var response = await httpClient.GetAsync($"http://division-microservice/schedule/getmatchupbyid/{matchupID}"))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<Matchup>(json);
                     }
                     else
                     {
