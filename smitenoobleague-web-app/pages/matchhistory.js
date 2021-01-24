@@ -16,7 +16,7 @@ export default function matchhistory({LoginSession, MatchHistory}) {
 
   const [MatchHistoryState, setMatchHistoryState] = useState(MatchHistory);
   const [index, setIndex] = useState(1);
-  const [matchesRemaining, setMatchesRemaining] = useState(MatchHistory.length > 9);
+  const [matchesRemaining, setMatchesRemaining] = useState(MatchHistory?.length > 9);
 
   const loadMoreMatches = async() => {
     if(matchesRemaining)
@@ -25,7 +25,7 @@ export default function matchhistory({LoginSession, MatchHistory}) {
       .then(res => {
         setMatchHistoryState(MatchHistoryState.concat(res.data)); 
         setIndex(index + 1); 
-        setMatchesRemaining(res.data.length > 9)
+        setMatchesRemaining(res.data?.length > 9)
       }).catch(err => {});
     }
   };
