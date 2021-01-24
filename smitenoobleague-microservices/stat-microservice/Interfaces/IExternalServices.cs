@@ -14,8 +14,10 @@ namespace stat_microservice.Interfaces
         Task<string> GetCaptainEmailWithCaptainTeamMemberIDAsync(int captainTeamMemberID);
         Task<bool> SendEmailNotificationToCaptainAsync(string msg, string title, string email);
         Task<PlayerWithTeamInfo> GetPlayerWithTeamInfoByPlayerIdAsync(int? playerID);
+        Task<Matchup> GetMatchupByMatchupIdAsync(int matchupID);
         Task<TeamWithDetails> GetTeamWithDetailsByTeamId(int? teamID);
         Task<Team> GetBasicTeamInfoByTeamId(int? teamID);
+        Task<IEnumerable<Team>> GetBasicTeamInfoInBatchWithTeamIdsList(IEnumerable<int> teamIDs);
         Task<string> GetDivisionNameByDivisionID(int? divisionID);
         Task<List<Role>> GetRolesAsync();
     }

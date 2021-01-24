@@ -387,6 +387,43 @@ namespace team_microservice.Services
             }
         }
 
+        public async Task<ActionResult<IEnumerable<Team>>> GetBasicTeamInfoBatchWithListOfIdsAsync(List<int> teamIDs)
+        {
+            try
+            {
+                List<TableTeam> foundTeams = await _db.TableTeams.Where(t => teamIDs.Contains(t.TeamId)).ToListAsync();
+                if (foundTeams?.Count() == 0)
+                {
+                    return new ObjectResult("No team found with the given teamID.") { StatusCode = 404 }; //NOT FOUND
+                }
+                else
+                {
+                    List<Team> returnTeams = new List<Team>();
+
+
+                    foreach(TableTeam team in foundTeams)
+                    {
+                        returnTeams.Add(new Team
+                        {
+                            TeamID = team.TeamId,
+                            TeamName = team.TeamName,
+                            DivisionID = team.TeamDivisionId,
+                            TeamLogoPath = team.TeamLogoPath
+                        });
+                    }
+
+                    return new ObjectResult(returnTeams) { StatusCode = 200 }; //OK
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get basis team info batch with list of team ids.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get basis team info batch with list of team ids.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
         public async Task<ActionResult<Team>> GetBasicTeamInfoByTeamIdAsync(int teamID)
         {
             try

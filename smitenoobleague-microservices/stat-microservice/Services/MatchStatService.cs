@@ -41,6 +41,48 @@ namespace stat_microservice.Services
             }
         }
 
+        public async Task<ActionResult<IEnumerable<MatchHistory>>> GetMatchHistoryOverview(int pageSize, int pageIndex)
+        {
+           try
+            {
+                //would of liked it to be more compact but entity framework left me no choice, can't orderby and group by and then skip and take in the same query
+                //get the latest matchup id's
+                var listOfMatchups = _db.TableMatchResults.Select(t => new { t.DatePlayed, t.ScheduleMatchUpId }).Distinct().OrderByDescending(t => t.DatePlayed).Skip(pageSize * pageIndex).Take(pageSize).Select(x => x.ScheduleMatchUpId).ToList();
+                //get all the entries for each matchup Id and calculate the totals
+                List<MatchHistory> matchHistoryList = await _db.TableMatchResults.Where(t => listOfMatchups.Contains(t.ScheduleMatchUpId)).GroupBy(x => x.ScheduleMatchUpId, (x, y) => new MatchHistory
+                {
+                    MatchupID = x,
+                    DatePlayed = y.Select(i => i.DatePlayed).Max().Value,
+                    TotalMatchDuration = string.Format("{1:0} min {0:ss} sec", TimeSpan.FromSeconds((int)y.Select(i => i.GamedurationInSeconds).Sum()), TimeSpan.FromSeconds((int)y.Select(i => i.GamedurationInSeconds).Sum()).TotalMinutes),
+                    AwayTeamScore = y.Count(i => i.WinningTeamId == i.AwayTeamId),
+                    HomeTeamScore = y.Count(i => i.WinningTeamId == i.HomeTeamId),
+                    HomeTeam = new Team { TeamID = y.Select(i => i.HomeTeamId).Max().Value },
+                    AwayTeam = new Team { TeamID = y.Select(i => i.AwayTeamId).Min().Value }
+                }).ToListAsync();
+
+                //using .min for value of home and away team. for some reason .first etc keep failing
+
+                //Get list of all unique team id's and get info for those teams then add them to the response object
+                IEnumerable<int> listOfTeamIds = matchHistoryList.Select(x => x.HomeTeam.TeamID).Distinct().Concat(matchHistoryList.Select(x => x.AwayTeam.TeamID).Distinct()).Distinct();
+                IEnumerable<Team> allTeamsInReturn = await _externalServices.GetBasicTeamInfoInBatchWithTeamIdsList(listOfTeamIds);
+                //replace team entry with ID only with actual team
+                foreach(Team t in allTeamsInReturn)
+                {
+                    matchHistoryList.Where(mh => mh.HomeTeam.TeamID == t.TeamID).ToList().ForEach(r => r.HomeTeam = t);
+                    matchHistoryList.Where(mh => mh.AwayTeam.TeamID == t.TeamID).ToList().ForEach(r => r.AwayTeam = t);
+                }
+
+                return new ObjectResult(matchHistoryList.OrderByDescending(l => l.DatePlayed)) { StatusCode = 200 };
+            }
+            catch(Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get list of matchhistory.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get list of matchhistory.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
         public async Task<ActionResult<MatchHistoryDetails>> GetMatchHistoryByMatchupIdAsync(int matchupID)
         {
             try
@@ -77,7 +119,7 @@ namespace stat_microservice.Services
                             BannedGods = new List<God>(),
                             Winners = new List<PlayerStatWithRole>(),
                             Losers = new List<PlayerStatWithRole>(),
-                            MatchDuration = $"{time:mm} min {time:ss} sec",
+                            MatchDuration = $"{time.TotalMinutes:0} min {time:ss} sec",
                             WinningTeamID = matchResult.WinningTeamId,
                             LosingTeamID = matchResult.LosingTeamId
                         };

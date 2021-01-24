@@ -18,6 +18,7 @@ namespace team_microservice.Interfaces
 
         //team
         Task<ActionResult<Team>> GetAllTeamsAsync();
+        Task<ActionResult<IEnumerable<Team>>> GetBasicTeamInfoBatchWithListOfIdsAsync(List<int> teamIDs);
         Task<ActionResult<Team>> GetBasicTeamInfoByTeamIdAsync(int teamID);
         Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByTeamIdAsync(int teamID);
         Task<ActionResult> UpdateTeamAsCaptainSync(TeamSubmission teamSubmisssion);

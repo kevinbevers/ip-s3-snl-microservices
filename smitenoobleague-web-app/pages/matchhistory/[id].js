@@ -20,8 +20,6 @@ import Image from "next/image";
 
 export default function matchdetails({LoginSession, MatchupData, status, errMsg}) {
 
-  console.log(MatchupData);
-
   if (status != null) {
     return (<><DefaultErrorPage statusCode={status} title={errMsg} data-testid="matchpageErrorPage"/></>);
   }
