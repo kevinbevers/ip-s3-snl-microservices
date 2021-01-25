@@ -47,7 +47,7 @@ namespace stat_microservice.Services
             {
                 //would of liked it to be more compact but entity framework left me no choice, can't orderby and group by and then skip and take in the same query
                 //get the latest matchup id's
-                var listOfMatchups = _db.TableMatchResults.Select(t => new { t.DatePlayed, t.ScheduleMatchUpId }).Distinct().OrderByDescending(t => t.DatePlayed).Skip(pageSize * pageIndex).Take(pageSize).Select(x => x.ScheduleMatchUpId).ToList();
+                var listOfMatchups = await _db.TableMatchResults.Select(t => new { t.DatePlayed, t.ScheduleMatchUpId }).Distinct().OrderByDescending(t => t.DatePlayed).Skip(pageSize * pageIndex).Take(pageSize).Select(x => x.ScheduleMatchUpId).ToListAsync();
                 //get all the entries for each matchup Id and calculate the totals
                 List<MatchHistory> matchHistoryList = await _db.TableMatchResults.Where(t => listOfMatchups.Contains(t.ScheduleMatchUpId)).GroupBy(x => x.ScheduleMatchUpId, (x, y) => new MatchHistory
                 {
@@ -63,7 +63,7 @@ namespace stat_microservice.Services
                 //using .min for value of home and away team. for some reason .first etc keep failing
 
                 //Get list of all unique team id's and get info for those teams then add them to the response object
-                IEnumerable<int> listOfTeamIds = matchHistoryList.Select(x => x.HomeTeam.TeamID).Distinct().Concat(matchHistoryList.Select(x => x.AwayTeam.TeamID).Distinct()).Distinct();
+                List<int> listOfTeamIds = matchHistoryList.Select(x => x.HomeTeam.TeamID).Distinct().Concat(matchHistoryList.Select(x => x.AwayTeam.TeamID).Distinct()).Distinct().ToList();
                 IEnumerable<Team> allTeamsInReturn = await _externalServices.GetBasicTeamInfoInBatchWithTeamIdsList(listOfTeamIds);
                 //replace team entry with ID only with actual team
                 foreach(Team t in allTeamsInReturn)

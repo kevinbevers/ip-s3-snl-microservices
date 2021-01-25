@@ -1,19 +1,34 @@
 //default react imports
 import React, { useState } from "react";
+import Link from "next/link";
 //boostrap components
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Table from "react-bootstrap/Table";
+import { Table, Col, Row} from "react-bootstrap";
 //icons
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaCheckCircle, FaTimesCircle, FaCircle } from "react-icons/fa";
+//image optimization
+import Img from 'react-optimized-image';
+import Image from "next/image";
 
-export default function ScoreTable(props) {
+export default function ScoreTable({Title, StandingData}) {
+
+        const RenderTeamImage = (t) => {
+                const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + t?.teamLogoPath;
+                return (t?.teamLogoPath != null ? <Image height={20} width={20} alt={t?.teamName} title={t?.teamName} src={imagePath} className="LogoStanding" draggable={false}></Image> :
+                        <Img webp width={20} height={20} alt={t?.teamName} title={t?.teamName} src={require("public/images/teamBadge.png")} className="LogoStanding" draggable={false}></Img>);
+        };
+
+        const ReadableDate = (date) => {
+          const d = new Date(date);
+          return d.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+        };
+
+
     return (
       <>
         <Row className="mt-4">
           <Col md={1} xl={2}></Col>
-          <Col md={10} xl={8} className="">
-    <h4 className="text-center font-weight-bold mb-0 p-2 rounded-top TableTitle">Current standing for {props.title}</h4>
+          <Col md={10} xl={8} xs={12} className="p-1">
+    <h4 className="text-center font-weight-bold mb-0 p-2 rounded-top TableTitle">Current standing for {Title}</h4>
             <Table responsive  variant="light" className="rounded-bottom text-center" id="StandingTable">
               <thead className="thead-light TableHeaders">
                 <tr>
@@ -27,126 +42,29 @@ export default function ScoreTable(props) {
                 </tr>
               </thead>
               <tbody>
-                <tr>
+              {StandingData.map((s, index) => (
+                  <tr key={index}>
                   {/* <td>1</td> */}
-                  <td className="TeamStanding">1. <img src="https://web2.hirez.com/esports/teams/ssg-70x70.png" alt="SSG" className="LogoStanding" draggable={false}/>Spacestation Gaming</td>
-                  <td>5</td>
-                  <td>5</td>
-                  <td>0</td>
-                  <td>20</td>
+                  <td className=""><span className="d-flex align-items-center">{index + 1}. <span className="mr-1 ml-1 d-flex align-items-center">{RenderTeamImage(s?.team)}</span> {s?.team?.teamName}</span></td>
+                  <td>{s?.standingWins + s?.standingLosses}</td>
+                  <td>{s?.standingWins}</td>
+                  <td>{s?.standingLosses}</td>
+                  <td>{s?.standingScore}</td>
                   <td className="">
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
+                    {s.last5Results?.length > 0 ? s.last5Results.map((r, index) => (
+                      r.won != null ? r.won ? <Link href={"matchhistory/" + r.matchupID}><FaCheckCircle key={index} title={ReadableDate(r?.datePlayed)} color="green" className="mr-1 Clickable"/></Link> : <Link href={"matchhistory/" + r.matchupID}><FaTimesCircle key={index} title={ReadableDate(r?.datePlayed)} color="red" className="mr-1 Clickable"/></Link> : <FaCircle key={index} color="gray" className="mr-1"/>
+                    )) : 
+                    <>
+                      <FaCircle color="gray" className="mr-1"/>
+                      <FaCircle color="gray" className="mr-1"/>
+                      <FaCircle color="gray" className="mr-1"/>
+                      <FaCircle color="gray" className="mr-1"/>
+                      <FaCircle color="gray" className="mr-1"/> 
+                    </>}
                     </td>
-                </tr>
-                <tr>
-                  {/* <td>2</td> */}
-                  <td className="TeamStanding">2. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
-                  <td>5</td>
-                  <td>4</td>
-                  <td>1</td>
-                  <td>15</td>
-                  <td className="">
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    </td>
-                </tr>
-                <tr>
-                  {/* <td>3</td> */}
-                  <td className="TeamStanding">3. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
-                  <td>5</td>
-                  <td>3</td>
-                  <td>2</td>
-                  <td>12</td>
-                  <td className="">
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    </td>
-                </tr>
-                <tr>
-                  {/* <td>4</td> */}
-                  <td className="TeamStanding">4. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
-                  <td>5</td>
-                  <td>3</td>
-                  <td>2</td>
-                  <td>11</td>
-                  <td className="">
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    </td>
-                </tr>
-                <tr>
-                  {/* <td>5</td> */}
-                  <td className="TeamStanding">5. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
-                  <td>5</td>
-                  <td>2</td>
-                  <td>3</td>
-                  <td>10</td>
-                  <td className="">
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    </td>
-                </tr>
-                <tr>
-                  {/* <td>6</td> */}
-                  <td className="TeamStanding">6. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
-                  <td>5</td>
-                  <td>2</td>
-                  <td>3</td>
-                  <td>6</td>
-                  <td className="">
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    </td>
-                </tr>
-                <tr>
-                  {/* <td>7</td> */}
-                  <td className="TeamStanding">7. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
-                  <td>5</td>
-                  <td>1</td>
-                  <td>4</td>
-                  <td>3</td>
-                  <td className="">
-                    <FaCheckCircle color="green" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    </td>
-                </tr>
-                <tr>
-                  {/* <td>8</td> */}
-                  <td className="TeamStanding">8. <img src="http://via.placeholder.com/70x70" alt="TeamLogo" className="LogoStanding" draggable={false}/> Teamname</td>
-                  <td>5</td>
-                  <td>0</td>
-                  <td>5</td>
-                  <td>1</td>
-                  <td className="">
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    <FaTimesCircle color="red" className="mr-1"/>
-                    </td>
-                </tr>
+                </tr>     
+              ))}
+
               </tbody>
             </Table>
           </Col>

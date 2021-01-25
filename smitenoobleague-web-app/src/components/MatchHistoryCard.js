@@ -21,7 +21,7 @@ export default function MatchHistoryCard({ MatchupResult }) {
 
         return (<>
                 <Card className="text-center mb-2">
-                <Card.Header>Played at {ReadableDate(MatchupResult?.datePlayed)}</Card.Header>
+                <Card.Header>Last game completed at {ReadableDate(MatchupResult?.datePlayed)}{MatchupResult?.homeTeamScore > 1 ||  MatchupResult?.awayTeamScore > 1 ? "" : "(Matchup in progress)"}</Card.Header>
                      <Card.Body>
                          <Container>
                                 <Row>

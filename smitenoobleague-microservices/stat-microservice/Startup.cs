@@ -73,6 +73,7 @@ namespace stat_microservice
             services.AddScoped<IPlayerStatService, PlayerStatService>();
             services.AddScoped<ITeamStatService, TeamStatService>();
             services.AddScoped<IExternalServices, ExternalServices>();
+            services.AddScoped<IStandingService, StandingService>();
             
            
 

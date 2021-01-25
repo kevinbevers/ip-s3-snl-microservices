@@ -11,8 +11,11 @@ import Image from "next/image";
 
 export default function ScheduleItem({homeTeam, awayTeam, matchupID, byeWeek, score}) {
 
-    const homeTeamImagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + homeTeam?.teamLogoPath;
-    const awayTeamImagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + awayTeam?.teamLogoPath;
+    const RenderTeamImage = (t) => {
+        const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + t?.teamLogoPath;
+        return (t?.teamLogoPath != null ? <Image height={70} width={70} alt={t?.teamName} title={t?.teamName} src={imagePath} className="MhTeamImg" draggable={false}></Image> :
+                <Img webp width={70} height={70} alt={t?.teamName} title={t?.teamName} src={require("public/images/teamBadge.png")} className="MhTeamImg" draggable={false}></Img>);
+};
 
     return (
         <Card className="text-center mb-2">
@@ -22,11 +25,8 @@ export default function ScheduleItem({homeTeam, awayTeam, matchupID, byeWeek, sc
                         <Col md={5} className="p-0">
                             <Row>
                                 <Col md={3} className="p-0">
-                                {homeTeam?.teamLogoPath != null ?
-                                        <Image height={70} width={70} alt={homeTeam?.teamName} src={homeTeamImagePath} draggable={false}></Image>
-                                        : <Img src={require("public/images/teamBadge.png")} alt={homeTeam?.teamName} className="MhTeamImg" draggable={false}></Img>
-                                        }
-                                    </Col>
+                                    {RenderTeamImage(homeTeam)}
+                                </Col>
                                 <Col md={9} className="my-auto"><h3 className="">{homeTeam?.teamName != null ? homeTeam?.teamName : "No opponent this week"}</h3></Col>
                             </Row>
                         </Col>
@@ -35,10 +35,7 @@ export default function ScheduleItem({homeTeam, awayTeam, matchupID, byeWeek, sc
                             <Row>
                                 <Col md={9} className="my-auto"><h3 className="">{awayTeam?.teamName != null ? awayTeam?.teamName : "No opponent this week"}</h3></Col>
                                 <Col md={3} className="p-0">
-                                {awayTeam?.teamLogoPath != null ?
-                                        <Image height={70} width={70} alt={awayTeam?.teamName} src={awayTeamImagePath} draggable={false}></Image>
-                                        : <Img src={require("public/images/teamBadge.png")} alt={awayTeam?.teamName} className="MhTeamImg" draggable={false}></Img>
-                                        }
+                                    {RenderTeamImage(awayTeam)}
                                 </Col>
                             </Row>
                         </Col>

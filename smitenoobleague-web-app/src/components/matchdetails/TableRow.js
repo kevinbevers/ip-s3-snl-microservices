@@ -17,7 +17,7 @@ export default function TableRow({player, index}) {
     return ( <>
         <tr className={player?.won ? index%2 ? "table-success2" : "table-success" : index%2 ? "table-danger2" : "table-danger"}>
         <td className="d-flex align-items-center justify-content-center">{showExtraStats ? <FaAngleUp className="mr-1 Clickable"onClick={toggleExtraStats}/> : <FaAngleDown  className="mr-1 Clickable"onClick={toggleExtraStats}/> } <Image width={30} height={30} src={player?.god?.godIcon} alt={player?.god?.godName} title={player?.god?.godName} className="GodImg rounded" draggable={false}/></td>
-            <td className=""><div className="d-flex align-items-center text-left"><Img webp src={require("public/images/roles/" + player?.role.roleName + "_Logo.png")} title={player?.role.roleName} alt={player?.role.roleName}  height={15} width={15} className="mr-1 my-auto"/> {player?.player?.playername}</div></td>
+            <td className=""><div className="d-flex align-items-center text-left"><Img webp src={require("public/images/roles/" + player?.role.roleName + "_Logo.png")} title={player?.role.roleName} alt={player?.role.roleName}  height={15} width={15} className="mr-1 my-auto" draggable={false}/> {player?.player?.playername}</div></td>
             <td>{player?.kills}/{player?.deaths}/{player?.assists}</td>
             <td>{player?.damageDealt}</td>
             <td>{player?.damageTaken}</td>
