@@ -4,10 +4,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "../src/components/NavBar";
 import Footer from "../src/components/Footer";
 //bootstrap components
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import { Container, Form } from "react-bootstrap";
+import { Container, Form, Alert, Button, Col, Row } from "react-bootstrap";
 //custom components
 
 import ScheduleBlock from "src/components/ScheduleBlock";
@@ -31,6 +28,8 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
     setSelectedDivisionID(evt.target.value);
 
     const selectedDivision = Divisions.filter(d => d.divisionID == evt.target.value)[0];
+    //set currentSchedule
+    setSelectedPeriod(selectedDivision?.currentScheduleID);
     //Get all schedules for the selected division
     await scheduleservice.GetListOfSchedulesByDivisionID(evt.target.value)
     .then(res => { setSchedules(res.data);}).catch(err => { setSchedules([{scheduleID: 0, scheduleName: "No schedules"}]);});
@@ -86,7 +85,9 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
           <Row className="mt-5">
             <Col md={3}></Col>
             <Col md={6} className="d-inline-flex justify-content-center">
+            <Alert variant="warning" className="rounded">
               <h3 className="ml-2 mr-2 mb-0 align-self-center font-weight-bold">No active schedule found</h3>
+            </Alert>
             </Col>
             <Col md={3}></Col>
           </Row>  

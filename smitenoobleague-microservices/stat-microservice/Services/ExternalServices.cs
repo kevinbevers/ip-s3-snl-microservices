@@ -45,7 +45,7 @@ namespace stat_microservice.Services
             }
         }
 
-        public async Task<IEnumerable<Team>> GetBasicTeamInfoInBatchWithTeamIdsList(IEnumerable<int> teamIDs)
+        public async Task<IEnumerable<Team>> GetBasicTeamInfoInBatchWithTeamIdsList(List<int> teamIDs)
         {
             //body for the post request
             var stringContent = new StringContent(JsonConvert.SerializeObject(teamIDs));

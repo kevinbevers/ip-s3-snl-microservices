@@ -17,7 +17,7 @@ namespace stat_microservice.Interfaces
         Task<Matchup> GetMatchupByMatchupIdAsync(int matchupID);
         Task<TeamWithDetails> GetTeamWithDetailsByTeamId(int? teamID);
         Task<Team> GetBasicTeamInfoByTeamId(int? teamID);
-        Task<IEnumerable<Team>> GetBasicTeamInfoInBatchWithTeamIdsList(IEnumerable<int> teamIDs);
+        Task<IEnumerable<Team>> GetBasicTeamInfoInBatchWithTeamIdsList(List<int> teamIDs);
         Task<string> GetDivisionNameByDivisionID(int? divisionID);
         Task<List<Role>> GetRolesAsync();
     }

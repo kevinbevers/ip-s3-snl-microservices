@@ -4,9 +4,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
 //bootstrap components
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { Container, FormControl, Form } from "react-bootstrap";
+import { Container, FormControl, Form, Row, Col, Alert } from "react-bootstrap";
 //component
 import PlayerCard from "src/components/PlayerCard";
 //Auth
@@ -119,7 +117,9 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
               <Row className="mt-5">
                 <Col md={3}></Col>
                 <Col md={6} className="d-inline-flex justify-content-center">
+                <Alert variant="warning" className="rounded">
                   <h3 className="ml-2 mr-2 mb-0 align-self-center font-weight-bold">No players found</h3>
+                </Alert>
                 </Col>
                 <Col md={3}></Col>
               </Row> 
