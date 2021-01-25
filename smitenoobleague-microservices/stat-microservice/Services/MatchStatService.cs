@@ -508,9 +508,17 @@ namespace stat_microservice.Services
         private IList<TableStat> ConvertMatchDataToTableStat(MatchData match, List<PlayerStat> players, TeamWithDetails snlTeam, ScheduledMatch validMatchup)
         {
             List<TableStat> convertedStats = new List<TableStat>();
+            //Get the RoleID for the fill player
+            var playerIds = players.Select(x => x.Player.PlayerID).ToList(); //get all players in the match
+            var availableRoles = snlTeam?.TeamMembers?.Select(x => new { x.TeamMemberRole, x.PlayerID }).ToList(); // create list of available roles
+            int? RoleIdForFill = availableRoles.Where(x => playerIds.Contains(x.PlayerID)).Select(y => y.TeamMemberRole.RoleID).FirstOrDefault(); //filter out the fill
 
             foreach (var p in players)
             {
+                //use this when playerID matches, if it is null use the fill's role ID
+                int? playerRoleId = availableRoles?.Where(tm => tm.PlayerID == p.Player.PlayerID).Select(tm => tm.TeamMemberRole.RoleID).FirstOrDefault(); 
+
+
                 TableStat stat = new TableStat
                 {
                     GameId = match.GameID,
@@ -522,7 +530,7 @@ namespace stat_microservice.Services
                     TeamId = snlTeam.TeamID,
                     PlayerIsFill = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.Player.PlayerID).Count() <= 0,
                     WinStatus = p.Won,
-                    RoleId = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.Player.PlayerID).Select(tm => tm.TeamMemberRole.RoleID).FirstOrDefault(),
+                    RoleId = playerRoleId != null ? playerRoleId : RoleIdForFill,
                     PlayerId = p.Player.PlayerID,
                     PlayerName = p.Player.Playername,
                     PlayerPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), p.Player.Platform),
