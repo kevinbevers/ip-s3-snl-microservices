@@ -5,7 +5,7 @@ import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer"; 
 import DefaultErrorPage from "next/error";
 //boostrap components
-import { Badge, Modal, Button, Jumbotron, Container, Row, Col } from "react-bootstrap";
+import { Badge, Modal, Button, Jumbotron, Container, Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 //icons
 import {FaTimes, FaPlaystation, FaXbox, FaSteam} from "react-icons/fa";
 import {RiSwitchFill} from "react-icons/ri";
@@ -25,16 +25,61 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
 
   const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + PlayerStats?.team?.teamLogoPath;
 
+  console.log(PlayerStats);
+
+
+  const ToolTipForBestPicks = (data) => {
+    if(data?.god?.godName != null)
+    {
+    return <Tooltip id="button-tooltip">
+      <div>
+        <h6 className="font-weight-bold">{data?.god?.godName}</h6>
+        <p className="text-left"><b>Times played:</b> {data?.totalGamesPlayed}<br />
+        <b>Winpercentage:</b> {(data?.totalWins / data?.totalGamesPlayed * 100)}%<br />
+        <b>Kill participation:</b> {data?.averageKillParticipation}%<br />
+        <b>Average Kills:</b> {data?.averageKills}<br />
+        <b>Average Deaths:</b> {data?.averageDeaths}<br />
+        <b>Average Assists:</b> {data?.averageAssists}<br />
+        <b>Average GPM:</b> {data?.averageGPM}<br />
+        </p>
+        
+    </div></Tooltip>
+    }
+    else {
+      return <Tooltip id="button-tooltip"><div><b>Not enough data yet to show.</b></div></Tooltip>
+    }
+  };
+
+const SimpleToolTip = (data) => {
+  if(data?.godName != null)
+  {
+  return <Tooltip id="button-tooltip">
+    <div>
+      <h6 className="font-weight-bold">{data?.godName}</h6>    
+  </div></Tooltip>
+  }
+  else {
+    return <Tooltip id="button-tooltip"><div><b>Not enough data yet to show.</b></div></Tooltip>
+  }
+};
+
+  //Data for the graph
+  let damageByTopDamageGods = 0;
+  PlayerStats?.highestDamageGods.forEach(e => {
+    damageByTopDamageGods += e.damageDealt;
+  })
+  let labelList = ["Other"];
+  let DamageList = [PlayerStats?.totalDamageDealt - damageByTopDamageGods];
+  PlayerStats?.highestDamageGods.forEach(e => {
+    labelList.push(e.godName);
+    DamageList.push(e.damageDealt);
+  });
+    
+
     const data = {
-        labels: [
-            "Ratatoskr",
-            "Sun Wukong",
-            "Ao Kuang",
-            "Mulan",
-            "Other"
-        ],
+        labels: labelList,
         datasets: [{
-            data: [20,20, 20, 10, 40],
+            data: DamageList,
             backgroundColor: [
                 "#6925E8",
                 "#27DBF2",
@@ -103,7 +148,7 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
               <Col md={4} xl={5} xs={9} className="pb-0 my-auto">
               <Row className="">
                  <Col md={12} className="d-flex">
-                 {PlayerStats.team?.teamLogoPath != null ? <Image height={30} width={30} alt={PlayerStats.team?.teamName} src={imagePath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image>  : 
+                 {PlayerStats.team?.teamLogoPath != null ? <Image layout="fixed" height={35} width={35} alt={PlayerStats.team?.teamName} src={imagePath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image>  : 
                         <Img alt={PlayerStats.team?.teamName} src={require("public/images/teamBadge.png")} className="SmallTeamImage mr-1 my-auto" draggable={false}></Img>
                       }
                    <h4 className="mb-0 PlayerStatTeamTitle my-auto">{PlayerStats?.team?.teamName}</h4>
@@ -139,16 +184,16 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
                   <Row><Col><h4 className="font-weight-bold PlayerBannerStatTitle text-center">RECENT PICKS</h4></Col></Row>
                   <Row className="mb-1">
                     <Col className="d-flex justify-content-center">                      
-                    <div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div>
-                    <div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div>
-                    <div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[0])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[0]?.godIcon != null ? PlayerStats?.recentPicks[0]?.godIcon : "/images/empty_slot.png"} alt={PlayerStats?.recentPicks[0]?.godName != null ? PlayerStats?.recentPicks[0]?.godName : "RecentPick1"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[1])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[1]?.godIcon != null ? PlayerStats?.recentPicks[1]?.godIcon : "/images/empty_slot.png"} alt={PlayerStats?.recentPicks[1]?.godName != null ? PlayerStats?.recentPicks[1]?.godName : "RecentPick2"} title={PlayerStats?.recentPicks[1]?.godName != null ? PlayerStats?.recentPicks[1]?.godName : "RecentPick2"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[2])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[2]?.godIcon != null ? PlayerStats?.recentPicks[2]?.godIcon : "/images/empty_slot.png"} alt={PlayerStats?.recentPicks[2]?.godName != null ? PlayerStats?.recentPicks[2]?.godName : "RecentPick3"} title={PlayerStats?.recentPicks[2]?.godName != null ? PlayerStats?.recentPicks[2]?.godName : "RecentPick3"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
                     </Col>
                 </Row>
                 <Row>
                     <Col  className="d-flex justify-content-center">                      
-                      <div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div>
-                      <div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div>
-                      <div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[3])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[3]?.godIcon != null ? PlayerStats?.recentPicks[3]?.godIcon : "/images/empty_slot.png"} alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[4])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[4]?.godIcon != null ? PlayerStats?.recentPicks[4]?.godIcon : "/images/empty_slot.png"} alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[5])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[5]?.godIcon != null ? PlayerStats?.recentPicks[5]?.godIcon : "/images/empty_slot.png"} alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
                     </Col>
                 </Row>
              </Col> 
@@ -234,11 +279,11 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[0])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[0]?.god.godIcon != null ? PlayerStats?.bestPicks[0]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[1])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[1]?.god.godIcon != null ? PlayerStats?.bestPicks[1]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[2])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[2]?.god.godIcon != null ? PlayerStats?.bestPicks[2]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[3])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[3]?.god.godIcon != null ? PlayerStats?.bestPicks[3]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[4])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[4]?.god.godIcon != null ? PlayerStats?.bestPicks[4]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
                     </Col>
                 </Row>
                 <Row className="">
@@ -246,11 +291,11 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
                 </Row>
                 <Row className="mb-4">
                 <Col className="d-flex">
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" rounded draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" rounded draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" rounded draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" rounded draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" rounded draggable={false}/></div>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[0])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[0]?.godIcon != null ? PlayerStats?.mostPicked[0]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[1])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[1]?.godIcon != null ? PlayerStats?.mostPicked[1]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[2])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[2]?.godIcon != null ? PlayerStats?.mostPicked[2]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[3])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[3]?.godIcon != null ? PlayerStats?.mostPicked[3]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[4])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[4]?.godIcon != null ? PlayerStats?.mostPicked[4]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
                     </Col>
                 </Row>
                 <Row className="">
@@ -258,17 +303,17 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
                 </Row>
                 <Row className="mb-4">
                 <Col className="d-flex">
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                      <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.topBansAgainst[0])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.topBansAgainst[0]?.godIcon != null ? PlayerStats?.topBansAgainst[0]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.topBansAgainst[1])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.topBansAgainst[1]?.godIcon != null ? PlayerStats?.topBansAgainst[1]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.topBansAgainst[2])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.topBansAgainst[2]?.godIcon != null ? PlayerStats?.topBansAgainst[2]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.topBansAgainst[3])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.topBansAgainst[3]?.godIcon != null ? PlayerStats?.topBansAgainst[3]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.topBansAgainst[4])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.topBansAgainst[4]?.godIcon != null ? PlayerStats?.topBansAgainst[4]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
                     </Col>
                 </Row>
                 <Row className="mb-4">
                 <Col className="">
                     {/* Link to pick percentages of team */}
-                <Button href="/stats/player/343532/pickpercentages" className="StatNumbers">Click to see player pick percentages</Button>
+                <Button href={`/stats/player/${PlayerStats?.player?.playerID}/pickpercentages`} className="StatNumbers">Click to see player pick percentages</Button>
                 </Col>
                 </Row>
                 </Col >
