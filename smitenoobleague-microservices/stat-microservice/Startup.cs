@@ -74,8 +74,9 @@ namespace stat_microservice
             services.AddScoped<ITeamStatService, TeamStatService>();
             services.AddScoped<IExternalServices, ExternalServices>();
             services.AddScoped<IStandingService, StandingService>();
-            
-           
+            services.AddScoped<IPickPercentageService, PickPercentageService>();
+
+
 
             //Auth
             string domain = Environment.GetEnvironmentVariable("Auth0Domain");

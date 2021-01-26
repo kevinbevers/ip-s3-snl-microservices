@@ -10,9 +10,15 @@ const GetListOfPlayersByDivisionID = async(divisionID) => {
     return apiClient.get("stat-service/playerstat/byplayerid/" + playerID);
   };
 
+  const GetPlayerPickPercentagesByPlayerID = async(playerID) => {
+    const apiClient = await helpers.BuildApiClient(null);
+    return apiClient.get("stat-service/playerstat/pickpercentagesbyplayerid/" + playerID);
+  };
+
   
 
 export default {
     GetListOfPlayersByDivisionID,
-    GetPlayerStatisticsByPlayerID
+    GetPlayerStatisticsByPlayerID,
+    GetPlayerPickPercentagesByPlayerID
 }

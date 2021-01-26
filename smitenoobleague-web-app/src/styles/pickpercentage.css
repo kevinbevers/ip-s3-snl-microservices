@@ -4,6 +4,7 @@
 
 .GodImgPick {
     height: 4vw;
+    width: 4vw;
 }
 
 .GodPickTitle {
@@ -20,6 +21,7 @@
     }
     .GodImgPick {
       height: 12vw !important;
+      width: 12vw !important;
   }
   .GodPickTitle {
     font-size: 4vw;

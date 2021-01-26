@@ -25,9 +25,6 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
 
   const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + PlayerStats?.team?.teamLogoPath;
 
-  console.log(PlayerStats);
-
-
   const ToolTipForBestPicks = (data) => {
     if(data?.god?.godName != null)
     {
@@ -43,6 +40,20 @@ export default function PlayerStat({LoginSession, PlayerStats, status, errMsg })
         <b>Average GPM:</b> {data?.averageGPM}<br />
         </p>
         
+    </div></Tooltip>
+    }
+    else {
+      return <Tooltip id="button-tooltip"><div><b>Not enough data yet to show.</b></div></Tooltip>
+    }
+  };
+
+  const SimpleToolTipForMostPicked = (data) => {
+    if(data?.godName != null)
+    {
+    return <Tooltip id="button-tooltip">
+      <div>
+        <h6 className="font-weight-bold">{data?.godName}</h6>
+        <p className="text-left"><b>Times played:</b> {data?.timesPlayed}</p>
     </div></Tooltip>
     }
     else {
@@ -140,7 +151,7 @@ const SimpleToolTip = (data) => {
     <>
       <NavBar LoginSession={LoginSession}/>
       <Container fluid className="mt-2">
-          {/* Team Header */}
+          {/* Player Header */}
           <Row className="">
               <Col md={2} xl={1} xs={3} className="my-auto">
                   <Img src={require("public/images/roles/" + PlayerStats?.player?.teamMemberRole.roleName + "_Logo.png")} className="MainRoleImage" draggable={false}></Img>
@@ -291,11 +302,11 @@ const SimpleToolTip = (data) => {
                 </Row>
                 <Row className="mb-4">
                 <Col className="d-flex">
-                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[0])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[0]?.godIcon != null ? PlayerStats?.mostPicked[0]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
-                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[1])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[1]?.godIcon != null ? PlayerStats?.mostPicked[1]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
-                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[2])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[2]?.godIcon != null ? PlayerStats?.mostPicked[2]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
-                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[3])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[3]?.godIcon != null ? PlayerStats?.mostPicked[3]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
-                <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.mostPicked[4])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[4]?.godIcon != null ? PlayerStats?.mostPicked[4]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(PlayerStats?.mostPicked[0])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[0]?.godIcon != null ? PlayerStats?.mostPicked[0]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(PlayerStats?.mostPicked[1])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[1]?.godIcon != null ? PlayerStats?.mostPicked[1]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(PlayerStats?.mostPicked[2])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[2]?.godIcon != null ? PlayerStats?.mostPicked[2]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(PlayerStats?.mostPicked[3])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[3]?.godIcon != null ? PlayerStats?.mostPicked[3]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
+                <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(PlayerStats?.mostPicked[4])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.mostPicked[4]?.godIcon != null ? PlayerStats?.mostPicked[4]?.godIcon : "/images/empty_slot.png"} alt="" className="rounded"  draggable={false}/></div></OverlayTrigger>
                     </Col>
                 </Row>
                 <Row className="">

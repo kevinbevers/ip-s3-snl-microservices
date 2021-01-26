@@ -24,7 +24,7 @@ namespace stat_microservice.Models.External
         //God stats
         public List<God> RecentPicks { get; set; }
         public List<GodStatistics> BestPicks { get; set; }
-        public List<God> MostPicked { get; set; }
+        public List<GodWithTimesPlayed> MostPicked { get; set; }
         public List<GodWithDamage> HighestDamageGods { get; set; }
         public List<God> TopBansAgainst { get; set; }
         //General Stats

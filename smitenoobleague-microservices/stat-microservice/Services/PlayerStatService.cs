@@ -203,16 +203,16 @@ namespace stat_microservice.Services
 
             return topDamageGods;
         }
-        private List<God> GetTop5MostPickedGodsAsync(List<GodStatistics> playerGodStats)
+        private List<GodWithTimesPlayed> GetTop5MostPickedGodsAsync(List<GodStatistics> playerGodStats)
         {
-            List<God> mostPicked = playerGodStats.OrderByDescending(x => x.TotalGamesPlayed).Take(5).Select(x => x.God).ToList();
+            List<GodWithTimesPlayed> mostPicked = playerGodStats.OrderByDescending(x => x.TotalGamesPlayed).Take(5).Select(x => new GodWithTimesPlayed {GodName = x.God.GodName, GodId = x.God.GodId, GodIcon = x.God.GodIcon, TimesPlayed = x.TotalGamesPlayed }).ToList();
 
             //add extra entries so it always returns a list of 5
             if (mostPicked.Count() < 5)
             {
                 for (int i = mostPicked.Count(); i < 5; i++)
                 {
-                    mostPicked.Add(new God { GodIcon = null, GodId = null, GodName = null });
+                    mostPicked.Add(new GodWithTimesPlayed { GodIcon = null, GodId = null, GodName = null, TimesPlayed = null });
                 }
             }
 
