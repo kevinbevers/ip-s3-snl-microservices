@@ -3,12 +3,9 @@ import React, { useState } from "react";
 //default page stuff
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
+import DefaultErrorPage from "next/error";
 //boostrap components
-import Jumbotron from "react-bootstrap/Jumbotron";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { Badge, Modal, Button } from "react-bootstrap";
+import { Badge, Modal, Button, Row, Col, Container, OverlayTrigger, Tooltip, Alert } from "react-bootstrap";
 //icons
 import { FaBox, FaInfoCircle } from "react-icons/fa";
 //chart
@@ -27,12 +24,53 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
 
     const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + TeamStats?.team?.teamLogoPath;
 
+    const SimpleToolTipForMostPicked = (data) => {
+        if(data?.godName != null)
+        {
+        return <Tooltip id="button-tooltip">
+          <div>
+            <h6 className="font-weight-bold">{data?.godName}</h6>
+            <p className="text-left"><b>Times played:</b> {data?.timesPlayed}</p>
+        </div></Tooltip>
+        }
+        else {
+          return <Tooltip id="button-tooltip"><div><b>Not enough data yet to show.</b></div></Tooltip>
+        }
+      };
+    
+    const SimpleToolTip = (data) => {
+      if(data?.godName != null)
+      {
+      return <Tooltip id="button-tooltip">
+        <div>
+          <h6 className="font-weight-bold">{data?.godName}</h6>    
+      </div></Tooltip>
+      }
+      else {
+        return <Tooltip id="button-tooltip"><div><b>Not enough data yet to show.</b></div></Tooltip>
+      }
+    };
+
+    const lastGamesCount = TeamStats?.recentPerformanceScore?.length;
+    let counter = 0;
+    let labelList = [];
+    TeamStats?.recentPerformanceScore?.forEach(e => {
+        if(lastGamesCount - counter == 1)
+        {
+            labelList.push("last game");
+        }
+        else {
+      labelList.push(lastGamesCount - counter + " games ago");
+        }
+      counter++;
+    });
+
     // RPP recent peformance points. a calculation done in the back-end based on gametime, kills, win or loss, gold earned and a few more stats. combined into a algorithm
     const data = {
-        labels: ["week 1","week 2","week 3", "week 4","week 5"],
+        labels: labelList,
         datasets: [
           {
-            label: "Recent peformance points",
+            label: "Recent performance points",
             fill: false,
             order: 0,
             lineTension: 0.1,
@@ -51,7 +89,7 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [2450,2300,2600,2000,2100,2230,2300,2400,2600]
+            data: TeamStats?.recentPerformanceScore
           }
         ]
       };
@@ -65,8 +103,13 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-                    stepSize: 500,
-                    suggestedMax: 3000,
+                    stepSize: 100,
+                    suggestedMax: 1000,
+                }
+            }],
+            xAxes: [{
+                ticks: {
+                    display: false //this will remove only the label
                 }
             }]
         }
@@ -84,7 +127,6 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
   return (
     <>
       <NavBar LoginSession={LoginSession}/>
-      {/* {postData} */}
       <Container fluid className="">
           {/* Team Header */}
           <Row className="">
@@ -102,7 +144,7 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                     <Row>
                     <Col xl={4} md={4} xs={4} className="pr-0"><h5 className="mb-0 TeamBannerStats"><b>Games played:</b> {TeamStats?.gamesPlayed}</h5></Col>
                     <Col xl={8} md={8} xs={8} className="pl-0 pr-0 d-flex">
-                        <h5 className="mb-0 TeamBannerStats mr-md-3 mr-1"><b>Win percentage:</b> {TeamStats?.winPercentage}%</h5>
+                        <h5 className="mb-0 TeamBannerStats mr-md-3 mr-1"><b>Win percentage:</b> {TeamStats?.gamesPlayed > 0 ? Math.round(TeamStats?.wins / TeamStats?.gamesPlayed * 100) : 0}%</h5>
                         <h5 className="mb-0 TeamBannerStats"><b>Current division:</b> {TeamStats?.divisionName}</h5>
                     </Col>
                     {/* <Col xl={5} md={5} xs={4} className="pl-0 pr-0"></Col> */}
@@ -112,11 +154,11 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
               </Col>
               <Col md={3} xl={3} xs={12} className="">
                  <Row>
-                     <Col md={12} className="text-center"><h5 className="RecentPerformanceTitle">Recent performance chart <a href="#" onClick={() => setRPPShow(true)} className="link-unstyled"><FaInfoCircle /></a></h5></Col>
+                     <Col md={12} className="text-center"><h5 className="RecentPerformanceTitle">Recent performance chart <a onClick={() => setRPPShow(true)} className="link-unstyled Clickable"><FaInfoCircle /></a></h5></Col>
                  </Row>
                  <Row className="text-center">
                      {/* Chart.JS Line graph */}
-                     <Col><Line data={data} legend={legendOpts} height={100} options={options} /></Col>
+                     <Col className=""><Line data={data} legend={legendOpts} height={100} options={options} /></Col>
                  </Row>
              </Col> 
             </Row>
@@ -158,6 +200,10 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                     <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team healing:</h4></Col>
                     <Col className=""><h4 className="StatNumbers">{TeamStats?.totalHealing}</h4></Col>
                     </Row>
+                    <Row className="mb-2">
+                    <Col md={8} xs={8} className=""><h4 className="font-weight-bold StatSubTitle">Total team wards placed:</h4></Col>
+                    <Col className=""><h4 className="StatNumbers">{TeamStats?.totalWardsPlaced}</h4></Col>
+                    </Row>
                 </Col>
                 {/* Pick stats and Star player */}
                 <Col md={3} className="border-right">
@@ -166,19 +212,30 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">STAR PLAYER NAME</h3>
+                        {TeamStats?.starPlayer != null ? <>
+                        <Img webp src={require(`public/images/roles/${TeamStats?.starPlayer?.teamMemberRole?.roleName}_Logo.png`)} className="GodImgStats mr-2" draggable={false}/>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.starPlayer?.teamMemberName}</h3></>
+                        :  <Alert variant="warning" className="rounded"><h5 className="my-auto font-weight-bold">No star player, not enough data</h5></Alert>}
                     </Col>
                 </Row>  
                 <Row className="">
                     <Col><h2 className="font-weight-bold StatTitle">MOST PLAYED</h2></Col>
                 </Row>
                 <Row className="mb-4">
-                    <Col className="d-flex">                      
-                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                    <Col className="d-flex">          
+                    {TeamStats?.mostPlayed != null ? <>        
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(TeamStats?.mostPlayed[0])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostPlayed[0]?.godIcon != null ? TeamStats?.mostPlayed[0]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostPlayed[0]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(TeamStats?.mostPlayed[1])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostPlayed[1]?.godIcon != null ? TeamStats?.mostPlayed[1]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostPlayed[2]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(TeamStats?.mostPlayed[2])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostPlayed[2]?.godIcon != null ? TeamStats?.mostPlayed[2]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostPlayed[3]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(TeamStats?.mostPlayed[3])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostPlayed[3]?.godIcon != null ? TeamStats?.mostPlayed[3]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostPlayed[3]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTipForMostPicked(TeamStats?.mostPlayed[4])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostPlayed[4]?.godIcon != null ? TeamStats?.mostPlayed[4]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostPlayed[4]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    </> : <>        
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst1"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst2"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst3"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst4"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst5"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    </>}
                     </Col>
                 </Row>
                 <Row className="">
@@ -186,16 +243,25 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
-                    <div className="GodImgStats position-relative mr-1"><Image layout="fill" src="https://static.smite.guru/i/champions/icons/ratatoskr.jpg" alt="" className="rounded" draggable={false}/></div>
+                        {TeamStats?.mostBanned ? <>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(TeamStats?.mostBanned[0])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostBanned[0]?.godIcon != null ? TeamStats?.mostBanned[0]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostBanned[0]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(TeamStats?.mostBanned[1])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostBanned[1]?.godIcon != null ? TeamStats?.mostBanned[1]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostBanned[2]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(TeamStats?.mostBanned[2])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostBanned[2]?.godIcon != null ? TeamStats?.mostBanned[2]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostBanned[3]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(TeamStats?.mostBanned[3])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostBanned[3]?.godIcon != null ? TeamStats?.mostBanned[3]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostBanned[3]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(TeamStats?.mostBanned[4])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={TeamStats?.mostBanned[4]?.godIcon != null ? TeamStats?.mostBanned[4]?.godIcon : "/images/empty_slot.png"} alt={TeamStats?.mostBanned[4]?.godName} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    </> : <>        
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst1"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst2"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst3"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst4"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"BannedAgainst5"} className="rounded" draggable={false}/></div></OverlayTrigger>
+                    </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                 <Col className="">
                     {/* Link to pick percentages of team */}
-                <Button href="/stats/team/2345/pickpercentages" className="StatNumbers">Click to see team pick percentages</Button>
+                <Button href={`/stats/team/${TeamStats?.team?.teamID}/pickpercentages`} className="StatNumbers">Click to see team pick percentages</Button>
                 </Col>
                 </Row>              
                
@@ -205,44 +271,51 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                 <h2 className="font-weight-bold StatTitle">ROSTER</h2>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Solo_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[0]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[0]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Img webp src={require("public/images/roles/Solo_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[0] != null ? TeamStats?.team?.teamMembers[0]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[0]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Jungle_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[1]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[1]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Img webp src={require("public/images/roles/Jungle_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[1] != null ? TeamStats?.team?.teamMembers[1]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[1]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Mid_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[2]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[2]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Img webp src={require("public/images/roles/Mid_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[2] != null ? TeamStats?.team?.teamMembers[2]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[2]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Support_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[3]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[3]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Img webp src={require("public/images/roles/Support_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[3] != null ? TeamStats?.team?.teamMembers[3]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[3]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                        <img src="/images/roles/Adc_Logo.png" className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[4]?.teamMemberName}</h3>{TeamStats?.team?.teamMembers[4]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Img webp src={require("public/images/roles/Adc_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
+                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[4] != null ? TeamStats?.team?.teamMembers[4]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[4]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 </Col>
                 {/* Recently played, no border right needed */}
                 <Col md={2} className=""> 
                     <h2 className="font-weight-bold StatTitle">RECENTLY PLAYED</h2>
-                    <Row><Col><RecentTeams backgroundColor={"RecentTeamWinBackground"} /></Col></Row>
-                    <Row><Col><RecentTeams backgroundColor={"RecentTeamWinBackground"} /></Col></Row>
-                    <Row><Col><RecentTeams backgroundColor={"RecentTeamLossBackground"} /></Col></Row>
-                    <Row><Col><RecentTeams backgroundColor={"RecentTeamWinBackground"} /></Col></Row>
-                    <Row><Col><RecentTeams backgroundColor={"RecentTeamLossBackground"} /></Col></Row>
-                    
+                    {TeamStats?.recentMatches != null ? <>
+              {TeamStats?.recentMatches.map((r, index) => ( <>
+                <RecentTeams key={index} recent={r} />
+                </>
+              ))}
+             </> : 
+             <> 
+              <Row className="mt-2 mb-2">
+                <Col md={12} className="text-left">
+                <Alert variant="warning" className="rounded"><h6 className="mb-0 align-self-center font-weight-bold">No recent played matches.</h6></Alert>
+                </Col>
+              </Row> 
+            </>}        
                 </Col>
             </Row>
       </Container>
@@ -268,7 +341,7 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                 <li>Gold earned</li>
                 <li>KDA of team</li>
                 <li>Damage dealt</li> 
-                <li>Kill particpation</li>
+                <li>Objectives taken</li>
                 </ul>
             </Modal.Body>
       </Modal>

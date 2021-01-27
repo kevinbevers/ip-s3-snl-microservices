@@ -8,6 +8,7 @@ namespace stat_microservice.Models.External
     {
         public TeamMember Player { get; set; }
         public Team Team { get; set; }
+        public int? PlayerId { get; set; }
 
         //Game stats
         public int GamesPlayed { get; set; }
@@ -38,5 +39,6 @@ namespace stat_microservice.Models.External
         public int TotalDistanceTravelled { get; set; }
         public int TotalWardsPlaced { get; set; }
         public int TotalStructureDamage { get; set; }
+        public int TotalGoldEarned { get; set; }
     }
 }

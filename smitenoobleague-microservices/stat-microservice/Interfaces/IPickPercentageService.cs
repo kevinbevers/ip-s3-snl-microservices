@@ -8,5 +8,6 @@ namespace stat_microservice.Interfaces
     public interface IPickPercentageService
     {
         Task<ActionResult<PlayerPickPercentages>> GetPickPercentagesForPlayerByPlayerId(int? playerID);
+        Task<ActionResult<TeamPickPercentages>> GetPickPercentagesForTeamByTeamId(int? teamID);
     }
 }

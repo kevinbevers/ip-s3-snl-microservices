@@ -1,6 +1,7 @@
 //default react imports
 import React, { useState } from "react";
 import Link from "next/link";
+import DefaultErrorPage from "next/error";
 //default page stuff
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";

@@ -75,6 +75,7 @@ namespace stat_microservice
             services.AddScoped<IExternalServices, ExternalServices>();
             services.AddScoped<IStandingService, StandingService>();
             services.AddScoped<IPickPercentageService, PickPercentageService>();
+            services.AddScoped<ILeaderboardService, LeaderBoardService>();
 
 
 

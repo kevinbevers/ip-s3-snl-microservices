@@ -5,7 +5,7 @@ import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer"; 
 import DefaultErrorPage from "next/error";
 //boostrap components
-import { Badge, Modal, Button, Jumbotron, Container, Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Badge, Modal, Button, Jumbotron, Container, Row, Col, OverlayTrigger, Tooltip, Alert } from "react-bootstrap";
 //icons
 import {FaTimes, FaPlaystation, FaXbox, FaSteam} from "react-icons/fa";
 import {RiSwitchFill} from "react-icons/ri";
@@ -76,12 +76,12 @@ const SimpleToolTip = (data) => {
 
   //Data for the graph
   let damageByTopDamageGods = 0;
-  PlayerStats?.highestDamageGods.forEach(e => {
+  PlayerStats?.highestDamageGods?.forEach(e => {
     damageByTopDamageGods += e.damageDealt;
   })
   let labelList = ["Other"];
   let DamageList = [PlayerStats?.totalDamageDealt - damageByTopDamageGods];
-  PlayerStats?.highestDamageGods.forEach(e => {
+  PlayerStats?.highestDamageGods?.forEach(e => {
     labelList.push(e.godName);
     DamageList.push(e.damageDealt);
   });
@@ -193,18 +193,28 @@ const SimpleToolTip = (data) => {
               </Col>
               <Col md={3} xl={3} xs={6} className="border-left border-right mt-1">
                   <Row><Col><h4 className="font-weight-bold PlayerBannerStatTitle text-center">RECENT PICKS</h4></Col></Row>
-                  <Row className="mb-1">
-                    <Col className="d-flex justify-content-center">                      
-                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[0])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[0]?.godIcon != null ? PlayerStats?.recentPicks[0]?.godIcon : "/images/empty_slot.png"} alt={PlayerStats?.recentPicks[0]?.godName != null ? PlayerStats?.recentPicks[0]?.godName : "RecentPick1"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                  <Row className="mb-1">                  
+                    <Col className="d-flex justify-content-center"> 
+                    {PlayerStats?.recentPicks != null ? <>                     
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[0])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[0]?.godIcon != null ? PlayerStats?.recentPicks[0]?.godIcon : "/images/empty_slot.png"} alt={PlayerStats?.recentPicks[0]?.godName != null ? PlayerStats?.recentPicks[0]?.godName : "RecentPick1"} title={PlayerStats?.recentPicks[1]?.godName != null ? PlayerStats?.recentPicks[1]?.godName : "RecentPick1"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
                     <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[1])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[1]?.godIcon != null ? PlayerStats?.recentPicks[1]?.godIcon : "/images/empty_slot.png"} alt={PlayerStats?.recentPicks[1]?.godName != null ? PlayerStats?.recentPicks[1]?.godName : "RecentPick2"} title={PlayerStats?.recentPicks[1]?.godName != null ? PlayerStats?.recentPicks[1]?.godName : "RecentPick2"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
                     <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[2])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[2]?.godIcon != null ? PlayerStats?.recentPicks[2]?.godIcon : "/images/empty_slot.png"} alt={PlayerStats?.recentPicks[2]?.godName != null ? PlayerStats?.recentPicks[2]?.godName : "RecentPick3"} title={PlayerStats?.recentPicks[2]?.godName != null ? PlayerStats?.recentPicks[2]?.godName : "RecentPick3"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    </> : <>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"RecentPick1"} title={"RecentPick1"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"RecentPick2"} title={"RecentPick2"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"RecentPick3"} title={"RecentPick3"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger></>}
                     </Col>
                 </Row>
                 <Row>
-                    <Col  className="d-flex justify-content-center">                      
+                    <Col className="d-flex justify-content-center">
+                      {PlayerStats?.recentPicks != null ? <>                 
                     <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[3])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[3]?.godIcon != null ? PlayerStats?.recentPicks[3]?.godIcon : "/images/empty_slot.png"} alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
                     <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[4])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[4]?.godIcon != null ? PlayerStats?.recentPicks[4]?.godIcon : "/images/empty_slot.png"} alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
                     <OverlayTrigger placement="bottom" overlay={SimpleToolTip(PlayerStats?.recentPicks[5])}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={PlayerStats?.recentPicks[5]?.godIcon != null ? PlayerStats?.recentPicks[5]?.godIcon : "/images/empty_slot.png"} alt="" className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    </> :  <>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"RecentPick1"} title={"RecentPick1"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"RecentPick2"} title={"RecentPick2"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger>
+                    <OverlayTrigger placement="bottom" overlay={SimpleToolTip(null)}><div className="PlayerRecentPickImg position-relative mr-1"><Image layout="fill" src={"/images/empty_slot.png"} alt={"RecentPick3"} title={"RecentPick3"} className="PlayerRecentPickImg rounded" draggable={false}/></div></OverlayTrigger></>}
                     </Col>
                 </Row>
              </Col> 
@@ -290,11 +300,11 @@ const SimpleToolTip = (data) => {
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
-                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[0])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[0]?.god.godIcon != null ? PlayerStats?.bestPicks[0]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
-                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[1])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[1]?.god.godIcon != null ? PlayerStats?.bestPicks[1]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
-                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[2])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[2]?.god.godIcon != null ? PlayerStats?.bestPicks[2]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
-                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[3])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[3]?.god.godIcon != null ? PlayerStats?.bestPicks[3]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
-                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[4])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[4]?.god.godIcon != null ? PlayerStats?.bestPicks[4]?.god.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[0])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[0]?.god?.godIcon != null ? PlayerStats?.bestPicks[0]?.god?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[1])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[1]?.god?.godIcon != null ? PlayerStats?.bestPicks[1]?.god?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[2])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[2]?.god?.godIcon != null ? PlayerStats?.bestPicks[2]?.god?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[3])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[3]?.god?.godIcon != null ? PlayerStats?.bestPicks[3]?.god?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
+                      <OverlayTrigger placement="bottom" overlay={ToolTipForBestPicks(PlayerStats?.bestPicks[4])}><div className="GodImgStats position-relative mr-1"><Image layout="fill" src={PlayerStats?.bestPicks[4]?.god?.godIcon != null ? PlayerStats?.bestPicks[4]?.god?.godIcon : "/images/empty_slot.png"} alt="" className="rounded" draggable={false}/></div></OverlayTrigger>
                     </Col>
                 </Row>
                 <Row className="">
@@ -335,7 +345,9 @@ const SimpleToolTip = (data) => {
                 <Row className="">
                     <Col className="mb-2">
                     {/* Doughnut chart */}
+                    {PlayerStats?.totalDamageDealt > 0 ? <>
                         <Doughnut data={data} height={14} width={20} options={options}/>
+                        </> : <><Alert variant="warning" className="rounded"><h3 className="my-auto RecentTeamPlayerName text-center">not enough data</h3></Alert> </>}
                     </Col>
                 </Row>
                 </Col>

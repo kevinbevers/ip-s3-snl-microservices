@@ -22,6 +22,7 @@ namespace stat_microservice.Stat_DB
         public int? GodPlayedId { get; set; }
         public string PatchNumber { get; set; }
         public bool? WinStatus { get; set; }
+        public int? TotalKillsTeam { get; set; }
         public int? IgTaskforce { get; set; }
         public int? IgMatchLengthInSeconds { get; set; }
         public string IgGodName { get; set; }

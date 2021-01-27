@@ -37,12 +37,24 @@ namespace stat_microservice.Services
                     List<PlayerMatchesStats> playerMatchesStats = await GetStatsFromPlayerMatchesAsync(playerID);
                     List<GodStatistics> playerGodStats = await GetStatsPerGodByPlayerIdFromDbAsync(playerID, playerMatchesStats);
                     PlayerStatistics playerStats = await GetPlayerStatByPlayerIdFromDbAsync(playerID, playerMatchesStats);
-
-                    playerStats.Player = foundPlayer?.Player;
-                    playerStats.Team = foundPlayer?.Team;
-                    playerStats.BestPicks = GetTop5BestGodsAsync(playerGodStats);
-                    playerStats.MostPicked = GetTop5MostPickedGodsAsync(playerGodStats);
-                    playerStats.HighestDamageGods = GetTopHighestDamageGods(playerGodStats);
+                    if (playerStats != null)
+                    {
+                        playerStats.Player = foundPlayer?.Player;
+                        playerStats.Team = foundPlayer?.Team;
+                        playerStats.BestPicks = GetTop5BestGodsAsync(playerGodStats);
+                        playerStats.MostPicked = GetTop5MostPickedGodsAsync(playerGodStats);
+                        playerStats.HighestDamageGods = GetTopHighestDamageGods(playerGodStats);
+                    }
+                    else
+                    {
+                        playerStats = new PlayerStatistics {
+                            Player = foundPlayer?.Player,
+                            Team = foundPlayer?.Team,
+                            BestPicks = new List<GodStatistics> { new GodStatistics { }, new GodStatistics { }, new GodStatistics { }, new GodStatistics { }, new GodStatistics { } },
+                            TopBansAgainst = new List<God> { new God { }, new God { }, new God { }, new God { }, new God { } },
+                            MostPicked = new List<GodWithTimesPlayed> { new GodWithTimesPlayed { }, new GodWithTimesPlayed { }, new GodWithTimesPlayed { }, new GodWithTimesPlayed { }, new GodWithTimesPlayed { } }
+                        };
+                    }
 
                     return new ObjectResult(playerStats) { StatusCode = 200 }; //OK
                 }
@@ -70,8 +82,8 @@ namespace stat_microservice.Services
                 GodPlayedId = y.Where(z => z.PlayerId == playerID).Select(z => z.GodPlayedId).Min(),
                 TotalKillsPlayerTeam = y.Where(z => z.PlayerId == playerID).Select(s => s.IgTaskforce).Min() == 1 ? y.Where(z => z.IgTaskforce == 1).Select(z => z.IgKills).Sum() : y.Where(z => z.IgTaskforce == 2).Select(z => z.IgKills).Sum(),
                 BansEnemyTeam = y.Where(z => z.PlayerId == playerID).Select(s => s.IgTaskforce).Min() == 1 ?
-                new List<int?> { y.Select(z => z.IgBan1Id).Min(), y.Select(z => z.IgBan3Id).Min(), y.Select(z => z.IgBan5Id).Min(), y.Select(z => z.IgBan7Id).Min(), y.Select(z => z.IgBan9Id).Min() } :
-                new List<int?> { y.Select(z => z.IgBan2Id).Min(), y.Select(z => z.IgBan4Id).Min(), y.Select(z => z.IgBan6Id).Min(), y.Select(z => z.IgBan8Id).Min(), y.Select(z => z.IgBan10Id).Min() },
+                new List<int?> { y.Select(z => z.IgBan2Id).Min(), y.Select(z => z.IgBan4Id).Min(), y.Select(z => z.IgBan6Id).Min(), y.Select(z => z.IgBan8Id).Min(), y.Select(z => z.IgBan10Id).Min() } :
+                new List<int?> { y.Select(z => z.IgBan1Id).Min(), y.Select(z => z.IgBan3Id).Min(), y.Select(z => z.IgBan5Id).Min(), y.Select(z => z.IgBan7Id).Min(), y.Select(z => z.IgBan9Id).Min() },
             }).ToListAsync();
 
             return playerMatchesStats;
@@ -151,33 +163,40 @@ namespace stat_microservice.Services
                 TotalDistanceTravelled = (int)z.Select(s => s.IgDistanceTraveled).Sum(),
                 TotalKills = (int)z.Select(s => s.IgKills).Sum(),
                 TotalHealing = (int)z.Select(s => s.IgHealing).Sum(),
+                TotalGoldEarned = (int)z.Select(s => s.IgGoldEarned).Sum(),
             }).FirstOrDefaultAsync();
 
-            //Get the last 6 played gods
-            PlayerStats.RecentPicks = await _db.TableStats.Join(_db.TableGodDetails, stat => stat.GodPlayedId, god => god.GodId, (stat, god) => new
+            if (PlayerStats != null)
             {
-                GodName = god.GodName,
-                GodId = god.GodId,
-                GodIconUrl = god.GodIconUrl,
-                Stats = stat
-            }).Where(x => x.Stats.PlayerId == playerID).GroupBy(y => y.GodId, (y, z) => new
-            {
-                God = new God { GodId = y, GodName = z.Select(g => g.GodName).Min(), GodIcon = z.Select(g => g.GodIconUrl).Min() },
-                LastDatePlayed = z.Select(s => s.Stats.MatchPlayedDate).Max()
-            }).OrderByDescending(x => x.LastDatePlayed).Select(x => x.God).Take(6).ToListAsync();
-
-            //Most banned against.
-            List<int?> bannedGods = new List<int?>();
-            //add all banned gods to 1 list
-            playerMatchesStats.ForEach(x => bannedGods.AddRange(x.BansEnemyTeam));
-            var top5BannedGods = bannedGods.GroupBy(r => r)
-                .Select(grp => new
+                //Get the last 6 played gods
+                PlayerStats.RecentPicks = await _db.TableStats.Join(_db.TableGodDetails, stat => stat.GodPlayedId, god => god.GodId, (stat, god) => new
                 {
-                    Value = grp.Key,
-                    Count = grp.Count()
-                }).OrderByDescending(x => x.Count).Take(5);
-            var godsFromDb = await _db.TableGodDetails.Where(x => top5BannedGods.Select(y => y.Value).ToList().Contains(x.GodId)).ToListAsync();
-            PlayerStats.TopBansAgainst = godsFromDb.Join(top5BannedGods, godtable => godtable.GodId, top5 => top5.Value, (godtable, top5) => new { God = new God { GodId = godtable.GodId, GodName = godtable.GodName, GodIcon = godtable.GodIconUrl }, BanCount = top5.Count }).OrderByDescending(x => x.BanCount).Select(x => x.God).ToList();
+                    GodName = god.GodName,
+                    GodId = god.GodId,
+                    GodIconUrl = god.GodIconUrl,
+                    Stats = stat
+                }).Where(x => x.Stats.PlayerId == playerID).GroupBy(y => y.GodId, (y, z) => new
+                {
+                    God = new God { GodId = y, GodName = z.Select(g => g.GodName).Min(), GodIcon = z.Select(g => g.GodIconUrl).Min() },
+                    LastDatePlayed = z.Select(s => s.Stats.MatchPlayedDate).Max()
+                }).OrderByDescending(x => x.LastDatePlayed).Select(x => x.God).Take(6).ToListAsync();
+
+                //Most banned against. modify this to contain only gods that are played atleast 7% in their role
+                List<int?> bannedGods = new List<int?>();
+                //add all banned gods to 1 list
+                playerMatchesStats.ForEach(x => bannedGods.AddRange(x.BansEnemyTeam));
+                var top5BannedGods = bannedGods.GroupBy(r => r)
+                    .Select(grp => new
+                    {
+                        Value = grp.Key,
+                        Count = grp.Count()
+                    }).OrderByDescending(x => x.Count).Take(5);
+                var godsFromDb = await _db.TableGodDetails.Where(x => top5BannedGods.Select(y => y.Value).ToList().Contains(x.GodId)).ToListAsync();
+                if (godsFromDb?.Count() > 0)
+                {
+                    PlayerStats.TopBansAgainst = godsFromDb.Join(top5BannedGods, godtable => godtable.GodId, top5 => top5.Value, (godtable, top5) => new { God = new God { GodId = godtable.GodId, GodName = godtable.GodName, GodIcon = godtable.GodIconUrl }, BanCount = top5.Count }).OrderByDescending(x => x.BanCount).Select(x => x.God).ToList();
+                }
+            }
 
             return PlayerStats;
         }

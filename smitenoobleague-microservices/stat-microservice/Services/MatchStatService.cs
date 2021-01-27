@@ -137,7 +137,7 @@ namespace stat_microservice.Services
                             int mvpScore = 0;
                             mvpScore += (int)(((double)player.IgHealing) * 0.008);
                             mvpScore += (int)(((double)player.IgDamageMitigated) * 0.006);
-                            mvpScore += (int)(((double)player.IgDamageMitigated) * 0.005);
+                            mvpScore += (int)(((double)player.IgDamageDealt) * 0.005);
                             mvpScore += (int)player.IgKills * 20;
                             mvpScore += (int)player.IgAssists * 15;
                             mvpScore += (int)player.IgWardsPlaced * 9;
@@ -147,7 +147,7 @@ namespace stat_microservice.Services
                             //if the player died divide score by number of deaths
                             if (player.IgDeaths > 0)
                             {
-                                mvpScore += mvpScore / (int)player.IgDeaths;
+                                mvpScore /= (int)player.IgDeaths;
                             }
                             //kill participation calculation = (kills + assists) / total kills * 100
                             //the sum returns the total amount of kills in this match
@@ -155,7 +155,7 @@ namespace stat_microservice.Services
                             double totalKills = (int)matchStats.Select(m => m.IgKills).Sum();
                             double playerParticipation = (int)player.IgKills + (int)player.IgAssists;
                             int killParticipationPercentage = Convert.ToInt32(playerParticipation / totalKills * 100);
-                            mvpScore += mvpScore * (int)killParticipationPercentage;
+                            mvpScore *= (int)killParticipationPercentage;
                             mvpScores.Add(new MvpPlayer { PlayerID = (int)player.PlayerId, MvpScore = mvpScore });
 
                             //add all items to the list
@@ -583,7 +583,8 @@ namespace stat_microservice.Services
                     IgBan7Id = match.BannedGods[6].GodId,
                     IgBan8Id = match.BannedGods[7].GodId,
                     IgBan9Id = match.BannedGods[8].GodId,
-                    IgBan10Id = match.BannedGods[9].GodId,  
+                    IgBan10Id = match.BannedGods[9].GodId,
+                    TotalKillsTeam = p.Won ? match.Winners.Select(x => x.Kills).Sum() : match.Losers.Select(x => x.Kills).Sum() //save total kills
                 };
 
                 convertedStats.Add(stat);
