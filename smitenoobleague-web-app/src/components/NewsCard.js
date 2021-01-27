@@ -7,7 +7,7 @@ export default function NewsCard(props){
 
     return (
     <Col className="mb-4">
-    <Card className="h-100">
+    <Card className="h-100 Clickable">
       <Card.Img variant="top" src="http://via.placeholder.com/300x150"  className="newsimg" draggable={false}/>
       <Card.Body>
             <Card.Title>{props.title}</Card.Title>

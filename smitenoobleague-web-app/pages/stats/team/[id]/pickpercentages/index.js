@@ -71,7 +71,7 @@ export default function PickPercentages({ LoginSession, TeamPicks, status, errMs
               <Row className="mb-4">
                 <Col md={4} xs={4}></Col>
                 <Col md={8} xs={8}>
-                  <Link href={`/stats/team/${TeamPicks?.team?.teamID}`}><Button className="w-100"><div className="d-flex text-center justify-content-center"><FaReply className="mr-2 my-auto" /><h5 className="my-auto BackButtonText">Back to player stats</h5></div></Button></Link>
+                  <Link href={`/stats/team/${TeamPicks?.team?.teamID}`}><Button className="w-100"><div className="d-flex text-center justify-content-center"><FaReply className="mr-2 my-auto" /><h5 className="my-auto BackButtonText">Back to team stats</h5></div></Button></Link>
                 </Col>
               </Row>
               <Row>
