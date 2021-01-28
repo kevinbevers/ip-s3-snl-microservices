@@ -30,6 +30,7 @@
     "react-dom": "^16.14.0",
     "react-icons": "^3.11.0",
     "react-sortablejs": "^6.0.0",
+    "react-vertical-timeline-component": "^3.3.3",
     "resolve-url-loader": "^3.1.2",
     "sortablejs": "1.12.0"
   },
