@@ -1,39 +1,42 @@
 //default react imports
 import React, { useState } from "react";
+import Link from "next/link";
+import DefaultErrorPage from "next/error";
 //default page stuff
 import NavBar from "../src/components/NavBar";
 import Footer from "../src/components/Footer";
 //boostrap components
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
+import {Container, Row, Col, Alert} from "react-bootstrap";
 //custom imports
 import LeaderBoardStatCard from "src/components/LeaderboardStatCard";
 //chart
 import {Pie, Bar} from "react-chartjs-2";
 //Auth
 import helpers from "utils/helpers";
+//services
+import leaderboardservice from "services/leaderboardservice";
 
 
-export default function leaderboards({LoginSession}) {
+export default function leaderboards({LoginSession, Data, status, errMsg }) {
 
-  const [Top10Array, setTop10Array] = useState([
-    {standing: 1,player: "playername", statvalue: "9999999999"},
-    {standing: 2,player: "playername", statvalue: "9999999999"},
-    {standing: 3,player: "playername", statvalue: "9999999999"},
-    {standing: 4,player: "playername", statvalue: "9999999999"},
-    {standing: 5,player: "playername", statvalue: "9999999999"},
-    {standing: 6,player: "playername", statvalue: "9999999999"},
-    {standing: 7,player: "playername", statvalue: "9999999999"},
-    {standing: 8,player: "playername", statvalue: "9999999999"},
-    {standing: 9,player: "playername", statvalue: "9999999999"},
-    {standing: 10,player: "playername", statvalue: "9999999999"},
-  ]); //Init top10array value
+  let TopDamageLabels = [];
+  let TopDamageData = [];
+
+  Data?.top4DamageAndRemainingInPercentage?.forEach(x => {
+    TopDamageLabels.push(x?.player?.playername);
+    TopDamageData.push(x?.score)
+  });
+
+  let Top5KdaLabels = [];
+  let Top5KdaData = [];
+
+  Data?.top5KdaPlayers?.forEach(x => {
+    Top5KdaLabels.push(x?.player?.playername);
+    Top5KdaData.push(x?.score);
+  });
 
   const BarData = {
-    labels: ["Playername", "Playername", "Playername", "Playername", "Playername", "Playername", "Playername"],
+    labels: Top5KdaLabels,
     datasets: [
       {
         label: "Player KDA",
@@ -42,7 +45,7 @@ export default function leaderboards({LoginSession}) {
         borderWidth: 1,
         hoverBackgroundColor: "#EB2602",
         hoverBorderColor: "#EB2602",
-        data: [3.5, 4.5, 9.1, 2.7, 6.3, 4, 1.9]
+        data: Top5KdaData
       }
     ]
   };
@@ -62,15 +65,9 @@ export default function leaderboards({LoginSession}) {
 };
 
   const data = {
-    labels: [
-        "Playername",
-        "Playername",
-        "Playername",
-        "Playername",
-        "Playername"
-    ],
+    labels: TopDamageLabels,
     datasets: [{
-        data: [20,20, 20, 10, 40],
+        data: TopDamageData,
         backgroundColor: [
             "#6925E8",
             "#27DBF2",
@@ -121,36 +118,47 @@ const options = {
         }
       }
   };
-
-  // question#1 should all the data be pulled on page load and drippled down to the components or should each component make it"s own call.
+  if (status != null && status != 404) {
+    return (<><DefaultErrorPage statusCode={status} title={errMsg} data-testid="playerpageErrorPage" /></>);
+  }
+  else {
   return (
     <>
       <NavBar LoginSession={LoginSession}/>
-      <Container fluid className="mt-4">
+      <Container fluid className="mt-2">
+        {status == 404 ? <><Row className="mt-5">
+                <Col md={3}></Col>
+                <Col md={6} className="d-inline-flex justify-content-center">
+                <Alert variant="warning" className="rounded">
+                  <h3 className="ml-2 mr-2 mb-0 align-self-center font-weight-bold">Not enough data available for leaderboards</h3>
+                </Alert> 
+                </Col>
+                <Col md={3}></Col>
+              </Row> </> : <>
         <Row>
           <Col md={9}>
             <Row>
               <Col md={3}>
-                <LeaderBoardStatCard title={"Kill"} val={Top10Array}/>
+                <LeaderBoardStatCard Title={"Kills"} Stat={Data?.kills}/>
               </Col>
 
               <Col md={3}>
-                <LeaderBoardStatCard title={"Assists"} val={Top10Array}/>
+                <LeaderBoardStatCard Title={"Assists"} Stat={Data?.assists}/>
               </Col>
 
               <Col md={3}>
-                <LeaderBoardStatCard title={"Damage dealt"} val={Top10Array}/>
+                <LeaderBoardStatCard Title={"Damage dealt"} Stat={Data?.damageDealt}/>
               </Col>
 
               <Col md={3}>
-              <LeaderBoardStatCard title={"Damage Mitigated"} val={Top10Array}/>
+              <LeaderBoardStatCard Title={"Damage Mitigated"} Stat={Data?.damageMitigated}/>
               </Col>
             </Row>
           </Col>
           <Col md={3}>
             {/* Pie chart of total damage dealt */}
             <Row>
-              <Col md={12} className="text-center"><h3>Pie chart of damage</h3></Col>
+              <Col md={12} className="text-center"><h3>Top 4 Damage dealers, compared to the rest</h3></Col>
             </Row>
            <Row className="mb-2">
              <Col>
@@ -166,45 +174,65 @@ const options = {
           <Col md={9}>
             <Row>
               <Col md={3}>
-              <LeaderBoardStatCard title={"Kill participation"} val={Top10Array}/>
+                <LeaderBoardStatCard Title={"Kill participation"} Stat={Data?.killParticipation} Percentage={"%"}/>
               </Col>
 
               <Col md={3}>
-              <LeaderBoardStatCard title={"Deaths"} val={Top10Array}/>
+               <LeaderBoardStatCard Title={"Deaths"} Stat={Data?.deaths}/>
               </Col>
 
               <Col md={3}>
-              <LeaderBoardStatCard title={"Damage taken"} val={Top10Array}/>
+              <LeaderBoardStatCard Title={"Damage taken"} Stat={Data?.damageTaken}/>
               </Col>
 
               <Col md={3}>
-              <LeaderBoardStatCard title={"Healing"} val={Top10Array}/>
+                <LeaderBoardStatCard Title={"Healing"} Stat={Data?.healing}/>
               </Col>
             </Row>
           </Col>
           <Col md={3}>
             {/* Line Chart of stats */}
             <Row>
-              <Col md={12} className="text-center"><h3>Chart of stats</h3></Col>
+              <Col md={12} className="text-center"><h3>Top 5 Highest KDA players</h3></Col>
             </Row>
             <Row className="mb-2">
               <Col><Bar data={BarData} height={230} options={BarOptions} /></Col>
             </Row>
           </Col>
-        </Row>
+        </Row> </>}
       </Container>
       <Footer />
     </>
   );
+  }
 }
 
 export async function getServerSideProps(context) {
-  
+
   const loginSessionData = await helpers.GetLoginSession(context.req);
 
+  //object to fill
+  let response = { data: null, statusCode: null, errMsg: null };
+  //call api for the data
+  await leaderboardservice.GetLeaderboardData()
+    .then(res => { response.data = res.data })
+    .catch(err => {
+      if (err.response == null) {
+        response.statusCode = 503;
+        response.errMsg = "SNL API unavailable";
+      }
+      else {
+        response.statusCode = JSON.stringify(err?.response?.status);
+        response.errMsg = err?.response?.data;
+      }
+    });
+
   return {
-      props: {
-          LoginSession: loginSessionData
-      },
+    props: {
+      LoginSession: loginSessionData,
+      Data: response.data,
+      status: response.statusCode,
+      errMsg: response.errMsg,
+    },
   };
 }

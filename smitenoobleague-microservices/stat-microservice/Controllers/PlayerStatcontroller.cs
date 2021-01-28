@@ -14,16 +14,25 @@ namespace stat_microservice.Controllers
     public class PlayerStatController : Controller
     {
         private readonly IPlayerStatService _playerStatService;
+        private readonly IPickPercentageService _pickPercentageService;
 
-        public PlayerStatController(IPlayerStatService playerStatService)
+        public PlayerStatController(IPlayerStatService playerStatService, IPickPercentageService pickPercentageService)
         {
             _playerStatService = playerStatService;
+            _pickPercentageService = pickPercentageService;
         }
-        // GET: stat-service/playerstat/byid
+        // GET: stat-service/playerstat/byplayerid
         [HttpGet("byplayerid/{playerID}")]
         public async Task<ActionResult<PlayerStatistics>> Get(int? playerID)
         {
             return await _playerStatService.GetPlayerStatsByPlayerIdAsync(playerID);
+        }
+
+        // GET: stat-service/playerstat/pickpercentagesbyplayerid
+        [HttpGet("pickpercentagesbyplayerid/{playerID}")]
+        public async Task<ActionResult<PlayerPickPercentages>> GetPlayerPickPercentages(int? playerID)
+        {
+            return await _pickPercentageService.GetPickPercentagesForPlayerByPlayerId(playerID);
         }
     }
 }

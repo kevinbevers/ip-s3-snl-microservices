@@ -25,6 +25,11 @@ const GetListOfTeamsByDivisionID = async(divisionID) => {
     return apiClient.get("stat-service/teamstat/byteamid/" + teamID);
   };
 
+  const GetTeamPickPercentagesByTeamID = async(teamID) => {
+    const apiClient = await helpers.BuildApiClient(null);
+    return apiClient.get("stat-service/teamstat/pickpercentagesbyteamid/" + teamID);
+  };
+
   
 
 export default {
@@ -32,5 +37,6 @@ export default {
     GetListOfTeamsWithDetailsByDivisionID,
     GetListOfTeamsWithoutDivisions,
     GetListOfTeamsWithDetailsWithoutDivisions,
-    GetTeamStatisticsByTeamID
+    GetTeamStatisticsByTeamID,
+    GetTeamPickPercentagesByTeamID
 }

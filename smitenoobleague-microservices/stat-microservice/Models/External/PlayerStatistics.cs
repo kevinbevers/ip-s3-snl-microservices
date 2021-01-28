@@ -8,6 +8,7 @@ namespace stat_microservice.Models.External
     {
         public TeamMember Player { get; set; }
         public Team Team { get; set; }
+        public int? PlayerId { get; set; }
 
         //Game stats
         public int GamesPlayed { get; set; }
@@ -19,11 +20,13 @@ namespace stat_microservice.Models.External
         public int AverageAssists { get; set; }
         public int AverageDamageDealt { get; set; }
         public int AverageDamageTaken { get; set; }
+        public int AverageDamageMitigated { get; set; }
         public int AverageKillParticipation { get; set; }
         //God stats
         public List<God> RecentPicks { get; set; }
-        public List<God> BestPicks { get; set; }
-        public List<God> MostPicked { get; set; }
+        public List<GodStatistics> BestPicks { get; set; }
+        public List<GodWithTimesPlayed> MostPicked { get; set; }
+        public List<GodWithDamage> HighestDamageGods { get; set; }
         public List<God> TopBansAgainst { get; set; }
         //General Stats
         public int TotalKills { get; set; }
@@ -36,5 +39,6 @@ namespace stat_microservice.Models.External
         public int TotalDistanceTravelled { get; set; }
         public int TotalWardsPlaced { get; set; }
         public int TotalStructureDamage { get; set; }
+        public int TotalGoldEarned { get; set; }
     }
 }
