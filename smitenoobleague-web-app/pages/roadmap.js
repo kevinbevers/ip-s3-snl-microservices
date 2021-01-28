@@ -26,10 +26,9 @@ export default function roadmap({LoginSession}) {
     <>
       <FullBackground src={"roadmap_bg"} />
       <NavBar LoginSession={LoginSession}/>
-      <Container fluid>
-        
-<VerticalTimeline>
-<Img alt={"SNL Roadmap"} height={300} webp src={require("public/images/SNL_Roadmap.png")} className="ml-5" draggable={false}></Img>
+      <Container fluid>       
+<VerticalTimeline animate={false}>
+<Row><Col className="mx-auto" xs={8}><Img alt={"SNL Roadmap"} height={300} webp src={require("public/images/SNL_Roadmap.png")} className="" draggable={false}></Img></Col></Row>
   <VerticalTimelineElement
     className="mt-0"
     contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
@@ -56,7 +55,8 @@ export default function roadmap({LoginSession}) {
     </p>
   </VerticalTimelineElement>
   <VerticalTimelineElement
-    className="vertical-timeline-element--work"
+    contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+    contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
     iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
      icon={<MdShowChart />}
   >
