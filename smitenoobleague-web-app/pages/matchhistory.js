@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
 //bootstrap implements
-import { Container, Button, Col, Row, Card } from "react-bootstrap";
+import { Container, Button, Col, Row, Card, Alert } from "react-bootstrap";
 //custom implements
 import MatchHistoryCard from "src/components/MatchHistoryCard";
 //Auth
@@ -43,7 +43,9 @@ export default function matchhistory({LoginSession, MatchHistory}) {
               <Row className="mt-5">
                 <Col md={3}></Col>
                 <Col md={6} className="d-inline-flex justify-content-center">
+                <Alert variant="warning" className="rounded">
                   <h3 className="ml-2 mr-2 mb-0 align-self-center font-weight-bold">No matches found / played yet.</h3>
+                  </Alert>
                 </Col>
                 <Col md={3}></Col>
               </Row> 

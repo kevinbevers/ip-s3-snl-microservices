@@ -29,7 +29,7 @@ export default function roadmap({LoginSession}) {
       <Container fluid>
         
 <VerticalTimeline>
-<Img alt={"SNL Roadmap"} height={400} webp src={require("public/images/SNL_Roadmap.png")} className="" draggable={false}></Img>
+<Img alt={"SNL Roadmap"} height={300} webp src={require("public/images/SNL_Roadmap.png")} className="ml-5" draggable={false}></Img>
   <VerticalTimelineElement
     className="mt-0"
     contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
