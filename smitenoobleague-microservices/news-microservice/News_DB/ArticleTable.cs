@@ -7,7 +7,7 @@ namespace news_microservice.News_DB
 {
     public partial class ArticleTable
     {
-        public int ArticleId { get; set; }
+        public string ArticleSlug { get; set; }
         public string ArticleTitle { get; set; }
         public string ArticleDescription { get; set; }
         public string ArticleContent { get; set; }

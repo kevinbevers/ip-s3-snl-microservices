@@ -10,7 +10,7 @@ namespace news_microservice.Interfaces
     {
         Task<ActionResult<List<Article>>> GetNewsOverviewAsync();
         Task<ActionResult<ArticleWithContent>> GetNewsArticleBySlugAsync(string slug);
-        Task<ActionResult<ArticleWithContent>> CreateNewsArticleAsync(ArticleWithContent article);
+        Task<ActionResult<ArticleWithContent>> CreateNewsArticleAsync(ArticleWithContent arti);
         Task<ActionResult<ArticleWithContent>> EditNewsArticleAsync(ArticleWithContent article);
         Task<ActionResult> DeleteNewsArticleAsync(string slug);
     }

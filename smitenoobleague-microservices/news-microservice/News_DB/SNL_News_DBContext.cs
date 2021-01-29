@@ -23,14 +23,15 @@ namespace news_microservice.News_DB
         {
             modelBuilder.Entity<ArticleTable>(entity =>
             {
-                entity.HasKey(e => e.ArticleId)
+                entity.HasKey(e => e.ArticleSlug)
                     .HasName("PRIMARY");
 
                 entity.ToTable("ArticleTable");
 
-                entity.Property(e => e.ArticleId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ArticleID");
+                entity.Property(e => e.ArticleSlug)
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_unicode_ci");
 
                 entity.Property(e => e.ArticleContent)
                     .HasColumnType("varchar(1000)")
