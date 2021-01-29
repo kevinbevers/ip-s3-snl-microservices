@@ -46,7 +46,7 @@ namespace news_microservice
                 dbContextOptions => dbContextOptions
                     .UseMySql(
                         // Replace with your connection string.
-                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_Division_DB",
+                        $"server=db;port=3306;user=root;password={dbpass};database=SNL_News_DB",
                         // Replace with your server version and type.
                         // For common usages, see pull request #1233.
                         new MySqlServerVersion(new Version(8, 0, 22)),
@@ -77,7 +77,7 @@ namespace news_microservice
             //add swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Division microservice API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "News microservice API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -129,7 +129,7 @@ namespace news_microservice
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Division microservice API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "News microservice API V1");
             });
         }
     }
