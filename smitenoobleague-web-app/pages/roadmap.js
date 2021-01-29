@@ -64,7 +64,7 @@ export default function roadmap({LoginSession}) {
     <h3 className="vertical-timeline-element-title">Dark mode</h3>
     <h6 className="vertical-timeline-element-subtitle">Coming Q2 2021</h6>
     <p>
-      Easily see which teams are competing in each division.
+      For those who like it.
     </p>
   </VerticalTimelineElement>
   <VerticalTimelineElement
