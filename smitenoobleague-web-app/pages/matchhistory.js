@@ -26,7 +26,7 @@ export default function matchhistory({LoginSession, MatchHistory}) {
         setMatchHistoryState(MatchHistoryState.concat(res.data)); 
         setIndex(index + 1); 
         setMatchesRemaining(res.data?.length > 9)
-      }).catch(err => {});
+      }).catch(err => {setMatchesRemaining(false);});
     }
   };
 
@@ -51,10 +51,8 @@ export default function matchhistory({LoginSession, MatchHistory}) {
               </Row> 
             </>}
         {matchesRemaining ?        
-          <Card className="text-center mb-2" onClick={loadMoreMatches}>
-          <a href="#" className="link-unstyled">
+          <Card className="text-center mb-2 link-unstyled Clickable" onClick={loadMoreMatches}>
             <Card.Header><h4 className="m-0">Load more matches...</h4></Card.Header>
-            </a>
             </Card> : <></>}
 
       </Container>

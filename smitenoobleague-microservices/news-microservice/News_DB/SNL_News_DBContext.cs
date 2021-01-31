@@ -38,12 +38,24 @@ namespace news_microservice.News_DB
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_unicode_ci");
 
+                entity.Property(e => e.ArticleDatePosted).HasColumnType("datetime");
+
                 entity.Property(e => e.ArticleDescription)
                     .HasColumnType("varchar(300)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_unicode_ci");
 
+                entity.Property(e => e.ArticleImagePath)
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_unicode_ci");
+
                 entity.Property(e => e.ArticleTitle)
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_unicode_ci");
+
+                entity.Property(e => e.ArticleType)
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_unicode_ci");

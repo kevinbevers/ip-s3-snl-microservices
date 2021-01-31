@@ -30,6 +30,8 @@ services:
         - Auth0Audience=${Auth0Audience}
     depends_on:
       - db
+    volumes:
+      - ./news-microservice/images:/app/images
 
   smiteapi-microservice:
     image: ${DOCKER_REGISTRY-}smiteapimicroservice

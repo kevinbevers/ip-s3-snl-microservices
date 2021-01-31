@@ -2,45 +2,62 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using news_microservice.Interfaces;
+using news_microservice.Models.External;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace news_microservice.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ArticleController : Controller
     {
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IArticleService _articleService;
+
+        public ArticleController(IArticleService articleService)
         {
-            return new string[] { "value1", "value2" };
+            _articleService = articleService;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+
+        // GET: news-service/article
+        [HttpGet("all/{pageSize}/{index}")]
+        public async Task<ActionResult<IEnumerable<Article>>> GetAllArticless(int pageSize = 8, int index = 0)
         {
-            return "value";
+            return await _articleService.GetNewsOverviewAsync(pageSize, index);
         }
 
-        // POST api/values
+        // GET news-service/article/{slug}
+        [HttpGet("{slug}")]
+        public async Task<ActionResult<ArticleWithContent>> GetArticle(string slug)
+        {
+            return await _articleService.GetNewsArticleBySlugAsync(slug);
+        }
+
+        // POST  news-service/article
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> CreateArticle([FromBody] ArticleWithContent article)
         {
+          return ModelState.IsValid ? await _articleService.CreateNewsArticleAsync(article) : BadRequest(ModelState);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // PUT  news-service/article
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ArticleWithContent>> UpdateArticle([FromBody] ArticleWithContent article)
         {
+            return ModelState.IsValid ? await _articleService.EditNewsArticleAsync(article) : BadRequest(ModelState);
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE  news-service/article/{slug}
+        [HttpDelete("{slug}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> DeleteArticle(string slug)
         {
+            return await _articleService.DeleteNewsArticleAsync(slug);
         }
     }
 }

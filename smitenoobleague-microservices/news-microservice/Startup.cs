@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using news_microservice.Interfaces;
+using news_microservice.Services;
 //database
 using news_microservice.News_DB;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace news_microservice
 {
@@ -53,7 +56,7 @@ namespace news_microservice
                         mySqlOptions => mySqlOptions
                             .CharSetBehavior(CharSetBehavior.NeverAppend)));
 
-            //services.AddScoped<INewsService, NewsService>();
+            services.AddScoped<IArticleService, ArticleService>();
 
             //Auth
             string domain = Environment.GetEnvironmentVariable("Auth0Domain");
@@ -113,6 +116,13 @@ namespace news_microservice
             }
 
             //app.UseHttpsRedirection();
+
+            //serve saved images.
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "images")),
+                RequestPath = "/images"
+            });
 
             app.UseRouting();
 

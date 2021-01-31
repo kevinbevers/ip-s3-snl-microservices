@@ -13,6 +13,7 @@
     <Folder Include="Services\" />
     <Folder Include="Models\External\" />
     <Folder Include="Models\Internal\" />
+    <Folder Include="images\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />

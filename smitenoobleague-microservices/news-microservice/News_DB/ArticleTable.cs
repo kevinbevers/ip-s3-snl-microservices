@@ -11,5 +11,8 @@ namespace news_microservice.News_DB
         public string ArticleTitle { get; set; }
         public string ArticleDescription { get; set; }
         public string ArticleContent { get; set; }
+        public DateTime? ArticleDatePosted { get; set; }
+        public string ArticleType { get; set; }
+        public string ArticleImagePath { get; set; }
     }
 }
