@@ -291,3 +291,4 @@ smitenoobleague-microservices/smitenoobleague_xyz.key
 smitenoobleague-microservices/certs/smitenoobleague_xyz.csr
 smitenoobleague-microservices/certs/smitenoobleague_xyz.key
 smitenoobleague-microservices/smiteapi-microservice/Config/hirezapi.json
+smitenoobleague-microservices/team-microservice/images/*.png
