@@ -24,7 +24,7 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
     useEffect(() => {
         setTeamName(apiResponse != null ? apiResponse?.teamName : "Api Unavailable");
         setOldName(apiResponse != null ? apiResponse?.teamName : "Api Unavailable");
-        setOldImage(apiResponse != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + apiResponse?.teamLogoPath : null);
+        setOldImage(apiResponse?.teamLogoPath != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + apiResponse?.teamLogoPath : null);
     }, []);
     //Buttons
     const editTeamName = () => {
@@ -62,7 +62,7 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
     //#endregion
 
     //#region EditTeamImage
-    const [imagePath, setImagePath] = useState(process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + apiResponse?.teamLogoPath);
+    const [imagePath, setImagePath] = useState(apiResponse?.teamLogoPath != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + apiResponse?.teamLogoPath : null);
     const [imageFile, setImageFile] = useState(null);
     const fileUploader = useRef();
     const [editImage, setEditImage] = useState(false);
@@ -85,7 +85,6 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
                 setImageFile(imgFile);
             };
             reader.readAsDataURL(imgFile);
-            console.log(imageFile);
         }
     };
 
@@ -167,7 +166,7 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
                         <Row>
                             <Col md={3} xs={3} className="my-auto p-0"><h5 className="font-weight-bold mb-0 TeamInfoTitle">Logo:</h5></Col>
                             <Col md={7} xs={7} className="my-auto p-0">
-                                {apiResponse?.teamLogoPath != null ? <div className="MainTeamImage position-relative"><Image layout={"fill"} alt={apiResponse?.teamName} src={imagePath} draggable={false}></Image></div> :
+                                {imagePath != null ? <div className="MainTeamImage position-relative"><Image layout={"fill"} alt={apiResponse?.teamName} src={imagePath} draggable={false}></Image></div> :
                                     <Img alt={apiResponse?.teamName} src={require("public/images/teamBadge.png")} className="MainTeamImage" draggable={false}></Img>
                                 }
                             </Col>
