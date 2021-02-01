@@ -21,7 +21,7 @@ namespace team_microservice.Interfaces
         Task<ActionResult<IEnumerable<Team>>> GetBasicTeamInfoBatchWithListOfIdsAsync(List<int> teamIDs);
         Task<ActionResult<Team>> GetBasicTeamInfoByTeamIdAsync(int teamID);
         Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByTeamIdAsync(int teamID);
-        Task<ActionResult> UpdateTeamAsCaptainSync(TeamSubmission teamSubmisssion);
+        Task<ActionResult<Team>> UpdateTeamAsCaptainSync(TeamSubmission teamSubmisssion);
         Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByCaptainAccountIdAsync(string captainID);
         //used for match stats saving
         Task<ActionResult<TeamWithDetails>> GetTeamByMatchPlayersAsync(List<int> playersInMatch);

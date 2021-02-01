@@ -47,8 +47,8 @@ return (
         <Accordion.Collapse eventKey="1">
             <Card.Body>
             <p className="m-0">If you would like to disband your team you should <b>contact the league admin</b>. 
-            Together with the admin you can look if the rest of the team also wants to disband and if the captain role could be taken over. 
-            If this is not an option the admin will delete the team. When the team gets deleted the data will be kept but not displayed on the site anymore</p>
+            Together with the admin you can look if the rest of the team also wants to disband, or if a team member wants to take over the captain role. 
+            If replacing the captain is not an option the admin will delete the team. When the team gets deleted the data will be kept but not displayed on the site anymore</p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>

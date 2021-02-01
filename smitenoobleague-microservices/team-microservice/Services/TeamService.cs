@@ -9,6 +9,8 @@ using team_microservice.Models.External;
 using team_microservice.Team_DB;
 using Microsoft.EntityFrameworkCore;
 using team_microservice.Models.Internal;
+using team_microservice.Classes;
+using Microsoft.AspNetCore.Hosting;
 
 namespace team_microservice.Services
 {
@@ -18,13 +20,15 @@ namespace team_microservice.Services
         private readonly ILogger<TeamService> _logger;
         private readonly IValidationService _validationService;
         private readonly IExternalServices _externalServices;
+        private readonly IWebHostEnvironment _env;
 
-        public TeamService(SNL_Team_DBContext db, ILogger<TeamService> logger, IValidationService validationService, IExternalServices externalServices)
+        public TeamService(SNL_Team_DBContext db, ILogger<TeamService> logger, IValidationService validationService, IExternalServices externalServices, IWebHostEnvironment env)
         {
             _db = db;
             _logger = logger;
             _validationService = validationService;
             _externalServices = externalServices;
+            _env = env;
         }
 
         public async Task<ActionResult<Team>> AddTeamAsync(TeamSubmissionAdmin teamSubmisssion)
@@ -81,6 +85,14 @@ namespace team_microservice.Services
                                         _db.TableTeams.Add(addTeam);
                                         await _db.SaveChangesAsync();
 
+                                        //Add logo
+                                        if (teamSubmisssion?.TeamLogo != null)
+                                        {
+                                            addTeam.TeamLogoPath = teamSubmisssion?.TeamLogo != null ? await ImageProcessing.SaveImageAsync(teamSubmisssion?.TeamLogo, "team" + addTeam.TeamId, _env) : null;
+                                            _db.TableTeams.Update(addTeam);
+                                            await _db.SaveChangesAsync();
+                                        }
+
                                         //update captain teamID with the generated ID
                                         addCaptain.TeamMemberTeamId = addTeam.TeamId;
                                         _db.TableTeamMembers.Update(addCaptain);
@@ -99,6 +111,14 @@ namespace team_microservice.Services
 
                                         _db.TableTeams.Add(addTeam);
                                         await _db.SaveChangesAsync();
+
+                                        //Add logo
+                                        if (teamSubmisssion?.TeamLogo != null)
+                                        {
+                                            addTeam.TeamLogoPath = teamSubmisssion?.TeamLogo != null ? await ImageProcessing.SaveImageAsync(teamSubmisssion?.TeamLogo, "team" + addTeam.TeamId, _env) : null;
+                                            _db.TableTeams.Update(addTeam);
+                                            await _db.SaveChangesAsync();
+                                        }
 
                                         return new ObjectResult("Team added succesfully, without captain.") { StatusCode = 201 };
                                     }
@@ -148,6 +168,14 @@ namespace team_microservice.Services
                         _db.TableTeams.Add(addTeam);
                         await _db.SaveChangesAsync();
 
+                        //Add logo
+                        if (teamSubmisssion?.TeamLogo != null)
+                        {
+                            addTeam.TeamLogoPath = teamSubmisssion?.TeamLogo != null ? await ImageProcessing.SaveImageAsync(teamSubmisssion?.TeamLogo, "team" + addTeam.TeamId, _env) : null;
+                            _db.TableTeams.Update(addTeam);
+                            await _db.SaveChangesAsync();
+                        }
+
                         //update captain teamID with the generated ID
                         addCaptain.TeamMemberTeamId = addTeam.TeamId;
                         _db.TableTeamMembers.Update(addCaptain);
@@ -163,6 +191,14 @@ namespace team_microservice.Services
                             TeamDivisionId = teamSubmisssion.TeamDivisionID,
                             TeamCaptainId = null
                         };
+
+                        //Add logo
+                        if (teamSubmisssion?.TeamLogo != null)
+                        {
+                            addTeam.TeamLogoPath = teamSubmisssion?.TeamLogo != null ? await ImageProcessing.SaveImageAsync(teamSubmisssion?.TeamLogo, "team" + addTeam.TeamId, _env) : null;
+                            _db.TableTeams.Update(addTeam);
+                            await _db.SaveChangesAsync();
+                        }
 
                         _db.TableTeams.Add(addTeam);
                         await _db.SaveChangesAsync();
@@ -981,7 +1017,7 @@ namespace team_microservice.Services
             }
         }
 
-        public async Task<ActionResult> UpdateTeamAsCaptainSync(TeamSubmission ts)
+        public async Task<ActionResult<Team>> UpdateTeamAsCaptainSync(TeamSubmission ts)
         {
             try
             {
@@ -1000,16 +1036,26 @@ namespace team_microservice.Services
                             foundTeam.TeamName = ts.TeamName;
                         }
 
-                        //update team logo
-                        if (ts.TeamLogo != null)
+                        //Update logo
+                        if (ts?.TeamLogo != null)
                         {
-
+                            //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
+                            ImageProcessing.DeleteImageAsync(foundTeam.TeamLogoPath, _env);
+                            //add the new one
+                            foundTeam.TeamLogoPath = ts?.TeamLogo != null ? await ImageProcessing.SaveImageAsync(ts?.TeamLogo, "team" + foundTeam.TeamId, _env) : null;
                         }
 
                         _db.TableTeams.Update(foundTeam);
                         await _db.SaveChangesAsync();
 
-                        return new ObjectResult("Team updated successfully.") { StatusCode = 200 }; //OK
+                        Team returnTeam = new Team {
+                            TeamID = foundTeam.TeamId,
+                            TeamLogoPath = foundTeam.TeamLogoPath,
+                            TeamName = foundTeam.TeamName,
+                            DivisionID = foundTeam.TeamDivisionId
+                        };
+
+                        return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
 
                     }
                 }
@@ -1295,9 +1341,14 @@ namespace team_microservice.Services
                                 foundTeam.TeamDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam.TeamDivisionId;
                                 foundTeam.TeamCaptainId = tc.TeamMemberId;
                                 foundTeam.TeamName = ts.TeamName;
-
+                                //Update logo
+                                if (ts?.TeamLogo != null)
+                                {
+                                    foundTeam.TeamLogoPath = ts?.TeamLogo != null ? await ImageProcessing.SaveImageAsync(ts?.TeamLogo, "team" + foundTeam.TeamId, _env) : null;
+                                }
 
                                 _db.TableTeams.Update(foundTeam);
+                                await _db.SaveChangesAsync();
 
                                 return new ObjectResult("Team updated successfully.") { StatusCode = 200 }; //OK
                             }
@@ -1321,10 +1372,14 @@ namespace team_microservice.Services
                                 foundTeam.TeamDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam.TeamDivisionId;
                                 foundTeam.TeamCaptainId = TeamCaptain.TeamMemberId;
                                 foundTeam.TeamName = ts.TeamName;
+                                //Update logo
+                                if (ts?.TeamLogo != null)
+                                {
+                                    foundTeam.TeamLogoPath = ts?.TeamLogo != null ? await ImageProcessing.SaveImageAsync(ts?.TeamLogo, "team" + foundTeam.TeamId, _env) : null;
+                                }
 
                                 _db.TableTeams.Update(foundTeam);
                                 await _db.SaveChangesAsync();
-
 
                                 return new ObjectResult("Team updated successfully.") { StatusCode = 200 }; //OK
                             }
@@ -1335,6 +1390,11 @@ namespace team_microservice.Services
                         foundTeam.TeamDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam.TeamDivisionId;
                         foundTeam.TeamCaptainId = foundTeam.TeamCaptainId;
                         foundTeam.TeamName = ts.TeamName;
+                        //Update logo
+                        if (ts?.TeamLogo != null)
+                        {
+                            foundTeam.TeamLogoPath = ts?.TeamLogo != null ? await ImageProcessing.SaveImageAsync(ts?.TeamLogo, "team" + foundTeam.TeamId, _env) : null;
+                        }
 
                         _db.TableTeams.Update(foundTeam);
                         await _db.SaveChangesAsync();

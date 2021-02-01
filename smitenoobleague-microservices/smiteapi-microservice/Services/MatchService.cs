@@ -205,7 +205,7 @@ namespace smiteapi_microservice.Services
                 //call the nodejs schedule api
                 await CallScheduleApiAsync(submission, plannedDate); // _gatewayKey.Key
                 //beautify response
-                string bdate = match.EntryDate.AddDays(7).ToString("dddd dd MMMM yyyy 'around' H:mm");
+                string bdate = match.EntryDate.AddDays(7).ToString("dddd d MMMM yyyy 'around' H:mm");
 
                 msg = $"{ResponseText_MatchDetailsHidden} {bdate}";
                 return new ObjectResult(msg) { StatusCode = 200 }; //OK

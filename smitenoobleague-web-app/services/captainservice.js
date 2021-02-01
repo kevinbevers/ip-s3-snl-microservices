@@ -18,7 +18,7 @@ const UpdatePlayerRole = async(apiToken, data) => {
 };
 
 const UpdateTeamInfo = async(apiToken, data) => {
-  const apiClient = await helpers.BuildApiClient(apiToken);
+  const apiClient = await helpers.BuildApiClientForm(apiToken);
   return apiClient.put(baseServiceAddress + "/team", data);
 };
 

@@ -1,5 +1,6 @@
 //default react imports
 import React, { useState } from "react";
+import DOMPurify from "dompurify";
 //default page stuff
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
@@ -14,6 +15,8 @@ import Image from "next/image";
 
 
 export default function news({LoginSession, Article}) {
+
+  const clean = DOMPurify.sanitize(Article?.articleContent);
 
   const ReadableDate = (date) => {
     const d = new Date(date);
@@ -33,7 +36,8 @@ export default function news({LoginSession, Article}) {
         <Row><Col><hr/></Col></Row>
         <Row>
           <Col md={6} className="mx-auto text-left">
-            {Article?.articleContent}
+            <div dangerouslySetInnerHTML={{__html: clean}}></div>
+           
           </Col>
         </Row>
       </Container>

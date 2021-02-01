@@ -9,6 +9,8 @@ using news_microservice.Models.External;
 using news_microservice.News_DB;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using news_microservice.Classes;
+using Microsoft.AspNetCore.Hosting;
 
 namespace news_microservice.Services
 {
@@ -16,11 +18,13 @@ namespace news_microservice.Services
     {
         private readonly SNL_News_DBContext _db;
         private readonly ILogger<ArticleService> _logger;
+        private readonly IWebHostEnvironment _env;
 
-        public ArticleService(SNL_News_DBContext db, ILogger<ArticleService> logger)
+        public ArticleService(SNL_News_DBContext db, ILogger<ArticleService> logger, IWebHostEnvironment env)
         {
             _db = db;
             _logger = logger;
+            _env = env;
         }
 
         public async Task<ActionResult> CreateNewsArticleAsync(ArticleWithContent article)
@@ -43,7 +47,8 @@ namespace news_microservice.Services
                         ArticleTitle = article?.ArticleTitle,
                         ArticleContent = article?.ArticleContent,
                         ArticleDescription = article?.ArticleDescription,
-                        ArticleType = article?.ArticleType
+                        ArticleType = article?.ArticleType,
+                        ArticleImagePath = article.ArticleImageFile != null ?  await ImageProcessing.SaveImageAsync(article.ArticleImageFile, articleSlug, _env) : null
                     };
 
                     _db.ArticleTables.Add(articleToAdd);
@@ -69,6 +74,7 @@ namespace news_microservice.Services
                 if (foundArticle != null)
                 {
                     _db.ArticleTables.Remove(foundArticle);
+                    ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
                     await _db.SaveChangesAsync();
 
                     return new ObjectResult("Article successfully deleted.") { StatusCode = 200 }; //OK
@@ -109,8 +115,17 @@ namespace news_microservice.Services
                             ArticleType = article.ArticleType,
                         };
 
+                        if(article.ArticleImageFile != null)
+                        {
+                            //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
+                            ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
+                            articleToAdd.ArticleImagePath = await ImageProcessing.SaveImageAsync(article.ArticleImageFile, articleSlug, _env);
+                        }
+
                         //remove the article with the old slug
                         _db.ArticleTables.Remove(foundArticle);
+                        ImageProcessing.DeleteImageAsync(foundArticle.ArticleSlug, _env);
+                        //add the new one
                         _db.ArticleTables.Add(articleToAdd);
                         await _db.SaveChangesAsync();
 
@@ -122,6 +137,13 @@ namespace news_microservice.Services
                         foundArticle.ArticleDatePosted = article.ArticleDate != null ? article.ArticleDate : foundArticle.ArticleDatePosted;
                         foundArticle.ArticleDescription = article.ArticleDescription != null ? article.ArticleDescription : foundArticle.ArticleDescription;
                         foundArticle.ArticleType = article.ArticleType != null ? article.ArticleType : foundArticle.ArticleType;
+
+                        if (article.ArticleImageFile != null)
+                        {
+                            //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
+                            ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
+                            foundArticle.ArticleImagePath = await ImageProcessing.SaveImageAsync(article.ArticleImageFile, foundArticle.ArticleSlug, _env);
+                        }
 
                         _db.ArticleTables.Update(foundArticle);
                         await _db.SaveChangesAsync();

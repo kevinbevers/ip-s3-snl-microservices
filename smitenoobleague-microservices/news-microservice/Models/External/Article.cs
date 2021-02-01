@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using news_microservice.Classes;
 
 namespace news_microservice.Models.External
 {
@@ -16,5 +18,8 @@ namespace news_microservice.Models.External
         [Required]
         public string ArticleType { get; set; }
         public string ArticleImagePath { get; set; }
+        [MaxFileSize(29 * 1024 * 1024)]
+        [AllowedExtensions(new[] { ".jpg", ".png", ".jpeg,", ".bmp" })]
+        public IFormFile ArticleImageFile { get; set; }
     }
 }
