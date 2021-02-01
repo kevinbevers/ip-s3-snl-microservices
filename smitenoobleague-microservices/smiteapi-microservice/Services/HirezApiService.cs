@@ -51,7 +51,7 @@ namespace smiteapi_microservice.Services
                 }
                 else
                 {
-                    return new MatchData { ret_msg = matchDetails[0].ret_msg };
+                    return new MatchData { ret_msg = matchDetails[0]?.ret_msg, EntryDate = (DateTime)(matchDetails[0]?.Entry_Datetime) };
                 }
             }
             else

@@ -129,14 +129,14 @@ namespace team_microservice.Controllers
         // PUT team-service
         [HttpPut]
         [Authorize(Roles = "Captain,Admin")]
-        public async Task<ActionResult> Put([FromBody] TeamSubmission teamSubmission)
+        public async Task<ActionResult<Team>> Put([FromForm] TeamSubmission teamSubmission)
         {
             return ModelState.IsValid ? await _teamService.UpdateTeamAsCaptainSync(teamSubmission) : BadRequest(ModelState);
         }
 
         // PUT team-service
         [HttpPut("admin")]
-        [Authorize(Roles = "Captain,Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> PutAdmin([FromBody]TeamSubmissionAdmin teamSubmission)
         {
             return ModelState.IsValid ? await _teamService.UpdateTeamAsAdminAsync(teamSubmission) : BadRequest(ModelState);

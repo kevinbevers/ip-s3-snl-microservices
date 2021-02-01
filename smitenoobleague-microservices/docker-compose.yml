@@ -16,6 +16,23 @@ services:
     depends_on:
       - db
 
+  news-microservice:
+    image: ${DOCKER_REGISTRY-}newsmicroservice
+    container_name: newsmicroservice
+    restart: always
+    build:
+      context: ./news-microservice/
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Production
+        - DB_Password=${DB_PASS}
+        - InternalServiceKey=${InternalServiceKey}
+        - Auth0Domain=${Auth0Domain}
+        - Auth0Audience=${Auth0Audience}
+    depends_on:
+      - db
+    volumes:
+      - ./news-microservice/images:/app/images
+
   smiteapi-microservice:
     image: ${DOCKER_REGISTRY-}smiteapimicroservice
     container_name: smiteapimicroservice

@@ -119,6 +119,16 @@ body {
   background-size: cover;
 }
 
+.news-banner {
+  height: 300px;
+}
+
+.news-bannerimg {
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(60%);
+}
+
 /*leaderboard page*/
 .LeaderboardCard {
   font-size: 0.8rem;
@@ -127,6 +137,11 @@ body {
 .newsimg {
   height: auto;
   width: auto;
+}
+
+.newsimg2 {
+  height: 200px;
+  object-fit: cover;
 }
 
 .subrule {

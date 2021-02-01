@@ -13,7 +13,7 @@ import helpers from "utils/helpers";
 import { VerticalTimeline, VerticalTimelineElement }  from "react-vertical-timeline-component";
 import 'react-vertical-timeline-component/style.min.css';
 //icons 
-import {FaStar, FaTrophy, FaBinoculars,FaUsers} from "react-icons/fa";
+import {FaStar, FaTrophy, FaBinoculars,FaUsers, FaAdjust} from "react-icons/fa";
 import {GiAchievement} from "react-icons/gi";
 import {BsTable} from "react-icons/bs";
 import {MdShowChart} from "react-icons/md";
@@ -55,8 +55,19 @@ export default function roadmap({LoginSession}) {
     </p>
   </VerticalTimelineElement>
   <VerticalTimelineElement
+    className=""
     contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
     contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
+    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+    icon={<FaAdjust />}
+  >
+    <h3 className="vertical-timeline-element-title">Dark mode</h3>
+    <h6 className="vertical-timeline-element-subtitle">Coming Q2 2021</h6>
+    <p>
+      For those who like it.
+    </p>
+  </VerticalTimelineElement>
+  <VerticalTimelineElement
     iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
      icon={<MdShowChart />}
   >
@@ -68,6 +79,8 @@ export default function roadmap({LoginSession}) {
   </VerticalTimelineElement>
   <VerticalTimelineElement
     className=""
+    contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+    contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
     iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
     icon={<BsTable />}
   >

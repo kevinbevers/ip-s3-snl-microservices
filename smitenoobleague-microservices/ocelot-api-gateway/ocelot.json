@@ -56,6 +56,18 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
+          "Host": "news-microservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/news-service/{everything}",
+      "SwaggerKey": "news"
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
           "Host": "nodeschedule-microservice",
           "Port": 80
         }
@@ -94,6 +106,17 @@
         }
       ]
     },
+    {
+      "Key": "news",
+      "Config": [
+        {
+          "Name": "News microservice API",
+          "Version": "v1",
+          "Url": "http://news-microservice/swagger/v1/swagger.json"
+        }
+      ]
+    },
+
     {
       "Key": "division",
       "Config": [
