@@ -32,8 +32,10 @@ The web-app uses the following *npm* packages
 | Next-compose-plugins | [Next compose plugins README][NextComDoc] |
 | react-icons | [React icons plugins README][ReactIconDoc] |
 | react-chartjs-2 | [React charts README][ReactChartDoc] |
-| SWR | [SWR page][SWRDoc]|
+| react-sortableJS | [Sortablejs page][SortableDoc]|
 | Jest| [Jest docs][JestDoc]|
+| Axios| [Axios docs][AxiosDoc]|
+| Yarn| [Yarn page][YarnDoc]|
 
 
 ### Production
@@ -48,22 +50,21 @@ $ cd smitenoobleague-web-app
 ```
 >then run the following commands to install all the required packages:
 ```bash
-$ npm i npm install next react react-dom
-$ npm install react-bootstrap bootstrap
-$ npm install next-optimized-images@canary
-$ npm install --save next-compose-plugins
-$ npm install react-icons --save
-$ npm install --save react-chartjs-2 chart.js
-$ npm install swr
-$ npm add --dev babel-jest @babel/core @babel/preset-env
-$ npm add -D jest jest-dom @testing-library/react @testing-library/jest-dom @testing-library/dom babel-jest
+$ npm install --global yarn
+$ yarn install
+
 ```
 >Finally run the app:
 ```bash
-$ npm run dev
+$ yarn run dev
 ```
 >finally go to [http//:localhost:3000][localhost] to see the web-app in the browser
 
+##### Setting up the microservices back-end
+Open the solution file(.sln)
+>Visual studio will recognize the docker-compose.
+>press the run button to run the docker compose.
+* Docker desktop needs to be installed to run the back-end.
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -82,6 +83,8 @@ $ npm run dev
    [NextComDoc]: <https://github.com/cyrilwanner/next-compose-plugins/blob/master/README.md>
    [ReactIconDoc]: <https://github.com/react-icons/react-icons/blob/master/README.md>
    [ReactChartDoc]: <https://github.com/jerairrest/react-chartjs-2/blob/master/README.md>
-   [SWRDoc]: <https://swr.vercel.app/>
+   [SortableDoc]: <https://github.com/SortableJS/react-sortablejs/blob/master/README.md/>
    [JestDoc]: <https://jestjs.io/>
+   [AxiosDoc]: <https://github.com/axios/axios/blob/master/README.md>
+   [YarnDoc]: <https://yarnpkg.com/>
 
