@@ -20,9 +20,9 @@ Smitenoobleague uses a number of open source projects and technologies to work p
 * [Ocelot] - A modern fast, scalable API gateway built on [ASP.NET Core]
 * [ASP.NET Core] - Free. Cross-platform. Open source. A framework for building web apps and services with .NET and C#.
 
-### npm packages used in the web-app
+### packages used in the web-app
 
-The web-app uses the following *npm* packages
+The web-app uses the following *npm* / *yarn* packages
 
 | Package | README |
 | ------ | ------ |
@@ -32,14 +32,43 @@ The web-app uses the following *npm* packages
 | Next-compose-plugins | [Next compose plugins README][NextComDoc] |
 | react-icons | [React icons plugins README][ReactIconDoc] |
 | react-chartjs-2 | [React charts README][ReactChartDoc] |
-| SWR | [SWR page][SWRDoc]|
+| react-sortableJS | [Sortablejs page][SortableDoc]|
 | Jest| [Jest docs][JestDoc]|
+| Axios| [Axios docs][AxiosDoc]|
+| Yarn| [Yarn page][YarnDoc]|
 
 
 ### Production
 https://smitenoobleague.com
 #### Development installation
+Setup the required .env files
 
+The smitenoobleague-microservices folder should have a .env containing the following:
+```.env
+DB_PASS={databasepass}
+DevId={smiteapidevid}
+AuthKey={smiteapiauthkey}
+CertPass={sslcertpassword}
+Domain={domainofthefrontend}
+InternalServiceKey={generatedkeyusedforinternalcommuncationsecurity}
+Auth0Domain={auth0domain}
+Auth0Audience={auth0audience}
+smtpMail={smtpmail}
+smtpMailPass={smtpmailpass}
+smtpHost={smtphost}
+smtpHostPort={smtppass}
+```
+The smitenoobleague-web-app folder should have a .env containing the following:
+```.env
+AUTH0_LOGOUT_URL={frontenddomainlogouturl}
+AUTH0_RETURN_URL={frontenddomainreturnurl}
+AUTH0_AUDIENCE={auth0audience}
+AUTH0_DOMAIN={auth0domain}
+AUTH0_CLIENT_SECRET={auth0secret}
+AUTH0_CLIENT_ID={auth0clientid}
+COOKIE_SECRET={generatedcookiesecret}
+NEXT_PUBLIC_BASE_API_URL={back-endapidomainurl}
+```
 ##### Setting up the web-app
 Open the project locally.
 >cd the web-app directory in the terminal:
@@ -48,22 +77,21 @@ $ cd smitenoobleague-web-app
 ```
 >then run the following commands to install all the required packages:
 ```bash
-$ npm i npm install next react react-dom
-$ npm install react-bootstrap bootstrap
-$ npm install next-optimized-images@canary
-$ npm install --save next-compose-plugins
-$ npm install react-icons --save
-$ npm install --save react-chartjs-2 chart.js
-$ npm install swr
-$ npm add --dev babel-jest @babel/core @babel/preset-env
-$ npm add -D jest jest-dom @testing-library/react @testing-library/jest-dom @testing-library/dom babel-jest
+$ npm install --global yarn
+$ yarn install
+
 ```
 >Finally run the app:
 ```bash
-$ npm run dev
+$ yarn run dev
 ```
 >finally go to [http//:localhost:3000][localhost] to see the web-app in the browser
 
+##### Setting up the microservices back-end
+Open the solution file(.sln)
+>Visual studio will recognize the docker-compose.
+>press the run button to run the docker compose.
+* Docker desktop needs to be installed to run the back-end.
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -82,6 +110,8 @@ $ npm run dev
    [NextComDoc]: <https://github.com/cyrilwanner/next-compose-plugins/blob/master/README.md>
    [ReactIconDoc]: <https://github.com/react-icons/react-icons/blob/master/README.md>
    [ReactChartDoc]: <https://github.com/jerairrest/react-chartjs-2/blob/master/README.md>
-   [SWRDoc]: <https://swr.vercel.app/>
+   [SortableDoc]: <https://github.com/SortableJS/react-sortablejs/blob/master/README.md/>
    [JestDoc]: <https://jestjs.io/>
+   [AxiosDoc]: <https://github.com/axios/axios/blob/master/README.md>
+   [YarnDoc]: <https://yarnpkg.com/>
 
