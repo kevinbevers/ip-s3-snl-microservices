@@ -41,7 +41,30 @@ The web-app uses the following *npm* packages
 ### Production
 https://smitenoobleague.com
 #### Development installation
+Setup the required .env files
 
+The smitenoobleague-microservices folder should have a .env containing the following:
+>DB_PASS={databasepass}
+>DevId={smiteapidevid}
+>AuthKey={smiteapiauthkey}
+>CertPass={sslcertpassword}
+>Domain={domainofthefrontend}
+>InternalServiceKey={generatedkeyusedforinternalcommuncationsecurity}
+>Auth0Domain={auth0domain}
+>Auth0Audience={auth0audience}
+>smtpMail={smtpmail}
+>smtpMailPass={smtpmailpass}
+>smtpHost={smtphost}
+>smtpHostPort={smtppass}
+The smitenoobleague-web-app folder should have a .env containing the following:
+AUTH0_LOGOUT_URL={frontenddomainlogouturl}
+AUTH0_RETURN_URL={frontenddomainreturnurl}
+AUTH0_AUDIENCE={auth0audience}
+AUTH0_DOMAIN={auth0domain}
+AUTH0_CLIENT_SECRET={generatedcookiesecret}
+AUTH0_CLIENT_ID={auth0clientid}
+COOKIE_SECRET={generatedcookiesecret}
+NEXT_PUBLIC_BASE_API_URL={back-endapidomainurl}
 ##### Setting up the web-app
 Open the project locally.
 >cd the web-app directory in the terminal:
