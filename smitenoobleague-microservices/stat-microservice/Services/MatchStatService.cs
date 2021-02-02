@@ -327,7 +327,10 @@ namespace stat_microservice.Services
                         GameId = match.GameID,
                         ScheduleMatchUpId = m.MatchupID,
                         WinningTeamId = winnerTeam.TeamID,
-                        LosingTeamId = loserTeam.TeamID
+                        LosingTeamId = loserTeam.TeamID,
+                        GamedurationInSeconds = match.MatchDurationInSeconds,
+                        AwayTeamId = m.AwayTeam.TeamID,
+                        HomeTeamId = m.HomeTeam.TeamID
                     };
 
                     //Not the first gameID for this planned matchup
@@ -621,7 +624,7 @@ namespace stat_microservice.Services
                     //add 1 win to the win column
                     homeTeamStanding.StandingWins += 1;
                     //if the team won 2 games against 0 they should get 3 points. otherwise they should get only 2
-                    homeTeamStanding.StandingScore = awayTeamWinCount == 0 ? +3 : +2;
+                    homeTeamStanding.StandingScore = awayTeamWinCount == 0 ? homeTeamStanding.StandingScore + 3 : homeTeamStanding.StandingScore + 2;
 
                     _db.TableStandings.Update(homeTeamStanding);
                 }
@@ -645,7 +648,7 @@ namespace stat_microservice.Services
                     //add 1 loss to the loss column
                     awayTeamStanding.StandingLosses += 1;
                     //if the team won atleast a match give them a point.
-                    awayTeamStanding.StandingScore = awayTeamWinCount == 1 ? +1 : +0;
+                    awayTeamStanding.StandingScore = awayTeamWinCount == 1 ? awayTeamStanding.StandingScore + 1 : awayTeamStanding.StandingScore + 0;
 
                     _db.TableStandings.Update(awayTeamStanding);
                 }
@@ -675,7 +678,7 @@ namespace stat_microservice.Services
                     //add 1 win to the win column
                     awayTeamStanding.StandingWins += 1;
                     //if the team won 2 games against 0 they should get 3 points. otherwise they should get only 2
-                    awayTeamStanding.StandingScore = homeTeamWinCount == 0 ? +3 : +2;
+                    awayTeamStanding.StandingScore = homeTeamWinCount == 0 ? awayTeamStanding.StandingScore + 3 : awayTeamStanding.StandingScore + 2;
 
                     _db.TableStandings.Update(awayTeamStanding);
                 }
@@ -699,7 +702,7 @@ namespace stat_microservice.Services
                     //add 1 loss to the loss column
                     homeTeamStanding.StandingLosses += 1;
                     //if the team won atleast a match give them a point.
-                    homeTeamStanding.StandingScore = homeTeamWinCount == 1 ? +1 : +0;
+                    homeTeamStanding.StandingScore = homeTeamWinCount == 1 ? homeTeamStanding.StandingScore + 1 : homeTeamStanding.StandingScore + 0;
 
                     _db.TableStandings.Update(homeTeamStanding);
                 }
@@ -735,13 +738,19 @@ namespace stat_microservice.Services
             //if foundschedule is empty there is no schedule found and the match is found invalid
             if (foundSchedule != null)
             {
-                ScheduledMatch scheduledMatch = new ScheduledMatch { ScheduleID = foundSchedule.ScheduleID };
+                ScheduledMatch scheduledMatch = new ScheduledMatch { ScheduleID = foundSchedule.ScheduleID, ScheduleStartDate = foundSchedule.ScheduleStartDate };
                 //Get the 2 matchups that are scheduled for these 2 teams
-                Matchup matchup1 = foundSchedule.Matchups.Where(mup => mup.HomeTeam.TeamID == winnerTeam.TeamID && mup.AwayTeam.TeamID == loserTeam.TeamID).FirstOrDefault();
-                Matchup matchup2 = foundSchedule.Matchups.Where(mup => mup.HomeTeam.TeamID == loserTeam.TeamID && mup.AwayTeam.TeamID == winnerTeam.TeamID).FirstOrDefault();
+                Matchup matchup1 = foundSchedule.Matchups.Where(mup => mup?.HomeTeam?.TeamID == winnerTeam?.TeamID && mup?.AwayTeam?.TeamID == loserTeam?.TeamID).FirstOrDefault();
+                Matchup matchup2 = foundSchedule.Matchups.Where(mup => mup?.HomeTeam?.TeamID == loserTeam?.TeamID && mup?.AwayTeam?.TeamID == winnerTeam?.TeamID).FirstOrDefault();
                 List<Matchup> matchups = new List<Matchup> { matchup1, matchup2 };
                 //Get the matchup that is already past the currentWeek / the same and check if the matchup is not older then 2 weeks. 2 weeks is the catchup time.
                 scheduledMatch.matchup = matchups.Where(mup => mup.WeekNumber <= foundSchedule.CurrentWeek && Math.Abs(mup.WeekNumber - foundSchedule.CurrentWeek) <= 2).FirstOrDefault();
+                //check if the entry date of the match id isn't before the matchup is scheduled
+                //var currentWeekDate = scheduledMatch.ScheduleStartDate.AddDays(7 * scheduledMatch.matchup.WeekNumber);
+                //if (match?.EntryDate < currentWeekDate)
+                //{
+                //    return null;
+                //}
 
                 return scheduledMatch;
             }

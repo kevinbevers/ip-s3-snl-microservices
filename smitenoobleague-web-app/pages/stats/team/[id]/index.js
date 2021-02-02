@@ -70,7 +70,7 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
         labels: labelList,
         datasets: [
           {
-            label: "Recent performance points",
+            label: "RPP",
             fill: false,
             order: 0,
             lineTension: 0.1,
@@ -116,8 +116,6 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
       };
 // Modal for info about linechart
       const [rppShow, setRPPShow] = useState(false);
-
-      console.log(TeamStats);
 
       if (status != null) {
         return (<><DefaultErrorPage statusCode={status} title={errMsg} data-testid="playerpageErrorPage"/></>);
@@ -333,7 +331,7 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <p>This chart shows the recent peformance of a team, The Recent performance is based of RPP(recent performance points)</p>
+            <p>This chart shows the recent match peformance of the team, each match get's a certain amount of RPP(recent performance points)</p>
                 <p>these points are calculated based on:</p> 
                 <ul>
                 <li>win or loss of a match</li> 
