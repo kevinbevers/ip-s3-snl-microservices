@@ -20,9 +20,9 @@ Smitenoobleague uses a number of open source projects and technologies to work p
 * [Ocelot] - A modern fast, scalable API gateway built on [ASP.NET Core]
 * [ASP.NET Core] - Free. Cross-platform. Open source. A framework for building web apps and services with .NET and C#.
 
-### npm packages used in the web-app
+### packages used in the web-app
 
-The web-app uses the following *npm* packages
+The web-app uses the following *npm* / *yarn* packages
 
 | Package | README |
 | ------ | ------ |
