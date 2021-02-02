@@ -19,7 +19,7 @@ export default function RecentTeams({recent}){
       <Link href={`/matchhistory/${recent?.matchupID}`}>
         <a className="link-unstyled">
         <Card className="text-center mb-2">
-        <Card.Body className={recent?.gamesPlayed == 3 ? recent?.won ? "RecentTeamWinBackground p-1" : "RecentTeamLossBackground p-1" : "bg-light p-1"}>
+        <Card.Body className={recent?.won ? "RecentTeamWinBackground p-1" : recent?.lost ? "RecentTeamLossBackground p-1" : "bg-light p-1"}>
           <Container>
             <Row className="">
                 <Col md={2} xs={2} className="p-0 mx-auto my-auto"><h3 className="text-center my-auto RecentTeamTitle font-weight-bold">VS</h3></Col>

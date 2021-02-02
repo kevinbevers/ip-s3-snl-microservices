@@ -6,7 +6,7 @@ import Link from "next/link";
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
 //boostrap components
-import { Button, FormControl, Card, Col, Row, Container, Jumbotron } from "react-bootstrap";
+import { Button, FormControl, Card, Col, Row, Container, Jumbotron, Alert } from "react-bootstrap";
 //icons
 import { FaReply } from "react-icons/fa";
 //custom components

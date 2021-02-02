@@ -5,5 +5,6 @@ namespace stat_microservice.Models.Internal
     {
         public Matchup matchup;
         public int ScheduleID { get; set; }
+        public DateTime ScheduleStartDate { get; set; }
     }
 }

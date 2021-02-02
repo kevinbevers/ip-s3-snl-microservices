@@ -42,9 +42,9 @@ namespace stat_microservice.Services
                     {
                         teamStats.Team = foundTeam;
                         teamStats.DivisionName = divisionName;
-                        teamStats.MostPlayed = GetTop5MostPickedGodsAsync(godStatistics);
+                        teamStats.MostPlayed = GetTop5MostPickedGods(godStatistics);
                         teamStats.StarPlayer = await GetStarPlayerId(teamID, teamMatchesStats, foundTeam.TeamMembers);
-                        teamStats.RecentPerformanceScore = GetRecentPerformanceScore(teamMatchesStats);
+                        teamStats.RecentPerformanceScore = await GetRecentPerformanceScoreAsync(teamMatchesStats, teamID);
                         teamStats.RecentMatches = await GetLast5MatchupsByTeamId(teamMatchesStats, teamID);
                     }
                     else
@@ -179,7 +179,7 @@ namespace stat_microservice.Services
 
             return TeamStats;
         }
-        private List<GodWithTimesPlayed> GetTop5MostPickedGodsAsync(List<GodStatistics> TeamGodStats)
+        private List<GodWithTimesPlayed> GetTop5MostPickedGods(List<GodStatistics> TeamGodStats)
         {
             List<GodWithTimesPlayed> mostPicked = TeamGodStats.OrderByDescending(x => x.TotalGamesPlayed).Take(5).Select(x => new GodWithTimesPlayed { GodName = x.God.GodName, GodId = x.God.GodId, GodIcon = x.God.GodIcon, TimesPlayed = x.TotalGamesPlayed }).ToList();
 
@@ -257,14 +257,19 @@ namespace stat_microservice.Services
 
             return currentTeamMembers.Where(x => x.PlayerID == MvpPlayerID).FirstOrDefault();
         }
-        private List<int> GetRecentPerformanceScore(List<TeamMatchesStats> teamMatchesStats)
+        private async Task<List<int>> GetRecentPerformanceScoreAsync(List<TeamMatchesStats> teamMatchesStats, int? teamID)
         {
-            var lastFewGames = teamMatchesStats.OrderByDescending(x => x.DatePlayed).Take(15).ToList();
+            //get last matchups few matchups
+            List<TableMatchResult> lastFewGames = await _db.TableMatchResults.Where(x => x.AwayTeamId == teamID || x.HomeTeamId == teamID).OrderByDescending(x => x.MatchResultId).Take(15).ToListAsync();
 
             List<int> recentPerformanceScoreList = new List<int>();
 
-            foreach(var match in lastFewGames)
+            //begin at the oldest of the last matchups
+            foreach(var mr in lastFewGames.OrderBy(x => x.MatchResultId)) //order again so the recent score is in the right order
             {
+                //get the specific match from that matchup
+                var match = teamMatchesStats.Where(x => x.GameId == mr.GameId && x.MatchupId == mr.ScheduleMatchUpId).FirstOrDefault();
+
                 double recentPerformanceScore = 0;
                 double matchTimeDivision = (double)match.MatchDurationInSeconds / 360;
 
@@ -301,9 +306,10 @@ namespace stat_microservice.Services
                 MatchupID = x,
                 GamesPlayed = y.Count(),
                 Won = y.Count(i => i.WinningTeamId == teamID) == 2,
+                Lost = y.Count(i => i.LosingTeamId == teamID) == 2,
                 DatePlayed = y.Select(i => i.DatePlayed).Max().Value,
                 Opponent = new Team { TeamID = y.Select(i => i.HomeTeamId).Max().Value != teamID ? y.Select(i => i.HomeTeamId).Max().Value : y.Select(i => i.AwayTeamId).Max().Value },
-            }).ToListAsync();
+            }).OrderByDescending(x => x.DatePlayed).ToListAsync();
 
             List<int> listOfTeamIds = matchHistoryList.Select(x => x.Opponent.TeamID).Distinct().ToList();
             IEnumerable<Team> allTeamsInReturn = await _externalServices.GetBasicTeamInfoInBatchWithTeamIdsList(listOfTeamIds);
