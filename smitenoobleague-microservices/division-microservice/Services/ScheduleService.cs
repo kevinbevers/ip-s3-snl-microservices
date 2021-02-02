@@ -96,7 +96,7 @@ namespace division_microservice.Services
                             DivisionID = fs.ScheduleDivisionId,
                             ScheduleName = fs.ScheduleName,
                             ScheduleStartDate = fs.ScheduleStartDate,
-                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate), //number of weeks gone by. remainder of 6 days
+                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, divisionTeams.Count()), //number of weeks gone by. remainder of 6 days
                             Matchups = await GetMatchups(fs.ScheduleId, divisionTeams)
                         });
                     }
@@ -161,7 +161,7 @@ namespace division_microservice.Services
                             ScheduleName = fs.ScheduleName,
                             ScheduleStartDate = fs.ScheduleStartDate,
                             DivisionID = fs.ScheduleDivisionId,
-                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate), //number of weeks gone by. remainder of 6 days
+                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, divisionTeams.Count()), //number of weeks gone by. remainder of 6 days
                             Matchups = await GetMatchups(fs.ScheduleId, divisionTeams)
                         };
                     
@@ -236,7 +236,7 @@ namespace division_microservice.Services
                             ScheduleName = fs.ScheduleName,
                             ScheduleStartDate = fs.ScheduleStartDate,
                             DivisionID = fs.ScheduleDivisionId,
-                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate), //number of weeks gone by. remainder of 6 days
+                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, divisionTeams.Count()), //number of weeks gone by. remainder of 6 days
                             Matchups = await GetMatchups(fs.ScheduleId, divisionTeams)
                         };
 
@@ -314,9 +314,12 @@ namespace division_microservice.Services
         }
 
         #region methods
-        private int GetCurrentWeek(DateTime startDate)
+        private int GetCurrentWeek(DateTime startDate, int teamCount)
         {
-            return (DateTime.Now - startDate).Days / 7 + 1; //number of weeks gone by. remainder of 6 days //add one to not be 0 on week 1 etc..
+            int numberOfWeeks = (teamCount - 1) * 2;
+            int currentWeekNumber = (DateTime.Now - startDate).Days / 7 + 1; //number of weeks gone by. remainder of 6 days //add one to not be 0 on week 1 etc..
+
+            return currentWeekNumber > numberOfWeeks ? numberOfWeeks : currentWeekNumber;
         }
         private async Task<IEnumerable<Matchup>> GetMatchups(int scheduleID, IList<Team> divisionTeams)
         {
