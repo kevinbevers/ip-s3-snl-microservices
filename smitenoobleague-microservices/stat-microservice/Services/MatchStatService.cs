@@ -100,115 +100,118 @@ namespace stat_microservice.Services
                     teamsInMatch.Add(await _externalServices.GetBasicTeamInfoByTeamId(matchResults?[0]?.LosingTeamId));
 
                     MatchHistoryDetails matchHistoryDetails = new MatchHistoryDetails { MatchupID = matchResults[0].ScheduleMatchUpId, MatchResults = new List<MatchDataWithRole>(), TeamsInMatch = teamsInMatch };
-               
+
 
                     //could use a big join to get all data in 1 Db call
                     foreach (TableMatchResult matchResult in matchResults)
                     {
                         List<TableStat> matchStats = await _db.TableStats.Where(ts => ts.GameId == matchResult.GameId && ts.MatchupId == matchResult.ScheduleMatchUpId).OrderBy(ms => ms.RoleId).ToListAsync();
 
-                        TimeSpan time = TimeSpan.FromSeconds((int)matchStats?[0]?.IgMatchLengthInSeconds);
-                        var ms = matchStats?[0];
-
-                        MatchDataWithRole matchData = new MatchDataWithRole
+                        if (matchStats?.Count() > 0)
                         {
-                            GameID = matchStats?[0]?.GameId,
-                            EntryDate = (DateTime)matchStats?[0]?.MatchPlayedDate,
-                            MatchDurationInSeconds = matchStats?[0]?.IgMatchLengthInSeconds,
-                            patchNumber = matchStats?[0]?.PatchNumber,
-                            BannedGods = new List<God>(),
-                            Winners = new List<PlayerStatWithRole>(),
-                            Losers = new List<PlayerStatWithRole>(),
-                            MatchDuration = $"{time.TotalMinutes:0} min {time:ss} sec",
-                            WinningTeamID = matchResult.WinningTeamId,
-                            LosingTeamID = matchResult.LosingTeamId
-                        };
+                            TimeSpan time = TimeSpan.FromSeconds((int)matchStats?[0]?.IgMatchLengthInSeconds);
+                            var ms = matchStats?[0];
 
-
-
-                        List<MvpPlayer> mvpScores = new List<MvpPlayer>();
-                        List<int?> itemsInMatch = new List<int?>();
-                        //All gods played in the match
-                        List<int?> godsInMatch = new List<int?>();
-                        //for each stat row in the match get the ids needed and calculate mvp score
-                        foreach (var player in matchStats)
-                        {
-                            //calculate as double because of the 0.000 values then round up in the end to int
-                            int mvpScore = 0;
-                            mvpScore += (int)(((double)player.IgHealing) * 0.008);
-                            mvpScore += (int)(((double)player.IgDamageMitigated) * 0.006);
-                            mvpScore += (int)(((double)player.IgDamageDealt) * 0.005);
-                            mvpScore += (int)player.IgKills * 20;
-                            mvpScore += (int)player.IgAssists * 15;
-                            mvpScore += (int)player.IgWardsPlaced * 9;
-                            mvpScore += (int)(((double)player.IgStructureDamage) * 0.2);
-                            mvpScore += (int)(((double)player.IgGoldEarned) * 0.1);
-                            mvpScore += (int)(((double)player.IgStructureDamage) / 45);
-                            //if the player died divide score by number of deaths
-                            if (player.IgDeaths > 0)
+                            MatchDataWithRole matchData = new MatchDataWithRole
                             {
-                                mvpScore /= (int)player.IgDeaths;
-                            }
-                            //kill participation calculation = (kills + assists) / total kills * 100
-                            //the sum returns the total amount of kills in this match
-                            //use double because division could go under 1 with 0.8 for example
-                            double totalKills = (int)matchStats.Select(m => m.IgKills).Sum();
-                            double playerParticipation = (int)player.IgKills + (int)player.IgAssists;
-                            int killParticipationPercentage = Convert.ToInt32(playerParticipation / totalKills * 100);
-                            mvpScore *= (int)killParticipationPercentage;
-                            mvpScores.Add(new MvpPlayer { PlayerID = (int)player.PlayerId, MvpScore = mvpScore });
+                                GameID = matchStats?[0]?.GameId,
+                                EntryDate = (DateTime)matchStats?[0]?.MatchPlayedDate,
+                                MatchDurationInSeconds = matchStats?[0]?.IgMatchLengthInSeconds,
+                                patchNumber = matchStats?[0]?.PatchNumber,
+                                BannedGods = new List<God>(),
+                                Winners = new List<PlayerStatWithRole>(),
+                                Losers = new List<PlayerStatWithRole>(),
+                                MatchDuration = $"{time.TotalMinutes:0} min {time:ss} sec",
+                                WinningTeamID = matchResult.WinningTeamId,
+                                LosingTeamID = matchResult.LosingTeamId
+                            };
 
-                            //add all items to the list
-                            itemsInMatch.Add(player?.IgItem1Id);
-                            itemsInMatch.Add(player?.IgItem2Id);
-                            itemsInMatch.Add(player?.IgItem3Id);
-                            itemsInMatch.Add(player?.IgItem4Id);
-                            itemsInMatch.Add(player?.IgItem5Id);
-                            itemsInMatch.Add(player?.IgItem6Id);
-                            itemsInMatch.Add(player?.IgRelic1Id);
-                            itemsInMatch.Add(player?.IgRelic2Id);
-                            //add played god to the list
-                            godsInMatch.Add(player?.GodPlayedId);
-                        }
-                        //Set the mvp in the return value
-                        matchData.MvpPlayerID = mvpScores.OrderByDescending(item => item.MvpScore).First().PlayerID;
-                        //All banned gods in the match
-                        List<int?> bansIds = new List<int?> { ms.IgBan1Id, ms.IgBan2Id, ms.IgBan3Id, ms.IgBan4Id, ms.IgBan5Id, ms.IgBan6Id, ms.IgBan7Id, ms.IgBan8Id, ms.IgBan9Id, ms.IgBan10Id };
-                        //Get all gods that where played or banned from the database
-                        List<TableGodDetail> allGods = await _db.TableGodDetails.Where(tg => bansIds.Contains(tg.GodId) || godsInMatch.Contains(tg.GodId)).ToListAsync();
-                        List<TableItemDetail> allItems = await _db.TableItemDetails.Where(ti => itemsInMatch.Contains(ti.ItemId)).ToListAsync();
 
-                        for (int i = 0; i < 10; i++)
-                        {
-                            if (bansIds[i] != null)
+
+                            List<MvpPlayer> mvpScores = new List<MvpPlayer>();
+                            List<int?> itemsInMatch = new List<int?>();
+                            //All gods played in the match
+                            List<int?> godsInMatch = new List<int?>();
+                            //for each stat row in the match get the ids needed and calculate mvp score
+                            foreach (var player in matchStats)
                             {
-                                TableGodDetail god = allGods.Where(bg => bg.GodId == bansIds[i]).FirstOrDefault();
-
-                                God ban = new God
+                                //calculate as double because of the 0.000 values then round up in the end to int
+                                int mvpScore = 0;
+                                mvpScore += (int)(((double)player.IgHealing) * 0.008);
+                                mvpScore += (int)(((double)player.IgDamageMitigated) * 0.006);
+                                mvpScore += (int)(((double)player.IgDamageDealt) * 0.005);
+                                mvpScore += (int)player.IgKills * 20;
+                                mvpScore += (int)player.IgAssists * 15;
+                                mvpScore += (int)player.IgWardsPlaced * 9;
+                                mvpScore += (int)(((double)player.IgStructureDamage) * 0.2);
+                                mvpScore += (int)(((double)player.IgGoldEarned) * 0.1);
+                                mvpScore += (int)(((double)player.IgStructureDamage) / 45);
+                                //if the player died divide score by number of deaths
+                                if (player.IgDeaths > 0)
                                 {
-                                    GodId = bansIds[i],
-                                    GodName = god.GodName,
-                                    GodIcon = god.GodIconUrl
-                                };
-                                //add to list of bans
-                                matchData.BannedGods.Add(ban);
+                                    mvpScore /= (int)player.IgDeaths;
+                                }
+                                //kill participation calculation = (kills + assists) / total kills * 100
+                                //the sum returns the total amount of kills in this match
+                                //use double because division could go under 1 with 0.8 for example
+                                double totalKills = (int)matchStats.Select(m => m.IgKills).Sum();
+                                double playerParticipation = (int)player.IgKills + (int)player.IgAssists;
+                                int killParticipationPercentage = Convert.ToInt32(playerParticipation / totalKills * 100);
+                                mvpScore *= (int)killParticipationPercentage;
+                                mvpScores.Add(new MvpPlayer { PlayerID = (int)player.PlayerId, MvpScore = mvpScore });
+
+                                //add all items to the list
+                                itemsInMatch.Add(player?.IgItem1Id);
+                                itemsInMatch.Add(player?.IgItem2Id);
+                                itemsInMatch.Add(player?.IgItem3Id);
+                                itemsInMatch.Add(player?.IgItem4Id);
+                                itemsInMatch.Add(player?.IgItem5Id);
+                                itemsInMatch.Add(player?.IgItem6Id);
+                                itemsInMatch.Add(player?.IgRelic1Id);
+                                itemsInMatch.Add(player?.IgRelic2Id);
+                                //add played god to the list
+                                godsInMatch.Add(player?.GodPlayedId);
                             }
-                            else
+                            //Set the mvp in the return value
+                            matchData.MvpPlayerID = mvpScores.OrderByDescending(item => item.MvpScore).First().PlayerID;
+                            //All banned gods in the match
+                            List<int?> bansIds = new List<int?> { ms.IgBan1Id, ms.IgBan2Id, ms.IgBan3Id, ms.IgBan4Id, ms.IgBan5Id, ms.IgBan6Id, ms.IgBan7Id, ms.IgBan8Id, ms.IgBan9Id, ms.IgBan10Id };
+                            //Get all gods that where played or banned from the database
+                            List<TableGodDetail> allGods = await _db.TableGodDetails.Where(tg => bansIds.Contains(tg.GodId) || godsInMatch.Contains(tg.GodId)).ToListAsync();
+                            List<TableItemDetail> allItems = await _db.TableItemDetails.Where(ti => itemsInMatch.Contains(ti.ItemId)).ToListAsync();
+
+                            for (int i = 0; i < 10; i++)
                             {
-                                //passed ban
-                                God ban = new God
+                                if (bansIds[i] != null)
                                 {
-                                    GodId = bansIds[i],
-                                    GodIcon = null,
-                                };
-                                matchData.BannedGods.Add(ban);
+                                    TableGodDetail god = allGods.Where(bg => bg.GodId == bansIds[i]).FirstOrDefault();
+
+                                    God ban = new God
+                                    {
+                                        GodId = bansIds[i],
+                                        GodName = god.GodName,
+                                        GodIcon = god.GodIconUrl
+                                    };
+                                    //add to list of bans
+                                    matchData.BannedGods.Add(ban);
+                                }
+                                else
+                                {
+                                    //passed ban
+                                    God ban = new God
+                                    {
+                                        GodId = bansIds[i],
+                                        GodIcon = null,
+                                    };
+                                    matchData.BannedGods.Add(ban);
+                                }
                             }
+
+                            matchData.Winners = CreateListOfPlayerStatsByWinStatus(matchStats, roles, allGods, allItems, true);
+                            matchData.Losers = CreateListOfPlayerStatsByWinStatus(matchStats, roles, allGods, allItems, false);
+
+                            matchHistoryDetails.MatchResults.Add(matchData);
                         }
-
-                        matchData.Winners = CreateListOfPlayerStatsByWinStatus(matchStats, roles, allGods, allItems, true);
-                        matchData.Losers = CreateListOfPlayerStatsByWinStatus(matchStats, roles, allGods, allItems, false);
-
-                        matchHistoryDetails.MatchResults.Add(matchData);
                     }
 
                     return new ObjectResult(matchHistoryDetails) { StatusCode = 200 };
