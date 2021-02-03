@@ -17,8 +17,7 @@ import captainservice from "services/captainservice";
 //image optimization
 import Img from 'react-optimized-image';
 
-export default function CaptainTeamManagement({apiResponse,apiToken}) {
-
+export default function CaptainTeamManagement({apiResponse,apiToken,adminManage}) {
       //#region TeamMembers
   const [teamMembers, setTeamMembers] = useState([]);
   //const [test, setTest] = useState([{ id: 1, name: "Player 1" }, { id: 2, name: "Player 2" }, { id: 3, name: "Player 3" }, { id: 4, name: "Player 4" }, { id: 5, name: "Player 5" }]);
@@ -62,7 +61,7 @@ export default function CaptainTeamManagement({apiResponse,apiToken}) {
             roleID: items[event.newIndex].teamMemberRole.roleID
           };
           //api call to update role
-          await captainservice.UpdatePlayerRole(apiToken, data).then(res => { }).catch(err => { SetNote({ msg: err.response, type: "bg-danger" }); SetNotify(true); });
+          await captainservice.UpdatePlayerRole(apiToken, data).then(res => { }).catch(err => { SetNote({ msg: err?.response?.data, type: "bg-danger" }); SetNotify(true); });
         }
         else if (items[event.oldIndex].teamMemberID != null) {
           const data = {
@@ -70,7 +69,7 @@ export default function CaptainTeamManagement({apiResponse,apiToken}) {
             roleID: items[event.oldIndex].teamMemberRole.roleID
           };
           //api call to update role
-          await captainservice.UpdatePlayerRole(apiToken, data).then(res => { }).catch(err => { SetNote({ msg: err.response, type: "bg-danger" }); SetNotify(true); });
+          await captainservice.UpdatePlayerRole(apiToken, data).then(res => { }).catch(err => { SetNote({ msg: err?.response?.data, type: "bg-danger" }); SetNotify(true); });
         }
       }
 
@@ -122,7 +121,7 @@ export default function CaptainTeamManagement({apiResponse,apiToken}) {
                           delay={200}>
 
                           {teamMembers.map((member, index) => (
-                            <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse?.teamID} />
+                            <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse?.teamID} adminManage={adminManage} />
                           ))}
                         </ReactSortable>
                         <Row><Col><h6 className="text-muted float-right ExtraInfoText">Drag and drop players to swap their roles.</h6></Col></Row>

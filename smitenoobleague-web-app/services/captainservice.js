@@ -2,11 +2,6 @@ import helpers from "utils/helpers";
 
 const baseServiceAddress = "team-service"
 
-const GetTeamByID = async(apiToken, data) => {
-    const apiClient = await helpers.BuildApiClient(apiToken);
-    return apiClient.get(baseServiceAddress + "/team/" + data);
-};
-
 const GetTeamByCaptainID = async(apiToken, data) => {
   const apiClient = await helpers.BuildApiClient(apiToken);
   return apiClient.get(baseServiceAddress + "/team/bycaptainid/" + data, { timeout: 5000 });
@@ -28,7 +23,6 @@ const SubmitMatchID = async(apiToken, data) => {
 };
 
 export default {
-  GetTeamByID,
   UpdatePlayerRole,
   UpdateTeamInfo,
   SubmitMatchID,

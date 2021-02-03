@@ -13,3 +13,31 @@
         font-size: 2.8vw;
     }
 }
+
+.adminDeleteButton {
+    color: #dc3545;
+    padding-left: 0;
+    padding-right: 5px;
+}
+
+.adminDeleteButton:hover {
+    color: #c82333;
+}
+
+.adminEditButton {
+    color: #ffc107;
+    padding-left: 0;
+    padding-right: 5px;
+}
+
+.adminEditButton:hover {
+    color: #e0a800;
+}
+
+.adminTeamListItem {
+    outline: none !important;
+}
+
+.adminTeamListItem:hover {
+    background-color: whitesmoke;
+}

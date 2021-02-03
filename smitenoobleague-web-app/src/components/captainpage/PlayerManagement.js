@@ -9,7 +9,7 @@ import manageteamservice from "services/manageteamservice";
 
 
 
-export default function PlayerManagement({member, apiToken, teamID}) {
+export default function PlayerManagement({member, apiToken, teamID, adminManage}) {
     const [PlayerModal, setPlayerModal] = useState(false);
     const [FoundPlayers, setFoundPlayers] = useState([]);
     const [SelectedPlayer, setSelectedPlayer] = useState();
@@ -47,6 +47,10 @@ const handleSearchPlayer = async() => {
             if(res.data.length > 0) 
             {
                 setSelectedPlayer(res.data[0]);
+            }
+            else {
+                setMsgPlayerInfo("No results found.");
+                setShowPlayerInfoAlert(true);
             }
         })
         .catch(err => {
@@ -132,6 +136,22 @@ function PlayerInfoAlert() {
     );
   }
   return <> </>;
+};
+
+const handleRemovePlayer = () => {
+    //remove player. member.teamMemberID
+    manageteamservice.RemovePlayerFromTeam(apiToken,member.teamMemberID).then(res => {
+        member.teamMemberName = null;
+        member.teamMemberID = null;
+        member.teamMemberPlatform = null;
+        member.playerID = null;
+        //close modal
+        handleClose();
+    }).catch(err => { 
+        console.log(err);
+        setMsgPlayerInfo(err?.response?.data);
+        setShowPlayerInfoAlert(true);
+       });
 };
 
     return (
@@ -285,6 +305,11 @@ function PlayerInfoAlert() {
                     {/* Footer */}
                     <Row>
                         <Col className="justify-content-end d-flex">
+                        {adminManage == true && member.teamCaptain == false ?
+                        <Button variant="danger" onClick={handleRemovePlayer} className="mr-1">
+                               Remove player
+                            </Button>
+                            : <> </>}
                         <Button variant="danger" onClick={handleClose} className="mr-1">
                                Cancel
                             </Button>

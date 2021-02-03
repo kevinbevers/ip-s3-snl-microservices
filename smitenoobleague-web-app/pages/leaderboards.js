@@ -22,7 +22,7 @@ export default function leaderboards({LoginSession, Data, status, errMsg }) {
   let TopDamageLabels = [];
   let TopDamageData = [];
 
-  Data?.top4DamageAndRemainingInPercentage?.forEach(x => {
+  Data?.top10DamageAndRemainingInPercentage?.forEach(x => {
     TopDamageLabels.push(x?.player?.playername);
     TopDamageData.push(x?.score)
   });
@@ -63,7 +63,6 @@ export default function leaderboards({LoginSession, Data, status, errMsg }) {
         }]
     }
 };
-
   const data = {
     labels: TopDamageLabels,
     datasets: [{
@@ -73,14 +72,28 @@ export default function leaderboards({LoginSession, Data, status, errMsg }) {
             "#27DBF2",
             "#57DB2D",
             "#F2C027",
-            "#EB2602"
+            "#EB2602",
+            "#ff9a00",
+            "#052F5F",
+            "#005377",
+            "#06A77D",
+            "#F1A208",
+            "#9B287B",
+            "#BB342F",
         ],
         hoverBackgroundColor: [
-            "#6925E8",
-            "#27DBF2",
-            "#57DB2D",
-            "#F2C027",
-            "#EB2602"
+          "#6925E8",
+          "#27DBF2",
+          "#57DB2D",
+          "#F2C027",
+          "#EB2602",
+          "#ff9a00",
+          "#052F5F",
+          "#005377",
+          "#06A77D",
+          "#F1A208",
+          "#9B287B",
+          "#BB342F",
         ]
     }]
 };
@@ -158,7 +171,7 @@ const options = {
           <Col md={3}>
             {/* Pie chart of total damage dealt */}
             <Row>
-              <Col md={12} className="text-center"><h3>Top 4 Damage dealers, compared to the rest</h3></Col>
+              <Col md={12} className="text-center"><h6 className="font-weight-bold mt-2 p-3">Top 10 Damage dealers, compared to the rest</h6></Col>
             </Row>
            <Row className="mb-2">
              <Col>
@@ -193,7 +206,7 @@ const options = {
           <Col md={3}>
             {/* Line Chart of stats */}
             <Row>
-              <Col md={12} className="text-center"><h3>Top 5 Highest KDA players</h3></Col>
+              <Col md={12} className="text-center"><h6 className="font-weight-bold">Top 5 highest KDA players</h6></Col>
             </Row>
             <Row className="mb-2">
               <Col><Bar data={BarData} height={230} options={BarOptions} /></Col>

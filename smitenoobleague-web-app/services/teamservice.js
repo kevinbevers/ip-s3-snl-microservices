@@ -1,5 +1,15 @@
 import helpers from "utils/helpers";
 
+const GetTeamByID = async(apiToken, data) => {
+  const apiClient = await helpers.BuildApiClient(apiToken);
+  return apiClient.get("team-service/Team/" + data);
+};
+
+const DeleteTeamByID = async(apiToken, data) => {
+  const apiClient = await helpers.BuildApiClient(apiToken);
+  return apiClient.delete("team-service/Team/" + data);
+};
+
 const GetListOfTeamsByDivisionID = async(divisionID) => {
     const apiClient = await helpers.BuildApiClient(null);
     return apiClient.get("team-service/Team/bydivision/" + divisionID);
@@ -38,5 +48,7 @@ export default {
     GetListOfTeamsWithoutDivisions,
     GetListOfTeamsWithDetailsWithoutDivisions,
     GetTeamStatisticsByTeamID,
-    GetTeamPickPercentagesByTeamID
+    GetTeamPickPercentagesByTeamID,
+    GetTeamByID,
+    DeleteTeamByID
 }

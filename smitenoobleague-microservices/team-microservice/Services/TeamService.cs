@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using team_microservice.Models.Internal;
 using team_microservice.Classes;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace team_microservice.Services
 {
@@ -21,14 +22,16 @@ namespace team_microservice.Services
         private readonly IValidationService _validationService;
         private readonly IExternalServices _externalServices;
         private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public TeamService(SNL_Team_DBContext db, ILogger<TeamService> logger, IValidationService validationService, IExternalServices externalServices, IWebHostEnvironment env)
+        public TeamService(SNL_Team_DBContext db, ILogger<TeamService> logger, IValidationService validationService, IExternalServices externalServices, IWebHostEnvironment env, IHttpContextAccessor httpContext)
         {
             _db = db;
             _logger = logger;
             _validationService = validationService;
             _externalServices = externalServices;
             _env = env;
+            _httpContext = httpContext;
         }
 
         public async Task<ActionResult<Team>> AddTeamAsync(TeamSubmissionAdmin teamSubmisssion)
@@ -866,6 +869,7 @@ namespace team_microservice.Services
 
         public async Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByTeamIdAsync(int teamID)
         {
+            var test = _httpContext.HttpContext.User;
             try
             {
                 TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == teamID).FirstOrDefaultAsync();
@@ -1021,6 +1025,12 @@ namespace team_microservice.Services
         {
             try
             {
+                //Validate access
+                if(!await ValidateIfCaptainHasAccess(ts.TeamID))
+                {
+                    return new ObjectResult("You don't have permission to edit this team.") { StatusCode = 403 }; //FORBIDDEN
+                }
+
                 TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == ts.TeamID).FirstOrDefaultAsync();
                 if (foundTeam != null)
                 {
@@ -1086,6 +1096,12 @@ namespace team_microservice.Services
                 }
                 else
                 {
+                    //Validate access
+                    if (!await ValidateIfCaptainHasAccess(teamMemberToUpdate.TeamMemberTeamId))
+                    {
+                        return new ObjectResult("You don't have permission to edit this team member.") { StatusCode = 403 }; //FORBIDDEN
+                    }
+
                     if (teamMemberToUpdate.TeamMemberRole == update.RoleID)
                     {
                         return new ObjectResult("Team-member new role is the same as the old role") { StatusCode = 400 }; //BAD REQUEST
@@ -1124,6 +1140,11 @@ namespace team_microservice.Services
         {
             try
             {
+                //Validate access
+                if (!await ValidateIfCaptainHasAccess(ts.TeamID))
+                {
+                    return new ObjectResult("You don't have permission to edit this team.") { StatusCode = 403 }; //FORBIDDEN
+                }
                 TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == ts.TeamID).FirstOrDefaultAsync();
                 if (foundTeam != null)
                 {
@@ -1406,6 +1427,28 @@ namespace team_microservice.Services
             else
             {
                 return new ObjectResult("No teams found with the given ID.") { StatusCode = 404 }; //NOT FOUND
+            }
+        }
+
+        private async Task<bool> ValidateIfCaptainHasAccess(int teamID)
+        {
+            var userFromJWT = _httpContext.HttpContext.User;
+
+            if (userFromJWT.IsInRole("Admin"))
+            {
+                return true;
+            }
+
+            string CaptainID = userFromJWT.Claims.Where(claim => claim.Type.Contains("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")).FirstOrDefault().Value;
+
+            if(await _db.TableTeamMembers.Where(x => x.TeamMemberTeamId == teamID && x.TeamMemberAccountId == CaptainID).CountAsync() > 0)
+            {
+                //captain of the given team
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         #endregion
