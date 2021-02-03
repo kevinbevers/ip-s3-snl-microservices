@@ -69,7 +69,7 @@ namespace team_microservice.Services
                                             TeamMemberPlayerId = (int)teamSubmisssion.Captain.TeamCaptainPlayerID,
                                             TeamMemberName = teamSubmisssion.Captain.TeamCaptainPlayerName,
                                             TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
-                                            TeamMemberPlatformId = teamSubmisssion.Captain.TeamCaptainPlatformID,
+                                            TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), teamSubmisssion?.Captain?.TeamCaptainPlatformName),
                                             TeamMemberDivisionId = teamSubmisssion.TeamDivisionID,
                                             TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1,
                                             TeamMemberEmail = teamSubmisssion?.Captain?.TeamCaptainEmail
@@ -153,7 +153,7 @@ namespace team_microservice.Services
                             TeamMemberPlayerId = (int)teamSubmisssion.Captain.TeamCaptainPlayerID,
                             TeamMemberName = teamSubmisssion.Captain.TeamCaptainPlayerName,
                             TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
-                            TeamMemberPlatformId = teamSubmisssion.Captain.TeamCaptainPlatformID,
+                            TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), teamSubmisssion?.Captain?.TeamCaptainPlatformName),
                             TeamMemberDivisionId = teamSubmisssion.TeamDivisionID,
                             TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1
                         };
@@ -1332,7 +1332,7 @@ namespace team_microservice.Services
                         }
                         else
                         {
-                            if (ts.Captain.TeamCaptainPlatformID == null || ts.Captain.TeamCaptainPlayerName == null)
+                            if (ts.Captain.TeamCaptainPlatformName == null || ts.Captain.TeamCaptainPlayerName == null)
                             {
                                 return new ObjectResult("Not all info provided for Teamcaptain.") { StatusCode = 400 }; //OK
                             }
@@ -1348,7 +1348,7 @@ namespace team_microservice.Services
                                     TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : (int)foundTeam.TeamDivisionId,
                                     TeamMemberName = ts.Captain.TeamCaptainPlayerName,
                                     TeamMemberRole = ts.Captain.TeamCaptainRoleID,
-                                    TeamMemberPlatformId = ts.Captain.TeamCaptainPlatformID,
+                                    TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts?.Captain?.TeamCaptainPlatformName),
                                     TeamMemberTeamId = foundTeam.TeamId,
                                     TeamMemberEmail = ts?.Captain?.TeamCaptainEmail
                                 };
@@ -1382,7 +1382,7 @@ namespace team_microservice.Services
                                 TeamCaptain.TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : (int)foundTeam.TeamDivisionId;
                                 TeamCaptain.TeamMemberName = ts.Captain.TeamCaptainPlayerName;
                                 TeamCaptain.TeamMemberRole = ts.Captain.TeamCaptainRoleID;
-                                TeamCaptain.TeamMemberPlatformId = ts.Captain.TeamCaptainPlatformID;
+                                TeamCaptain.TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts?.Captain?.TeamCaptainPlatformName);
                                 TeamCaptain.TeamMemberEmail = ts.Captain.TeamCaptainEmail;
 
                                 _db.TableTeamMembers.Update(TeamCaptain);

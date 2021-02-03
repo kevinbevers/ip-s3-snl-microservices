@@ -7,6 +7,7 @@ import {Container, Row, Col, Card, Button} from "react-bootstrap";
 import FullBackground from "../src/components/FullBackground";
 //custom imports
 import ManageTeams from "src/components/managepage/manageteams";
+import CreateTeam from "src/components/managepage/createteam";
 //Auth
 import helpers from "utils/helpers";
 
@@ -28,7 +29,7 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                         <Card.Text>Manage existing teams or create a new team.</Card.Text>
                         <Row>
                             <Col md={6} className="mb-2">
-                                <Button variant={"primary"} size={"lg"} className="btn-block">Create new team</Button>
+                                <CreateTeam apiToken={apiToken} />
                             </Col>
                             <Col md={6} className="mb-2">
                                 <ManageTeams apiToken={apiToken} />
@@ -129,7 +130,7 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                                 <Row className="h-75">
                                     <Col md={12} className="mb-2 h-100">
                                         <div className="bg-dark text-light log pl-2 pt-1 pb-1">
-                                            <p className="logmsg"><b className="logtime">02-02-2021 15:00</b> <b className="text-info logmsg">The Salty boys made a roster change:</b><br /> > Pandacat got swapped out for BarraCudda</p>
+                                            <p className="logmsg"><b className="logtime">02-02-2021 15:00</b> <b className="text-info logmsg">The Salty boys made a roster change:</b><br /> - Pandacat got swapped out for BarraCudda</p>
                                         </div>
                                     </Col>
                                 </Row>

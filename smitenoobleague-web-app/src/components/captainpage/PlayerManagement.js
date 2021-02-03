@@ -38,7 +38,7 @@ export default function PlayerManagement({member, apiToken, teamID, adminManage}
     };
 
 const handleSearchPlayer = async() => { 
-    if(SearchName != null)
+    if(SearchName != null && SearchName != "")
     {
         const name = SearchName;
         manageteamservice.GetPlayersByName(apiToken, name)
@@ -148,7 +148,6 @@ const handleRemovePlayer = () => {
         //close modal
         handleClose();
     }).catch(err => { 
-        console.log(err);
         setMsgPlayerInfo(err?.response?.data);
         setShowPlayerInfoAlert(true);
        });

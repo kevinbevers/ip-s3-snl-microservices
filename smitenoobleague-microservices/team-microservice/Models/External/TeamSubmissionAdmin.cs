@@ -12,7 +12,7 @@ namespace team_microservice.Models.External
             public string TeamCaptainAccountID { get; set; }
             public int? TeamCaptainPlayerID { get; set; }
             public string TeamCaptainPlayerName { get; set; }
-            public int? TeamCaptainPlatformID { get; set; }
+            public string TeamCaptainPlatformName { get; set; }
             public int? TeamCaptainRoleID { get; set; }
         }
     }

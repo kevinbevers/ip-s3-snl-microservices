@@ -19,7 +19,7 @@ export default function ManageTeams({apiToken}) {
 
     //Divisions for dropdown
     const [Divisions, setDivisions] = useState([]);
-    //CurrentSchedule
+    //teams to show
     const [TeamsToShow, setTeamsToShow] = useState([]);
 
     //Select Division
