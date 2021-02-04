@@ -31,7 +31,7 @@ export default function ManageTeamListItem({apiToken, Team, removeTeamFunc}) {
     };
 
     const deleteTeam = async() => {
-      await teamservice.DeleteTeamByID(apiToken, Team?.teamID).then(res => {removeTeamFunc(Team?.teamID)}).catch(err => {console.log(err)});
+      await teamservice.DeleteTeamByID(apiToken, Team?.teamID).then(res => {removeTeamFunc(Team?.teamID)}).catch(err => {});
     };
 
     const renderTeamLogo = (t) => {

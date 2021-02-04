@@ -129,7 +129,7 @@ export default function CreateTeam({apiToken}) {
             size="lg"
             show={modalCreateShow}
             onHide={closeCreateTeam}
-            aria-labelledby="manage-team-modal"
+            aria-labelledby="create-team-modal"
             >
             <Modal.Header closeButton>
                 <Modal.Title className="font-weight-bold">
@@ -139,7 +139,7 @@ export default function CreateTeam({apiToken}) {
             <Modal.Body>
             <Container>
                 <Form autoComplete="off">
-                <Form.Control type="text" hidden value="stopstupidautocomplete"/>
+                <Form.Control type="text" hidden defaultValue="stopstupidautocomplete"/>
                 <Row><Col>
                 <h5 className="font-weight-bold">Basic info</h5>
                 <hr />

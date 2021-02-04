@@ -8,6 +8,8 @@ import FullBackground from "../src/components/FullBackground";
 //custom imports
 import ManageTeams from "src/components/managepage/manageteams";
 import CreateTeam from "src/components/managepage/createteam";
+import ManageDivisions from "src/components/managepage/managedivisions";
+import CreateDivision from "src/components/managepage/createdivision";
 //Auth
 import helpers from "utils/helpers";
 
@@ -45,10 +47,10 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                         <Card.Text>Manage existing division or create a new one.</Card.Text>
                         <Row>
                             <Col md={6} className="mb-2">
-                                <Button variant={"primary"} size={"lg"} className="btn-block">Create new division</Button>
+                                <CreateDivision apiToken={apiToken} />
                             </Col>
                             <Col md={6} className="mb-2">
-                            <Button variant={"primary"} size={"lg"} className="btn-block">Manage exisiting divisions</Button>
+                            <ManageDivisions apiToken={apiToken}/>
                             </Col>
                         </Row>
                     </Card.Body>

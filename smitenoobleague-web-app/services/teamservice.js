@@ -5,6 +5,16 @@ const GetTeamByID = async(apiToken, data) => {
   return apiClient.get("team-service/Team/" + data);
 };
 
+const GetAllTeams = async() => {
+  const apiClient = await helpers.BuildApiClient(null);
+  return apiClient.get("team-service/Team/");
+};
+
+const SetTeamsDivision = async(apiToken,data) => {
+  const apiClient = await helpers.BuildApiClient(apiToken);
+  return apiClient.post("team-service/Team/setdivisionforteams", data);
+};
+
 const DeleteTeamByID = async(apiToken, data) => {
   const apiClient = await helpers.BuildApiClient(apiToken);
   return apiClient.delete("team-service/Team/" + data);
@@ -13,6 +23,11 @@ const DeleteTeamByID = async(apiToken, data) => {
 const AddNewTeam = async(apiToken, data) => {
   const apiClient = await helpers.BuildApiClient(apiToken);
   return apiClient.post("team-service/Team/", data);
+};
+
+const UpdateTeamAsAdmin = async(apiToken, data) => {
+  const apiClient = await helpers.BuildApiClient(apiToken);
+  return apiClient.put("team-service/team/admin", data);
 };
 
 const GetListOfTeamsByDivisionID = async(divisionID) => {
@@ -56,5 +71,8 @@ export default {
     GetTeamPickPercentagesByTeamID,
     GetTeamByID,
     DeleteTeamByID,
-    AddNewTeam
+    AddNewTeam,
+    UpdateTeamAsAdmin,
+    GetAllTeams,
+    SetTeamsDivision
 }

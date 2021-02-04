@@ -40,7 +40,7 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
         //call api to update team
         const formData = new FormData();
         formData.append("teamID", apiResponse?.teamID);
-        formData.append("teamName", oldName);
+        formData.append("teamName", teamName);
 
             await captainservice.UpdateTeamInfo(apiToken, formData).then(res => { 
                 setOldName(teamName); 
@@ -103,9 +103,9 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
         formData.append("teamLogo", imageFile);
 
         await captainservice.UpdateTeamInfo(apiToken, formData).then(res => {
-            console.log(res.data);
             setShowTeamInfoAlert(false);
             setEditImage(false);
+            apiResponse.teamLogoPath = res?.data?.teamLogoPath;
         })
             .catch(err => {
                 console.log(err);

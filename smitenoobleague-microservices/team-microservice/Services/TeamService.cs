@@ -923,7 +923,7 @@ namespace team_microservice.Services
         {
             try
             {
-                if (divisionTeams.teamIdList.Count() > 0)
+                if (divisionTeams.teamIdList?.Count() > 0)
                 {
                     List<TableTeam> teamsToRemove = await _db.TableTeams.Where(t => t.TeamDivisionId == divisionTeams.divisionID).ToListAsync();
                     if (teamsToRemove.Count() > 0)
@@ -962,7 +962,21 @@ namespace team_microservice.Services
                 }
                 else
                 {
-                    return new ObjectResult("No teamID's submitted") { StatusCode = 400 }; //NOT FOUND  
+                    List<TableTeam> teamsToRemove = await _db.TableTeams.Where(t => t.TeamDivisionId == divisionTeams.divisionID).ToListAsync();
+                    if (teamsToRemove.Count() > 0)
+                    {
+                        //Remove current teams and members from the given division
+                        List<TableTeamMember> foundMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberDivisionId == divisionTeams.divisionID).ToListAsync();
+                        foundMembers.ForEach(m => m.TeamMemberDivisionId = null);
+                        teamsToRemove.ForEach(t => t.TeamDivisionId = null);
+
+                        _db.TableTeamMembers.UpdateRange(foundMembers);
+                        _db.TableTeams.UpdateRange(teamsToRemove);
+
+                        await _db.SaveChangesAsync();
+                    }
+
+                    return new ObjectResult("Division cleared of teams.") { StatusCode = 200 }; //OK
                 }
 
 

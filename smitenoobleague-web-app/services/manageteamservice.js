@@ -24,5 +24,5 @@ export default {
   GetPlayersByName,
   AddPlayerToTeam,
   UpdatePlayerToTeam,
-  RemovePlayerFromTeam
+  RemovePlayerFromTeam,
 }
