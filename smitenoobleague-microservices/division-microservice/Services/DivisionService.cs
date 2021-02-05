@@ -114,6 +114,8 @@ namespace division_microservice.Services
                 {
                     _db.TableDivisions.Remove(divisionToDelete);
                     await _db.SaveChangesAsync(); //save deletion / could have save changes as int changes and count the amount of changes and return that
+                    //update all teams to be divisionless
+                    await _externalServices.RemoveTeamsFromDivision(divisionID);
 
                     //make call to teamService to remove division id from the teams that have it
 

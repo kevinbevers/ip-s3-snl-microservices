@@ -1,0 +1,49 @@
+.log {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    height: 450px;
+}
+
+.teamList {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    height: 300px;
+}
+
+@media (max-width: 767.98px) {
+    .logtime {
+        font-size: 2.5vw;
+    }
+    
+    .logmsg {
+        font-size: 2.8vw;
+    }
+}
+
+.adminDeleteButton {
+    color: #dc3545;
+    padding-left: 0;
+    padding-right: 5px;
+}
+
+.adminDeleteButton:hover {
+    color: #c82333;
+}
+
+.adminEditButton {
+    color: #ffc107;
+    padding-left: 0;
+    padding-right: 5px;
+}
+
+.adminEditButton:hover {
+    color: #e0a800;
+}
+
+.adminTeamListItem {
+    outline: none !important;
+}
+
+.adminTeamListItem:hover {
+    background-color: whitesmoke;
+}

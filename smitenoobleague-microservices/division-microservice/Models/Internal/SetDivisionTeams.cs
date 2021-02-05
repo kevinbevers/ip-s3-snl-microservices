@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace team_microservice.Models.External
+namespace division_microservice.Models.Internal
 {
     public class SetDivisionTeams
     {
-        [Required]
         public int divisionID { get; set; }
         public List<int> teamIdList { get; set; }
     }

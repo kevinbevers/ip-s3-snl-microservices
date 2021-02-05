@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using division_microservice.Interfaces;
@@ -127,7 +127,7 @@ namespace division_microservice.Services
                 {
                     //add all scheduleid's to the int list
                     List<SimpleSchedule> divisionScheduleIds = new List<SimpleSchedule>();
-                    foundSchedules.ForEach(fs => divisionScheduleIds.Add( new SimpleSchedule {ScheduleID = fs.ScheduleId, ScheduleName = fs.ScheduleName }));
+                    foundSchedules.ForEach(fs => divisionScheduleIds.Add( new SimpleSchedule {ScheduleID = fs.ScheduleId, ScheduleName = fs.ScheduleName}));
 
                     return new ObjectResult(divisionScheduleIds) { StatusCode = 200 };//OK
                 }

@@ -15,8 +15,14 @@ const GetPlayersByName = async(apiToken, data) => {
     return apiClient.put("team-service/team/updatemember", data);
   };
 
+  const RemovePlayerFromTeam = async(apiToken, data) => {
+    const apiClient = await helpers.BuildApiClient(apiToken);
+    return apiClient.delete("team-service/team/teammember/" + data);
+  };
+
 export default {
   GetPlayersByName,
   AddPlayerToTeam,
-  UpdatePlayerToTeam
+  UpdatePlayerToTeam,
+  RemovePlayerFromTeam,
 }

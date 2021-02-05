@@ -51,7 +51,7 @@ namespace division_microservice.Controllers
         // POST /division
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Division>> Post([FromBody] string divisionName) //return created division object
+        public async Task<ActionResult<Division>> Post([FromForm] string divisionName) //return created division object
         {
             return ModelState.IsValid ? await _divisionService.CreateDivisionAsync(divisionName) : BadRequest(ModelState);
         }

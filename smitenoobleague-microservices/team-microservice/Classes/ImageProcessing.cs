@@ -103,7 +103,7 @@ namespace team_microservice.Classes
             if (IsImage(file))
             {
                 DateTime date = DateTime.UtcNow;
-                string imageName = $"{date:yyyyMMddHHmm}_{imgName}.png"; //datetime in the save parameter for cache busting
+                string imageName = $"{date:yyyyMMddHHmmss}_{imgName}.png"; //datetime in the save parameter for cache busting
                 string filePath = Path.Combine(env.ContentRootPath, "images");
 
                 using (var memoryStream = new MemoryStream())

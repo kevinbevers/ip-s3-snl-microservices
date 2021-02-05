@@ -5,15 +5,80 @@ import {RiSwitchFill} from "react-icons/ri";
 import {GiPc} from "react-icons/gi";
 import {SiEpicgames} from "react-icons/si";
 import manageteamservice from "services/manageteamservice";
+import teamservice from "services/teamservice";
 
 
 
 
-export default function PlayerManagement({member, apiToken, teamID}) {
+export default function PlayerManagement({member, apiToken, teamID, adminManage}) {
     const [PlayerModal, setPlayerModal] = useState(false);
     const [FoundPlayers, setFoundPlayers] = useState([]);
     const [SelectedPlayer, setSelectedPlayer] = useState();
     const [SearchName, setSearchName] = useState("");
+    //#region captain
+    //captain modal
+    const [ModalEditCaptain, setModalEditCaptain] = useState(false);
+    const [CaptainSub, setCaptainSub] = useState("");
+    const [CaptainMail, setCaptainMail] = useState("");
+
+    const closeCaptainModal = () =>{ 
+        setCaptainSub("");
+        setCaptainMail("");
+        setModalEditCaptain(false);
+    };
+
+    const handleEditCaptain = async() => {
+
+        if(CaptainSub == "" || CaptainSub == null)
+        {
+            setMsgCaptainInfo("Captain auth0 sub is required");
+            setShowcaptainInfoAlert(true);
+        }
+        else if(CaptainMail == "" || CaptainMail == null)
+        {
+            setMsgCaptainInfo("Captain auth0 email is required");
+            setShowcaptainInfoAlert(true);
+        }
+        else {
+        let teamData = null;
+        //get most up to date team info
+        await teamservice.GetTeamByID(apiToken, teamID).then(res => {teamData = res.data;
+            const data = {
+                teamID: teamID,
+                teamName: teamData?.teamName,
+                teamDivsion: teamData?.teamDivsion,
+                captain: {
+                  teamCaptainEmail: CaptainMail,
+                  teamCaptainAccountID: CaptainSub,
+                  teamCaptainPlayerID: member.playerID,
+                  teamCaptainPlayerName: member.teamMemberName,
+                  teamCaptainPlatformName: member.teamMemberPlatform,
+                  teamCaptainRoleID: member.teamMemberRole.roleID
+                }
+              };
+             teamservice.UpdateTeamAsAdmin(apiToken, data).then(res => { closeCaptainModal();}).catch(err => {
+                setMsgCaptainInfo(err?.response?.data);
+                setShowcaptainInfoAlert(true);
+            });
+        }).catch(err => {});
+    }
+    };
+
+    const [msgCaptainInfo, setMsgCaptainInfo] = useState("Error msg");
+const [showCaptainInfoAlert, setShowcaptainInfoAlert] = useState(false);
+function CaptainInfoPlayer() {
+  if (showCaptainInfoAlert) {
+    return (
+      <Alert className="" variant="danger" onClose={() => setShowcaptainInfoAlert(false)} dismissible>
+        <p className="my-auto">
+          {msgCaptainInfo}
+        </p>
+      </Alert>
+    );
+  }
+  return <> </>;
+};
+    //#endregion
 
     const updateSearchName = (event) => {
         if(event.target.value != null)
@@ -38,7 +103,7 @@ export default function PlayerManagement({member, apiToken, teamID}) {
     };
 
 const handleSearchPlayer = async() => { 
-    if(SearchName != null)
+    if(SearchName != null && SearchName != "")
     {
         const name = SearchName;
         manageteamservice.GetPlayersByName(apiToken, name)
@@ -47,6 +112,10 @@ const handleSearchPlayer = async() => {
             if(res.data.length > 0) 
             {
                 setSelectedPlayer(res.data[0]);
+            }
+            else {
+                setMsgPlayerInfo("No results found.");
+                setShowPlayerInfoAlert(true);
             }
         })
         .catch(err => {
@@ -132,6 +201,21 @@ function PlayerInfoAlert() {
     );
   }
   return <> </>;
+};
+
+const handleRemovePlayer = () => {
+    //remove player. member.teamMemberID
+    manageteamservice.RemovePlayerFromTeam(apiToken,member.teamMemberID).then(res => {
+        member.teamMemberName = null;
+        member.teamMemberID = null;
+        member.teamMemberPlatform = null;
+        member.playerID = null;
+        //close modal
+        handleClose();
+    }).catch(err => { 
+        setMsgPlayerInfo(err?.response?.data);
+        setShowPlayerInfoAlert(true);
+       });
 };
 
     return (
@@ -285,6 +369,16 @@ function PlayerInfoAlert() {
                     {/* Footer */}
                     <Row>
                         <Col className="justify-content-end d-flex">
+                        {adminManage == true && member.teamCaptain == false ?
+                        <Button variant="danger" onClick={handleRemovePlayer} className="mr-1">
+                               Remove player
+                            </Button>
+                            : <> </>}
+                        {adminManage == true && member.teamCaptain == true ?
+                        <Button variant="warning" onClick={() => setModalEditCaptain(true)} className="mr-1">
+                               Edit captain
+                            </Button>
+                            : <> </>}
                         <Button variant="danger" onClick={handleClose} className="mr-1">
                                Cancel
                             </Button>
@@ -297,6 +391,60 @@ function PlayerInfoAlert() {
                  </>}
                
         </Modal>
+        <Modal
+            show={ModalEditCaptain}
+            onHide={closeCaptainModal}
+            aria-labelledby="manage-team-modal"
+            >
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    <h6 className="font-weight-bold">Edit captain</h6>
+                </Modal.Title>
+            </Modal.Header>
+           <Modal.Body>
+           <Container>
+                <Form autoComplete="off">
+                <Form.Control type="text" hidden value="stopstupidautocomplete"/>
+                <Form.Group>
+                <Row><Col>
+                <h5 className="font-weight-bold">Team captain</h5>
+                <hr />
+                </Col></Row>
+                <Form.Row>
+                    <Form.Label column lg={3} className="font-weight-bold">
+                    Auth0 Email:
+                    </Form.Label>
+                    <Col>
+                    <Form.Control type="email" placeholder="Enter captain's auth0 Email" value={CaptainMail} onChange={(e) => setCaptainMail(e.target.value)}/>
+                    </Col>
+                </Form.Row>
+                <br />
+                <Form.Row>
+                    <Form.Label column lg={3} className="font-weight-bold">
+                    Auth0 sub:
+                    </Form.Label>
+                    <Col>
+                    <Form.Control type="text" placeholder="Enter captain's auth0 sub" value={CaptainSub} onChange={(e) => setCaptainSub(e.target.value)}/>
+                    </Col>
+                </Form.Row>
+                <br />
+                </Form.Group>
+                </Form>
+            </Container>
+            <Row><Col><CaptainInfoPlayer /></Col></Row>
+              <Row>
+                  <Col className="justify-content-end d-flex p-auto">
+                      <Button variant="primary" className="mr-2 font-weight-bold" onClick={closeCaptainModal}>
+                          Cancel
+                      </Button>
+
+                      <Button className="font-weight-bold" variant="warning" onClick={handleEditCaptain}>
+                          Update
+                      </Button>
+                  </Col>
+              </Row>
+              </Modal.Body>
+            </Modal>
         </>
     );
 }

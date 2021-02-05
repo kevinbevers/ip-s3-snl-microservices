@@ -28,6 +28,7 @@
     "react": "^16.14.0",
     "react-bootstrap": "^1.4.0",
     "react-chartjs-2": "^2.11.1",
+    "react-datetime": "^3.0.4",
     "react-dom": "^16.14.0",
     "react-icons": "^3.11.0",
     "react-sortablejs": "^6.0.0",

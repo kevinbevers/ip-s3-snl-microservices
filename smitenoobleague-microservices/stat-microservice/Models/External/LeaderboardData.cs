@@ -14,7 +14,7 @@ namespace stat_microservice.Models.External
         public List<LeaderboardEntry_Double> KillParticipation { get; set; }
         public List<LeaderboardEntry> DamageTaken { get; set; }
         public List<LeaderboardEntry> Healing { get; set; }
-        public List<LeaderboardEntry> Top4DamageAndRemainingInPercentage { get; set; }
+        public List<LeaderboardEntry> Top10DamageAndRemainingInPercentage { get; set; }
         public List<LeaderboardEntry_Double> Top5KdaPlayers { get; set; }
     }
 }

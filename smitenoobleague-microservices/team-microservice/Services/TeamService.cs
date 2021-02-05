@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using team_microservice.Models.Internal;
 using team_microservice.Classes;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace team_microservice.Services
 {
@@ -21,14 +22,16 @@ namespace team_microservice.Services
         private readonly IValidationService _validationService;
         private readonly IExternalServices _externalServices;
         private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public TeamService(SNL_Team_DBContext db, ILogger<TeamService> logger, IValidationService validationService, IExternalServices externalServices, IWebHostEnvironment env)
+        public TeamService(SNL_Team_DBContext db, ILogger<TeamService> logger, IValidationService validationService, IExternalServices externalServices, IWebHostEnvironment env, IHttpContextAccessor httpContext)
         {
             _db = db;
             _logger = logger;
             _validationService = validationService;
             _externalServices = externalServices;
             _env = env;
+            _httpContext = httpContext;
         }
 
         public async Task<ActionResult<Team>> AddTeamAsync(TeamSubmissionAdmin teamSubmisssion)
@@ -66,7 +69,7 @@ namespace team_microservice.Services
                                             TeamMemberPlayerId = (int)teamSubmisssion.Captain.TeamCaptainPlayerID,
                                             TeamMemberName = teamSubmisssion.Captain.TeamCaptainPlayerName,
                                             TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
-                                            TeamMemberPlatformId = teamSubmisssion.Captain.TeamCaptainPlatformID,
+                                            TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), teamSubmisssion?.Captain?.TeamCaptainPlatformName),
                                             TeamMemberDivisionId = teamSubmisssion.TeamDivisionID,
                                             TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1,
                                             TeamMemberEmail = teamSubmisssion?.Captain?.TeamCaptainEmail
@@ -150,7 +153,7 @@ namespace team_microservice.Services
                             TeamMemberPlayerId = (int)teamSubmisssion.Captain.TeamCaptainPlayerID,
                             TeamMemberName = teamSubmisssion.Captain.TeamCaptainPlayerName,
                             TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
-                            TeamMemberPlatformId = teamSubmisssion.Captain.TeamCaptainPlatformID,
+                            TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), teamSubmisssion?.Captain?.TeamCaptainPlatformName),
                             TeamMemberDivisionId = teamSubmisssion.TeamDivisionID,
                             TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1
                         };
@@ -866,6 +869,7 @@ namespace team_microservice.Services
 
         public async Task<ActionResult<TeamWithDetails>> GetTeamWithDetailsByTeamIdAsync(int teamID)
         {
+            var test = _httpContext.HttpContext.User;
             try
             {
                 TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == teamID).FirstOrDefaultAsync();
@@ -919,7 +923,7 @@ namespace team_microservice.Services
         {
             try
             {
-                if (divisionTeams.teamIdList.Count() > 0)
+                if (divisionTeams.teamIdList?.Count() > 0)
                 {
                     List<TableTeam> teamsToRemove = await _db.TableTeams.Where(t => t.TeamDivisionId == divisionTeams.divisionID).ToListAsync();
                     if (teamsToRemove.Count() > 0)
@@ -958,7 +962,21 @@ namespace team_microservice.Services
                 }
                 else
                 {
-                    return new ObjectResult("No teamID's submitted") { StatusCode = 400 }; //NOT FOUND  
+                    List<TableTeam> teamsToRemove = await _db.TableTeams.Where(t => t.TeamDivisionId == divisionTeams.divisionID).ToListAsync();
+                    if (teamsToRemove.Count() > 0)
+                    {
+                        //Remove current teams and members from the given division
+                        List<TableTeamMember> foundMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberDivisionId == divisionTeams.divisionID).ToListAsync();
+                        foundMembers.ForEach(m => m.TeamMemberDivisionId = null);
+                        teamsToRemove.ForEach(t => t.TeamDivisionId = null);
+
+                        _db.TableTeamMembers.UpdateRange(foundMembers);
+                        _db.TableTeams.UpdateRange(teamsToRemove);
+
+                        await _db.SaveChangesAsync();
+                    }
+
+                    return new ObjectResult("Division cleared of teams.") { StatusCode = 200 }; //OK
                 }
 
 
@@ -1021,6 +1039,12 @@ namespace team_microservice.Services
         {
             try
             {
+                //Validate access
+                if(!await ValidateIfCaptainHasAccess(ts.TeamID))
+                {
+                    return new ObjectResult("You don't have permission to edit this team.") { StatusCode = 403 }; //FORBIDDEN
+                }
+
                 TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == ts.TeamID).FirstOrDefaultAsync();
                 if (foundTeam != null)
                 {
@@ -1086,6 +1110,12 @@ namespace team_microservice.Services
                 }
                 else
                 {
+                    //Validate access
+                    if (!await ValidateIfCaptainHasAccess(teamMemberToUpdate.TeamMemberTeamId))
+                    {
+                        return new ObjectResult("You don't have permission to edit this team member.") { StatusCode = 403 }; //FORBIDDEN
+                    }
+
                     if (teamMemberToUpdate.TeamMemberRole == update.RoleID)
                     {
                         return new ObjectResult("Team-member new role is the same as the old role") { StatusCode = 400 }; //BAD REQUEST
@@ -1124,6 +1154,11 @@ namespace team_microservice.Services
         {
             try
             {
+                //Validate access
+                if (!await ValidateIfCaptainHasAccess(ts.TeamID))
+                {
+                    return new ObjectResult("You don't have permission to edit this team.") { StatusCode = 403 }; //FORBIDDEN
+                }
                 TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == ts.TeamID).FirstOrDefaultAsync();
                 if (foundTeam != null)
                 {
@@ -1311,7 +1346,7 @@ namespace team_microservice.Services
                         }
                         else
                         {
-                            if (ts.Captain.TeamCaptainPlatformID == null || ts.Captain.TeamCaptainPlayerName == null)
+                            if (ts.Captain.TeamCaptainPlatformName == null || ts.Captain.TeamCaptainPlayerName == null)
                             {
                                 return new ObjectResult("Not all info provided for Teamcaptain.") { StatusCode = 400 }; //OK
                             }
@@ -1327,7 +1362,7 @@ namespace team_microservice.Services
                                     TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : (int)foundTeam.TeamDivisionId,
                                     TeamMemberName = ts.Captain.TeamCaptainPlayerName,
                                     TeamMemberRole = ts.Captain.TeamCaptainRoleID,
-                                    TeamMemberPlatformId = ts.Captain.TeamCaptainPlatformID,
+                                    TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts?.Captain?.TeamCaptainPlatformName),
                                     TeamMemberTeamId = foundTeam.TeamId,
                                     TeamMemberEmail = ts?.Captain?.TeamCaptainEmail
                                 };
@@ -1361,7 +1396,7 @@ namespace team_microservice.Services
                                 TeamCaptain.TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : (int)foundTeam.TeamDivisionId;
                                 TeamCaptain.TeamMemberName = ts.Captain.TeamCaptainPlayerName;
                                 TeamCaptain.TeamMemberRole = ts.Captain.TeamCaptainRoleID;
-                                TeamCaptain.TeamMemberPlatformId = ts.Captain.TeamCaptainPlatformID;
+                                TeamCaptain.TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts?.Captain?.TeamCaptainPlatformName);
                                 TeamCaptain.TeamMemberEmail = ts.Captain.TeamCaptainEmail;
 
                                 _db.TableTeamMembers.Update(TeamCaptain);
@@ -1406,6 +1441,28 @@ namespace team_microservice.Services
             else
             {
                 return new ObjectResult("No teams found with the given ID.") { StatusCode = 404 }; //NOT FOUND
+            }
+        }
+
+        private async Task<bool> ValidateIfCaptainHasAccess(int teamID)
+        {
+            var userFromJWT = _httpContext.HttpContext.User;
+
+            if (userFromJWT.IsInRole("Admin"))
+            {
+                return true;
+            }
+
+            string CaptainID = userFromJWT.Claims.Where(claim => claim.Type.Contains("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")).FirstOrDefault().Value;
+
+            if(await _db.TableTeamMembers.Where(x => x.TeamMemberTeamId == teamID && x.TeamMemberAccountId == CaptainID).CountAsync() > 0)
+            {
+                //captain of the given team
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         #endregion

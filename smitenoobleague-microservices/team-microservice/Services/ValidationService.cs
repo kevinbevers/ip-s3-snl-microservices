@@ -24,6 +24,11 @@ namespace team_microservice.Services
             var captainTeamMemberObject = await _db.TableTeamMembers.Where(m => m.TeamMemberPlayerId == playerID).FirstOrDefaultAsync();
             if (captainTeamMemberObject != null)
             {
+                if(captainTeamMemberObject.TeamMemberTeamId != teamID)
+                {
+                    return true;
+                }
+
                 int captainFound = await _db.TableTeams.Where(t => t.TeamCaptainId == captainTeamMemberObject.TeamMemberId && t.TeamId != teamID).CountAsync();
                 return captainFound > 0;
             }

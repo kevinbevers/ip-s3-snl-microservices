@@ -36,13 +36,18 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
         setShowTeamInfoAlert(false);
     };
     const confirmNameEdit = async () => {
-        if (teamName != apiResponse.teamName) {
+        if (teamName != apiResponse?.teamName) {
         //call api to update team
         const formData = new FormData();
         formData.append("teamID", apiResponse?.teamID);
-        formData.append("teamName", oldName);
+        formData.append("teamName", teamName);
 
-            await captainservice.UpdateTeamInfo(apiToken, formData).then(res => { setOldName(teamName); setShowTeamInfoAlert(false); setEditing(false); })
+            await captainservice.UpdateTeamInfo(apiToken, formData).then(res => { 
+                setOldName(teamName); 
+                setShowTeamInfoAlert(false); 
+                setEditing(false); 
+                apiResponse.teamName = teamName;
+            })
                 .catch(err => {
                     console.log(err);
                     if (err?.response?.status != 400) {
@@ -98,9 +103,9 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
         formData.append("teamLogo", imageFile);
 
         await captainservice.UpdateTeamInfo(apiToken, formData).then(res => {
-            console.log(res.data);
             setShowTeamInfoAlert(false);
             setEditImage(false);
+            apiResponse.teamLogoPath = res?.data?.teamLogoPath;
         })
             .catch(err => {
                 console.log(err);

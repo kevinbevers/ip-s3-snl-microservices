@@ -41,7 +41,7 @@ namespace stat_microservice.Services
                         Healing = await GetTop10HealingAsync(),
                         DamageMitigated = await GetTop10DamageMitigatedAsync(),
                         DamageTaken = await GetTop10DamageTakenAsync(),
-                        Top4DamageAndRemainingInPercentage = await GetTop4DamageAndRemainderAsync(),
+                        Top10DamageAndRemainingInPercentage = await GetTop10DamageAndRemainderAsync(),
                         Top5KdaPlayers = await GetTop5KdaAsync(),
                         KillParticipation = await GetTop10KillParticipationAsync()
                     };
@@ -114,33 +114,20 @@ namespace stat_microservice.Services
 
             return leaderboardEntries;
         }
-        private async Task<List<LeaderboardEntry>> GetTop4DamageDealtAsync()
-        {
-            //Group all stats by playerID then get the top 4 players with the most damage dealt
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
-            {
-                Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
-                Score = y.Select(z => z.IgDamageDealt).Sum()
-            }).OrderByDescending(x => x.Score).Take(4).ToListAsync();
-            //Set the platform name based on the ID
-            leaderboardEntries.ForEach(x => x.Player.Platform = ((ApiPlatformEnum)x.Player.PlatformID).ToString());
-
-            return leaderboardEntries;
-        }
-        private async Task<List<LeaderboardEntry>> GetTop4DamageAndRemainderAsync()
+        private async Task<List<LeaderboardEntry>> GetTop10DamageAndRemainderAsync()
         {
             //total damage dealt
             int? totalDamage = await _db.TableStats.Select(x => x.IgDamageDealt).SumAsync();
 
-            var top4DamageDealers = await GetTop4DamageDealtAsync();
+            var top10DamageDealers = await GetTop10DamageDealtAsync();
 
-            var Top4Damage = top4DamageDealers.Select(x => x.Score).Sum();
+            var Top10Damage = top10DamageDealers.Select(x => x.Score).Sum();
 
             //Score to %
-            top4DamageDealers.ForEach(x => x.Score = (int)((double)x.Score / (double)totalDamage * 100));
-            top4DamageDealers.Add(new LeaderboardEntry { Player = new LeaderboardPlayer { Playername = "The rest of the SNL" }, Score = (int)((double)(totalDamage - Top4Damage) / (double)totalDamage * 100) });
+            top10DamageDealers.ForEach(x => x.Score = (int)((double)x.Score / (double)totalDamage * 100));
+            top10DamageDealers.Add(new LeaderboardEntry { Player = new LeaderboardPlayer { Playername = "The rest of the SNL" }, Score = (int)((double)(totalDamage - Top10Damage) / (double)totalDamage * 100) });
             
-            return top4DamageDealers;
+            return top10DamageDealers;
         }
         private async Task<List<LeaderboardEntry>> GetTop10HealingAsync()
         {
@@ -187,7 +174,7 @@ namespace stat_microservice.Services
             List<LeaderboardEntry_Double> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
-                Score = Math.Round((double)y.Select(z => z.IgKills).Sum() + (double)y.Select(z => z.IgAssists).Sum()) / (double)y.Select(z => z.IgDeaths).Sum()
+                Score = Math.Round(((double)y.Select(z => z.IgKills).Sum() + (double)y.Select(z => z.IgAssists).Sum()) / (double)y.Select(z => z.IgDeaths).Sum(),2)
             }).OrderByDescending(x => x.Score).Take(5).ToListAsync();
             //Set the platform name based on the ID
             leaderboardEntries.ForEach(x => x.Player.Platform = ((ApiPlatformEnum)x.Player.PlatformID).ToString());
