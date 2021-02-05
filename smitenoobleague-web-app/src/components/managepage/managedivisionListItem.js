@@ -72,7 +72,7 @@ export default function ManageDivisionListItem({apiToken, divisiondata, removeDi
         setModalDivisionShow(true);
     };
 
-    const handleEditDivsion = async() => {
+    const handleEditDivision = async() => {
 
         const updateData = {
             divisionID: divisiondata?.divisionID,
@@ -157,7 +157,7 @@ export default function ManageDivisionListItem({apiToken, divisiondata, removeDi
                     <Col className="teamList border border-dark">
                     {Teams != null ? <>
                         {Teams.map((t, index) => (
-                                    <Form.Check key={index} label={t.teamName} value={t.teamID} onChange={handleTeamListChange} defaultChecked={t.divisionID == divisiondata?.divisionID} type={"checkbox"} />
+                                    <Form.Check key={index} label={`${t.teamName} ${t.divisionID != null ? "" : "(division-less)"}`} value={t.teamID} onChange={handleTeamListChange} defaultChecked={t.divisionID == divisiondata?.divisionID} type={"checkbox"} />
                         ))}
                         </> : 
                         <> 
@@ -179,7 +179,7 @@ export default function ManageDivisionListItem({apiToken, divisiondata, removeDi
             <Row><Col><DivisionInfoAlert /></Col></Row>
             <Row>
             <Col md={2} xs={2}><Button variant="danger" className="btn-block" onClick={closeDivisionModal}>Cancel</Button></Col>
-                <Col><Button className="btn-block" onClick={handleEditDivsion}>Save changes</Button></Col>
+                <Col><Button className="btn-block" onClick={handleEditDivision}>Save changes</Button></Col>
             </Row>
             </Modal.Body>
             </Modal>

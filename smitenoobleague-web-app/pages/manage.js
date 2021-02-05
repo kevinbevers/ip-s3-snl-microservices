@@ -10,6 +10,8 @@ import ManageTeams from "src/components/managepage/manageteams";
 import CreateTeam from "src/components/managepage/createteam";
 import ManageDivisions from "src/components/managepage/managedivisions";
 import CreateDivision from "src/components/managepage/createdivision";
+import ManageSchedules from "src/components/managepage/manageschedules";
+import CreateSchedule from "src/components/managepage/createschedule";
 //Auth
 import helpers from "utils/helpers";
 
@@ -68,10 +70,10 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                                 <Card.Text>Generate, edit or delete a schedule. Each schedule is linked to a division.</Card.Text>
                                 <Row>
                                     <Col md={6} className="mb-2">
-                                        <Button variant={"primary"} size={"lg"} className="btn-block">Generate new schedule</Button>
+                                       <CreateSchedule apiToken={apiToken} />
                                     </Col>
                                     <Col md={6} className="mb-2">
-                                    <Button variant={"primary"} size={"lg"} className="btn-block">Manage exisiting schedules</Button>
+                                        <ManageSchedules apiToken={apiToken} />
                                     </Col>
                                 </Row>
                             </Card.Body>
