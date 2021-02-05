@@ -13,7 +13,7 @@ class MyDocument extends Document {
         <meta name="description" content="Smitenoobleague is a website where teams can sign up, compete and see there stats" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@Smitenoobleague" />
-        <meta name="twitter:title" content="Embed a Twitch Video into a React Website" />
+        <meta name="twitter:title" content="Schedules, Stats, Leaderboards and more" />
         <meta name="twitter:description" content="Smitenoobleague is a website where teams can sign up, compete and see there stats" />
         <meta name="twitter:image" content="https://smitenoobleague.com/images/twitterbanner.jpg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
