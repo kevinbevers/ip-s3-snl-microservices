@@ -17,13 +17,18 @@ function Home({LoginSession}) {
     <NavBar LoginSession={LoginSession}/>
   <div className="jumbotron-fluid">
     {/* render body here */}
-    <div className=" container halfTransparent mb-2 mt-5 rounded p-3" id="welcomeScreen">
-        <h1 className="display-5">Hello, welcome to the Smite Noob League website!</h1>
-        <p className="lead">On this site you can view information about the league, including stats and game results.</p>
+    <div className=" container halfTransparent mb-2 mt-5 rounded p-4" id="welcomeScreen">
+        <h1 className="display-5">Welcome to the Smitenoobleague website!</h1>
+        <h2 className="lead">The fully automated smite amateur league! Stats, Leaderboards and more.</h2>
         <hr className="my-4" />
-        <p>If you want more information about the league click the button below to check out our FAQ page</p>
-        <p className="lead">
-            <a className="btn btn-primary btn-lg mb-4 btn-block" href="/faq" role="button">I want Info</a>
+        <h6>
+          sending screenshots of match results to an admin? no longer!<br />
+          the team captain can easily submit the match id on the captain dashboard and the rest happens automatically.<br />
+          Questions? your answer is probably found in the <a href="/faq">FAQ</a>.
+        </h6>
+        <br />
+        <p>
+        Wondering what's coming up for the Smitenoobleague? check out the <a href="/roadmap">roadmap</a>!
         </p>
     </div>
   </div>
