@@ -63,11 +63,12 @@ return (
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="2">
             <Card.Body>
-            <span className="m-0">If you want to sign up as a team you should send an e-mail to <a href="mailto:signup@smitenoobleague.com?SUBJECT=Sign up">signup@smitenoobleague.com</a> with the following information:
+            <span className="m-0">If you want to sign up as a team you should send an e-mail to <a href="mailto:signup@smitenoobleague.com?SUBJECT=Sign up for captain">signup@smitenoobleague.com</a> with the following information:
             <ul>
-                <li>Your Gamertag / ingame name</li>
+                <li>Your Gamertag / IGN,</li>
                 <li>Your Platform</li>
-                <li>Your team's skill level (please answer fairly)</li>
+                <li>Your estimated skill level (Bronze/Silver/Gold/Platinum/Diamond/Masters)</li>
+                <li>Skill level of the team you have in mind(Estimation of all members combined)</li>
             </ul>
             </span>
             </Card.Body>
