@@ -27,7 +27,7 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
 
         if(evt.target.value?.length > 0)
         {
-          setPlayersMatched(PlayersToShow.filter(p => 
+          setPlayersMatched(PlayersToShow?.filter(p => 
             p.player?.teamMemberName.toLowerCase().includes(evt.target.value.toLowerCase()) ||
             p.player?.teamMemberRole.roleName.toLowerCase().includes(evt.target.value.toLowerCase()) ||
             p.team?.teamName.toLowerCase().includes(evt.target.value.toLowerCase()) ||
@@ -49,12 +49,12 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
         if(evt.target.value == 0)
         {
           //Get teams that are in no division
-          await playerservice.GetListOfPlayersByDivisionID(null).then((res) => {setPlayersToShow(res.data);}).catch((error) => {setPlayersToShow(null)});
+          await playerservice.GetListOfPlayersByDivisionID(null).then((res) => {setPlayersToShow(res.data); setPlayersMatched(res.data); setSearchValue("");}).catch((error) => {setPlayersToShow(null)});
         }
         else 
         {         
           //Get teams from selected division
-          await playerservice.GetListOfPlayersByDivisionID(evt.target.value).then((res) => {setPlayersToShow(res.data); setPlayersMatched(res.data);}).catch((error) => {setPlayersToShow(null); setPlayersMatched([]);});
+          await playerservice.GetListOfPlayersByDivisionID(evt.target.value).then((res) => {setPlayersToShow(res.data); setPlayersMatched(res.data); setSearchValue("");}).catch((error) => {setPlayersToShow(null); setPlayersMatched([]);});
         }
   
       };

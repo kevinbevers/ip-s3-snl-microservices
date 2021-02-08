@@ -125,6 +125,7 @@ export async function getServerSideProps(context) {
         listOfSchedules = res.data;
       })
       .catch((error) => {
+        listOfSchedules.push([{scheduleID: 0, scheduleName: "No schedules"}]);
       });
 
 
