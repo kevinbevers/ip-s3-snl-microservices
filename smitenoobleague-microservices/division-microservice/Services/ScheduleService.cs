@@ -48,7 +48,7 @@ namespace division_microservice.Services
                     }
 
                     //enddate of the double round robin is amount of teams - 1 (don't play yourself) & that * 2 because it's a double round robin
-                    DateTime endDate = values.ScheduleStartDate.AddDays(7 * divisionTeams.Count() * 2 - 1);
+                    DateTime endDate = values.ScheduleStartDate.AddDays(7 * ((divisionTeams.Count() -1) * 2));
                     int overlap = await CheckDateOverlap(values, endDate);
 
                     if (overlap > 0)

@@ -5,7 +5,7 @@ import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer"; 
 import DefaultErrorPage from "next/error";
 //boostrap components
-import { Badge, Modal, Button, Jumbotron, Container, Row, Col, OverlayTrigger, Tooltip, Alert } from "react-bootstrap";
+import { Badge, Modal, Button, Container, Row, Col, OverlayTrigger, Tooltip, Alert } from "react-bootstrap";
 //icons
 import {FaTimes, FaPlaystation, FaXbox, FaSteam} from "react-icons/fa";
 import {RiSwitchFill} from "react-icons/ri";
