@@ -30,6 +30,13 @@ function Home({LoginSession}) {
         <p>
         Wondering what's coming up for the Smitenoobleague? check out the <a href="/roadmap">roadmap</a>!
         </p>
+        <p>
+        If you want to sign up as a team you should send an e-mail to <a href="mailto:signup@smitenoobleague.com?SUBJECT=Sign up for captain">signup@smitenoobleague.com</a> with the following information:<br />
+          - Your Gamertag / IGN.<br />
+          - Your Platform.<br />
+          - Your estimated skill level (Bronze/Silver/Gold/Platinum/Diamond/Masters).<br />
+          - Skill level of the team you have in mind(Estimation of all members combined).<br />
+        </p>
     </div>
   </div>
     <Footer />
