@@ -99,6 +99,17 @@ return (
         </Accordion.Collapse>
         </Card>
 
+        <Card>
+        <Accordion.Toggle as={Card.Header} eventKey="5">
+            <ContextAwareToggle eventKey="5">Is there a discord where i can contact other players / captains?</ContextAwareToggle>
+        </Accordion.Toggle>
+        <Accordion.Collapse eventKey="5">
+            <Card.Body>
+            <p className="m-0">Of course there is! <a href="https://discord.gg/ZZxqtaZvuj" target="_blank">Click here to join</a></p>
+            </Card.Body>
+        </Accordion.Collapse>
+        </Card>
+
         </Accordion>
     </>
 );
