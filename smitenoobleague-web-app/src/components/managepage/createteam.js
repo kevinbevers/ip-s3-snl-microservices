@@ -70,7 +70,7 @@ export default function CreateTeam({apiToken}) {
         else {
         const data = {
             teamName: TeamName,
-            teamDivisionID: SelectedDivisionID == 0 ? null : SelectedDivisionID,
+            teamDivisionID: SelectedDivisionID == 0 ? null : Number(SelectedDivisionID),
             captain: {
               teamCaptainEmail: CaptainMail,
               teamCaptainAccountID: CaptainSub,
