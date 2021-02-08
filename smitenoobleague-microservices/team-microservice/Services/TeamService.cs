@@ -1064,7 +1064,10 @@ namespace team_microservice.Services
                         if (ts?.TeamLogo != null)
                         {
                             //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
-                            ImageProcessing.DeleteImageAsync(foundTeam.TeamLogoPath, _env);
+                            if (foundTeam?.TeamLogoPath != null)
+                            {
+                                ImageProcessing.DeleteImageAsync(foundTeam.TeamLogoPath, _env);
+                            }
                             //add the new one
                             foundTeam.TeamLogoPath = ts?.TeamLogo != null ? await ImageProcessing.SaveImageAsync(ts?.TeamLogo, "team" + foundTeam.TeamId, _env) : null;
                         }
