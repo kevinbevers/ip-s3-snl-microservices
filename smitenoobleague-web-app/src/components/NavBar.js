@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 //optimized images
 import Img from 'react-optimized-image';
 import Logo from "public/images/SNL_Navbar_Logo.png";
+//icon
+import {FaDiscord} from "react-icons/fa";
 
 export default function NavBar({LoginSession}) {
     
@@ -33,6 +35,7 @@ export default function NavBar({LoginSession}) {
                     <Nav.Link href="/news" className={router?.pathname == "/news" ? "active" : ""}>News</Nav.Link>
                     <Nav.Link href="/rules" className={router?.pathname == "/rules" ? "active" : ""}>Rules</Nav.Link>
                     <Nav.Link href="/faq" className={router?.pathname == "/faq" ? "active" : ""}>FAQ</Nav.Link>
+                    <Nav.Link href="https://discord.gg/ZZxqtaZvuj" className="" target="_blank">Join <FaDiscord/></Nav.Link>
                     </Nav>
                     <Nav>
                         {LoginSession?.user != null ? 

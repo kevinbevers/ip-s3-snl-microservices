@@ -109,6 +109,14 @@ body {
     .footer {
       margin-top: 5%;
     }
+
+    .smallText {
+      font-size: 4vw;
+    }
+
+    .landingTitle {
+      font-size: 10vw;
+    }
 }
 
 /*faq page*/

@@ -67,6 +67,7 @@ return (
             <ul>
                 <li>Your Gamertag / IGN,</li>
                 <li>Your Platform</li>
+                <li>Your Region</li>
                 <li>Your estimated skill level (Bronze/Silver/Gold/Platinum/Diamond/Masters)</li>
                 <li>Skill level of the team you have in mind(Estimation of all members combined)</li>
             </ul>
@@ -90,11 +91,11 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="4">
-            <ContextAwareToggle eventKey="4">How many games are played per match?</ContextAwareToggle>
+            <ContextAwareToggle eventKey="4">How many games are played per matchup?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="4">
             <Card.Body>
-            <p className="m-0">By default each match is a best of 3, so the max amount of games is 3, the minimum amount is 2.</p>
+            <p className="m-0">By default each matchup is a best of 3, so the max amount of games is 3, the minimum amount is 2.</p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>
@@ -106,6 +107,28 @@ return (
         <Accordion.Collapse eventKey="5">
             <Card.Body>
             <p className="m-0">Of course there is! <a href="https://discord.gg/ZZxqtaZvuj" target="_blank">Click here to join</a></p>
+            </Card.Body>
+        </Accordion.Collapse>
+        </Card>
+
+        <Card>
+        <Accordion.Toggle as={Card.Header} eventKey="6">
+            <ContextAwareToggle eventKey="6">Is the smitenoobleague cross region?</ContextAwareToggle>
+        </Accordion.Toggle>
+        <Accordion.Collapse eventKey="6">
+            <Card.Body>
+            <p className="m-0"><b>Not by default</b>, however there could be special divisions that allow for cross region play.</p>
+            </Card.Body>
+        </Accordion.Collapse>
+        </Card>
+
+        <Card>
+        <Accordion.Toggle as={Card.Header} eventKey="7">
+            <ContextAwareToggle eventKey="7">Is the smitenoobleague cross platform?</ContextAwareToggle>
+        </Accordion.Toggle>
+        <Accordion.Collapse eventKey="7">
+            <Card.Body>
+            <p className="m-0"><b>By default divisions are cross platform</b>, there could however be divisions that are locked to 1 platform and /or input method</p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>
