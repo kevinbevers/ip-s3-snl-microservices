@@ -67,6 +67,7 @@ export default function roadmap({LoginSession}) {
       For those who like it.
     </p>
   </VerticalTimelineElement>
+
   <VerticalTimelineElement
     iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
      icon={<MdShowChart />}
@@ -77,10 +78,22 @@ export default function roadmap({LoginSession}) {
       Player Championships offer a way to see what player is performing the best in a specific league. And give player the chance to compete on a personal level.
     </p>
   </VerticalTimelineElement>
+
   <VerticalTimelineElement
-    className=""
     contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
     contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
+    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+     icon={<FaTrophy />}
+  >
+    <h3 className="vertical-timeline-element-title">Accolades and badges</h3>
+    <h6 className="vertical-timeline-element-subtitle">Coming Q3 2021</h6>
+    <p>
+      Players and teams will be able to show off their achievements from past splits in the form of badges and accolades. For example a split 1 winner badge.
+    </p>
+  </VerticalTimelineElement>
+
+  <VerticalTimelineElement
+    className=""
     iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
     icon={<BsTable />}
   >

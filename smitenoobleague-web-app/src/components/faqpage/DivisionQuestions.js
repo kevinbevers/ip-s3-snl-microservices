@@ -54,11 +54,11 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="2">
-            <ContextAwareToggle eventKey="2">How many games do you play per week?</ContextAwareToggle>
+            <ContextAwareToggle eventKey="2">How many matches do you play per week?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="2">
             <Card.Body>
-            <p className="m-0">You play <b>1</b> game per week. 
+            <p className="m-0">You play 1 matchup per week. A matchup last <b>2</b> or <b>3</b> matches.
             If your team can"t play a week then you it"s expected that you play that game the week after and play the regular game of that week.</p>
             </Card.Body>
         </Accordion.Collapse>
