@@ -10,11 +10,11 @@ class MyDocument extends Document {
     return (
       <Html lang={"en-EN"}>
         <Head>
-        <meta name="description" content="Smitenoobleague is a website where teams can sign up, compete and see there stats" />
+        <meta name="description" content="Smitenoobleague is a website for a fully automated smite amateur league where teams can sign up, compete, there stats and captains can manage their teams." />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@Smitenoobleague" />
         <meta name="twitter:title" content="Schedules, Stats, Leaderboards and more" />
-        <meta name="twitter:description" content="Smitenoobleague is a website where teams can sign up, compete and see there stats" />
+        <meta name="twitter:description" content="Smitenoobleague is a website for a fully automated smite amateur league where teams can sign up, compete, there stats and captains can manage their teams." />
         <meta name="twitter:image" content="https://smitenoobleague.com/images/twitterbanner.jpg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
