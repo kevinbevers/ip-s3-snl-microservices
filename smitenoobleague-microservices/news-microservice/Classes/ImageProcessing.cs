@@ -103,7 +103,7 @@ namespace news_microservice.Classes
             if (IsImage(file))
             {
                 DateTime date = DateTime.UtcNow;
-                string imageName = $"{date:yyyyMMddHHmm}_{imgName}.png"; //datetime in the save parameter for cache busting
+                string imageName = $"{date:yyyyMMddHHmmss}_{imgName}.png"; //datetime in the save parameter for cache busting
                 string filePath = Path.Combine(env.ContentRootPath, "images");
 
                 using (var memoryStream = new MemoryStream())
@@ -117,7 +117,7 @@ namespace news_microservice.Classes
                         img.Save(ms, ImageFormat.Png);
                         ms.Seek(0, SeekOrigin.Begin);
                         //resize the image to 400 by 400
-                        var sizedImg = ResizeImage(Image.FromStream(ms), 400, 400);
+                        var sizedImg = ResizeImage(Image.FromStream(ms), 1920, 1080);
                         MemoryStream ms2 = new MemoryStream();
                         sizedImg.Save(ms2, ImageFormat.Png);
                         ms2.Seek(0, SeekOrigin.Begin);
@@ -141,7 +141,7 @@ namespace news_microservice.Classes
         {
             string filePath = Path.Combine(env.ContentRootPath, "images", imgName);
 
-            if(File.Exists(filePath))
+            if (File.Exists(filePath))
             {
                 File.Delete(filePath);
             }

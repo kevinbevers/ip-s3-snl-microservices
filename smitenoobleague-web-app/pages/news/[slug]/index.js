@@ -18,6 +18,12 @@ export default function news({LoginSession, Article}) {
 
   const clean = DOMPurify.sanitize(Article?.articleContent);
 
+  const ArticleImg = (a) => {
+    const articleImg = process.env.NEXT_PUBLIC_BASE_API_URL + "/news-service/images/" + Article?.articleImagePath;
+    return Article?.articleImagePath != null ? <Image alt={"SNL News Image"} layout={"fill"} src={articleImg} className="news-bannerimg" draggable={false}></Image>
+    : <Image alt={"SNL News Image"} layout={"fill"} src={"/images/news_placeholder.jpg"} className="news-bannerimg" draggable={false}></Image>;
+  };
+
   const ReadableDate = (date) => {
     const d = new Date(date);
     return d.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
@@ -26,7 +32,7 @@ export default function news({LoginSession, Article}) {
   return (
     <>
       <NavBar LoginSession={LoginSession}/>
-      <div className="w-100 news-banner position-relative"><Image alt={"SNL News Image"} layout={"fill"} src={"/images/news_bg.jpg"} className="news-bannerimg" draggable={false}></Image></div>
+      <div className="w-100 news-banner position-relative">{ArticleImg(Article)}</div>
       <Container fluid className="mt-3">
         <Row><Col md={6} className="mx-auto text-left">
         <h2 className="display-4 font-weight-bold">{Article?.articleTitle}</h2>

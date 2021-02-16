@@ -92,9 +92,25 @@ export default function ManageDivisionListItem({apiToken, divisiondata, removeDi
                 setShowDivisionInfoAlert(true);
             });
         }).catch(err => {
-            setMsgDivisionInfo(err?.response?.data);
-            setShowDivisionInfoAlert(true);});
-    };
+            console.log(err.response);
+            if(err?.response?.status == 400)
+            {
+              if(err?.response.data?.DivisionName != null)
+              {
+                setMsgDivisionInfo(err?.response?.data?.DivisionName[0]);
+                setShowDivisionInfoAlert(true);
+              }
+              else {
+                setMsgDivisionInfo(err?.response?.data);
+                setShowDivisionInfoAlert(true);
+              }
+            }
+            else {
+              setMsgTeamInfo("Oh Oh, Something went wrong!!");
+              setShowTeamInfoAlert(true);
+            }
+    });
+};
 
             //#region errorMsg
             const [msgDivisionInfo, setMsgDivisionInfo] = useState("Error msg");

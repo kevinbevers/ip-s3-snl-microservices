@@ -174,3 +174,12 @@ body {
 .Disabled {
   cursor: not-allowed;
 }
+
+.newsArticle:hover .newsArticleImg,
+.newsArticle:focus .newsArticleImg {
+  transform: scale(1.2);
+}
+
+.newsArticleImg {
+  transition: all .5s;
+}
