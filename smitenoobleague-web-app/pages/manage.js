@@ -12,6 +12,8 @@ import ManageDivisions from "src/components/managepage/managedivisions";
 import CreateDivision from "src/components/managepage/createdivision";
 import ManageSchedules from "src/components/managepage/manageschedules";
 import CreateSchedule from "src/components/managepage/createschedule";
+import ManageArticles from "src/components/managepage/managearticles";
+import CreateArticle from "src/components/managepage/createarticle";
 //Auth
 import helpers from "utils/helpers";
 
@@ -88,10 +90,10 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                             <Card.Text>Add new articles or edit existing ones</Card.Text>
                             <Row>
                                 <Col md={6} className="mb-2">
-                                    <Button variant={"primary"} size={"lg"} className="btn-block">Create new Article</Button>
+                                    <CreateArticle apiToken={apiToken} />
                                 </Col>
                                 <Col md={6} className="mb-2">
-                                <Button variant={"primary"} size={"lg"} className="btn-block">Manage existing Articles</Button>
+                                    <ManageArticles apiToken={apiToken} />
                                 </Col>
                             </Row>
                         </Card.Body>

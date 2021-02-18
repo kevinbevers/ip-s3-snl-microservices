@@ -92,7 +92,6 @@ export default function ManageDivisionListItem({apiToken, divisiondata, removeDi
                 setShowDivisionInfoAlert(true);
             });
         }).catch(err => {
-            console.log(err.response);
             if(err?.response?.status == 400)
             {
               if(err?.response.data?.DivisionName != null)

@@ -132,6 +132,12 @@ body {
   height: 300px;
 }
 
+.news-banner-preview {
+  height: 300px;
+  width:480px;
+  object-fit: cover;
+}
+
 .news-bannerimg {
   object-fit: cover;
   object-position: center;
@@ -182,4 +188,23 @@ body {
 
 .newsArticleImg {
   transition: all .5s;
+}
+
+textarea {
+  resize: none;
+}
+
+.articleDesc {
+  height: 90px !important;
+}
+
+.articleContent {
+  height: 300px !important;
+}
+
+.previewButton {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 18px;
 }

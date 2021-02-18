@@ -82,7 +82,7 @@ namespace news_microservice.Classes
 
                         using (var img = Image.FromStream(memoryStream))
                         {
-                            var sizedImg = ResizeImage(img, 400, 400);
+                            var sizedImg = ResizeImage(img, 480, 300);
                             return ImageToByteArray(sizedImg);
                         }
                     }

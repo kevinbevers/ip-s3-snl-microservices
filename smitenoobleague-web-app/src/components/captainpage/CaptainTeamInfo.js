@@ -182,7 +182,7 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
                         <Row className="mt-2"><Col>{editImage ? <Button className="btn-block" onClick={updateImage}>Upload image <FaUpload className="my-auto" /></Button> : <></>}</Col></Row>
                         <Form>
                             <Form.Group>
-                                <Form.File id="TeamImageFile" hidden ref={fileUploader} onChange={setPreview} />
+                                <Form.File id="TeamImageFile" hidden ref={fileUploader} onChange={setPreview}  accept="image/x-png,image/gif,image/jpeg" />
                             </Form.Group>
                         </Form>
                         <Row><Col><TeamInfoAlert /></Col></Row>
