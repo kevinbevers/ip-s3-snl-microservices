@@ -114,7 +114,7 @@ namespace smiteapi_microservice.Services
                 MatchData match = await _hirezApiService.GetMatchDetailsAsync((int)submission.gameID);
 
                 //check return message from api. if the return msg is null the match is valid
-                if (match.ret_msg != null && match.ret_msg.ToString() != "Not all playerdata is available for this match because 1 of the players has their profile hidden.")
+                if (match.ret_msg != null && !match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
                 {
                     //something went wrong even when the matchData should have been available. because it is 7 days later
                     return new ObjectResult(match.ret_msg) { StatusCode = 404 }; //BAD REQUEST
@@ -170,6 +170,10 @@ namespace smiteapi_microservice.Services
 
             if (entry != null)
             {
+                if(entry.QueueState == true)
+                {
+                    return new ObjectResult("MatchID already validated.") { StatusCode = 200 };
+                }
                 //update the entry of the gameID and it's state
                 entry.QueueState = true;
                 _db.Update(entry);
@@ -179,6 +183,7 @@ namespace smiteapi_microservice.Services
                 //Add the match to the queue table with QueueState true so that it will never get scheduled and we can check if the match has already been submitted.
                 _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = DateTime.UtcNow, QueueState = true, PatchVersion = submission.patchNumber });
             }
+
             await _db.SaveChangesAsync();
             //set patch number
             match.patchNumber = submission.patchNumber;
