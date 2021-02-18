@@ -25,12 +25,13 @@ DROP TABLE IF EXISTS `ArticleTable`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ArticleTable` (
-  `ArticleSlug` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ArticleTitle` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ArticleDescription` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ArticleContent` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ArticleSlug` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ArticleTitle` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ArticleDescription` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ArticleContent` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ArticleDatePosted` datetime DEFAULT NULL,
-  `ArticleType` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ArticleType` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ArticleImagePath` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`ArticleSlug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -44,4 +45,4 @@ CREATE TABLE `ArticleTable` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-30 21:02:43
+-- Dump completed on 2021-02-18 14:24:20

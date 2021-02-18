@@ -10,7 +10,26 @@ const GetArticleBySlug = async(slug) => {
     return apiClient.get(`news-service/article/${slug}`);
 };
 
+const CreateArticle = async(apiToken, data) => {
+    const apiClient = await helpers.BuildApiClient(apiToken);
+    return apiClient.post(`news-service/article`, data);
+};
+
+const EditArticle = async(apiToken, data) => {
+    const apiClient = await helpers.BuildApiClient(apiToken);
+    return apiClient.put(`news-service/article`, data);
+};
+
+const DeleteArticle = async(apiToken, slug) => {
+    const apiClient = await helpers.BuildApiClient(apiToken);
+    return apiClient.delete(`news-service/article/${slug}`);
+};
+
+
 export default {
     GetArticleList,
-    GetArticleBySlug
+    GetArticleBySlug,
+    CreateArticle,
+    EditArticle,
+    DeleteArticle
 }

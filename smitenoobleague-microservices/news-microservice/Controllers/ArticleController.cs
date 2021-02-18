@@ -40,7 +40,7 @@ namespace news_microservice.Controllers
         // POST  news-service/article
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> CreateArticle([FromBody] ArticleWithContent article)
+        public async Task<ActionResult> CreateArticle([FromForm] ArticleWithContent article)
         {
           return ModelState.IsValid ? await _articleService.CreateNewsArticleAsync(article) : BadRequest(ModelState);
         }
@@ -48,7 +48,7 @@ namespace news_microservice.Controllers
         // PUT  news-service/article
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ArticleWithContent>> UpdateArticle([FromBody] ArticleWithContent article)
+        public async Task<ActionResult<ArticleWithContent>> UpdateArticle([FromForm] ArticleWithContent article)
         {
             return ModelState.IsValid ? await _articleService.EditNewsArticleAsync(article) : BadRequest(ModelState);
         }

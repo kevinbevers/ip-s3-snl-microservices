@@ -74,7 +74,10 @@ namespace news_microservice.Services
                 if (foundArticle != null)
                 {
                     _db.ArticleTables.Remove(foundArticle);
-                    ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
+                    if (foundArticle.ArticleImagePath != null)
+                    {
+                        ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
+                    }
                     await _db.SaveChangesAsync();
 
                     return new ObjectResult("Article successfully deleted.") { StatusCode = 200 }; //OK
@@ -115,11 +118,19 @@ namespace news_microservice.Services
                             ArticleType = article.ArticleType,
                         };
 
-                        if(article.ArticleImageFile != null)
+                        //add or remove image when an image path is set 
+                        if (article?.ArticleImagePath != null)
                         {
-                            //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
-                            ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
-                            articleToAdd.ArticleImagePath = await ImageProcessing.SaveImageAsync(article.ArticleImageFile, articleSlug, _env);
+                            if (foundArticle?.ArticleImagePath != null)
+                            {
+                                //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
+                                ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
+                            }
+
+                            if (article.ArticleImageFile != null)
+                            {
+                                articleToAdd.ArticleImagePath = await ImageProcessing.SaveImageAsync(article.ArticleImageFile, articleSlug, _env);
+                            }
                         }
 
                         //remove the article with the old slug
@@ -134,19 +145,24 @@ namespace news_microservice.Services
                     else
                     {
                         foundArticle.ArticleContent = article.ArticleContent != null ? article.ArticleContent : foundArticle.ArticleContent;
-                        foundArticle.ArticleDatePosted = article.ArticleDate != null ? article.ArticleDate : foundArticle.ArticleDatePosted;
                         foundArticle.ArticleDescription = article.ArticleDescription != null ? article.ArticleDescription : foundArticle.ArticleDescription;
                         foundArticle.ArticleType = article.ArticleType != null ? article.ArticleType : foundArticle.ArticleType;
 
-                        if (article.ArticleImageFile != null)
+                        //add or remove image when an image path is set 
+                        if (article?.ArticleImagePath != null)
                         {
-                            //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
-                            ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
-                            foundArticle.ArticleImagePath = await ImageProcessing.SaveImageAsync(article.ArticleImageFile, foundArticle.ArticleSlug, _env);
-                        }
+                            if (foundArticle?.ArticleImagePath != null)
+                            {
+                                //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
+                                ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
+                                foundArticle.ArticleImagePath = null;
+                            }
 
-                        _db.ArticleTables.Update(foundArticle);
-                        await _db.SaveChangesAsync();
+                            if (article.ArticleImageFile != null)
+                            {
+                                foundArticle.ArticleImagePath = await ImageProcessing.SaveImageAsync(article.ArticleImageFile, foundArticle.ArticleSlug, _env);
+                            }
+                        }
 
                         _db.ArticleTables.Update(foundArticle);
                         await _db.SaveChangesAsync();

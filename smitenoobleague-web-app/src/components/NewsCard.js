@@ -8,6 +8,12 @@ import Image from "next/image";
 
 export default function NewsCard({Article}){
 
+  const ArticleImg = (a) => {
+    const articleImg = process.env.NEXT_PUBLIC_BASE_API_URL + "/news-service/images/" + Article?.articleImagePath;
+    return Article?.articleImagePath != null ? <Image alt={"SNL News Image"} className="newsimg2 rounded-top newsArticleImg" layout={"fill"} src={articleImg} draggable={false}></Image>
+    : <Image alt={"SNL News Image"} className="newsimg2 rounded-top newsArticleImg" layout={"fill"} src={"/images/news_placeholder.jpg"} draggable={false}></Image>;
+  };
+
   const ReadableDate = (date) => {
     const d = new Date(date);
     return d.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
@@ -16,9 +22,9 @@ export default function NewsCard({Article}){
     return (
     <Col className="mb-4">
       <Link href={"news/" + Article?.articleSlug}>
-    <Card className="h-100 Clickable">
+    <Card className="h-100 Clickable newsArticle">
       {/* <Card.Img variant="top" src={require("public/images/news_bg.jpg")}  className="newsimg" draggable={false}/> */}
-      <div className="w-100 newsimg2 position-relative"><Image alt={"SNL News Image"} className="newsimg2 rounded-top" layout={"fill"} src={"/images/news_bg.jpg"} draggable={false}></Image></div>
+      <div className="w-100 newsimg2 position-relative">{ArticleImg(Article)}</div>
       <Card.Body>
             <Card.Title>{Article?.articleTitle}</Card.Title>
             <Card.Text>{Article?.articleDescription}</Card.Text>
