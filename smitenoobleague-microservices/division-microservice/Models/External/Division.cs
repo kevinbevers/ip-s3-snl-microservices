@@ -13,7 +13,7 @@ namespace division_microservice.Models.External
         [Display(Name = "Division name")]
         [Required(ErrorMessage ="Division name is required")]
         [MinLength(5, ErrorMessage = "Division name is too short, a minimum of 5 characters is required")]
-        [MaxLength(20, ErrorMessage = "Division name is too long, a maximum of 20 characters is allowed")]
+        [MaxLength(21, ErrorMessage = "Division name is too long, a maximum of 21 characters is allowed")]
         public string DivisionName { get; set; }
         public IEnumerable<Team> DivisionTeams { get; set; }
         public int? CurrentScheduleID { get; set; }
