@@ -7,6 +7,8 @@ namespace stat_microservice.Models.Internal
         public int? IngameTeamID { get; set; } //taskforce
         public bool Won { get; set; }
         public bool FirstBanSide { get; set; }
+        //is player a fill?
+        public bool playerIsFill { get; set; }
         //Player info
         public Player Player { get; set; }
         //God played
