@@ -47,7 +47,7 @@ export default function TeamTable({playerdata, team}) {
                     </Row>
                 </Col>
             </Row>
-            <Row className="mb-5">
+            <Row className="mb-lg-5 mb-md-5 mb-xl-5">
                 <Col xl={12} md={12} xs={12} className="mx-auto">
                     <Table responsive variant="" className="rounded-bottom text-center" id="TeamTable">
                         <thead className="">
@@ -67,6 +67,9 @@ export default function TeamTable({playerdata, team}) {
                         <tbody>{players.map((player, index) => (<TableRow player={player} key={index} index={index} />))}</tbody>
                     </Table>
                 </Col>
+            </Row>
+            <Row className="mb-5 d-block d-sm-none">
+                <Col><h6 className="text-muted ExtraInfoText">Hold and swipe to scroll table</h6></Col>
             </Row>
         </>
     );

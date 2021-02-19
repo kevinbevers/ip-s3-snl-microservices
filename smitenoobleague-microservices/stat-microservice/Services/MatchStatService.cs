@@ -917,7 +917,9 @@ namespace stat_microservice.Services
                     //Player & Role
                     Player = new Player { PlayerID = p.PlayerId, Playername = p.PlayerName, Platform = ((ApiPlatformEnum)p.PlayerPlatformId).ToString() },
                     Role = roles.Where(r => r.RoleID == p.RoleId).FirstOrDefault(),
-                    FirstBanSide = p.IgTaskforce == 1 //taskforce 1 is order, order is always the first ban side
+                    FirstBanSide = p.IgTaskforce == 1, //taskforce 1 is order, order is always the first ban side
+                    //player is fill ?
+                    playerIsFill = (bool)p.PlayerIsFill
                 };
 
                 listOfPlayerStats.Add(player);
