@@ -36,7 +36,7 @@ namespace division_microservice.Division_DB
                     .IsRequired()
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                    .HasCollation("utf8mb4_unicode_ci");
             });
 
             modelBuilder.Entity<TableMatchup>(entity =>
@@ -79,7 +79,7 @@ namespace division_microservice.Division_DB
                     .IsRequired()
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCollation("utf8mb4_unicode_ci");
 
                 entity.Property(e => e.ScheduleStartDate).HasColumnType("datetime");
             });

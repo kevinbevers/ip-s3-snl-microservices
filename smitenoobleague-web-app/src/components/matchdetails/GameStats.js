@@ -160,6 +160,7 @@ export default function GameData({MatchResult, teamsInMatch}) {
                         <hr />
                         <h6><b>Date:</b> {ReadableDate(MatchResult?.entryDate)}</h6>
                         <h6><b>Duration:</b> {MatchResult?.matchDuration}</h6>
+                        <h6><b>Match ID:</b> {MatchResult?.gameID}</h6>
                         <hr />
                         <h5 className="font-weight-bold">Game details</h5>
                         <hr />
