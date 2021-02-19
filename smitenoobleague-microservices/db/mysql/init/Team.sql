@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `SNL_Team_DB` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `SNL_Team_DB` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `SNL_Team_DB`;
 -- MySQL dump 10.13  Distrib 8.0.22, for macos10.15 (x86_64)
 --
@@ -26,10 +26,17 @@ DROP TABLE IF EXISTS `TableRole`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `TableRole` (
   `RoleID` int NOT NULL AUTO_INCREMENT,
-  `RoleName` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `RoleName` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`RoleID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+LOCK TABLES `TableRole` WRITE;
+/*!40000 ALTER TABLE `TableRole` DISABLE KEYS */;
+INSERT INTO `TableRole` VALUES (1,'Solo'),(2,'Jungle'),(3,'Mid'),(4,'Support'),(5,'Adc');
+/*!40000 ALTER TABLE `TableRole` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `TableTeam`
@@ -41,18 +48,12 @@ DROP TABLE IF EXISTS `TableTeam`;
 CREATE TABLE `TableTeam` (
   `TeamID` int NOT NULL AUTO_INCREMENT,
   `TeamDivisionID` int DEFAULT NULL,
-  `TeamName` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `TeamName` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `TeamCaptainID` int DEFAULT NULL,
-  `TeamLogoPath` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `TeamLogoPath` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`TeamID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
-LOCK TABLES `TableRole` WRITE;
-/*!40000 ALTER TABLE `TableRole` DISABLE KEYS */;
-INSERT INTO `TableRole` VALUES (1,'Solo'),(2,'Jungle'),(3,'Mid'),(4,'Support'),(5,'Adc');
-/*!40000 ALTER TABLE `TableRole` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `TableTeamMember`
@@ -66,13 +67,13 @@ CREATE TABLE `TableTeamMember` (
   `TeamMemberTeamID` int NOT NULL,
   `TeamMemberPlayerID` int NOT NULL,
   `TeamMemberRole` int DEFAULT NULL,
-  `TeamMemberName` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `TeamMemberName` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `TeamMemberPlatformID` int DEFAULT NULL,
-  `TeamMemberAccountID` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `TeamMemberAccountID` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `TeamMemberDivisionID` int DEFAULT NULL,
-  `TeamMemberEmail` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `TeamMemberEmail` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`TeamMemberID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -84,4 +85,4 @@ CREATE TABLE `TableTeamMember` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-30 12:49:22
+-- Dump completed on 2021-02-19 14:23:03

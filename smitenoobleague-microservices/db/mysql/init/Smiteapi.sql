@@ -18,21 +18,14 @@ USE `SNL_Smiteapi_DB`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `TableQueue`
+-- Dumping data for table `TableQueue`
 --
 
-DROP TABLE IF EXISTS `TableQueue`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `TableQueue` (
-  `QueueID` int NOT NULL AUTO_INCREMENT,
-  `GameID` int NOT NULL,
-  `QueueState` bit(1) NOT NULL,
-  `QueueDate` datetime NOT NULL,
-  `PatchVersion` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`QueueID`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `TableQueue` WRITE;
+/*!40000 ALTER TABLE `TableQueue` DISABLE KEYS */;
+INSERT INTO `TableQueue` VALUES (27,1125091524,_binary '','2021-02-06 18:20:35','8.1');
+/*!40000 ALTER TABLE `TableQueue` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -43,4 +36,4 @@ CREATE TABLE `TableQueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-31 17:02:59
+-- Dump completed on 2021-02-19 14:23:57

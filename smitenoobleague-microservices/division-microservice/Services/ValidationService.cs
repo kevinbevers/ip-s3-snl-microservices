@@ -5,6 +5,7 @@ using division_microservice.Division_DB;
 using division_microservice.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+
 namespace division_microservice.Services
 {
     public class ValidationService : IValidationService
@@ -24,10 +25,10 @@ namespace division_microservice.Services
             return foundDivision > 0;
         }
 
-        public async Task<bool> DivisionNameIsTakenAsync(string divisionName, int? divisionID)
+        public async Task<bool> DivisionNameIsTakenAsync(string divisionName, int? divisionID) 
         {
-                int foundDivision = await _db.TableDivisions.Where(d => d.DivisionName.ToLower() == divisionName.ToLower() && d.DivisionId != divisionID).CountAsync();
-                return foundDivision > 0;  
+            int foundDivision = await _db.TableDivisions.Where(d => d.DivisionName.ToLower().Equals(divisionName.ToLower()) && d.DivisionId != divisionID).CountAsync();
+            return foundDivision > 0;  
         }
     }
 }

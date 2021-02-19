@@ -49,13 +49,17 @@ export default function CaptainTeamInfo({ apiResponse, apiToken }) {
                 apiResponse.teamName = teamName;
             })
                 .catch(err => {
-                    console.log(err);
+                    console.log(err?.response);
                     if (err?.response?.status != 400) {
                         SetNote({ title: "Error", msg: "Oh oh something went wrong trying to update the teamname.", type: "bg-danger" });
                         SetNotify(true);
                     }
-                    else {
+                    else if(err?.response?.data?.TeamName != null) {
                         setMsgTeamInfo(err.response.data.TeamName[0]);
+                        setShowTeamInfoAlert(true);
+                    }
+                    else {
+                        setMsgTeamInfo(err?.response?.data);
                         setShowTeamInfoAlert(true);
                     }
                 });
