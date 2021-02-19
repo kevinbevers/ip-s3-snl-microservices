@@ -1,5 +1,5 @@
 //default react imports
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //default page stuff
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
@@ -50,6 +50,26 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
         return <Tooltip id="button-tooltip"><div><b>Not enough data yet to show.</b></div></Tooltip>
       }
     };
+
+    const [teamMembers, setTeamMembers] = useState([]);
+    //const [test, setTest] = useState([{ id: 1, name: "Player 1" }, { id: 2, name: "Player 2" }, { id: 3, name: "Player 3" }, { id: 4, name: "Player 4" }, { id: 5, name: "Player 5" }]);
+    //Get every team member for each role. to make sure they are on the correct position if less then 5 members get returned
+    useEffect(() => {
+      const team = [];
+      const solo = TeamStats?.team?.teamMembers.filter(member => member.teamMemberRole.roleID == 1)[0];
+      team.push(solo != undefined ? solo : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 1, roleName: "Solo" } }); //SOLO
+      const jungle = TeamStats?.team?.teamMembers.filter(member => member.teamMemberRole.roleID == 2)[0]
+      team.push(jungle != undefined ? jungle : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 2, roleName: "Jungle" } }); //JUNGLE
+      const mid = TeamStats?.team?.teamMembers.filter(member => member.teamMemberRole.roleID == 3)[0];
+      team.push(mid != undefined ? mid : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 3, roleName: "Mid" } }); //MID
+      const support = TeamStats?.team?.teamMembers.filter(member => member.teamMemberRole.roleID == 4)[0];
+      team.push(support != undefined ? support : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 4, roleName: "Support" } }); //SUPPORT
+      const adc = TeamStats?.team?.teamMembers.filter(member => member.teamMemberRole.roleID == 5)[0];
+      team.push(adc != undefined ? adc : { playerID: null, teamCaptain: null, teamMemberID: null, teamMemberName: null, teamMemberPlatform: null, teamMemberRole: { roleID: 5, roleName: "Adc" } }); //ADC
+  
+      setTeamMembers(team);
+  
+    }, []);
 
     const lastGamesCount = TeamStats?.recentPerformanceScore?.length;
     let counter = 0;
@@ -270,31 +290,31 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Solo_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[0] != null ? TeamStats?.team?.teamMembers[0]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[0]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <h3 className="my-auto RecentTeamPlayerName">{teamMembers[0]?.teamMemberName != null ? teamMembers[0]?.teamMemberName : "No player in this role yet"}</h3>{teamMembers[0]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Jungle_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[1] != null ? TeamStats?.team?.teamMembers[1]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[1]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <h3 className="my-auto RecentTeamPlayerName">{teamMembers[1]?.teamMemberName != null ? teamMembers[1]?.teamMemberName : "No player in this role yet"}</h3>{teamMembers[1]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Mid_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[2] != null ? TeamStats?.team?.teamMembers[2]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[2]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <h3 className="my-auto RecentTeamPlayerName">{teamMembers[2]?.teamMemberName != null ? teamMembers[2]?.teamMemberName : "No player in this role yet"}</h3>{teamMembers[2]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Support_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[3] != null ? TeamStats?.team?.teamMembers[3]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[3]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <h3 className="my-auto RecentTeamPlayerName">{teamMembers[3]?.teamMemberName != null ? teamMembers[3]?.teamMemberName : "No player in this role yet"}</h3>{teamMembers[3]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Adc_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <h3 className="my-auto RecentTeamPlayerName">{TeamStats?.team?.teamMembers[4] != null ? TeamStats?.team?.teamMembers[4]?.teamMemberName : "No player in this role yet"}</h3>{TeamStats?.team?.teamMembers[4]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <h3 className="my-auto RecentTeamPlayerName">{teamMembers[4]?.teamMemberName != null ? teamMembers[4]?.teamMemberName : "No player in this role yet"}</h3>{teamMembers[4]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 </Col>
