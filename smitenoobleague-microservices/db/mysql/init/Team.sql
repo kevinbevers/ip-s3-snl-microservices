@@ -31,7 +31,6 @@ CREATE TABLE `TableRole` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
 LOCK TABLES `TableRole` WRITE;
 /*!40000 ALTER TABLE `TableRole` DISABLE KEYS */;
 INSERT INTO `TableRole` VALUES (1,'Solo'),(2,'Jungle'),(3,'Mid'),(4,'Support'),(5,'Adc');
@@ -85,4 +84,4 @@ CREATE TABLE `TableTeamMember` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-02-19 14:23:03
+-- Dump completed on 2021-02-19 14:50:28
