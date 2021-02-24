@@ -291,31 +291,31 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Solo_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <Link href={`/stats/player/${TeamStats.starPlayer.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[0]?.teamMemberName != null ? teamMembers[0]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[0]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Link href={`/stats/player/${teamMembers[0]?.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[0]?.teamMemberName != null ? teamMembers[0]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[0]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Jungle_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <Link href={`/stats/player/${TeamStats.starPlayer.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[1]?.teamMemberName != null ? teamMembers[1]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[1]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Link href={`/stats/player/${teamMembers[1]?.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[1]?.teamMemberName != null ? teamMembers[1]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[1]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Mid_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <Link href={`/stats/player/${TeamStats.starPlayer.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[2]?.teamMemberName != null ? teamMembers[2]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[2]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Link href={`/stats/player/${teamMembers[2]?.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[2]?.teamMemberName != null ? teamMembers[2]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[2]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Support_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <Link href={`/stats/player/${TeamStats.starPlayer.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[3]?.teamMemberName != null ? teamMembers[3]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[3]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Link href={`/stats/player/${teamMembers[3]?.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[3]?.teamMemberName != null ? teamMembers[3]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[3]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col className="d-flex">
                         <Img webp src={require("public/images/roles/Adc_Logo.png")} className="GodImgStats mr-2" draggable={false}/>
-                        <Link href={`/stats/player/${TeamStats.starPlayer.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[4]?.teamMemberName != null ? teamMembers[4]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[4]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
+                        <Link href={`/stats/player/${teamMembers[4]?.playerID}`}><h3 className="my-auto RecentTeamPlayerName Clickable Hoverable" title="click to see player stats">{teamMembers[4]?.teamMemberName != null ? teamMembers[4]?.teamMemberName : "No player in this role yet"}</h3></Link>{teamMembers[4]?.teamCaptain ? <Badge variant="secondary" className="my-auto ml-1 mr-1 StatBadge">Captain</Badge> : <> </>}
                     </Col>
                 </Row>
                 </Col>
