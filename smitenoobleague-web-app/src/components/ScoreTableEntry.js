@@ -25,7 +25,7 @@ export default function ScoreTableEntry({s,index}) {
     return (
         <tr>
         {/* <td>1</td> */}
-        <td className=""><span className="d-flex align-items-center">{index + 1}. <span className="mr-1 ml-1 d-flex align-items-center">{RenderTeamImage(s?.team)}</span> {s?.team?.teamName}</span></td>
+        <td className=""><span className="d-flex align-items-center">{index + 1}. <span className="mr-1 ml-1 d-flex align-items-center">{RenderTeamImage(s?.team)}</span> <Link href={`/stats/team/${s?.team?.teamID}`}><span className="Hoverable Clickable" title="click to see team stats">{s?.team?.teamName}</span></Link></span></td>
         <td>{s?.standingWins + s?.standingLosses}</td>
         <td>{s?.standingWins}</td>
         <td>{s?.standingLosses}</td>

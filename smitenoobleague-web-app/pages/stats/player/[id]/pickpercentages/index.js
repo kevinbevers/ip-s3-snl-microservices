@@ -61,7 +61,8 @@ export default function PickPercentages({ LoginSession, PlayerPicks, status, err
                   {PlayerPicks.team?.teamLogoPath != null ? <Image layout="fixed" height={35} width={35} alt={PlayerPicks.team?.teamName} src={imagePath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image> :
                     <Img alt={PlayerPicks.team?.teamName} src={require("public/images/teamBadge.png")} className="SmallTeamImage mr-1 my-auto" draggable={false}></Img>
                   }
-                  <h4 className="mb-0 PlayerStatTeamTitle my-auto">{PlayerPicks?.team?.teamName}</h4>
+                  <Link href={`/stats/team/${PlayerPicks.team.teamID}`} ><h4 className="mb-0 PlayerStatTeamTitle my-auto Clickable Hoverable" title={"click to see team stats"}>{PlayerPicks?.team?.teamName}</h4></Link>
+                  
                 </Col>
               </Row>
               <Row className="">

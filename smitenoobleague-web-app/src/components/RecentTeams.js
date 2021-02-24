@@ -14,10 +14,15 @@ export default function RecentTeams({recent}){
             <Img webp alt={t?.teamName} title={t?.teamName} src={require("public/images/teamBadge.png")} className="RecentTeamLogo mr-2" draggable={false}></Img>);
 };
 
+const ReadableDate = (date) => {
+  const d = new Date(date);
+  return d.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+};
+
     return (
       <Row><Col>
       <Link href={`/matchhistory/${recent?.matchupID}`}>
-        <a className="link-unstyled">
+        <a className="link-unstyled" title={`click to see match details, ${ReadableDate(recent.datePlayed)}`}>
         <Card className="text-center mb-2">
         <Card.Body className={recent?.won ? "RecentTeamWinBackground p-1" : recent?.lost ? "RecentTeamLossBackground p-1" : "bg-light p-1"}>
           <Container>
