@@ -1,5 +1,6 @@
 //default react imports
 import React, { useState } from "react";
+import Link from "next/link";
 //default page stuff
 import NavBar from "src/components/NavBar"; 
 import Footer from "src/components/Footer"; 
@@ -162,7 +163,7 @@ const SimpleToolTip = (data) => {
                  {PlayerStats.team?.teamLogoPath != null ? <Image layout="fixed" height={35} width={35} alt={PlayerStats.team?.teamName} src={imagePath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image>  : 
                         <Img alt={PlayerStats.team?.teamName} src={require("public/images/teamBadge.png")} className="SmallTeamImage mr-1 my-auto" draggable={false}></Img>
                       }
-                   <h4 className="mb-0 PlayerStatTeamTitle my-auto">{PlayerStats?.team?.teamName}</h4>
+                   <Link href={`/stats/team/${PlayerStats.team.teamID}`} ><h4 className="mb-0 PlayerStatTeamTitle my-auto Clickable Hoverable" title={"click to see team stats"}>{PlayerStats?.team?.teamName}</h4></Link>
                   </Col>
               </Row>
               <Row className="">

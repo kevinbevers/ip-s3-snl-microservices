@@ -177,6 +177,10 @@ body {
   cursor: pointer;
 }
 
+.Hoverable:hover {
+  color: rgba(0,0,0,.7);
+}
+
 .Disabled {
   cursor: not-allowed;
 }

@@ -1,5 +1,6 @@
 //default react imports
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 //boostrap components
 import {Row, Col, Table} from "react-bootstrap";
 //custom components
@@ -40,9 +41,9 @@ export default function TeamTable({playerdata, team}) {
             <Row className="mb-2">
                 <Col xl={12} md={12} xs={12} className="mx-auto">
                     <Row>
-                        <Col md={8} className="d-inline-flex">
-                            {RenderTeamImage(team)}
-                    <h4 className="font-weight-bold my-auto ml-1">{team?.teamName}</h4>
+                    <Col md={8} className="d-inline-flex">
+                        {RenderTeamImage(team)}
+                        <Link href={`/stats/team/${team.teamID}`}><h4 className="font-weight-bold my-auto ml-1 Clickable Hoverable" title={"click to see team stats"}>{team?.teamName}</h4></Link>
                     </Col>
                     </Row>
                 </Col>
