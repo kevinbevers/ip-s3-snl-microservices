@@ -1,6 +1,6 @@
 //default react imports
 import React, { useState, useEffect, useRef } from "react";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 //bootstrap
 import {Container, Row, Col, Card, Button, Modal, ListGroup, ListGroupItem, Form, Alert} from "react-bootstrap";
 //icons

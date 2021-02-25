@@ -1,6 +1,7 @@
 //default react imports
 import React, { useState } from "react";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
+import Head from "next/head";
 //default page stuff
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
@@ -15,9 +16,6 @@ import Image from "next/image";
 
 
 export default function news({LoginSession, Article}) {
-
-  const clean = DOMPurify.sanitize(Article?.articleContent);
-
   const ArticleImg = (a) => {
     const articleImg = process.env.NEXT_PUBLIC_BASE_API_URL + "/news-service/images/" + Article?.articleImagePath;
     return Article?.articleImagePath != null ? <Image alt={"SNL News Image"} layout={"fill"} src={articleImg} className="news-bannerimg" draggable={false}></Image>
@@ -32,6 +30,14 @@ export default function news({LoginSession, Article}) {
   return (
     <>
       <NavBar LoginSession={LoginSession}/>
+      {/* Load override head after navbar, since default twitter head get's loaded in navbar */}
+      <Head>
+        <meta name="twitter:card" key={"twitter:card"} content="summary_large_image"/>
+        <meta name="twitter:site" key="twitter:site" content="@Smitenoobleague"/>
+        <meta name="twitter:title" key="twitter:title" content={Article?.articleTitle}/>
+        <meta name="twitter:description" key="twitter:description" content={Article?.articleDescription} />
+        <meta name="twitter:image" key="twitter:image" content={process.env.NEXT_PUBLIC_BASE_API_URL + "/news-service/images/" + Article?.articleImagePath} />
+      </Head>
       <div className="w-100 news-banner position-relative">{ArticleImg(Article)}</div>
       <Container fluid className="mt-3">
         <Row><Col md={6} className="mx-auto text-left">
@@ -42,7 +48,7 @@ export default function news({LoginSession, Article}) {
         <Row><Col><hr/></Col></Row>
         <Row>
           <Col md={6} className="mx-auto text-left">
-            <div dangerouslySetInnerHTML={{__html: clean}}></div>
+            <div dangerouslySetInnerHTML={{__html: Article?.articleContent != null ? DOMPurify.sanitize(Article?.articleContent) : ""}}></div>
            
           </Col>
         </Row>

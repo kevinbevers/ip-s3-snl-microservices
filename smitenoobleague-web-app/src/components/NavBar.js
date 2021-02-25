@@ -9,12 +9,22 @@ import Img from 'react-optimized-image';
 import Logo from "public/images/SNL_Navbar_Logo.png";
 //icon
 import {FaDiscord} from "react-icons/fa";
+//dynamic head
+import Head from "next/head";
 
 export default function NavBar({LoginSession}) {
     
     const router = useRouter();
 
     return (
+        <>
+        <Head>
+        <meta name="twitter:card" key={"twitter:card"} content="summary_large_image" />
+        <meta name="twitter:site" key="twitter:site" content="@Smitenoobleague" />
+        <meta name="twitter:title" key="twitter:title" content="Schedules, Stats, Leaderboards and more" />
+        <meta name="twitter:description" key="twitter:description" content="Smitenoobleague is a website for a fully automated smite amateur league where teams can sign up, compete, see their stats and captains can manage their teams." />
+        <meta name="twitter:image" key="twitter:image" content="https://smitenoobleague.com/images/twitterbanner.jpg" />
+        </Head>
             <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="darktext font-weight-bold">
                 <Navbar.Brand href="/" className="p-0" className={router?.pathname == "/" ? "active" : ""}>
                 <Img src={Logo} webp sizes={[60, 120]} width="60" height="60" className="d-inline-block align-top" alt="SNL" draggable={false}/>
@@ -51,5 +61,6 @@ export default function NavBar({LoginSession}) {
                     </Nav>
                 </Navbar.Collapse>
                 </Navbar>
+        </>
     );
 }
