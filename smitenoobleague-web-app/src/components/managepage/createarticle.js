@@ -129,7 +129,7 @@ export default function CreateArticle({apiToken}) {
 
     return (
         <>
-            <Button variant={"primary"} size={"lg"} onClick={() => setModalArticleShow(true)} className="btn-block">Create new division</Button>
+            <Button variant={"primary"} size={"lg"} onClick={() => setModalArticleShow(true)} className="btn-block">Create new article</Button>
             <Modal
             size={"xl"}
             show={ModalArticleShow}

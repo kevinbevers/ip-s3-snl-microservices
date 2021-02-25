@@ -10,7 +10,7 @@ import ManageScheduleListItem from "src/components/managepage/managescheduleList
 import scheduleservice from "services/scheduleservice";
 import divisionservice from "services/divisionservice";
 
-export default function ManageSchedules({apiToken}) {
+export default function ManageSchedules({apiToken, adminManage}) {
 
     const [modalListShow, setModalListShow] = useState(false);
     const closeListModal = () => {
@@ -91,7 +91,7 @@ export default function ManageSchedules({apiToken}) {
                     <Col lg={10} xs={12} className="mx-auto">    
                      {SchedulesToShow != null ? <><ListGroup>
                             {SchedulesToShow.map((s, index) => (
-                                    <ManageScheduleListItem key={index} apiToken={apiToken} scheduledata={s} removeScheduleFunc={RemoveSchedule} /> 
+                                    <ManageScheduleListItem key={index} apiToken={apiToken} scheduledata={s} removeScheduleFunc={RemoveSchedule} adminManage={adminManage} /> 
                                     
                             ))}
                            </ListGroup></> : 

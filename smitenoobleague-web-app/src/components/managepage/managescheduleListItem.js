@@ -86,7 +86,7 @@ export default function ManageScheduleListItem({apiToken, scheduledata, removeSc
             <Row className="mb-1" onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
                 <Col lg={11} xs={11} className="mb-0"><ListGroupItem onClick={editSchedule} className="d-flex align-items-center Clickable adminTeamListItem">{scheduledata?.scheduleName} {hovering ? <p className="text-muted ml-auto mb-0">Click to edit</p> : <> </>}</ListGroupItem></Col>
                 <Col lg={1} xs={1} className="btn-group p-0">
-                    {hovering ?
+                    {hovering && adminManage ?
                     <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable" title="Delete division" onClick={() => setModalAreYouSure(true)} /> : <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable d-block d-sm-block d-lg-none" title="Delete division" onClick={() => setModalAreYouSure(true)} /> }
                 </Col>
             </Row>

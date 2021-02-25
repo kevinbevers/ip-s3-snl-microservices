@@ -7,14 +7,12 @@ import {Container, Row, Col, Card, Button} from "react-bootstrap";
 import FullBackground from "../src/components/FullBackground";
 //custom imports
 import ManageTeams from "src/components/managepage/manageteams";
-import CreateTeam from "src/components/managepage/createteam";
 import ManageDivisions from "src/components/managepage/managedivisions";
-import CreateDivision from "src/components/managepage/createdivision";
 import ManageSchedules from "src/components/managepage/manageschedules";
-import CreateSchedule from "src/components/managepage/createschedule";
 import ManageArticles from "src/components/managepage/managearticles";
 import CreateArticle from "src/components/managepage/createarticle";
 import SubmitMatch from "src/components/managepage/submitmatch";
+import NavBar from "src/components/NavBar";
 //Auth
 import helpers from "utils/helpers";
 
@@ -26,61 +24,27 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
       else {
   return (
     <>
+    <NavBar LoginSession={LoginSession} />
     <FullBackground src={"roadmap_bg"} />
     <Container className="mb-2 mt-2" fluid>
-        <Row className="">
-            <Col md={6} className="mb-2">
-                <Card>
-                    <Card.Body>
-                        <Card.Title><h2 className="font-weight-bolder">Manage teams</h2></Card.Title>
-                        <Card.Text>Manage existing teams or create a new team.</Card.Text>
-                        <Row>
-                            <Col md={6} className="mb-2">
-                                <CreateTeam apiToken={apiToken} />
-                            </Col>
-                            <Col md={6} className="mb-2">
-                                <ManageTeams apiToken={apiToken} adminManage={true}/>
-                            </Col>
-                        </Row>
-                    </Card.Body>
-                </Card>
-            </Col>
-            <Col md={6} className="mb-2">
-                <Card>
-                    <Card.Body>
-                        <Card.Title><h2 className="font-weight-bolder">Manage divisions</h2></Card.Title>
-                        <Card.Text>Manage existing division or create a new one.</Card.Text>
-                        <Row>
-                            <Col md={6} className="mb-2">
-                                <CreateDivision apiToken={apiToken} />
-                            </Col>
-                            <Col md={6} className="mb-2">
-                            <ManageDivisions apiToken={apiToken} adminManage={true}/>
-                            </Col>
-                        </Row>
-                    </Card.Body>
-                </Card>
-            </Col>
-        </Row>
-
         <Row className="">
             <Col md={6}>
                 <Row>
                     <Col md={12} className="mb-2">
-                        <Card>
-                            <Card.Body>
-                                <Card.Title><h2 className="font-weight-bolder">Manage schedules</h2></Card.Title>
-                                <Card.Text>Generate, edit or delete a schedule. Each schedule is linked to a division.</Card.Text>
-                                <Row>
-                                    <Col md={6} className="mb-2">
-                                       <CreateSchedule apiToken={apiToken} />
-                                    </Col>
-                                    <Col md={6} className="mb-2">
-                                        <ManageSchedules apiToken={apiToken} adminManage={true}/>
-                                    </Col>
-                                </Row>
-                            </Card.Body>
-                        </Card>
+                    <Card>
+                        <Card.Body>
+                            <Card.Title><h2 className="font-weight-bolder">Manage schedules & divisions</h2></Card.Title>
+                            <Card.Text>Manage existing division and schedules.</Card.Text>
+                            <Row>
+                                <Col md={6} className="mb-2">
+                                    <ManageSchedules apiToken={apiToken} />
+                                </Col>
+                                <Col md={6} className="mb-2">
+                                    <ManageDivisions apiToken={apiToken}/>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
                     </Col>
                 </Row>
                 <Row>
@@ -94,7 +58,7 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                                     <CreateArticle apiToken={apiToken} />
                                 </Col>
                                 <Col md={6} className="mb-2">
-                                    <ManageArticles apiToken={apiToken}/>
+                                    <ManageArticles apiToken={apiToken} />
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -105,21 +69,22 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                     <Col md={12} className="mb-2">
                         <Card>
                             <Card.Body>
-                                <Card.Title><h2 className="font-weight-bolder">Admin tools</h2></Card.Title>
+                                <Card.Title><h2 className="font-weight-bolder">Manage teams & admin tools</h2></Card.Title>
+                                <Card.Text>Manage existing teams, submit match id's or penalize teams</Card.Text>
                                 <Row>
-                                    <Col md={6} className="mb-2">
-                                        <Button variant={"primary"} size={"lg"} className="btn-block">penalize team in standings</Button>
+                                <Col md={6} className="mb-2">
+                                        <ManageTeams apiToken={apiToken} />
                                     </Col>
                                     <Col md={6} className="mb-2">
-                                    <Button variant={"primary"} size={"lg"} className="btn-block">Enforce match forfeit</Button>
+                                        <SubmitMatch apiToken={apiToken} />
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col md={6} className="mb-2">
-                                       <SubmitMatch apiToken={apiToken} />
+                                        <Button variant={"primary"} size={"lg"} className="btn-block disabled Disabled">penalize team in standings</Button>
                                     </Col>
                                     <Col md={6} className="mb-2">
-                                    <Button variant={"primary"} size={"lg"} className="btn-block">Generate MatchData</Button>
+                                    <Button variant={"primary"} size={"lg"} className="btn-block disabled Disabled">Enforce match forfeit</Button>
                                     </Col>
                                 </Row>
                             </Card.Body>
@@ -136,7 +101,7 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                                 <Card.Text>Important activities are logged and displayed here.</Card.Text>
                                 <Row className="h-75">
                                     <Col md={12} className="mb-2 h-100">
-                                    <div className="bg-dark text-light log pl-2 pt-1 pb-1">
+                                        <div className="bg-dark text-light log pl-2 pt-1 pb-1">
                                             <p className="logmsg"><b className="logtime">02-02-2021 15:00</b> <b className="text-info logmsg">Placeholder made a roster change:</b><br /> - Placeholder got swapped out for Placeholder</p>
                                         </div>
                                     </Col>
@@ -160,14 +125,17 @@ export async function getServerSideProps(context) {
   if (loginSessionData?.user != null) {
     const apiTokenForClient = await helpers.GetAccessTokenForClient(context.req, context.res);
 
-    if(loginSessionData?.user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'].includes("Admin") == false)
+    if(loginSessionData?.user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'].includes("Mod") == false)
     {
-        return {
-            props: {
-                status: 404,
-                errMsg: ""
-            }
-          };
+        if(loginSessionData?.user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'].includes("Admin") == false)
+        {
+            return {
+                props: {
+                    status: 404,
+                    errMsg: ""
+                }
+            };
+        }
     }
 
     return {

@@ -182,7 +182,7 @@ body {
 }
 
 .Disabled {
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 
 .newsArticle:hover .newsArticleImg,

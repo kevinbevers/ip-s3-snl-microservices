@@ -10,7 +10,7 @@ import ManageTeamListItem from "src/components/managepage/manageteamListItem";
 import teamservice from "services/teamservice";
 import divisionservice from "services/divisionservice";
 
-export default function ManageTeams({apiToken}) {
+export default function ManageTeams({apiToken, adminManage}) {
 
     const [modalListShow, setModalListShow] = useState(false);
     const closeListModal = () => {
@@ -103,7 +103,7 @@ export default function ManageTeams({apiToken}) {
                     <Col lg={10} xs={12} className="mx-auto">    
                      {TeamsToShow != null ? <><ListGroup>
                             {TeamsToShow.map((t, index) => (
-                                    <ManageTeamListItem key={index} apiToken={apiToken} Team={t} removeTeamFunc={RemoveTeam} />   
+                                    <ManageTeamListItem key={index} apiToken={apiToken} Team={t} removeTeamFunc={RemoveTeam} adminManage={adminManage} />   
                             ))}
                            </ListGroup></> : 
                             <> 
