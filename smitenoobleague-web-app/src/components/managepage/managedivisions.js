@@ -9,7 +9,7 @@ import ManageDivisionListItem from "src/components/managepage/managedivisionList
 //API
 import divisionservice from "services/divisionservice";
 
-export default function ManageDivisions({apiToken}) {
+export default function ManageDivisions({apiToken, adminManage}) {
 
     const [modalListShow, setModalListShow] = useState(false);
     const closeListModal = () => {
@@ -50,7 +50,7 @@ export default function ManageDivisions({apiToken}) {
                     <Col lg={10} xs={12} className="mx-auto">    
                      {Divisions != null ? <><ListGroup>
                             {Divisions.map((d, index) => (
-                                    <ManageDivisionListItem key={index} apiToken={apiToken} divisiondata={d} removeDivFunc={RemoveDiv} />
+                                    <ManageDivisionListItem key={index} apiToken={apiToken} divisiondata={d} removeDivFunc={RemoveDiv} adminManage={adminManage} />
                             ))}
                            </ListGroup></> : 
                             <> 

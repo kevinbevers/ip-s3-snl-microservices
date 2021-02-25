@@ -39,7 +39,7 @@ namespace news_microservice.Controllers
 
         // POST  news-service/article
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Mod")]
         public async Task<ActionResult> CreateArticle([FromForm] ArticleWithContent article)
         {
           return ModelState.IsValid ? await _articleService.CreateNewsArticleAsync(article) : BadRequest(ModelState);
@@ -47,7 +47,7 @@ namespace news_microservice.Controllers
 
         // PUT  news-service/article
         [HttpPut]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Mod")]
         public async Task<ActionResult<ArticleWithContent>> UpdateArticle([FromForm] ArticleWithContent article)
         {
             return ModelState.IsValid ? await _articleService.EditNewsArticleAsync(article) : BadRequest(ModelState);
@@ -55,7 +55,7 @@ namespace news_microservice.Controllers
 
         // DELETE  news-service/article/{slug}
         [HttpDelete("{slug}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Mod")]
         public async Task<ActionResult> DeleteArticle(string slug)
         {
             return await _articleService.DeleteNewsArticleAsync(slug);

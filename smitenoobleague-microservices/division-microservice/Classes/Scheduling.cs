@@ -16,6 +16,8 @@ namespace division_microservice.Classes
                 ListTeam.Add(new Team { TeamName = "No match planned", TeamID = 999999 });
             }
             List<Team> teams = new List<Team>();
+            //use the shuffle function to randomize the schedule generated.
+            ListTeam.Shuffle();
 
             teams.AddRange(ListTeam); // Copy all the elements.
             teams.RemoveAt(0); // To exclude the first team.
@@ -120,6 +122,21 @@ namespace division_microservice.Classes
             }
 
             return matchups;
+        }
+        //List randomizer from the internet. clever way to re index a list.
+        private static Random rng = new Random();
+
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
     }
 

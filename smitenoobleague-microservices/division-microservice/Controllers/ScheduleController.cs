@@ -69,7 +69,7 @@ namespace division_microservice.Controllers
 
         // PUT /schedule/{scheduleID}
         [HttpPut]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Mod")]
         public async Task<ActionResult<Schedule>> Put([FromBody] SimpleSchedule values)
         {
             return ModelState.IsValid ? await _scheduleService.UpdateScheduleForDivisionAsync(values) : BadRequest(ModelState);

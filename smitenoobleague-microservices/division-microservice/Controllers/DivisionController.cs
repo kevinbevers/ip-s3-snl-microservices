@@ -58,7 +58,7 @@ namespace division_microservice.Controllers
 
         // PUT /division
         [HttpPut]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Mod")]
         public async Task<ActionResult<Division>> Put([FromBody] Division updatedDivision) //return updated division object
         {
             return ModelState.IsValid ? await _divisionService.UpdateDivisionAsync(updatedDivision) : BadRequest(ModelState);
