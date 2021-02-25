@@ -270,29 +270,37 @@ namespace stat_microservice.Services
                 //get the specific match from that matchup
                 var match = teamMatchesStats.Where(x => x.GameId == mr.GameId && x.MatchupId == mr.ScheduleMatchUpId).FirstOrDefault();
 
-                double recentPerformanceScore = 0;
-                double matchTimeDivision = (double)match.MatchDurationInSeconds / 360;
-
-                recentPerformanceScore += (int)((double)match.TotalDamageDealtInMatch * 0.005);
-                recentPerformanceScore += (int)((double)match.GoldEarnedInMatch * 0.008);
-                recentPerformanceScore += (int)((double)match.TotalObjectivesTakenInMatch * 35);
-                recentPerformanceScore += (int)((double)match.TotalKillsTeam * 20);
-                recentPerformanceScore += (int)((double)match.TotalAssistsInMatch * 25);
-                //if the player died divide score by number of deaths
-                if (match.TotalDeathsInMatch > 0)
+                if (match != null)
                 {
-                    double DeathPenalty = (double)match.TotalDeathsInMatch * 10;
-                    recentPerformanceScore =  (int)(recentPerformanceScore - DeathPenalty);
+                    double recentPerformanceScore = 0;
+                    double matchTimeDivision = (double)match.MatchDurationInSeconds / 360;
+
+                    recentPerformanceScore += (int)((double)match.TotalDamageDealtInMatch * 0.005);
+                    recentPerformanceScore += (int)((double)match.GoldEarnedInMatch * 0.008);
+                    recentPerformanceScore += (int)((double)match.TotalObjectivesTakenInMatch * 35);
+                    recentPerformanceScore += (int)((double)match.TotalKillsTeam * 20);
+                    recentPerformanceScore += (int)((double)match.TotalAssistsInMatch * 25);
+                    //if the player died divide score by number of deaths
+                    if (match.TotalDeathsInMatch > 0)
+                    {
+                        double DeathPenalty = (double)match.TotalDeathsInMatch * 10;
+                        recentPerformanceScore = (int)(recentPerformanceScore - DeathPenalty);
+                    }
+
+                    recentPerformanceScore /= matchTimeDivision;
+
+                    if (match.WonMatch == false)
+                    {
+                        recentPerformanceScore *= 0.9;
+                    }
+
+                    recentPerformanceScoreList.Add((int)recentPerformanceScore);
                 }
-
-                recentPerformanceScore /= matchTimeDivision;
-
-                if(match.WonMatch == false)
+                else
                 {
-                    recentPerformanceScore *= 0.9;
+                    //score for forfeit based on forfeit win or loss
+                    recentPerformanceScoreList.Add(mr.WinningTeamId == teamID ? 500 : 0);
                 }
-
-                recentPerformanceScoreList.Add((int)recentPerformanceScore);
             }
 
             return recentPerformanceScoreList;

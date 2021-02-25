@@ -212,6 +212,10 @@ namespace stat_microservice.Services
 
                             matchHistoryDetails.MatchResults.Add(matchData);
                         }
+                        else
+                        {
+                            matchHistoryDetails.MatchResults.Add(null);
+                        }
                     }
 
                     return new ObjectResult(matchHistoryDetails) { StatusCode = 200 };
