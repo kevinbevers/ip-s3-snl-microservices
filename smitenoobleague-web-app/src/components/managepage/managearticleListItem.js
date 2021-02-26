@@ -189,7 +189,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                         Article title:
                     </Form.Label>
                     <Col>
-                    <Form.Control type="text" placeholder="Enter article title..." value={Article?.articleTitle} onChange={changeTitle}/>
+                    <Form.Control type="text" placeholder="Enter article title..." value={Article?.articleTitle} maxLength={60} onChange={changeTitle}/>
                     </Col>
                 </Form.Row>
                 <br />
@@ -198,7 +198,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                         Article description:
                     </Form.Label>
                     <Col>
-                    <Form.Control type="text" as={"textarea"} className="articleDesc" maxLength={255} placeholder="Enter description of the article..." value={Article?.articleDescription} onChange={changeDescription}/>
+                    <Form.Control type="text" as={"textarea"} className="articleDesc" maxLength={300} placeholder="Enter description of the article..." value={Article?.articleDescription} onChange={changeDescription}/>
                     </Col>
                 </Form.Row>
                 <br />
@@ -207,7 +207,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                         Article type:
                     </Form.Label>
                     <Col>
-                    <Form.Control type="text" placeholder="Enter article type..." value={Article?.articleType} onChange={changeType}/>
+                    <Form.Control type="text" placeholder="Enter article type..." value={Article?.articleType} onChange={changeType} maxLength={45}/>
                     </Col>
                 </Form.Row>
                 <br />
@@ -217,7 +217,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                     </Form.Label>
                     <Col>
                         <FaEye className="previewButton Clickable" onClick={() => setModalPreviewShow(true)} />
-                        <Form.Control type="text" as={"textarea"} className="articleContent" maxLength={1000} placeholder="Article content here..." value={Article?.articleContent} onChange={changeContent}/>      
+                        <Form.Control type="text" as={"textarea"} className="articleContent" maxLength={4000} placeholder="Article content here..." value={Article?.articleContent} onChange={changeContent}/>      
                     </Col>
                 </Form.Row>
                 <br />
