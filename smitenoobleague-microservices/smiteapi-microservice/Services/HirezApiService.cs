@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace smiteapi_microservice.Services
 {
@@ -274,7 +275,7 @@ namespace smiteapi_microservice.Services
             //}
         }
 
-        public async Task<IEnumerable<Player>> SearchPlayersByNameAsync(string name)
+        public async Task<ActionResult<IEnumerable<Player>>> SearchPlayersByNameAsync(string name)
         {
             List<ApiPlayer> playersfound = await _hirezApi.SearchPlayerByName(name);
 
@@ -283,6 +284,7 @@ namespace smiteapi_microservice.Services
             if (playersfound?[0].ret_msg != null)
             {
                 //could return message to user
+                return new ObjectResult(playersfound?[0].ret_msg.ToString()) { StatusCode = 404 };
             }
             else
             {
