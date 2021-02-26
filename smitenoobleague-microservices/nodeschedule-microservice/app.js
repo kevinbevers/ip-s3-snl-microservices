@@ -15,6 +15,7 @@ const axios = require('axios');
 
 //INIT. get all scheduled jobs from the database. to prevent schedule loss on restart of node app
 GetJobsFromDB();
+GetInhouseJobsFromDB();
 
 app.get('/', function (req, res) {
   res.send('Node scheduler is running')
@@ -28,7 +29,7 @@ app.post('/schedulematch', function (req, res) {
   const patch = req.body.patch;
 
   ScheduleGame(date, patch, id);
-
+  console.log(`Game with ID: ${id} added to scheduling. Date: ${date}`);
   res.send(`Game with ID: ${id} added to scheduling. Date: ${date}`);
 });
 
@@ -41,8 +42,21 @@ app.get('/schedulematch/:id/:patch/:time', function (req, res) {
   const patch = req.params.patch;
 
   ScheduleGame(date, patch, id);
-
+  console.log(`Game with ID: ${id} added to scheduling. Date: ${date}`);
   res.send(`Game with ID: ${id} added to scheduling. Date: ${date}`);
+});
+
+//get version of scheduling expected: /schedulematch/1111111111/year-month-dayT00:00:00 //this get's called by the smite api 
+//date should be in the future.
+app.get('/scheduleinhousematch/:id/:patch/:time', function (req, res) {
+
+  const date = new Date(req.params.time);
+  const id = req.params.id;
+  const patch = req.params.patch;
+
+  CallSmiteApiInhouse(date, patch, id);
+  console.log(`Inhouse Game with ID: ${id} added to scheduling. Date: ${date}`);
+  res.send(`Inhouse Game with ID: ${id} added to scheduling. Date: ${date}`);
 });
 
 //App listen
@@ -54,6 +68,14 @@ function ScheduleGame(date, patch, id) {
   schedule.scheduleJob(date, function () {
     //send the gameID to the smiteapi microservice
     CallSmiteApi(id, patch, date);
+  });
+}
+
+//Methods / functions
+function ScheduleInhouseGame(date, patch, id) {
+  schedule.scheduleJob(date, function () {
+    //send the gameID to the smiteapi microservice
+    CallSmiteApiInhouse(id, patch, date);
   });
 }
 
@@ -77,6 +99,29 @@ function CallSmiteApi(id, patch, date) {
       //reschedule with + 2 hours
       date = date.addHours(2);
       ScheduleGame(date, patch, id);
+    }).catch(error => { console.error(error); });
+}
+
+function CallSmiteApiInhouse(id, patch, date) {
+  axios.post(process.env.API_URL + '/queuedmatch/inhouse', {
+    gameID: id,
+    patchNumber: patch
+  },{headers: {"ServiceKey":process.env.InternalServiceKey}})
+    .then(res => {
+      //log the response
+      console.log("Inhouse scheduled job ran successfull with the following data: {" + "id: " + id + " @: " + date + "}");
+      console.log(`statusCode: ${res.statusCode}`);
+      console.log(res);
+    })
+    .catch(error => {
+      //log the error
+      console.log("Inhouse scheduled job ran unsuccessfull with the following data: {" + "id: " + id + " @: " + date + "}");
+      //Log the response text
+      console.error(error.response.data);
+
+      //reschedule with + 2 hours
+      date = date.addHours(2);
+      ScheduleInhouseGame(date, patch, id);
     }).catch(error => { console.error(error); });
 }
 
@@ -109,6 +154,38 @@ function GetJobsFromDB() {
     .catch(err => {
       console.log("Error: " + err);
         setTimeout(GetJobsFromDB, 5000);
+    });
+}
+
+function GetInhouseJobsFromDB() {
+  axios.get(process.env.API_URL + '/queuedmatch/inhouse',{headers: {"ServiceKey":process.env.InternalServiceKey}})
+    .then(res =>
+    // The whole response has been received. Print out the result.
+    {
+      const data = res.data;
+      console.log(data);
+      let scheduledGames = data;
+      //foreach received object
+      scheduledGames.forEach(game => {
+
+        const id = game.gameID;
+        const date = new Date(game.scheduleTime);
+        const patch = game.patchNumber;
+        //still something wrong with this date sorting.
+        if (Date.parse(date) <= Date.now()) {
+          console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
+          //make api call to get matchdata. in that call it will also update the database
+          CallSmiteApiInhouse(id, patch, date);
+        }
+        else {
+          console.log("Added " + id + " as scheduled job @: " + date);
+          ScheduleInhouseGame(date, patch, id);
+        }
+      });
+    })
+    .catch(err => {
+      console.log("Error: " + err);
+        setTimeout(GetInhouseJobsFromDB, 5000);
     });
 }
 

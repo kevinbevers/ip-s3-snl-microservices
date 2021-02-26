@@ -20,10 +20,12 @@ namespace smiteapi_microservice.Controllers
     public class MatchController : Controller
     {
         private readonly IMatchService _matchService;
+        private readonly IInhouseMatchService _inhouseMatchService;
 
-        public MatchController(IMatchService matchService)
+        public MatchController(IMatchService matchService, IInhouseMatchService inhouseMatchService)
         {
             _matchService = matchService;
+            _inhouseMatchService = inhouseMatchService;
         }
 
         // GET: /match/134314134141
@@ -35,10 +37,18 @@ namespace smiteapi_microservice.Controllers
 
         // POST /match
         [HttpPost]
-        [Authorize(Roles = "Captain,Admin")]
+        [Authorize(Roles = "Captain,Admin,Mod")]
         public async Task<ActionResult> Post([FromBody] int? gameID)
         {
             return await _matchService.ProcessMatchIdAsync(gameID);
+        }
+
+        // POST /match
+        [HttpPost("inhouse")]
+        [Authorize(Roles = "Admin,Mod")]
+        public async Task<ActionResult> PostInhouse([FromBody] int? gameID)
+        {
+            return await _inhouseMatchService.ProcessInhouseMatchIdAsync(gameID);
         }
     }
 }

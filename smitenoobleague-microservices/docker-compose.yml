@@ -69,6 +69,21 @@ services:
     depends_on:
       - db
 
+  inhouse-microservice:
+    image: ${DOCKER_REGISTRY-}inhousemicroservice
+    container_name: inhousemicroservice
+    restart: always
+    build:
+      context: ./inhouse-microservice/
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Production
+        - DB_Password=${DB_PASS}
+        - InternalServiceKey=${InternalServiceKey}
+        - Auth0Domain=${Auth0Domain}
+        - Auth0Audience=${Auth0Audience}
+    depends_on:
+      - db
+
   team-microservice:
     image: ${DOCKER_REGISTRY-}teammicroservice
     container_name: teammicroservice

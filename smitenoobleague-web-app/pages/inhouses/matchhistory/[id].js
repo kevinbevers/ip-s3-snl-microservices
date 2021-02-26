@@ -1,24 +1,26 @@
 //default react imports
 import React, { useState, useEffect } from "react";
 //default page stuff
-import NavBar from "src/components/NavBar";
+import InhouseNavBar from "src/components/inhouses/InhouseNavBar";
 import Footer from "src/components/Footer";
 //boostrap components
 import { Alert, Tab, Nav, Table, Col, Row, Container, Jumbotron } from "react-bootstrap";
 //icons
 import { FaBox } from "react-icons/fa";
 //custom components
-import GameStats from "src/components/matchdetails/GameStats";
+import InhouseGameStats from "src/components/inhouses/InhouseGameStats";
 import DefaultErrorPage from "next/error";
 //Auth
 import helpers from "utils/helpers";
 //services
-import matchservice from "services/matchservice";
+import inhouseservice from "services/inhouseservice";
 //image optimization
 import Img from 'react-optimized-image';
 import Image from "next/image";
 
 export default function matchdetails({LoginSession, MatchupData, status, errMsg}) {
+
+  const [teamsInMatch, setTeamsInMatch] = useState([{teamID: 1, teamName: "Order", teamLogoPath: "order.png"},{teamID: 2, teamName: "Chaos", teamLogoPath: "chaos.png"}]);
 
   if (status != null) {
     return (<><DefaultErrorPage statusCode={status} title={errMsg} data-testid="matchpageErrorPage"/></>);
@@ -27,10 +29,10 @@ export default function matchdetails({LoginSession, MatchupData, status, errMsg}
     
   return (
     <>
-     <NavBar LoginSession={LoginSession}/>
+     <InhouseNavBar LoginSession={LoginSession}/>
       {/* {postData} */}
       <Container fluid className="mt-2">
-            {MatchupData?.matchResults?.length > 0 ?  <GameStats MatchResult={MatchupData?.matchResults[0]} teamsInMatch={MatchupData?.teamsInMatch}/>
+            {MatchupData?.matchResult != null ?  <InhouseGameStats MatchResult={MatchupData?.matchResult}/>
               : <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game not played</h4></Col></Row>}
       </Container>
       <Footer />
@@ -45,12 +47,12 @@ export async function getServerSideProps(context) {
 
 
   //id from url
-  const matchupID = context.params.id;
+  const gameID = context.params.id;
   //object to fill
   let response = { data: null, statusCode: null, errMsg: null };
 
    //call api for the data
-   await matchservice.GetMatchupHistoryByMatchupID(matchupID)
+   await inhouseservice.GetInhouseHistoryDetailsByGameID(gameID)
    .then(res => {response.data = res.data})
    .catch(err => {
      if (err.response == null) {

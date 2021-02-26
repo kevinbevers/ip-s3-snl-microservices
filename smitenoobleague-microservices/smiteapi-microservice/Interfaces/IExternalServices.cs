@@ -9,6 +9,7 @@ namespace smiteapi_microservice.Interfaces
     public interface IExternalServices
     {
         Task<ObjectResult> SaveMatchdataToStatService(MatchData match);
+        Task<ObjectResult> SaveInhouseMatchdataToInhouseService(MatchData match);
         Task<TeamWithDetails> GetTeamWithDetailsByIdAsync(int teamID);
     }
 }

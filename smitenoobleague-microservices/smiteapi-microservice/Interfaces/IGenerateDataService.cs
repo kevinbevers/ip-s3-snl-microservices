@@ -7,5 +7,6 @@ namespace smiteapi_microservice.Interfaces
     public interface IGenerateDataService
     {
         Task<ActionResult> GenerateMatchDataForMatchupWithTeamIds(int winningTeamId, int losingTeamId, DateTime? playedDate, bool? faultyQueueID, bool? hiddenPlayersChance, int? numberOfFillsWinners, int? numberOfFillsLosers);
+        Task<ActionResult> GenerateMatchDataForInhouseUsingLeagueTeams(int winningTeamId, int losingTeamId, DateTime? playedDate, bool? faultyQueueID, bool? hiddenPlayersChance, int? numberOfFillsWinners, int? numberOfFillsLosers);
     }
 }

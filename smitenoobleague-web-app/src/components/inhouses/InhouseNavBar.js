@@ -33,7 +33,7 @@ export default function InhouseNavBar({LoginSession}) {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mr-auto">
-                    <Nav.Link href="/inhouses/matchhistory" className={router?.pathname == "/inhouses/matchhistory" ? "active" : ""}>Match history</Nav.Link>
+                    <Nav.Link href="/inhouses/matchhistory" className={router?.pathname.includes("/inhouses/matchhistory") ? "active" : ""}>Match history</Nav.Link>
                     <Nav.Link href="/inhouses/leaderboards" className={router?.pathname == "/inhouses/leaderboards" ? "active" : ""}>Leaderboards</Nav.Link>
                     {/* <Nav.Link href="https://discord.gg/ZZxqtaZvuj" className="" target="_blank">Join SNL <FaDiscord/></Nav.Link> */}
                     </Nav>

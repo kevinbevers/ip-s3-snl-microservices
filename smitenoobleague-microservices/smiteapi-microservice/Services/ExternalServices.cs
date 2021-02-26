@@ -44,6 +44,27 @@ namespace smiteapi_microservice.Services
             }
         }
 
+        public async Task<ObjectResult> SaveInhouseMatchdataToInhouseService(MatchData match)
+        {
+            //body for the post request
+            var stringContent = new StringContent(JsonConvert.SerializeObject(match));
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(15); //timeout after 15 seconds. higher timeout because on first run this could be slow.
+                //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+                stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                using (var response = await httpClient.PostAsync($"http://inhouse-microservice/matchstat", stringContent))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    int statusCode = (int)response.StatusCode;
+                    return new ObjectResult(json) { StatusCode = statusCode };
+                }
+            }
+        }
+
         public async Task<ObjectResult> SaveMatchdataToStatService(MatchData match)
         {
             //body for the post request

@@ -39,7 +39,7 @@ export default function NavBar({LoginSession}) {
                         <NavDropdown.Item href="/stats/player" className={router?.pathname.includes("/stats/player")  ? "active font-weight-bold" : "font-weight-bold"}>Player stats</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="/schedules" className={router?.pathname == "/schedules" ? "active" : ""}>Schedules</Nav.Link>
-                    <Nav.Link href="/matchhistory" className={router?.pathname == "/matchhistory" ? "active" : ""}>Match history</Nav.Link>
+                    <Nav.Link href="/matchhistory" className={router?.pathname.includes("/matchhistory") ? "active" : ""}>Match history</Nav.Link>
                     <Nav.Link href="/standings" className={router?.pathname == "/standings" ? "active" : ""}>Standings</Nav.Link>
                     <Nav.Link href="/leaderboards" className={router?.pathname == "/leaderboards" ? "active" : ""}>Leaderboards</Nav.Link>
                     <Nav.Link href="/news" className={router?.pathname == "/news" ? "active" : ""}>News</Nav.Link>

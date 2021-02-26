@@ -10,7 +10,7 @@ import InhouseMatchHistoryCard from "src/components/inhouses/InhouseMatchHistory
 //Auth
 import helpers from "utils/helpers";
 //services
-import matchservice from "services/matchservice";
+import inhouseservice from "services/inhouseservice";
 
 export default function matchhistory({LoginSession, MatchHistory}) {
 
@@ -21,7 +21,7 @@ export default function matchhistory({LoginSession, MatchHistory}) {
   const loadMoreMatches = async() => {
     if(matchesRemaining)
     {
-      await matchservice.GetMatchupHistoryList(1,index)
+      await inhouseservice.GetInhouseHistoryList(1,index)
       .then(res => {
         setMatchHistoryState(MatchHistoryState.concat(res.data)); 
         setIndex(index + 1); 
@@ -67,7 +67,7 @@ export async function getServerSideProps(context) {
 
   let latest10Matches = null;
 
-  await matchservice.GetMatchupHistoryList(10,0).then(res => {latest10Matches = res.data;}).catch(err => {});
+  await inhouseservice.GetInhouseHistoryList(10,0).then(res => {latest10Matches = res.data;}).catch(err => {});
 
   return {
       props: {
