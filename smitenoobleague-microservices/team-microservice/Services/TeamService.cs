@@ -64,6 +64,11 @@ namespace team_microservice.Services
                                             return new ObjectResult("Teamcaptain already taken.") { StatusCode = 400 }; //BAD REQUEST
                                         }
 
+                                        if(teamSubmisssion.Captain?.TeamCaptainEmail == null)
+                                        {
+                                            return new ObjectResult("Teamcaptain email not filled in.") { StatusCode = 400 }; //BAD REQUEST
+                                        }
+
                                         TableTeamMember addCaptain = new TableTeamMember
                                         {
                                             TeamMemberPlayerId = (int)teamSubmisssion.Captain.TeamCaptainPlayerID,
@@ -1354,6 +1359,11 @@ namespace team_microservice.Services
                                 return new ObjectResult("Not all info provided for Teamcaptain.") { StatusCode = 400 }; //OK
                             }
 
+                            if (ts.Captain?.TeamCaptainEmail == null)
+                            {
+                                return new ObjectResult("Teamcaptain email not filled in.") { StatusCode = 400 }; //BAD REQUEST
+                            }
+
                             TableTeamMember TeamCaptain = foundMembers.Where(m => m.TeamMemberPlayerId == ts.Captain.TeamCaptainPlayerID).FirstOrDefault();
                             //if captain isn't in the current team
                             if (TeamCaptain == null)
@@ -1395,12 +1405,12 @@ namespace team_microservice.Services
 
                                 //update current team member to captain if the given captain is a team member
                                 TeamCaptain.TeamMemberPlayerId = (int)ts.Captain.TeamCaptainPlayerID;
-                                TeamCaptain.TeamMemberAccountId = ts.Captain.TeamCaptainAccountID;
+                                TeamCaptain.TeamMemberAccountId = ts.Captain.TeamCaptainAccountID != null ? ts.Captain.TeamCaptainAccountID : TeamCaptain.TeamMemberAccountId;
                                 TeamCaptain.TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : (int)foundTeam.TeamDivisionId;
                                 TeamCaptain.TeamMemberName = ts.Captain.TeamCaptainPlayerName;
                                 TeamCaptain.TeamMemberRole = ts.Captain.TeamCaptainRoleID;
                                 TeamCaptain.TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts?.Captain?.TeamCaptainPlatformName);
-                                TeamCaptain.TeamMemberEmail = ts.Captain.TeamCaptainEmail;
+                                TeamCaptain.TeamMemberEmail = ts.Captain.TeamCaptainEmail != null ? ts.Captain.TeamCaptainEmail : TeamCaptain.TeamMemberEmail;
 
                                 _db.TableTeamMembers.Update(TeamCaptain);
                                 await _db.SaveChangesAsync();
