@@ -1,11 +1,11 @@
 //default react imports
 import React, { useState } from "react";
 //default page stuff
-import NavBar from "../src/components/NavBar";
-import Footer from "../src/components/Footer";
+import NavBar from "src/components/NavBar";
+import Footer from "src/components/Footer";
 
 //import background component
-import FullBackground from "../src/components/FullBackground";
+import FullBackground from "src/components/FullBackground";
 //Auth
 import helpers from "utils/helpers";
 

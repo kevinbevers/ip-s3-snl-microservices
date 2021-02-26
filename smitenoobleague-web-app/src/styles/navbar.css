@@ -23,3 +23,9 @@
 .smallfootertext {
     font-size: 12px;
 }
+
+/* @media (min-width: 769px) {
+    .navbar-light.darktext {
+        font-size: 1.1vw;
+    }
+} */

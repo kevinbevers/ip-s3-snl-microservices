@@ -5,21 +5,15 @@ const GetLoginSession = async(req) => {
   //get session
   const session = await auth0.getSession(req);
   //Check if logged in user is captain to show captainpage in navbar
-  let Captain = false;
-
-  //console.log(session.accessToken);
-
-  if(session?.user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes("Captain"))
-  {
-    Captain = true;
-  }
-  else {
-    Captain = false;
-  }
+  let Captain = session?.user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes("Captain") ? true : false;
+  let Mod = session?.user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes("Mod") ? true : false;
+  let Admin = session?.user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes("Admin") ? true : false;
 
   return {
           user: session?.user || null,
-          isCaptain: Captain
+          isCaptain: Captain,
+          isMod: Mod,
+          isAdmin: Admin
         };
 };
 //used in server side for autorized calls

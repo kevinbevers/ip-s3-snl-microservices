@@ -26,7 +26,7 @@ export default function NavBar({LoginSession}) {
         <meta name="twitter:image" key="twitter:image" content="https://smitenoobleague.com/images/twitterbanner.jpg" />
         </Head>
             <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="darktext font-weight-bold">
-                <Navbar.Brand href="/" className="p-0" className={router?.pathname == "/" ? "active" : ""}>
+                <Navbar.Brand href="/" className={router?.pathname == "/" ? "p-0 active" : "p-0"}>
                 <Img src={Logo} webp sizes={[60, 120]} width="60" height="60" className="d-inline-block align-top" alt="SNL" draggable={false}/>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -46,6 +46,8 @@ export default function NavBar({LoginSession}) {
                     <Nav.Link href="/rules" className={router?.pathname == "/rules" ? "active" : ""}>Rules</Nav.Link>
                     <Nav.Link href="/faq" className={router?.pathname == "/faq" ? "active" : ""}>FAQ</Nav.Link>
                     <Nav.Link href="https://discord.gg/ZZxqtaZvuj" className="" target="_blank">Join <FaDiscord/></Nav.Link>
+                    {/* {LoginSession?.isMod ? <><Nav.Link href="/moderate" className={router?.pathname == "/moderate" ? "active" : ""}>Moderate dashboard</Nav.Link></> : <> </>}
+                    {LoginSession?.isAdmin ? <><Nav.Link href="/manage" className={router?.pathname == "/manage" ? "active" : ""}>Manage dashboard</Nav.Link></> : <> </>} */}
                     </Nav>
                     <Nav>
                         {LoginSession?.user != null ? 
