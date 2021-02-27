@@ -26,7 +26,7 @@ export default function NavBar({LoginSession}) {
         <meta name="twitter:image" key="twitter:image" content="https://smitenoobleague.com/images/twitterbanner.jpg" />
         </Head>
             <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="darktext font-weight-bold">
-                <Navbar.Brand href="/" className="p-0" className={router?.pathname == "/" ? "active" : ""}>
+                <Navbar.Brand href="/" className={router?.pathname == "/" ? "p-0 active" : "p-0"}>
                 <Img src={Logo} webp sizes={[60, 120]} width="60" height="60" className="d-inline-block align-top" alt="SNL" draggable={false}/>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -39,13 +39,15 @@ export default function NavBar({LoginSession}) {
                         <NavDropdown.Item href="/stats/player" className={router?.pathname.includes("/stats/player")  ? "active font-weight-bold" : "font-weight-bold"}>Player stats</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="/schedules" className={router?.pathname == "/schedules" ? "active" : ""}>Schedules</Nav.Link>
-                    <Nav.Link href="/matchhistory" className={router?.pathname == "/matchhistory" ? "active" : ""}>Match history</Nav.Link>
+                    <Nav.Link href="/matchhistory" className={router?.pathname.includes("/matchhistory") ? "active" : ""}>Match history</Nav.Link>
                     <Nav.Link href="/standings" className={router?.pathname == "/standings" ? "active" : ""}>Standings</Nav.Link>
                     <Nav.Link href="/leaderboards" className={router?.pathname == "/leaderboards" ? "active" : ""}>Leaderboards</Nav.Link>
                     <Nav.Link href="/news" className={router?.pathname == "/news" ? "active" : ""}>News</Nav.Link>
                     <Nav.Link href="/rules" className={router?.pathname == "/rules" ? "active" : ""}>Rules</Nav.Link>
                     <Nav.Link href="/faq" className={router?.pathname == "/faq" ? "active" : ""}>FAQ</Nav.Link>
                     <Nav.Link href="https://discord.gg/ZZxqtaZvuj" className="" target="_blank">Join <FaDiscord/></Nav.Link>
+                    {/* {LoginSession?.isMod ? <><Nav.Link href="/moderate" className={router?.pathname == "/moderate" ? "active" : ""}>Moderate dashboard</Nav.Link></> : <> </>}
+                    {LoginSession?.isAdmin ? <><Nav.Link href="/manage" className={router?.pathname == "/manage" ? "active" : ""}>Manage dashboard</Nav.Link></> : <> </>} */}
                     </Nav>
                     <Nav>
                         {LoginSession?.user != null ? 

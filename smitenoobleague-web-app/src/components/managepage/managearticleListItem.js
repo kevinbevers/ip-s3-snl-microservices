@@ -149,7 +149,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                 <Col lg={11} xs={11} className="mb-0"><ListGroupItem onClick={editArticle} className="d-flex align-items-center Clickable adminTeamListItem">{articledata.articleTitle} {hovering ? <p className="text-muted ml-auto mb-0">Click to edit</p> : <> </>}</ListGroupItem></Col>
                 <Col lg={1} xs={1} className="btn-group p-0">
                     {hovering ?
-                    <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable" title="Delete division" onClick={() => setModalAreYouSure(true)} /> : <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable d-block d-sm-block d-lg-none" title="Delete division" onClick={() => setModalAreYouSure(true)} /> }
+                    <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable" title="Delete article" onClick={() => setModalAreYouSure(true)} /> : <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable d-block d-sm-block d-lg-none" title="Delete division" onClick={() => setModalAreYouSure(true)} /> }
                 </Col>
             </Row>
             <Modal
@@ -189,7 +189,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                         Article title:
                     </Form.Label>
                     <Col>
-                    <Form.Control type="text" placeholder="Enter article title..." value={Article?.articleTitle} onChange={changeTitle}/>
+                    <Form.Control type="text" placeholder="Enter article title..." value={Article?.articleTitle} maxLength={60} onChange={changeTitle}/>
                     </Col>
                 </Form.Row>
                 <br />
@@ -198,7 +198,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                         Article description:
                     </Form.Label>
                     <Col>
-                    <Form.Control type="text" as={"textarea"} className="articleDesc" maxLength={255} placeholder="Enter description of the article..." value={Article?.articleDescription} onChange={changeDescription}/>
+                    <Form.Control type="text" as={"textarea"} className="articleDesc" maxLength={300} placeholder="Enter description of the article..." value={Article?.articleDescription} onChange={changeDescription}/>
                     </Col>
                 </Form.Row>
                 <br />
@@ -207,7 +207,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                         Article type:
                     </Form.Label>
                     <Col>
-                    <Form.Control type="text" placeholder="Enter article type..." value={Article?.articleType} onChange={changeType}/>
+                    <Form.Control type="text" placeholder="Enter article type..." value={Article?.articleType} onChange={changeType} maxLength={45}/>
                     </Col>
                 </Form.Row>
                 <br />
@@ -217,7 +217,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                     </Form.Label>
                     <Col>
                         <FaEye className="previewButton Clickable" onClick={() => setModalPreviewShow(true)} />
-                        <Form.Control type="text" as={"textarea"} className="articleContent" maxLength={1000} placeholder="Article content here..." value={Article?.articleContent} onChange={changeContent}/>      
+                        <Form.Control type="text" as={"textarea"} className="articleContent" maxLength={4000} placeholder="Article content here..." value={Article?.articleContent} onChange={changeContent}/>      
                     </Col>
                 </Form.Row>
                 <br />

@@ -21,6 +21,7 @@ export default function FullBackground({src}) {
     : src == "news_bg" ? <Img webp height={100} width={100} sizes={[1920, 480,425]} src={require("public/images/news_bg.jpg")} style={bgStyle} draggable={false} alt="BG"/> 
     : src == "rules_bg" ? <Img webp height={100} width={100} sizes={[1920, 480,425]} src={require("public/images/rules_bg.jpg")} style={bgStyle} draggable={false} alt="BG"/>
     : src == "roadmap_bg" ? <Img webp height={100} width={100} sizes={[1920, 480,425]} src={require("public/images/roadmap_bg.jpg")} style={bgStyle} draggable={false} alt="BG"/>
+    : src == "inhouse_bg" ? <Img webp height={100} width={100} sizes={[1920, 480,425]} src={require("public/images/inhouse_bg.jpg")} style={bgStyle} draggable={false} alt="BG"/>
     : <Img webp height={100} width={100} sizes={[1920, 480,425]} src={require("public/images/dark_bg.jpg")} style={bgStyle} draggable={false} alt="BG"/>}
     </>
     

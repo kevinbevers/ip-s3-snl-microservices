@@ -27,5 +27,13 @@ namespace smiteapi_microservice.Controllers
         {
             return await _generateDataService.GenerateMatchDataForMatchupWithTeamIds(winningTeamID, losingTeamID, playedDate, faultyQueueID, hiddenPlayersChance, numberOfFillsWinners, numberOfFillsLosers);
         }
+
+        // GET: api/values
+        [HttpGet("matchdataforinhousewithleagueteams/{winningTeamID}/{losingTeamID}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GenerateMatchDataForInhouse(int winningTeamID, int losingTeamID, [FromQuery] DateTime playedDate, [FromQuery] bool? faultyQueueID, [FromQuery] bool? hiddenPlayersChance, [FromQuery] int? numberOfFillsWinners, [FromQuery] int? numberOfFillsLosers)
+        {
+            return await _generateDataService.GenerateMatchDataForInhouseUsingLeagueTeams(winningTeamID, losingTeamID, playedDate, faultyQueueID, hiddenPlayersChance, numberOfFillsWinners, numberOfFillsLosers);
+        }
     }
 }

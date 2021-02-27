@@ -19,9 +19,6 @@ import Img from 'react-optimized-image';
 import Image from "next/image";
 
 export default function matchdetails({LoginSession, MatchupData, status, errMsg}) {
-
-  console.log(MatchupData);
-
   if (status != null) {
     return (<><DefaultErrorPage statusCode={status} title={errMsg} data-testid="matchpageErrorPage"/></>);
   }
@@ -52,15 +49,15 @@ export default function matchdetails({LoginSession, MatchupData, status, errMsg}
           </Row>
           <Tab.Content className="mt-2">
             <Tab.Pane eventKey="Game1">
-              {MatchupData?.matchResults.length > 0 ? <GameStats MatchResult={MatchupData?.matchResults[0]} teamsInMatch={MatchupData?.teamsInMatch}/> 
+              {MatchupData?.matchResults.length > 0 ? MatchupData?.matchResults[0] == null ? <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game forfeited</h4></Col></Row> : <GameStats MatchResult={MatchupData?.matchResults[0]} teamsInMatch={MatchupData?.teamsInMatch}/>
               : <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game not played</h4></Col></Row>}
             </Tab.Pane>
             <Tab.Pane eventKey="Game2">
-            {MatchupData?.matchResults.length > 1 ? <GameStats MatchResult={MatchupData?.matchResults[1]} teamsInMatch={MatchupData?.teamsInMatch}/> 
+            {MatchupData?.matchResults.length > 1 ? MatchupData?.matchResults[1] == null ? <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game forfeited</h4></Col></Row> : <GameStats MatchResult={MatchupData?.matchResults[1]} teamsInMatch={MatchupData?.teamsInMatch}/>
               : <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game not played</h4></Col></Row>}
             </Tab.Pane>
             <Tab.Pane eventKey="Game3">
-            {MatchupData?.matchResults.length > 2 ? <GameStats MatchResult={MatchupData?.matchResults[2]} teamsInMatch={MatchupData?.teamsInMatch}/> 
+            {MatchupData?.matchResults.length > 2 ? MatchupData?.matchResults[2] == null ? <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game forfeited</h4></Col></Row> : <GameStats MatchResult={MatchupData?.matchResults[2]} teamsInMatch={MatchupData?.teamsInMatch}/>
               : <Row><Col xl={3} md={5} xs={12} className="mx-auto text-center NotPlayedText"><h4 className="font-weight-bold">Game not played</h4></Col></Row>}
             </Tab.Pane>
           </Tab.Content>

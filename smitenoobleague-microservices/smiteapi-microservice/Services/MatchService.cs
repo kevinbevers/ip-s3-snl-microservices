@@ -30,7 +30,6 @@ namespace smiteapi_microservice.Services
         private readonly string ResponeText_alreadySubmitted = "gameID is already submitted";
         private readonly string ResponeText_gameIdEmpty = "Invalid gameID submitted";
         private readonly string ResponseText_MatchDetailsHidden = "Matchdata not yet available. The data will be added once it becomes available at"; //Date will be added after this
-        private readonly string ResponseText_MatchDetailsAdded = "Matchdata was added to our database";
 
         public MatchService(SNL_Smiteapi_DBContext db, IHirezApiService hirezApiService, ILogger<MatchService> logger, IExternalServices externalServices)
         {
@@ -114,7 +113,7 @@ namespace smiteapi_microservice.Services
                 MatchData match = await _hirezApiService.GetMatchDetailsAsync((int)submission.gameID);
 
                 //check return message from api. if the return msg is null the match is valid
-                if (match.ret_msg != null && !match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+                if (match?.ret_msg != null && !match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
                 {
                     //something went wrong even when the matchData should have been available. because it is 7 days later
                     return new ObjectResult(match.ret_msg) { StatusCode = 404 }; //BAD REQUEST
@@ -168,28 +167,42 @@ namespace smiteapi_microservice.Services
             //Add or update the submission entry in the database
             TableQueue entry = await _db.TableQueues.Where(entry => entry.GameId == submission.gameID).FirstOrDefaultAsync();
 
-            if (entry != null)
+            if (match?.ret_msg != null && match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
             {
-                if(entry.QueueState == true)
+                //if privacy flag was set remove the id from the queue table so it can be resubmitted.
+                if (entry != null)
                 {
-                    return new ObjectResult("MatchID already validated.") { StatusCode = 200 };
+                    _db.Remove(entry);
+                    await _db.SaveChangesAsync();
                 }
-                //update the entry of the gameID and it's state
-                entry.QueueState = true;
-                _db.Update(entry);
+                //send data to stat service
+                return await _externalServices.SaveInhouseMatchdataToInhouseService(match);
             }
             else
             {
-                //Add the match to the queue table with QueueState true so that it will never get scheduled and we can check if the match has already been submitted.
-                _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = DateTime.UtcNow, QueueState = true, PatchVersion = submission.patchNumber });
+                if (entry != null)
+                {
+                    if (entry.QueueState == true)
+                    {
+                        return new ObjectResult("MatchID already validated.") { StatusCode = 200 };
+                    }
+                    //update the entry of the gameID and it's state
+                    entry.QueueState = true;
+                    _db.Update(entry);
+                }
+                else
+                {
+                    //Add the match to the queue table with QueueState true so that it will never get scheduled and we can check if the match has already been submitted.
+                    _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = DateTime.UtcNow, QueueState = true, PatchVersion = submission.patchNumber });
+                }
+
+                await _db.SaveChangesAsync();
+                //set patch number
+                match.patchNumber = submission.patchNumber;
+
+                //send data to stat service
+                return await _externalServices.SaveMatchdataToStatService(match);
             }
-
-            await _db.SaveChangesAsync();
-            //set patch number
-            match.patchNumber = submission.patchNumber;
-
-            //send data to stat service
-            return await _externalServices.SaveMatchdataToStatService(match);
 
             //return new ObjectResult(ResponseText_MatchDetailsAdded) { StatusCode = 201 }; //CREATED
         }
@@ -210,7 +223,7 @@ namespace smiteapi_microservice.Services
                 //call the nodejs schedule api
                 await CallScheduleApiAsync(submission, plannedDate); // _gatewayKey.Key
                 //beautify response
-                string bdate = match.EntryDate.AddDays(7).ToString("dddd d MMMM yyyy 'around' H:mm");
+                string bdate = match.EntryDate.AddDays(7).ToString("dddd d MMMM yyyy 'around' HH:mm");
 
                 msg = $"{ResponseText_MatchDetailsHidden} {bdate}";
                 return new ObjectResult(msg) { StatusCode = 200 }; //OK

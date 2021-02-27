@@ -82,7 +82,53 @@ namespace smiteapi_microservice.Services
             }
         }
 
+        public async Task<ActionResult> GenerateMatchDataForInhouseUsingLeagueTeams(int winningTeamId, int losingTeamId, DateTime? playedDate, bool? faultyQueueID, bool? hiddenPlayersChance, int? numberOfFillsWinners, int? numberOfFillsLosers)
+        {
+            try
+            {
+                DateTime yesterday = DateTime.Today.AddDays(-1);
+                List<ApiMatchList> rankedMatchesFound = await _hirezApi.GetListOfMatchIdsByQueueID(451, yesterday, "15,20");
+                if (rankedMatchesFound != null)
+                {
+                    if (rankedMatchesFound[0]?.ret_msg != null)
+                    {
+                        return new ObjectResult(rankedMatchesFound[0]?.ret_msg) { StatusCode = 400 }; //NOT FOUND
+                    }
+                    else
+                    {
+                        Random random = new Random();
+                        int indexToSelect = random.Next(0, rankedMatchesFound.Count() - 1);
+                        int matchIdToUse = (int)rankedMatchesFound[indexToSelect].Match;
+                        //Get actual matchdata
+                        MatchData matchToChange = await GetMatchDetailsAsync(matchIdToUse);
+                        //set patch number
+                        matchToChange.patchNumber = (await _hirezApi.GetPatchInfo()).version_string;
 
+                        OptionalMatchManipulation(playedDate, faultyQueueID, hiddenPlayersChance, matchToChange);
+
+                        if (matchToChange.ret_msg != null)
+                        {
+                            return new ObjectResult("Something went wrong: " + matchToChange.ret_msg.ToString()) { StatusCode = 400 };
+                        }
+
+                        MatchData manipulatedMatchData = await ReplaceMatchDataPlayers(matchToChange, numberOfFillsWinners, numberOfFillsLosers, winningTeamId, losingTeamId);
+                        //the only difference with the other generate. this is a quick lazy solution
+                        return await _externalServices.SaveInhouseMatchdataToInhouseService(manipulatedMatchData);
+                    }
+                }
+                else
+                {
+                    return new ObjectResult("No ranked matches found to generate data from") { StatusCode = 404 }; //NOT FOUND
+                }
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to generate matchdata. does the target team have 5 players set?");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to generate matchdata. does the target team have 5 players set?") { StatusCode = 500 }; //INTERNAL SERVER ERRORr
+            }
+        }
         #region methods
         private static void OptionalMatchManipulation(DateTime? playedDate, bool? faultyQueueID, bool? hiddenPlayersChance, MatchData matchToChange)
         {

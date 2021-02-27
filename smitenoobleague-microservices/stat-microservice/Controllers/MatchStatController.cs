@@ -21,13 +21,6 @@ namespace stat_microservice.Controllers
             _matchStatService = matchStatService;
         }
 
-        // GET: api/values/5
-        [HttpGet("getmatchstatsbygameid/{id}")]
-        public async Task<ActionResult> Get(int id)
-        {
-            return await _matchStatService.GetMatchStatByGameIdAsync(id);
-        }
-
         [HttpGet("getmatchhistory/{pageSize}/{index}")]
         public async Task<ActionResult<IEnumerable<MatchHistory>>> GetMatchHistory(int pageSize = 10, int index = 0)
         {
@@ -41,8 +34,6 @@ namespace stat_microservice.Controllers
         {
             return await _matchStatService.ValidateAndSaveMatchStatsAsync(match);
         }
-
-        //Something needs to fixed, swagger can't load this for some reason
         // GET: matchstat/matchhistorybymatchupid/{matchupID}
         [HttpGet("matchhistorybymatchupid/{matchupID}")]
         public async Task<ActionResult<MatchHistoryDetails>> GetMatchHistory(int matchupID)

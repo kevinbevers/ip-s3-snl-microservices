@@ -16,7 +16,7 @@ export default function LeaderboardStatCard({Stat, Title, Percentage}){
     <Card.Header className="text-center LeaderBoardTitleText font-weight-bold">{Title}</Card.Header>
     {Stat?.length > 0 ? <>
                   <Row>
-                    <Col md={7} className="pr-0">
+                    <Col md={7} xs={7} className="pr-0">
                       <ListGroup variant="flush">
                         <ListGroup.Item className="p-1"><p className="LeaderboardStatText"><b>&#8205; 1.</b>  <Link href={`/stats/player/${Stat[0].player.playerID}`}><span className="Clickable Hoverable" title={"click to see player stats"}>{Stat[0]?.player?.playername}</span></Link></p></ListGroup.Item>
                         <ListGroup.Item className="p-1"><p className="LeaderboardStatText"><b>&#8205; 2.</b>  <Link href={`/stats/player/${Stat[1].player.playerID}`}><span className="Clickable Hoverable" title={"click to see player stats"}>{Stat[1]?.player?.playername}</span></Link></p></ListGroup.Item>
@@ -30,7 +30,7 @@ export default function LeaderboardStatCard({Stat, Title, Percentage}){
                         <ListGroup.Item className="p-1"><p className="LeaderboardStatText"><b>10.</b> <Link href={`/stats/player/${Stat[9].player.playerID}`}><span className="Clickable Hoverable" title={"click to see player stats"}>{Stat[9]?.player?.playername}</span></Link></p></ListGroup.Item>
                       </ListGroup>
                     </Col>
-                    <Col md={5} className="pl-0 text-right">
+                    <Col md={5} xs={5} className="pl-0 text-right">
                       <ListGroup variant="flush">
                         <ListGroup.Item className="p-1"><p className="LeaderboardStatText pr-2">{Stat[0]?.score}{Percentage}</p></ListGroup.Item>
                         <ListGroup.Item className="p-1"><p className="LeaderboardStatText pr-2">{Stat[1]?.score}{Percentage}</p></ListGroup.Item>

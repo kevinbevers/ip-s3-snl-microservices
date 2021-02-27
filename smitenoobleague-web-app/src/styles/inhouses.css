@@ -1,0 +1,96 @@
+@media (min-width: 769px) {
+    .matchPlayers {
+        font-size: 1.2vw;
+        font-weight: bold;
+    }
+
+    .awayWin{
+        /* away win border */
+        border-right-style:solid;
+        border-right-width: 10px;
+        border-right-color: #28a745!important;
+        /* home loss border */
+        border-left-style:solid;
+        border-left-width: 10px;
+        border-left-color: #dc3545!important;
+    }
+
+    .homeWin{
+        /* home win border */
+        border-left-style:solid;
+        border-left-width: 10px;
+        border-left-color: #28a745!important;
+        /* away loss border */
+        border-right-style:solid;
+        border-right-width: 10px;
+        border-right-color: #dc3545!important;
+    }
+}
+
+@media (max-width: 769px) {
+    .awayWin{
+        /* away win border */
+        border-bottom-style:solid;
+        border-bottom-width: 10px;
+        border-bottom-color: #28a745!important;
+        /* home loss border */
+        border-top-style:solid;
+        border-top-width: 10px;
+        border-top-color: #dc3545!important;
+    }
+
+    .homeWin{
+        /* home win border */
+        border-top-style:solid;
+        border-top-width: 10px;
+        border-top-color: #28a745!important;
+        /* away loss border */
+        border-bottom-style:solid;
+        border-bottom-width: 10px;
+        border-bottom-color: #dc3545!important;
+    }
+}
+
+@media (min-width: 768px) {
+    .LeaderboardStatText1 {
+        margin: 0;
+        font-size: 1.5vw;
+      }
+    
+      .LeaderboardStatText2 {
+        margin: 0;
+        font-size: 1.1vw;
+      }
+    
+      .LeaderboardStatText3 {
+        margin: 0;
+        font-size: 1vw;
+      }
+    
+      .LeaderboardStatText4 {
+        margin: 0;
+        font-size: 0.9vw;
+      }
+}
+
+@media (max-width: 767px) {
+    .LeaderboardStatText1 {
+        margin: 0;
+        font-size: 6vw;
+      }
+    
+      .LeaderboardStatText2 {
+        margin: 0;
+        font-size: 4.5vw;
+      }
+    
+      .LeaderboardStatText3 {
+        margin: 0;
+        font-size: 4vw;
+      }
+    
+      .LeaderboardStatText4 {
+        margin: 0;
+        font-size: 3.5vw;
+      }
+}

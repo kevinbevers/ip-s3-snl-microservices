@@ -32,6 +32,18 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
+          "Host": "inhouse-microservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/inhouse-service/{everything}",
+      "SwaggerKey": "inhouse"
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
           "Host": "team-microservice",
           "Port": 80
         }
@@ -93,6 +105,16 @@
           "Name": "Stat microservice API",
           "Version": "v1",
           "Url": "http://stat-microservice/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "inhouse",
+      "Config": [
+        {
+          "Name": "Inhouse microservice API",
+          "Version": "v1",
+          "Url": "http://inhouse-microservice/swagger/v1/swagger.json"
         }
       ]
     },

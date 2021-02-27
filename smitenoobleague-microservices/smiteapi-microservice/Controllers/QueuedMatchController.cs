@@ -16,10 +16,12 @@ namespace smiteapi_microservice.Controllers
     public class QueuedMatchController : Controller
     {
         private readonly IMatchService _matchService;
+        private readonly IInhouseMatchService _inhouseMatchService;
 
-        public QueuedMatchController(IMatchService matchService)
+        public QueuedMatchController(IMatchService matchService, IInhouseMatchService inhouseMatchService)
         {
             _matchService = matchService;
+            _inhouseMatchService = inhouseMatchService;
         }
 
         // GET: /queuedmatch
@@ -36,6 +38,23 @@ namespace smiteapi_microservice.Controllers
         public async Task<IActionResult> Post([FromBody] MatchSubmission submission)
         {
             return await _matchService.ProcessScheduleApiRequestAsync(submission);
+
+        }
+
+        // GET: /queuedmatch/inhouse
+        [HttpGet("inhouse")]
+        [ServiceFilter(typeof(InternalServicesOnly))]
+        public async Task<ActionResult<List<QueuedMatch>>> GetInhouse()
+        {
+            return await _inhouseMatchService.GetScheduledInhouseGamesFromDbAsync();
+        }
+
+        // POST: /queuedmatch/inhouse
+        [HttpPost("inhouse")]
+        [ServiceFilter(typeof(InternalServicesOnly))]
+        public async Task<IActionResult> PostInhouse([FromBody] MatchSubmission submission)
+        {
+            return await _inhouseMatchService.ProcessInhouseScheduleApiRequestAsync(submission);
 
         }
     }

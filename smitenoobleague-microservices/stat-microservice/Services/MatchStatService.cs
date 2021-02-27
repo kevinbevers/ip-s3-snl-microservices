@@ -26,21 +26,6 @@ namespace stat_microservice.Services
 
         }
 
-        public async Task<ActionResult> GetMatchStatByGameIdAsync(int gameID)
-        {
-            try
-            {
-                return new ObjectResult("Matchstats") { StatusCode = 200 };
-            }
-            catch (Exception ex)
-            {
-                //log the error
-                _logger.LogError(ex, "Something went wrong trying to Get Match stats by gameID.");
-                //return result to client
-                return new ObjectResult("Something went wrong trying to Get Match stats by gameID.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
-            }
-        }
-
         public async Task<ActionResult<IEnumerable<MatchHistory>>> GetMatchHistoryOverview(int pageSize, int pageIndex)
         {
            try
@@ -212,6 +197,10 @@ namespace stat_microservice.Services
 
                             matchHistoryDetails.MatchResults.Add(matchData);
                         }
+                        else
+                        {
+                            matchHistoryDetails.MatchResults.Add(null);
+                        }
                     }
 
                     return new ObjectResult(matchHistoryDetails) { StatusCode = 200 };
@@ -258,6 +247,15 @@ namespace stat_microservice.Services
                     string winnerCaptainMail = await _externalServices.GetCaptainEmailWithCaptainTeamMemberIDAsync(idWinner);
                     int idLoser = loserTeam.TeamMembers.Where(m => m.TeamCaptain == true).Select(m => m.TeamMemberID).FirstOrDefault();
                     string loserCaptainMail = await _externalServices.GetCaptainEmailWithCaptainTeamMemberIDAsync(idLoser);
+                    //log this, to track down issues with captain email not being saved in the db.
+                    if(loserCaptainMail == null)
+                    {
+                        _logger.LogError("Losing team's captain doesn't have an email set in the DB");
+                    }
+                    if(winnerCaptainMail == null)
+                    {
+                        _logger.LogError("Winning team's captain doesn't have an email set in the DB");
+                    }
                     #endregion
 
                     #region check if there is a ret_msg from the match. 

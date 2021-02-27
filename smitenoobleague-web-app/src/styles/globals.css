@@ -7,7 +7,7 @@
 @import "captain.css";
 @import "navbar.css";
 @import "admin.css";
-
+@import "inhouses.css";
 
 /* Font setup */
 @font-face {
@@ -91,6 +91,7 @@ body {
       margin: 0;
       font-size: 0.86vw;
     }
+
     .LeaderBoardTitleText {
       font-size: 1vw;
     }
@@ -114,9 +115,9 @@ body {
       font-size: 4vw;
     }
 
-    .landingTitle {
+    /* .landingTitle {
       font-size: 10vw;
-    }
+    } */
 }
 
 /*faq page*/

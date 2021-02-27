@@ -23,7 +23,7 @@ namespace smiteapi_microservice.Controllers
 
         // GET: /player/lolliepoep
         [HttpGet("{playername}")]
-        public async Task<IEnumerable<Player>> Get(string playername)
+        public async Task<ActionResult<IEnumerable<Player>>> Get(string playername)
         {
             return await _hirezApiService.SearchPlayersByNameAsync(playername);
         }
