@@ -13,11 +13,10 @@ import helpers from "utils/helpers";
 import inhouseservice from "services/inhouseservice";
 
 export default function matchhistory({LoginSession, MatchHistory, apiToken}) {
-
   const [MatchHistoryState, setMatchHistoryState] = useState(MatchHistory);
   const [index, setIndex] = useState(1);
   const [matchesRemaining, setMatchesRemaining] = useState(MatchHistory?.length > 9);
-
+  
   const loadMoreMatches = async() => {
     if(matchesRemaining)
     {
@@ -40,7 +39,7 @@ export default function matchhistory({LoginSession, MatchHistory, apiToken}) {
     <>
       <InhouseNavBar LoginSession={LoginSession} apiToken={apiToken}/>
       <Container className="mt-4">
-      {MatchHistoryState != null ? <>
+      {MatchHistoryState?.length > 0 ? <>
               {MatchHistoryState.map((mh, index) => (
                         <InhouseMatchHistoryCard key={index} MatchupResult={mh} adminManage={LoginSession?.isAdmin || LoginSession?.isMod} apiToken={apiToken} removeMatchFunc={RemoveMatch} />
               ))}
