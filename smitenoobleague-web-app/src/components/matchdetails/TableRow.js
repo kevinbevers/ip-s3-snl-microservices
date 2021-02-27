@@ -27,18 +27,18 @@ export default function TableRow({player, index}) {
             <td>{player?.gpm}</td>
             <td className="">
                 <div className="d-flex align-items-center justify-content-center m-0 p-0">
-                    <div className="ItemImg mr-1 position-relative"><Image priority={true} layout={"fill"} alt={player?.relic1Name} title={player?.relic1Name} src={player?.relic1Icon != null ? player?.relic1Icon : "/images/empty_slot.png"} draggable={false}/></div>
-                    <div className="ItemImg mr-1 position-relative"><Image priority={true} layout={"fill"}  alt={player?.relic2Name} title={player?.relic2Name} src={player?.relic2Icon != null ? player?.relic2Icon : "/images/empty_slot.png"} draggable={false}/></div>
+                    <div className="ItemImg mr-1 position-relative"><Image loading={"eager"} layout={"fill"} alt={player?.relic1Name} title={player?.relic1Name} src={player?.relic1Icon != null ? player?.relic1Icon : "/images/empty_slot.png"} draggable={false}/></div>
+                    <div className="ItemImg mr-1 position-relative"><Image loading={"eager"} layout={"fill"}  alt={player?.relic2Name} title={player?.relic2Name} src={player?.relic2Icon != null ? player?.relic2Icon : "/images/empty_slot.png"} draggable={false}/></div>
                 </div>
             </td>
             <td className="">
                 <div className="d-flex align-items-center justify-content-center m-0 p-0">
-                    <div className="ItemImg mr-1 position-relative"><Image priority={true} layout={"fill"} alt={player?.item1Name} title={player?.item1Name} src={player?.item1Icon != null ? player?.item1Icon : "/images/empty_slot.png"} draggable={false}/></div>
-                    <div className="ItemImg mr-1 position-relative"><Image priority={true} layout={"fill"} alt={player?.item2Name} title={player?.item2Name} src={player?.item2Icon != null ? player?.item2Icon : "/images/empty_slot.png"} draggable={false}/></div>
-                    <div className="ItemImg mr-1 position-relative"><Image priority={true} layout={"fill"} alt={player?.item3Name} title={player?.item3Name} src={player?.item3Icon != null ? player?.item3Icon : "/images/empty_slot.png"} draggable={false}/></div>
-                    <div className="ItemImg mr-1 position-relative"><Image priority={true} layout={"fill"} alt={player?.item4Name} title={player?.item4Name} src={player?.item4Icon != null ? player?.item4Icon : "/images/empty_slot.png"} draggable={false}/></div>
-                    <div className="ItemImg mr-1 position-relative"><Image priority={true} layout={"fill"} alt={player?.item5Name} title={player?.item5Name} src={player?.item5Icon != null ? player?.item5Icon : "/images/empty_slot.png"} draggable={false}/></div>
-                    <div className="ItemImg mr-1 position-relative"><Image priority={true} layout={"fill"} alt={player?.item6Name} title={player?.item6Name} src={player?.item6Icon != null ? player?.item6Icon : "/images/empty_slot.png"} draggable={false}/></div>
+                    <div className="ItemImg mr-1 position-relative"><Image loading={"eager"} layout={"fill"} alt={player?.item1Name} title={player?.item1Name} src={player?.item1Icon != null ? player?.item1Icon : "/images/empty_slot.png"} draggable={false}/></div>
+                    <div className="ItemImg mr-1 position-relative"><Image loading={"eager"} layout={"fill"} alt={player?.item2Name} title={player?.item2Name} src={player?.item2Icon != null ? player?.item2Icon : "/images/empty_slot.png"} draggable={false}/></div>
+                    <div className="ItemImg mr-1 position-relative"><Image loading={"eager"} layout={"fill"} alt={player?.item3Name} title={player?.item3Name} src={player?.item3Icon != null ? player?.item3Icon : "/images/empty_slot.png"} draggable={false}/></div>
+                    <div className="ItemImg mr-1 position-relative"><Image loading={"eager"} layout={"fill"} alt={player?.item4Name} title={player?.item4Name} src={player?.item4Icon != null ? player?.item4Icon : "/images/empty_slot.png"} draggable={false}/></div>
+                    <div className="ItemImg mr-1 position-relative"><Image loading={"eager"} layout={"fill"} alt={player?.item5Name} title={player?.item5Name} src={player?.item5Icon != null ? player?.item5Icon : "/images/empty_slot.png"} draggable={false}/></div>
+                    <div className="ItemImg mr-1 position-relative"><Image loading={"eager"} layout={"fill"} alt={player?.item6Name} title={player?.item6Name} src={player?.item6Icon != null ? player?.item6Icon : "/images/empty_slot.png"} draggable={false}/></div>
                 </div>
             </td>  
         </tr>
