@@ -78,20 +78,20 @@ export default function GameData({MatchResult, teamsInMatch}) {
     const RenderTeamImage = (t) => {
 
         const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + t?.teamLogoPath;
-        return (t?.teamLogoPath != null ? <Image layout="fixed" height={20} width={20} alt={t?.teamName} title={t?.teamName} src={imagePath} className="" draggable={false}></Image>  : 
+        return (t?.teamLogoPath != null ? <Image loading={"eager"} layout="fixed" height={20} width={20} alt={t?.teamName} title={t?.teamName} src={imagePath} className="" draggable={false}></Image>  : 
         <Img webp width={20} height={20} alt={t?.teamName} title={t?.teamName} src={require("public/images/teamBadge.png")} className="" draggable={false}></Img>);
       };
 
       const RenderTeamImageLayoutFill = (t) => {
 
         const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + t?.teamLogoPath;
-        return <Image height={20} width={20} alt={t?.teamName} title={t?.teamName} src={t?.teamLogoPath != null ?imagePath : "/images/teamBadge.png"} className="" draggable={false}></Image>;
+        return <Image loading={"eager"} height={20} width={20} alt={t?.teamName} title={t?.teamName} src={t?.teamLogoPath != null ?imagePath : "/images/teamBadge.png"} className="" draggable={false}></Image>;
       };
 
       const BanWithTeamImage = (banNumber) => {
         return (<>
             <div className="position-relative mt-3 mr-lg-2 mr-1">               
-                <div className="position-relative"><Image width={30} height={30} src={MatchResult?.bannedGods[banNumber - 1]?.godIcon != null ? MatchResult?.bannedGods[banNumber - 1]?.godIcon : "/images/empty_slot.png"} alt={MatchResult?.bannedGods[banNumber - 1]?.godName} title={MatchResult?.bannedGods[banNumber - 1]?.godName} className="GodImg rounded" draggable={false}/></div>
+                <div className="position-relative"><Image loading={"eager"} width={30} height={30} src={MatchResult?.bannedGods[banNumber - 1]?.godIcon != null ? MatchResult?.bannedGods[banNumber - 1]?.godIcon : "/images/empty_slot.png"} alt={MatchResult?.bannedGods[banNumber - 1]?.godName} title={MatchResult?.bannedGods[banNumber - 1]?.godName} className="GodImg rounded" draggable={false}/></div>
                 <div className="SmallTeamImg position-absolute">{RenderTeamImageLayoutFill(banNumber%2 ? firstTeam : secondTeam)}</div>
             </div>  
             </>);
@@ -166,8 +166,8 @@ export default function GameData({MatchResult, teamsInMatch}) {
                         <hr />
                         <h6><b>Total kills:</b> {totals?.killCount}</h6>
                         <h6><b>Total wards placed:</b> {totals?.wardsPlaced}</h6>
-                        <h6 className="d-flex"> <b className="mr-1">First blood:</b> {totals?.firstBlood != null ? <Image layout="fixed" height={20} width={20} src={totals?.firstBlood?.godIcon} alt="FirstBloodGod" className="rounded" />: <> </> }<span className="ml-1">{totals?.firstBlood?.playername}</span></h6>
-                        <h6 className="d-flex"> <b className="mr-1">MVP:</b> <Image layout="fixed" height={20} width={20} src={totals?.mvp?.godIcon != null ? totals?.mvp?.godIcon : "/images/empty_slot.png"} alt="MvpGod" className="GodImg rounded" /> <span className="ml-1">{totals?.mvp?.player?.playername}</span></h6>
+                        <h6 className="d-flex"> <b className="mr-1">First blood:</b> {totals?.firstBlood != null ? <Image loading={"eager"} layout="fixed" height={20} width={20} src={totals?.firstBlood?.godIcon} alt="FirstBloodGod" className="rounded" />: <> </> }<span className="ml-1">{totals?.firstBlood?.playername}</span></h6>
+                        <h6 className="d-flex"> <b className="mr-1">MVP:</b> <Image loading={"eager"} layout="fixed" height={20} width={20} src={totals?.mvp?.godIcon != null ? totals?.mvp?.godIcon : "/images/empty_slot.png"} alt="MvpGod" className="GodImg rounded" /> <span className="ml-1">{totals?.mvp?.player?.playername}</span></h6>
                         {/* <p className="mb-0">A little text describing the game, possibly auto generated.</p> */}
                         <hr />
                         <h5 className="font-weight-bold">Map stats</h5>
