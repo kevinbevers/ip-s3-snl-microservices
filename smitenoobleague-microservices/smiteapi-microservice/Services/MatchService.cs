@@ -113,7 +113,7 @@ namespace smiteapi_microservice.Services
                 MatchData match = await _hirezApiService.GetMatchDetailsAsync((int)submission.gameID);
 
                 //check return message from api. if the return msg is null the match is valid
-                if (match.ret_msg != null && !match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+                if (match?.ret_msg != null && !match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
                 {
                     //something went wrong even when the matchData should have been available. because it is 7 days later
                     return new ObjectResult(match.ret_msg) { StatusCode = 404 }; //BAD REQUEST
@@ -167,7 +167,7 @@ namespace smiteapi_microservice.Services
             //Add or update the submission entry in the database
             TableQueue entry = await _db.TableQueues.Where(entry => entry.GameId == submission.gameID).FirstOrDefaultAsync();
 
-            if (match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+            if (match?.ret_msg != null && match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
             {
                 //if privacy flag was set remove the id from the queue table so it can be resubmitted.
                 if (entry != null)

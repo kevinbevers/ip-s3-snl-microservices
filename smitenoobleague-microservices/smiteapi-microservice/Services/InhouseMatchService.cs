@@ -150,7 +150,7 @@ namespace smiteapi_microservice.Services
             //Add or update the submission entry in the database
             TableQueueInhouse entry = await _db.TableQueueInhouses.Where(entry => entry.GameId == submission.gameID).FirstOrDefaultAsync();
 
-            if (match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+            if (match?.ret_msg != null && match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
             {
                 //if privacy flag was set remove the id from the queue table so it can be resubmitted.
                 if(entry != null)
