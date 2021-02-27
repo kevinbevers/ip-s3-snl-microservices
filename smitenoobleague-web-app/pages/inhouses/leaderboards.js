@@ -8,7 +8,7 @@ import Footer from "src/components/Footer";
 //boostrap components
 import {Container, Row, Col, Alert} from "react-bootstrap";
 //custom imports
-import LeaderBoardStatCard from "src/components/LeaderboardStatCard";
+import InhouseLeaderBoardStatCard from "src/components/inhouses/InhouseLeaderboardStatCard";
 //chart
 import {Pie, Bar} from "react-chartjs-2";
 //Auth
@@ -152,19 +152,19 @@ const options = {
           <Col md={9}>
             <Row>
               <Col md={3} className="p-0 pl-1 pr-1">
-                <LeaderBoardStatCard Title={"Kills"} Stat={Data?.kills}/>
+                <InhouseLeaderBoardStatCard Title={"Kills"} Stat={Data?.kills}/>
               </Col>
 
               <Col md={3} className="p-0 pl-1 pr-1">
-                <LeaderBoardStatCard Title={"Assists"} Stat={Data?.assists}/>
+                <InhouseLeaderBoardStatCard Title={"Assists"} Stat={Data?.assists}/>
               </Col>
 
               <Col md={3} className="p-0 pl-1 pr-1">
-                <LeaderBoardStatCard Title={"Damage dealt"} Stat={Data?.damageDealt}/>
+                <InhouseLeaderBoardStatCard Title={"Damage dealt"} Stat={Data?.damageDealt}/>
               </Col>
 
               <Col md={3} className="p-0 pl-1 pr-1">
-              <LeaderBoardStatCard Title={"Damage Mitigated"} Stat={Data?.damageMitigated}/>
+              <InhouseLeaderBoardStatCard Title={"Damage Mitigated"} Stat={Data?.damageMitigated}/>
               </Col>
             </Row>
           </Col>
@@ -187,19 +187,19 @@ const options = {
           <Col md={9}>
             <Row>
               <Col md={3} className="p-0 pl-1 pr-1">
-                <LeaderBoardStatCard Title={"Kill participation"} Stat={Data?.killParticipation} Percentage={"%"}/>
+                <InhouseLeaderBoardStatCard Title={"Kill participation"} Stat={Data?.killParticipation} Percentage={"%"}/>
               </Col>
 
               <Col md={3} className="p-0 pl-1 pr-1">
-               <LeaderBoardStatCard Title={"Deaths"} Stat={Data?.deaths}/>
+               <InhouseLeaderBoardStatCard Title={"Deaths"} Stat={Data?.deaths}/>
               </Col>
 
               <Col md={3} className="p-0 pl-1 pr-1">
-              <LeaderBoardStatCard Title={"Damage taken"} Stat={Data?.damageTaken}/>
+              <InhouseLeaderBoardStatCard Title={"Damage taken"} Stat={Data?.damageTaken}/>
               </Col>
 
               <Col md={3} className="p-0 pl-1 pr-1">
-                <LeaderBoardStatCard Title={"Healing"} Stat={Data?.healing}/>
+                <InhouseLeaderBoardStatCard Title={"Healing"} Stat={Data?.healing}/>
               </Col>
             </Row>
           </Col>
