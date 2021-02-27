@@ -52,11 +52,12 @@ namespace service_tests
 
             //Arrange
             var mock = new Mock<ILogger<MatchService>>();
+            var mock2 = new Mock<ILogger<InhouseMatchService>>();
             Mock<IExternalServices> externalMock = CreateMockExternalServices();
             ILogger<MatchService> logger = mock.Object;
-            var controller = new QueuedMatchController(new MatchService(_mockedDB, null, logger, externalMock.Object));
+            ILogger<InhouseMatchService> logger2 = mock2.Object;
+            var controller = new QueuedMatchController(new MatchService(_mockedDB, null, logger, externalMock.Object), new InhouseMatchService(_mockedDB, null, logger2, externalMock.Object));
             
-
             //Act
             var result = await controller.Get();
 
@@ -82,12 +83,14 @@ namespace service_tests
 
             //Arrange
             var mock = new Mock<ILogger<MatchService>>();
+            var mock2 = new Mock<ILogger<InhouseMatchService>>();
             ILogger<MatchService> logger = mock.Object;
+            ILogger<InhouseMatchService> logger2 = mock2.Object;
             Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
             IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
             Mock<IExternalServices> externalMock = CreateMockExternalServices();
 
-            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger, externalMock.Object));
+            var controller = new MatchController(new MatchService(_mockedDB, null, logger, externalMock.Object), new InhouseMatchService(_mockedDB, null, logger2, externalMock.Object));
 
             //Act
             var result = await controller.Get(1234);
@@ -112,12 +115,14 @@ namespace service_tests
 
             //Arrange
             var mock = new Mock<ILogger<MatchService>>();
+            var mock2 = new Mock<ILogger<InhouseMatchService>>();
             ILogger<MatchService> logger = mock.Object;
+            ILogger<InhouseMatchService> logger2 = mock2.Object;
             Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
             IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
             Mock<IExternalServices> externalMock = CreateMockExternalServices();
 
-            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger, externalMock.Object));
+            var controller = new MatchController(new MatchService(_mockedDB, null, logger, externalMock.Object), new InhouseMatchService(_mockedDB, null, logger2, externalMock.Object));
 
             //Act
             var result = await controller.Get(1234555);
@@ -137,12 +142,14 @@ namespace service_tests
 
             //Arrange
             var mock = new Mock<ILogger<MatchService>>();
+            var mock2 = new Mock<ILogger<InhouseMatchService>>();
             ILogger<MatchService> logger = mock.Object;
+            ILogger<InhouseMatchService> logger2 = mock2.Object;
             Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
             IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
             Mock<IExternalServices> externalMock = CreateMockExternalServices();
 
-            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger, externalMock.Object));
+            var controller = new MatchController(new MatchService(_mockedDB, null, logger, externalMock.Object), new InhouseMatchService(_mockedDB, null, logger2, externalMock.Object));
 
             //Act
             var result = await controller.Get(5432);
@@ -162,12 +169,14 @@ namespace service_tests
 
             //Arrange
             var mock = new Mock<ILogger<MatchService>>();
+            var mock2 = new Mock<ILogger<InhouseMatchService>>();
             ILogger<MatchService> logger = mock.Object;
+            ILogger<InhouseMatchService> logger2 = mock2.Object;
             Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
             IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
             Mock<IExternalServices> externalMock = CreateMockExternalServices();
 
-            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger, externalMock.Object));
+            var controller = new MatchController(new MatchService(_mockedDB, null, logger, externalMock.Object), new InhouseMatchService(_mockedDB, null, logger2, externalMock.Object));
 
             //Act
             var result = await controller.Post(1234);
@@ -187,12 +196,14 @@ namespace service_tests
 
             //Arrange
             var mock = new Mock<ILogger<MatchService>>();
+            var mock2 = new Mock<ILogger<InhouseMatchService>>();
             ILogger<MatchService> logger = mock.Object;
+            ILogger<InhouseMatchService> logger2 = mock2.Object;
             Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
             IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
             Mock<IExternalServices> externalMock = CreateMockExternalServices();
 
-            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger, externalMock.Object));
+            var controller = new MatchController(new MatchService(_mockedDB, null, logger, externalMock.Object), new InhouseMatchService(_mockedDB, null, logger2, externalMock.Object));
 
             //Act
             var result = await controller.Post(12323124);
@@ -212,12 +223,14 @@ namespace service_tests
 
             //Arrange
             var mock = new Mock<ILogger<MatchService>>();
+            var mock2 = new Mock<ILogger<InhouseMatchService>>();
             ILogger<MatchService> logger = mock.Object;
+            ILogger<InhouseMatchService> logger2 = mock2.Object;
             Mock<IHirezApiContext> hirezApiMock = CreateMockHirezApiContext();
             IHirezApiService hirezApiService = new HirezApiService(hirezApiMock.Object);
             Mock<IExternalServices> externalMock = CreateMockExternalServices();
 
-            var controller = new MatchController(new MatchService(_mockedDB, hirezApiService, logger, externalMock.Object));
+            var controller = new MatchController(new MatchService(_mockedDB, null, logger, externalMock.Object), new InhouseMatchService(_mockedDB, null, logger2, externalMock.Object));
 
             //Act
             var result = await controller.Post(5432);

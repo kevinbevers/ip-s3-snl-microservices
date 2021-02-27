@@ -46,7 +46,7 @@ namespace smiteapi_microservice.Controllers
         [ServiceFilter(typeof(InternalServicesOnly))]
         public async Task<ActionResult<List<QueuedMatch>>> GetInhouse()
         {
-            return await _matchService.GetScheduledGamesFromDbAsync();
+            return await _inhouseMatchService.GetScheduledInhouseGamesFromDbAsync();
         }
 
         // POST: /queuedmatch/inhouse
@@ -54,7 +54,7 @@ namespace smiteapi_microservice.Controllers
         [ServiceFilter(typeof(InternalServicesOnly))]
         public async Task<IActionResult> PostInhouse([FromBody] MatchSubmission submission)
         {
-            return await _matchService.ProcessScheduleApiRequestAsync(submission);
+            return await _inhouseMatchService.ProcessInhouseScheduleApiRequestAsync(submission);
 
         }
     }

@@ -23,7 +23,7 @@ namespace smiteapi_microservice.Services
         private readonly IHirezApiService _hirezApiService;
         private readonly IExternalServices _externalServices;
         //logging
-        private readonly ILogger<MatchService> _logger;
+        private readonly ILogger<InhouseMatchService> _logger;
         //gateway key
         //private readonly GatewayKey _gatewayKey;
         //return messages, move to static class
@@ -31,7 +31,7 @@ namespace smiteapi_microservice.Services
         private readonly string ResponeText_gameIdEmpty = "Invalid gameID submitted";
         private readonly string ResponseText_MatchDetailsHidden = "Matchdata not yet available. The data will be added once it becomes available at"; //Date will be added after this
 
-        public InhouseMatchService(SNL_Smiteapi_DBContext db, IHirezApiService hirezApiService, ILogger<MatchService> logger, IExternalServices externalServices)
+        public InhouseMatchService(SNL_Smiteapi_DBContext db, IHirezApiService hirezApiService, ILogger<InhouseMatchService> logger, IExternalServices externalServices)
         {
             //database
             _db = db;
