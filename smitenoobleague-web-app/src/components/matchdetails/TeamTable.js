@@ -18,7 +18,7 @@ export default function TeamTable({playerdata, team}) {
     const RenderTeamImage = (t) => {
 
         const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + t?.teamLogoPath;
-        return (t?.teamLogoPath != null ? <Image height={50} width={50} alt={t?.teamName} src={imagePath} className="TeamLogo" draggable={false}></Image>  : 
+        return (t?.teamLogoPath != null ? <Image priority={true} height={50} width={50} alt={t?.teamName} src={imagePath} className="TeamLogo" draggable={false}></Image>  : 
         <Img webp width={50} height={50} alt={t?.teamName} src={require("public/images/teamBadge.png")} className="TeamLogo" draggable={false}></Img>);
       };
 

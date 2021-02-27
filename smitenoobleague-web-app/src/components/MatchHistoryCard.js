@@ -11,7 +11,7 @@ export default function MatchHistoryCard({ MatchupResult }) {
 
         const RenderTeamImage = (t) => {
                 const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + t?.teamLogoPath;
-                return (t?.teamLogoPath != null ? <Image height={70} width={70} alt={t?.teamName} title={t?.teamName} src={imagePath} className="MhTeamImg" draggable={false}></Image> :
+                return (t?.teamLogoPath != null ? <Image priority={true} height={70} width={70} alt={t?.teamName} title={t?.teamName} src={imagePath} className="MhTeamImg" draggable={false}></Image> :
                         <Img webp width={70} height={70} alt={t?.teamName} title={t?.teamName} src={require("public/images/teamBadge.png")} className="MhTeamImg" draggable={false}></Img>);
         };
 
