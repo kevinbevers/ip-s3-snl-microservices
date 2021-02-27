@@ -7,7 +7,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY . inhouse-microservice/
-RUN dotnet restore "stat-microservice/inhouse-microservice.csproj"
+RUN dotnet restore "inhouse-microservice/inhouse-microservice.csproj"
 COPY . .
 WORKDIR "/src/inhouse-microservice"
 RUN dotnet build "inhouse-microservice.csproj" -c Release -o /app/build
