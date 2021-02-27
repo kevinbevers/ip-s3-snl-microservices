@@ -19,11 +19,19 @@ namespace inhouse_microservice.Controllers
         {
             _leaderboardService = leaderboardService;
         }
+
         // GET: leaderboard/data
         [HttpGet("data")]
         public async Task<ActionResult<LeaderboardData>> Get()
         {
             return await _leaderboardService.GetInhouseLeaderboardDataAsync();
+        }
+
+        // GET: leaderboard/data
+        [HttpGet("data/landing")]
+        public async Task<ActionResult<LeaderboardData>> GetLanding()
+        {
+            return await _leaderboardService.GetInhouseLeaderboardDataLandingPageAsync();
         }
     }
 }

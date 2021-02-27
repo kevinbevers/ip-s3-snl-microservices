@@ -12,7 +12,7 @@ import helpers from "utils/helpers";
 //services
 import inhouseservice from "services/inhouseservice";
 
-export default function matchhistory({LoginSession, MatchHistory}) {
+export default function matchhistory({LoginSession, MatchHistory, apiToken}) {
 
   const [MatchHistoryState, setMatchHistoryState] = useState(MatchHistory);
   const [index, setIndex] = useState(1);
@@ -30,13 +30,19 @@ export default function matchhistory({LoginSession, MatchHistory}) {
     }
   };
 
+  function RemoveMatch(gameID){
+    let art = MatchHistoryState;
+    const arr = art.filter((item) => item.gameID !== gameID);
+    setMatchHistoryState(arr);
+  };
+
   return (
     <>
-      <InhouseNavBar LoginSession={LoginSession}/>
+      <InhouseNavBar LoginSession={LoginSession} apiToken={apiToken}/>
       <Container className="mt-4">
       {MatchHistoryState != null ? <>
               {MatchHistoryState.map((mh, index) => (
-                        <InhouseMatchHistoryCard key={index} MatchupResult={mh} />
+                        <InhouseMatchHistoryCard key={index} MatchupResult={mh} adminManage={LoginSession?.isAdmin || LoginSession?.isMod} apiToken={apiToken} removeMatchFunc={RemoveMatch} />
               ))}
              </> : 
              <> 
@@ -65,6 +71,12 @@ export async function getServerSideProps(context) {
   
   const loginSessionData = await helpers.GetLoginSession(context.req);
 
+  let apiTokenForClient = null;
+
+  if (loginSessionData?.user != null) {
+    apiTokenForClient = await helpers.GetAccessTokenForClient(context.req, context.res);
+  }
+
   let latest10Matches = null;
 
   await inhouseservice.GetInhouseHistoryList(10,0).then(res => {latest10Matches = res.data;}).catch(err => {});
@@ -72,7 +84,8 @@ export async function getServerSideProps(context) {
   return {
       props: {
           LoginSession: loginSessionData,
-          MatchHistory: latest10Matches
+          MatchHistory: latest10Matches,
+          apiToken: apiTokenForClient
       },
   };
 }

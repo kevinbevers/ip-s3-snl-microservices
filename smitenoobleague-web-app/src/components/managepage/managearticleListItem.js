@@ -149,7 +149,7 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
                 <Col lg={11} xs={11} className="mb-0"><ListGroupItem onClick={editArticle} className="d-flex align-items-center Clickable adminTeamListItem">{articledata.articleTitle} {hovering ? <p className="text-muted ml-auto mb-0">Click to edit</p> : <> </>}</ListGroupItem></Col>
                 <Col lg={1} xs={1} className="btn-group p-0">
                     {hovering ?
-                    <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable" title="Delete division" onClick={() => setModalAreYouSure(true)} /> : <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable d-block d-sm-block d-lg-none" title="Delete division" onClick={() => setModalAreYouSure(true)} /> }
+                    <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable" title="Delete article" onClick={() => setModalAreYouSure(true)} /> : <FaTrashAlt size={22} className="adminDeleteButton my-auto Clickable d-block d-sm-block d-lg-none" title="Delete division" onClick={() => setModalAreYouSure(true)} /> }
                 </Col>
             </Row>
             <Modal

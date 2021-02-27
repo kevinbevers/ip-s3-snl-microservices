@@ -14,10 +14,10 @@ import {Pie, Bar} from "react-chartjs-2";
 //Auth
 import helpers from "utils/helpers";
 //services
-import leaderboardservice from "services/leaderboardservice";
+import inhouseservice from "services/inhouseservice";
 
 
-export default function leaderboards({LoginSession, Data, status, errMsg }) {
+export default function leaderboards({LoginSession, Data, status, errMsg, apiToken }) {
 
   let TopDamageLabels = [];
   let TopDamageData = [];
@@ -137,7 +137,7 @@ const options = {
   else {
   return (
     <>
-      <InhouseNavBar LoginSession={LoginSession}/>
+      <InhouseNavBar LoginSession={LoginSession} apiToken={apiToken}/>
       <Container fluid className="mt-2">
         {status == 404 ? <><Row className="mt-5">
                 <Col md={3}></Col>
@@ -151,24 +151,24 @@ const options = {
         <Row>
           <Col md={9}>
             <Row>
-              <Col md={3}>
+              <Col md={3} className="p-0 pl-1 pr-1">
                 <LeaderBoardStatCard Title={"Kills"} Stat={Data?.kills}/>
               </Col>
 
-              <Col md={3}>
+              <Col md={3} className="p-0 pl-1 pr-1">
                 <LeaderBoardStatCard Title={"Assists"} Stat={Data?.assists}/>
               </Col>
 
-              <Col md={3}>
+              <Col md={3} className="p-0 pl-1 pr-1">
                 <LeaderBoardStatCard Title={"Damage dealt"} Stat={Data?.damageDealt}/>
               </Col>
 
-              <Col md={3}>
+              <Col md={3} className="p-0 pl-1 pr-1">
               <LeaderBoardStatCard Title={"Damage Mitigated"} Stat={Data?.damageMitigated}/>
               </Col>
             </Row>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="p-0 pl-1 pr-1">
             {/* Pie chart of total damage dealt */}
             <Row>
               <Col md={12} className="text-center"><h6 className="font-weight-bold mt-2 p-3">Top 10 Damage dealers, compared to the rest</h6></Col>
@@ -186,24 +186,24 @@ const options = {
         <Row>
           <Col md={9}>
             <Row>
-              <Col md={3}>
+              <Col md={3} className="p-0 pl-1 pr-1">
                 <LeaderBoardStatCard Title={"Kill participation"} Stat={Data?.killParticipation} Percentage={"%"}/>
               </Col>
 
-              <Col md={3}>
+              <Col md={3} className="p-0 pl-1 pr-1">
                <LeaderBoardStatCard Title={"Deaths"} Stat={Data?.deaths}/>
               </Col>
 
-              <Col md={3}>
+              <Col md={3} className="p-0 pl-1 pr-1">
               <LeaderBoardStatCard Title={"Damage taken"} Stat={Data?.damageTaken}/>
               </Col>
 
-              <Col md={3}>
+              <Col md={3} className="p-0 pl-1 pr-1">
                 <LeaderBoardStatCard Title={"Healing"} Stat={Data?.healing}/>
               </Col>
             </Row>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="p-0 pl-1 pr-1">
             {/* Line Chart of stats */}
             <Row>
               <Col md={12} className="text-center"><h6 className="font-weight-bold">Top 5 highest KDA players</h6></Col>
@@ -223,11 +223,16 @@ const options = {
 export async function getServerSideProps(context) {
 
   const loginSessionData = await helpers.GetLoginSession(context.req);
+  let apiTokenForClient = null;
+
+  if (loginSessionData?.user != null) {
+    apiTokenForClient = await helpers.GetAccessTokenForClient(context.req, context.res);
+  }
 
   //object to fill
   let response = { data: null, statusCode: null, errMsg: null };
   //call api for the data
-  await leaderboardservice.GetLeaderboardData()
+  await inhouseservice.GetInhouseLeaderboardData()
     .then(res => { response.data = res.data })
     .catch(err => {
       if (err.response == null) {
@@ -246,6 +251,7 @@ export async function getServerSideProps(context) {
       Data: response.data,
       status: response.statusCode,
       errMsg: response.errMsg,
+      apiToken: apiTokenForClient
     },
   };
 }

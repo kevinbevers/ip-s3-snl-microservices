@@ -2,6 +2,7 @@
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import {Button} from "react-bootstrap";
 //nextjs router hook
 import { useRouter } from "next/router";
 //optimized images
@@ -11,8 +12,10 @@ import Logo from "public/images/SNL_Navbar_Logo.png";
 import {FaDiscord} from "react-icons/fa";
 //dynamic head
 import Head from "next/head";
+//custom imports
+import InhouseNavBarSubmitButton from "src/components/inhouses/InhouseNavBarSubmitButton";
 
-export default function InhouseNavBar({LoginSession}) {
+export default function InhouseNavBar({LoginSession, apiToken}) {
     
     const router = useRouter();
 
@@ -38,6 +41,8 @@ export default function InhouseNavBar({LoginSession}) {
                     {/* <Nav.Link href="https://discord.gg/ZZxqtaZvuj" className="" target="_blank">Join SNL <FaDiscord/></Nav.Link> */}
                     </Nav>
                     <Nav>
+                    {LoginSession?.isMod || LoginSession?.isAdmin ?
+                        <InhouseNavBarSubmitButton apiToken={apiToken} /> : <> </>}
                         {LoginSession?.user != null ? 
                         <> 
                         <Nav.Link href="/api/logout">

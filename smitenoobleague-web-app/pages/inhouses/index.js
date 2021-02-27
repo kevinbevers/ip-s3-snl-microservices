@@ -12,13 +12,14 @@ import FullBackground from "src/components/FullBackground";
 import helpers from "utils/helpers";
 //icon
 import {FaDiscord} from "react-icons/fa";
+//services
+import inhouseservice from "services/inhouseservice";
 
-function Home({LoginSession}) {
-
+function Home({LoginSession, Data, status, errMsg, apiToken }) {
   return (
     <>
     <FullBackground src={"inhouse_bg"} />
-    <InhouseNavBar LoginSession={LoginSession}/>
+    <InhouseNavBar LoginSession={LoginSession} apiToken={apiToken}/>
     <Container fluid>
   <div className="jumbotron-fluid">
     {/* render body here */}
@@ -36,20 +37,20 @@ function Home({LoginSession}) {
   <Row>
           <Col md={11} className="mx-auto">
             <Row>
-              <Col md={3}>
-              <InhouseStatCard Title="Average KDA" />
+              <Col md={3} className="p-0 pl-1 pr-1">
+              {Data?.top5KdaPlayers != null ? <InhouseStatCard Title="Average KDA" Stat={Data?.top5KdaPlayers} /> : <> </>}
               </Col>
 
-              <Col md={3}>
-              <InhouseStatCard Title="Average Damage Dealt" />
+              <Col md={3} className="p-0 pl-1 pr-1">
+              {Data?.damageDealt != null ? <InhouseStatCard Title="Average Damage Dealt" Stat={Data?.damageDealt} /> : <></>}
               </Col>
 
-              <Col md={3}>
-              <InhouseStatCard Title="Average Damage Mitigated" />
+              <Col md={3} className="p-0 pl-1 pr-1">
+              {Data?.damageMitigated != null ? <InhouseStatCard Title="Average Damage Mitigated" Stat={Data?.damageMitigated} /> : <> </>}
               </Col>
 
-              <Col md={3}>
-              <InhouseStatCard Title="Average Kill Participation" />
+              <Col md={3} className="p-0 pl-1 pr-1">
+              {Data?.killParticipation != null ? <InhouseStatCard Title="Average Kill Participation" Stat={Data?.killParticipation} Percentage={"%"} />: <> </>}
               </Col>
             </Row>
           </Col>
@@ -63,11 +64,36 @@ function Home({LoginSession}) {
 export async function getServerSideProps(context) {
 
   const loginSessionData = await helpers.GetLoginSession(context.req);
+  let apiTokenForClient = null;
+
+  if (loginSessionData?.user != null) {
+    apiTokenForClient = await helpers.GetAccessTokenForClient(context.req, context.res);
+  }
+
+  //object to fill
+  let response = { data: null, statusCode: null, errMsg: null };
+  //call api for the data
+  await inhouseservice.GetInhouseLeaderboardDataLandingPage()
+    .then(res => { response.data = res.data })
+    .catch(err => {
+      if (err.response == null) {
+        response.statusCode = 503;
+        response.errMsg = "SNL API unavailable";
+      }
+      else {
+        response.statusCode = JSON.stringify(err?.response?.status);
+        response.errMsg = err?.response?.data;
+      }
+    });
 
   return {
-      props: {
-          LoginSession: loginSessionData
-      },
+    props: {
+      LoginSession: loginSessionData,
+      Data: response.data,
+      status: response.statusCode,
+      errMsg: response.errMsg,
+      apiToken: apiTokenForClient
+    },
   };
 }
 

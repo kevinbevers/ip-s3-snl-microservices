@@ -11,5 +11,6 @@ namespace inhouse_microservice.Models.External
         public DateTime? DatePlayed {get; set;}
         public List<Player> OrderPlayers { get; set; }
         public List<Player> ChaosPlayers { get; set; }
+        public bool homeWin { get; set; }
     }
 }

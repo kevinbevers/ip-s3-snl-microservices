@@ -18,7 +18,7 @@ import inhouseservice from "services/inhouseservice";
 import Img from 'react-optimized-image';
 import Image from "next/image";
 
-export default function matchdetails({LoginSession, MatchupData, status, errMsg}) {
+export default function matchdetails({LoginSession, MatchupData, status, errMsg, apiToken}) {
 
   const [teamsInMatch, setTeamsInMatch] = useState([{teamID: 1, teamName: "Order", teamLogoPath: "order.png"},{teamID: 2, teamName: "Chaos", teamLogoPath: "chaos.png"}]);
 
@@ -29,7 +29,7 @@ export default function matchdetails({LoginSession, MatchupData, status, errMsg}
     
   return (
     <>
-     <InhouseNavBar LoginSession={LoginSession}/>
+     <InhouseNavBar LoginSession={LoginSession} apiToken={apiToken}/>
       {/* {postData} */}
       <Container fluid className="mt-2">
             {MatchupData?.matchResult != null ?  <InhouseGameStats MatchResult={MatchupData?.matchResult}/>
@@ -44,7 +44,11 @@ export default function matchdetails({LoginSession, MatchupData, status, errMsg}
 export async function getServerSideProps(context) {
   
   const loginSessionData = await helpers.GetLoginSession(context.req);
+  let apiTokenForClient = null;
 
+  if (loginSessionData?.user != null) {
+    apiTokenForClient = await helpers.GetAccessTokenForClient(context.req, context.res);
+  }
 
   //id from url
   const gameID = context.params.id;
@@ -71,6 +75,7 @@ export async function getServerSideProps(context) {
       MatchupData: response.data,
       status: response.statusCode,
       errMsg: response.errMsg,
+      apiToken: apiTokenForClient
     }, // will be passed to the page component as props
   }
 }

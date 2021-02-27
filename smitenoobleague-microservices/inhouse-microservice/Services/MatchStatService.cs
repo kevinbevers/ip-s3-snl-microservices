@@ -175,14 +175,15 @@ namespace inhouse_microservice.Services
                 {
                     GameID = x,
                     DatePlayed = y.Select(i => i.MatchPlayedDate).Max().Value,
-                    TotalMatchDuration = string.Format("{1:0} min {0:ss} sec", TimeSpan.FromSeconds((int)y.Select(i => i.IgMatchLengthInSeconds).Sum()), TimeSpan.FromSeconds((int)y.Select(i => i.IgMatchLengthInSeconds).Sum()).TotalMinutes),
+                    TotalMatchDuration = string.Format("{1:0} min {0:ss} sec", TimeSpan.FromSeconds((int)y.Select(i => i.IgMatchLengthInSeconds).Min()), TimeSpan.FromSeconds((int)y.Select(i => i.IgMatchLengthInSeconds).Min()).TotalMinutes),
+                    homeWin = (bool)y.Where(i => i.IgTaskforce == 1).Select(i => i.WinStatus).Min()
                 }).ToListAsync();
 
 
                 foreach (var match in matchHistoryList)
                 {
-                    match.ChaosPlayers = await _db.TableStats.Where(x => x.GameId == match.GameID && x.IgTaskforce == 1).Select(x => new Player { PlayerID = x.PlayerId, Playername = x.PlayerName, Platform = ((ApiPlatformEnum)x.PlayerPlatformId).ToString() }).ToListAsync();
-                    match.OrderPlayers = await _db.TableStats.Where(x => x.GameId == match.GameID && x.IgTaskforce == 2).Select(x => new Player { PlayerID = x.PlayerId, Playername = x.PlayerName, Platform = ((ApiPlatformEnum)x.PlayerPlatformId).ToString() }).ToListAsync();
+                    match.ChaosPlayers = await _db.TableStats.Where(x => x.GameId == match.GameID && x.IgTaskforce == 2).Select(x => new Player { PlayerID = x.PlayerId, Playername = x.PlayerName, Platform = ((ApiPlatformEnum)x.PlayerPlatformId).ToString() }).ToListAsync();
+                    match.OrderPlayers = await _db.TableStats.Where(x => x.GameId == match.GameID && x.IgTaskforce == 1).Select(x => new Player { PlayerID = x.PlayerId, Playername = x.PlayerName, Platform = ((ApiPlatformEnum)x.PlayerPlatformId).ToString() }).ToListAsync();
                 }
 
                 return new ObjectResult(matchHistoryList.OrderByDescending(l => l.DatePlayed)) { StatusCode = 200 };
@@ -228,8 +229,36 @@ namespace inhouse_microservice.Services
                 return new ObjectResult("Something went wrong trying to Save Match stats.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
-    #region methods
-    private async Task SaveMatchStatsToDatabaseAsync(MatchData match)
+
+        public async Task<ActionResult> DeleteInhouseMatchDataByGameIdAsync(int gameId)
+        {
+            try
+            {
+                List<TableStat> foundMatchStats = await _db.TableStats.Where(t => t.GameId == gameId).ToListAsync();
+                if (foundMatchStats?.Count > 0)
+                {
+                    _db.TableStats.RemoveRange(foundMatchStats);
+                    await _db.SaveChangesAsync();
+
+                    return new ObjectResult("match stats deleted successfully.") { StatusCode = 200 }; //OK
+                }
+                else
+                {
+                    return new ObjectResult("No match stats found with the given gameID.") { StatusCode = 404 }; //NOT FOUND
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to delete a team.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to delete a team.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
+        #region methods
+        private async Task SaveMatchStatsToDatabaseAsync(MatchData match)
     {
         List<TableStat> matchStatsPerPlayer = new List<TableStat>();
 
@@ -502,6 +531,6 @@ namespace inhouse_microservice.Services
 
                 return listOfPlayerStats;
             }
-    #endregion
+        #endregion
     }
 }

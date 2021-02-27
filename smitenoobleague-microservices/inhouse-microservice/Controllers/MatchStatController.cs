@@ -40,5 +40,14 @@ namespace inhouse_microservice.Controllers
         {
             return await _matchStatService.GetInhouseMatchHistoryByGameIdAsync(gameID);
         }
+
+        // DELETE: matchstat
+        [HttpDelete("{gameID}")]
+        public async Task<ActionResult<MatchHistoryDetails>> DeleteMatchStatsByGameID(int gameID)
+        {
+            return await _matchStatService.DeleteInhouseMatchDataByGameIdAsync(gameID);
+        }
+
+        
     }
 }

@@ -12,5 +12,6 @@ namespace inhouse_microservice.Interfaces
         Task<ActionResult> ValidateAndSaveInhouseMatchStatsAsync(MatchData match);
         Task<ActionResult<IEnumerable<MatchHistory>>> GetInhouseMatchHistoryOverview(int pageSize, int pageIndex);
         Task<ActionResult<MatchHistoryDetails>> GetInhouseMatchHistoryByGameIdAsync(int gameId);
+        Task<ActionResult> DeleteInhouseMatchDataByGameIdAsync(int gameId);
     }
 }

@@ -9,5 +9,6 @@ namespace inhouse_microservice.Interfaces
     public interface ILeaderboardService
     {
         public Task<ActionResult<LeaderboardData>> GetInhouseLeaderboardDataAsync();
+        public Task<ActionResult<LeaderboardData>> GetInhouseLeaderboardDataLandingPageAsync();
     }
 }
