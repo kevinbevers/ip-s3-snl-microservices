@@ -13,12 +13,12 @@ function Home({LoginSession}) {
 
   return (
     <>
-    <FullBackground src={"dark_bg"} />
+    <FullBackground src={"bg"} />
     <NavBar LoginSession={LoginSession}/>
   <div className="jumbotron-fluid">
     {/* render body here */}
     <div className=" container halfTransparent mb-2 mt-5 rounded p-4" id="welcomeScreen">
-        <h1 className="landingTitle font-weight-bold">Welcome to the Smitenoobleague website!</h1>
+        <h2 className="landingTitle font-weight-bold">Welcome to the Smitenoobleague website!</h2>
         <h2 className="lead">The fully automated smite amateur league! Stats, Leaderboards and more.</h2>
         <hr className="my-4" />
         <h6>
@@ -38,6 +38,11 @@ function Home({LoginSession}) {
           - Your Region <br />
           - Your estimated skill level (Bronze/Silver/Gold/Platinum/Diamond/Masters).<br />
           - Skill level of the team you have in mind(Estimation of all members combined).<br />
+        </p>
+        <h4 className="font-weight-bold mb-0">Partnership with Audacity Gaming</h4>
+        <p>
+        We’re proud to partner with <a href="https://discord.gg/AudacityGaming" target="_blank">Audacity Gaming</a>.<br />One of the first things that this partnership brings is an <a href="/inhouses" target="_blank">InHouse StatTracker</a> where you can compete to be the top dog of the Audacity inhouses.<br />
+        We are both looking forward to bring you more innovative solutions to elevate your smite experience to the next level.
         </p>
     </div>
   </div>

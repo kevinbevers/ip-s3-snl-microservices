@@ -45,7 +45,7 @@ export default function NavBar({LoginSession}) {
                     <Nav.Link href="/news" className={router?.pathname == "/news" ? "active" : ""}>News</Nav.Link>
                     <Nav.Link href="/rules" className={router?.pathname == "/rules" ? "active" : ""}>Rules</Nav.Link>
                     <Nav.Link href="/faq" className={router?.pathname == "/faq" ? "active" : ""}>FAQ</Nav.Link>
-                    <Nav.Link href="https://discord.gg/ZZxqtaZvuj" className="" target="_blank">Join <FaDiscord/></Nav.Link>
+                    <Nav.Link href="https://discord.gg/AudacityGaming" className="" target="_blank">Join <FaDiscord/></Nav.Link>{/*https://discord.gg/ZZxqtaZvuj*/}
                     {/* {LoginSession?.isMod ? <><Nav.Link href="/moderate" className={router?.pathname == "/moderate" ? "active" : ""}>Moderate dashboard</Nav.Link></> : <> </>}
                     {LoginSession?.isAdmin ? <><Nav.Link href="/manage" className={router?.pathname == "/manage" ? "active" : ""}>Manage dashboard</Nav.Link></> : <> </>} */}
                     </Nav>

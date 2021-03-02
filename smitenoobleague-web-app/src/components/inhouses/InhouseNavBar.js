@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 //optimized images
 import Img from 'react-optimized-image';
 import Logo from "public/images/SNL_Navbar_Logo.png";
+//import Logo from "public/images/REVAMPCOLLAB.png";
 //icon
 import {FaDiscord} from "react-icons/fa";
 //dynamic head
