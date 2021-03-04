@@ -31,7 +31,24 @@ CREATE TABLE `TableQueue` (
   `QueueDate` datetime NOT NULL,
   `PatchVersion` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`QueueID`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TableQueueInhouses`
+--
+
+DROP TABLE IF EXISTS `TableQueueInhouses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `TableQueueInhouses` (
+  `QueueID` int NOT NULL AUTO_INCREMENT,
+  `GameID` int DEFAULT NULL,
+  `QueueState` tinyint(1) DEFAULT NULL,
+  `QueueDate` datetime DEFAULT NULL,
+  `PatchVersion` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`QueueID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -43,4 +60,4 @@ CREATE TABLE `TableQueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-02-19 14:50:08
+-- Dump completed on 2021-02-26 20:20:57
