@@ -164,7 +164,7 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                     <Col xl={4} md={4} xs={4} className="pr-0"><h5 className="mb-0 TeamBannerStats"><b>Games played:</b> {TeamStats?.gamesPlayed}</h5></Col>
                     <Col xl={8} md={8} xs={8} className="pl-0 pr-0 d-flex">
                         <h5 className="mb-0 TeamBannerStats mr-md-3 mr-1"><b>Win percentage:</b> {TeamStats?.gamesPlayed > 0 ? Math.round(TeamStats?.wins / TeamStats?.gamesPlayed * 100) : 0}%</h5>
-                        <h5 className="mb-0 TeamBannerStats"><b>Current division:</b> {TeamStats?.divisionName.replace("division", "")}</h5>
+                        <h5 className="mb-0 TeamBannerStats"><b>Current division:</b> {TeamStats?.divisionName != null ? TeamStats?.divisionName?.replace("division", "") : "..."}</h5>
                     </Col>
                     {/* <Col xl={5} md={5} xs={4} className="pl-0 pr-0"></Col> */}
                     </Row>
