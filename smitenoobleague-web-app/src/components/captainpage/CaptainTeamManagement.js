@@ -117,14 +117,14 @@ export default function CaptainTeamManagement({apiResponse,apiToken,adminManage}
                           swapClass={"text-success"}
                           chosenClass={"PlayerBoxGrapped"}
                           dragClass={"PlayerBoxGrapped"}
-                          delayOnTouchOnly={true}
-                          delay={200}>
+                          delayOnTouchOnly={false}
+                          delay={100}>
 
                           {teamMembers.map((member, index) => (
                             <PlayerManagement key={index} member={member} apiToken={apiToken} teamID={apiResponse?.teamID} adminManage={adminManage} />
                           ))}
                         </ReactSortable>
-                        <Row><Col><h6 className="text-muted float-right ExtraInfoText">Drag and drop players to swap their roles.</h6></Col></Row>
+                        <Row><Col><h6 className="text-muted float-right ExtraInfoText d-none d-sm-block">Drag and drop players to swap their roles.</h6><h6 className="text-muted float-right ExtraInfoText d-block d-sm-none">Hold and drag players to swap their roles.</h6></Col></Row>
                       </Col>
                     </Row>
 
