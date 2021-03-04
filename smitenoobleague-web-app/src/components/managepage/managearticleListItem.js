@@ -20,6 +20,9 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
     const [ModalArticleShow, setModalArticleShow] = useState(false);
     const [ModalPreviewShow, setModalPreviewShow] = useState(false);
     const [Article, setArticle] = useState({});
+    const [imagePath, setImagePath] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+    const fileUploader = useRef();
 
     const closeArticleModal = () => {
         setMsgArticleInfo("Err Msg.");
@@ -33,7 +36,11 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
     };
 
     const editArticle = async() => {
-        await newsservice.GetArticleBySlug(articledata.articleSlug).then(res => { setArticle(res.data); setModalArticleShow(true); }).catch(err => {});
+        await newsservice.GetArticleBySlug(articledata.articleSlug).then(res => { 
+            setArticle(res.data);
+            console.log(res.data);
+            setImagePath(res.data?.articleImagePath != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/news-service/images/" + res.data?.articleImagePath : null);
+             setModalArticleShow(true); }).catch(err => {});
     };
 
     const handleEditArticle = async() => {
@@ -99,9 +106,9 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
     };
 
     //#region EditTeamImage
-    const [imagePath, setImagePath] = useState(articledata?.articleImagePath != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/news-service/images/" + articledata?.articleImagePath : null);
-    const [imageFile, setImageFile] = useState(null);
-    const fileUploader = useRef();
+    useEffect(() => {
+        setImagePath(articledata?.articleImagePath != null ? process.env.NEXT_PUBLIC_BASE_API_URL + "/news-service/images/" + articledata?.articleImagePath : null);
+    }, []);
 
 
     const setPreview = (evt) => {
