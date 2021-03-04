@@ -7,7 +7,7 @@ namespace news_microservice.Models.External
     {
         [Required]
         [MinLength(50)]
-        [MaxLength(1000)]
+        [MaxLength(4000)]
         public string ArticleContent { get; set; }
     }
 }

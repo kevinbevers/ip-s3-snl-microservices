@@ -54,24 +54,24 @@ export default function ManageArticleListItem({apiToken, articledata, removeArti
             articledata.articleImagePath = imagePath;
             closeArticleModal();
         }).catch(err => {
-            if(err?.response?.data?.articleTitle != null)
+            if(err?.response?.data?.ArticleTitle != null)
             {
-                setMsgArticleInfo(err?.response?.data?.articleTitle[0]);
+                setMsgArticleInfo(err?.response?.data?.ArticleTitle[0]);
                 setShowArticleInfoAlert(true);
             }
-            else if(err?.response?.data?.articleDescription != null)
+            else if(err?.response?.data?.ArticleDescription != null)
             {
-                setMsgArticleInfo(err?.response?.data?.articleDescription[0]);
+                setMsgArticleInfo(err?.response?.data?.ArticleDescription[0]);
                 setShowArticleInfoAlert(true);
             }
-            else if(err?.response?.data?.articleType != null)
+            else if(err?.response?.data?.ArticleType != null)
             {
-                setMsgArticleInfo(err?.response?.data?.articleType[0]);
+                setMsgArticleInfo(err?.response?.data?.ArticleType[0]);
                 setShowArticleInfoAlert(true);
             }
-            else if(err?.response?.data?.articleContent != null)
+            else if(err?.response?.data?.ArticleContent != null)
             {
-                setMsgArticleInfo(err?.response?.data?.articleContent[0]);
+                setMsgArticleInfo(err?.response?.data?.ArticleContent[0]);
                 setShowArticleInfoAlert(true);
             }
             else 
