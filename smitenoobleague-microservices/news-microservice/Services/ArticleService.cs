@@ -121,7 +121,7 @@ namespace news_microservice.Services
                         //add or remove image when an image path is set 
                         if (article?.ArticleImagePath != null)
                         {
-                            if (foundArticle?.ArticleImagePath != null)
+                            if (foundArticle?.ArticleImagePath != null && (bool)!article?.ArticleImagePath.Contains(foundArticle.ArticleImagePath))
                             {
                                 //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
                                 ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
@@ -151,7 +151,7 @@ namespace news_microservice.Services
                         //add or remove image when an image path is set 
                         if (article?.ArticleImagePath != null)
                         {
-                            if (foundArticle?.ArticleImagePath != null)
+                            if (foundArticle?.ArticleImagePath != null && (bool)!article?.ArticleImagePath.Contains(foundArticle.ArticleImagePath))
                             {
                                 //Delete the old team logo. old images should be deleted to keep the disk from being bombarded with images.
                                 ImageProcessing.DeleteImageAsync(foundArticle.ArticleImagePath, _env);
