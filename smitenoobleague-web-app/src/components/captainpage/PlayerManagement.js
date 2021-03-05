@@ -108,7 +108,10 @@ const handleSearchPlayer = async() => {
         const name = SearchName;
         manageteamservice.GetPlayersByName(apiToken, name)
         .then(res => {
-            setFoundPlayers(res.data); 
+            setFoundPlayers(res.data);
+            setMsgPlayerInfo("");
+            setShowPlayerInfoAlert(false);
+
             if(res.data.length > 0) 
             {
                 setSelectedPlayer(res.data[0]);
@@ -119,8 +122,17 @@ const handleSearchPlayer = async() => {
             }
         })
         .catch(err => {
+            if(err?.response?.status == 404)
+            {
+                setFoundPlayers(null);
+                setSelectedPlayer(null);
+                setMsgPlayerInfo("No results found.");
+                setShowPlayerInfoAlert(true);
+            }
+            else {
             setMsgPlayerInfo(err?.response?.data);
             setShowPlayerInfoAlert(true);
+            }
         });
     }
 };

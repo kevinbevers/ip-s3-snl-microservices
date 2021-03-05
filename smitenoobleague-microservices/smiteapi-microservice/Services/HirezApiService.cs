@@ -283,6 +283,10 @@ namespace smiteapi_microservice.Services
             //convert ApiPlayer model to Player model
             if (playersfound?[0].ret_msg != null)
             {
+                if(playersfound?[0].ret_msg.ToString() == "[]")
+                {
+                    return new ObjectResult(returnList) { StatusCode = 200 };
+                }
                 //could return message to user
                 return new ObjectResult(playersfound?[0].ret_msg.ToString()) { StatusCode = 404 };
             }
@@ -291,7 +295,7 @@ namespace smiteapi_microservice.Services
                 playersfound.ForEach(p => returnList.Add(new Player { Playername = p.Name, Platform = p.portal_id.ToString(), PlayerID = p.player_id }));
             }
 
-            return returnList;
+            return new ObjectResult(returnList) {StatusCode = 200 };
         }
     }
 }
