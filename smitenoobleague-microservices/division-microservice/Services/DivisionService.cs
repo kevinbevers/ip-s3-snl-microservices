@@ -276,7 +276,7 @@ namespace division_microservice.Services
 
             if(currentSchedule == null)
             {
-                currentSchedule = await _db.TableSchedules.Where(s => Today.AddDays(7) < s.ScheduleStartDate).FirstOrDefaultAsync();
+                currentSchedule = await _db.TableSchedules.Where(s => Today.AddDays(7) >= s.ScheduleStartDate && Today <= s.ScheduleEndDate && s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
             }
 
             return currentSchedule?.ScheduleId;
