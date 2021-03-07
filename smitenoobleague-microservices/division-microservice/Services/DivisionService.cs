@@ -274,6 +274,11 @@ namespace division_microservice.Services
             //check if given date overlaps with already existing schedules
             var currentSchedule = await _db.TableSchedules.Where(s => Today >= s.ScheduleStartDate && Today <= s.ScheduleEndDate && s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
 
+            if(currentSchedule == null)
+            {
+                currentSchedule = await _db.TableSchedules.Where(s => Today.AddDays(7) < s.ScheduleStartDate).FirstOrDefaultAsync();
+            }
+
             return currentSchedule?.ScheduleId;
         }
 

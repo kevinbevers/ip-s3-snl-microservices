@@ -108,17 +108,19 @@ export default function rules({LoginSession}) {
           <h5 id="rule1.4" className="font-weight-bold">1.4. Match settings</h5>
           <p>The in-game match settings should be the following:</p>
             <ul>
-              <li>Map: Conquest</li>
-              <li>Player picking method: Draft-Conquest</li>
-              <li>Password: SNL(MatchupWeek) e.g., SNLWeek1</li>
+              <li>Match type: Conquest</li>
               <li>Starting level: 1</li>
               <li>Team size: 5 v 5</li>
+              <li>Player pick: Draft-Conquest</li>
+              <li>Staring level: Level 1</li>
               <li>Starting gold: 1500</li>
               <li>Pause type: free</li>
               <li>Bonus time: 90</li>
               <li>Region: Region of the team setting up (home team)</li>
+              <li>Allow Spectators/Record Demo: On</li>
+              <li>Password: SNL(MatchupWeek) e.g., SNLWeek1</li>
               <li>Spectator password: [Leave this blank]</li>
-              </ul>
+            </ul>
           <h5 id="rule1.5" className="font-weight-bold">1.5. Gods available for play</h5>
           <p>All gods are allowed to be played in a SNL game, with exceptions to break cases. If a God is not available for comp play because of a game breaking bug the god is also not allowed to be played in a SNL game until fixed. Team’s still picking these gods will be penalized with at least 1 penalty point.</p>
           <h5 id="rule1.6" className="font-weight-bold">1.6. Ending of a match</h5>
