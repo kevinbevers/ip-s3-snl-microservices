@@ -332,13 +332,15 @@ namespace service_tests
 
             //Assert
             var PlayersFound = Assert.IsType<ActionResult<IEnumerable<Player>>>(result);
+            var response = Assert.IsAssignableFrom<ActionResult<IEnumerable<Player>>>(result).Result as ObjectResult;
+            var responseVal = response.Value as IEnumerable<Player>;
             //check if matchdata object is returned
-            Assert.True(PlayersFound.Value != null);
+            Assert.True(responseVal != null);
             //check if match ret_msg contains the reason why the matchdata isn't given. ret_msg stats reason on success
-            Assert.True(PlayersFound.Value?.Count() > 0);
-            Assert.Equal("Testuser", PlayersFound.Value.First().Playername);
-            Assert.Equal(ApiPlatformEnum.PS4.ToString(), PlayersFound.Value.First().Platform);
-            Assert.Equal(1, PlayersFound.Value.First().PlayerID);
+            Assert.True(responseVal?.Count() > 0);
+            Assert.Equal("Testuser", responseVal.First().Playername);
+            Assert.Equal(ApiPlatformEnum.PS4.ToString(), responseVal.First().Platform);
+            Assert.Equal(1, responseVal.First().PlayerID);
         }
         #endregion
 
