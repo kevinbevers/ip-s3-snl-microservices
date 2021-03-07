@@ -16,7 +16,7 @@ import divisionservice from "services/divisionservice";
 import scheduleservice from "services/scheduleservice";
 
 
-export default function ManageScheduleListItem({apiToken, scheduledata, removeScheduleFunc}) {
+export default function ManageScheduleListItem({apiToken, scheduledata, removeScheduleFunc, adminManage}) {
 
     //States
     const [hovering, setHovering] = useState(false);
