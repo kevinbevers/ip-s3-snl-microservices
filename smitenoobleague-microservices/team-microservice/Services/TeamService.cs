@@ -160,7 +160,8 @@ namespace team_microservice.Services
                             TeamMemberAccountId = teamSubmisssion.Captain.TeamCaptainAccountID,
                             TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), teamSubmisssion?.Captain?.TeamCaptainPlatformName),
                             TeamMemberDivisionId = teamSubmisssion.TeamDivisionID,
-                            TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1
+                            TeamMemberRole = teamSubmisssion?.Captain?.TeamCaptainRoleID != null ? teamSubmisssion.Captain.TeamCaptainRoleID : 1,
+                            TeamMemberEmail = teamSubmisssion?.Captain?.TeamCaptainEmail
                         };
 
                         _db.TableTeamMembers.Add(addCaptain);
