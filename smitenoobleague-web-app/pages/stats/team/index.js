@@ -42,7 +42,10 @@ export default function team({LoginSession, DivisionList, TeamList}) {
       //Add the teams without division
         if(Divisions?.length > 0)
         {
+          if(!Divisions.includes(x => x.divisionID == 0))
+          {
           setDivisions(Divisions.concat({divisionID: 0, divisionName: "Division-less Teams"}));
+          }
         }
     }, []);
 
@@ -113,7 +116,7 @@ export async function getServerSideProps(context) {
   return {
       props: {
           LoginSession: loginSessionData,
-          DivisionList: listOfDivisions,
+          DivisionList: listOfDivisions.filter(d => d.teamCount != null) != [] ? listOfDivisions.filter(d => d.teamCount != null) : [{divisionID: 0, divisionName: "Division-less Teams"}],
           TeamList: listOfTeams
       },
   };

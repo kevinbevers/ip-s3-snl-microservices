@@ -16,6 +16,7 @@ namespace division_microservice.Models.External
         [MaxLength(21, ErrorMessage = "Division name is too long, a maximum of 21 characters is allowed")]
         public string DivisionName { get; set; }
         public IEnumerable<Team> DivisionTeams { get; set; }
+        public int? TeamCount { get; set; }
         public int? CurrentScheduleID { get; set; }
     }
 }

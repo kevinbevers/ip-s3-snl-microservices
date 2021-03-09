@@ -109,7 +109,7 @@ export async function getServerSideProps(context) {
   let ScheduleData = null;
 
   //Get division data from api
-  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {});
+  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data; console.log(res.data); }).catch(err => {});
 
   //check if there are divisions, if yes check if the first division has a schedule and get it
   if (listOfDivisions?.length > 0) {
@@ -136,7 +136,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       LoginSession: loginSessionData,
-      DivisionList: listOfDivisions,
+      DivisionList: listOfDivisions.filter(d => d.teamCount != null),
       SchedulesForFirstDivision: listOfSchedules,
       CurrentScheduleDataForFirstDivision: ScheduleData
     },
