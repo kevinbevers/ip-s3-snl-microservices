@@ -206,6 +206,9 @@ namespace division_microservice.Services
                     { 
                         Division returnDivision = new Division { DivisionID = division.DivisionId, DivisionName = division.DivisionName };
                         returnDivision.CurrentScheduleID = await GetCurrentSchedule(division.DivisionId);
+                        //this makes this function a little but slower ;( but it gives the ability to clean up the dropdown and remove empty divisions from the lists
+                        var divTeams = await _externalServices.GetDivisionTeamsByIdAsync(division.DivisionId);
+                        returnDivision.TeamCount = divTeams?.Count();
                         returnDivisions.Add(returnDivision);
                     };
 

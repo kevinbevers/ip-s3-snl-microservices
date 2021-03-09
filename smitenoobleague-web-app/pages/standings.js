@@ -142,7 +142,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       LoginSession: loginSessionData,
-      DivisionList: listOfDivisions,
+      DivisionList: listOfDivisions.filter(d => d.teamCount != null),
       SchedulesForFirstDivision: listOfSchedules,
       CurrentStandingData: StandingData
     },

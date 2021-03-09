@@ -62,10 +62,14 @@ export default function player({LoginSession, DivisionList, PlayerList}) {
       useEffect(() => {
         if(Divisions?.length > 0)
         {
-          //Add the teams without division
+          //Add the players without division
+          if(!Divisions.includes(x => x.divisionID == 0))
+          {
           setDivisions(Divisions.concat({divisionID: 0, divisionName: "Division-less Players"}));
+          }
         }
       }, []);
+
     return (
       <>      
         <NavBar LoginSession={LoginSession}/>
@@ -154,7 +158,7 @@ export async function getServerSideProps(context) {
   return {
       props: {
           LoginSession: loginSessionData,
-          DivisionList: listOfDivisions,
+          DivisionList: listOfDivisions.filter(d => d.teamCount != null) != [] ? listOfDivisions.filter(d => d.teamCount != null) : [{divisionID: 0, divisionName: "Division-less Players"}],
           PlayerList: listOfPlayers
       },
   };
