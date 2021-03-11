@@ -214,7 +214,7 @@ namespace smiteapi_microservice.Services
 
             if (msg.Contains("Privacy flag set for one or more players.. Player(s):"))
             {
-                msg += " Resubmit after the privacy option has been disabled for the player(s) in question.";
+                msg += ". Resubmit after the privacy option has been disabled for the player(s) in question.";
             }
 
             return new ObjectResult(msg) { StatusCode = 404 }; //NOT FOUND
