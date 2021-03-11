@@ -212,9 +212,9 @@ namespace smiteapi_microservice.Services
                 return new ObjectResult(msg) { StatusCode = 200 }; //OK
             }
 
-            if (match?.ret_msg != null && match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+            if (msg.Contains("Privacy flag set for one or more players.. Player(s):"))
             {
-                match.ret_msg += " Resubmit after the privacy option has been disabled for the player(s) in question.";
+                msg += " Resubmit after the privacy option has been disabled for the player(s) in question.";
             }
 
             return new ObjectResult(msg) { StatusCode = 404 }; //NOT FOUND
