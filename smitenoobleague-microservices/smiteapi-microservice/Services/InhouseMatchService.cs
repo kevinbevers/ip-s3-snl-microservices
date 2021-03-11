@@ -98,6 +98,7 @@ namespace smiteapi_microservice.Services
                 //check return message from api. if the return msg is null the match is valid
                 if (match.ret_msg != null && !match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
                 {
+                    match.ret_msg += " Resubmit after the privacy option has been disabled for the player(s) in question.";
                     //something went wrong even when the matchData should have been available. because it is 7 days later
                     return new ObjectResult(match.ret_msg) { StatusCode = 404 }; //BAD REQUEST
                                                                                  //Node scheduler will add a new scheduled job 2 hours later to try to get the data again
@@ -152,8 +153,9 @@ namespace smiteapi_microservice.Services
 
             if (match?.ret_msg != null && match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
             {
+                match.ret_msg += " Resubmit after the privacy option has been disabled for the player(s) in question.";
                 //if privacy flag was set remove the id from the queue table so it can be resubmitted.
-                if(entry != null)
+                if (entry != null)
                 {
                     _db.Remove(entry);
                     await _db.SaveChangesAsync();
@@ -210,8 +212,12 @@ namespace smiteapi_microservice.Services
                 return new ObjectResult(msg) { StatusCode = 200 }; //OK
             }
 
-            return new ObjectResult(msg) { StatusCode = 404 }; //NOT FOUND
+            if (match?.ret_msg != null && match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+            {
+                match.ret_msg += " Resubmit after the privacy option has been disabled for the player(s) in question.";
+            }
 
+            return new ObjectResult(msg) { StatusCode = 404 }; //NOT FOUND
 
         }
 
