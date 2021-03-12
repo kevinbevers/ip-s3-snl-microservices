@@ -125,9 +125,9 @@ namespace smiteapi_microservice.Services
                                 {
                                     if (match.ret_msg != null)
                                     {
-                                        if (!match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+                                        if (!match.ret_msg.ToString().Contains("Privacy flag set for player(s):"))
                                         {
-                                            match.ret_msg = "Privacy flag set for one or more players.. Player(s):";
+                                            match.ret_msg = "Privacy flag set for player(s):";
                                             match.ret_msg += " " + mp.hz_player_name + mp.hz_gamer_tag;
                                         }
                                         else
@@ -138,7 +138,7 @@ namespace smiteapi_microservice.Services
                                     }
                                     else
                                     {
-                                        match.ret_msg = "Privacy flag set for one or more players.. Player(s):";
+                                        match.ret_msg = "Privacy flag set for player(s):";
                                         match.ret_msg += " " + mp.hz_player_name + mp.hz_gamer_tag;
                                     }
                                 }

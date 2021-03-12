@@ -94,7 +94,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetTopKillsAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most kills
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry {
+            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry {
                 Player = new LeaderboardPlayer {PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value  },
                 Score = y.Select(z => z.IgKills).Sum()
             }).OrderByDescending(x => x.Score).Take(amount).ToListAsync();
@@ -106,7 +106,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetTopAssistsAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most assists
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = y.Select(z => z.IgAssists).Sum()
@@ -119,7 +119,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetTopDeathsAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most deaths
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = y.Select(z => z.IgDeaths).Sum()
@@ -132,7 +132,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetTopDamageDealtAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most damage dealt
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = y.Select(z => z.IgDamageDealt).Sum()
@@ -145,7 +145,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetTop10DamageAndRemainderAsync()
         {
             //total damage dealt
-            int? totalDamage = await _db.TableStats.Select(x => x.IgDamageDealt).SumAsync();
+            int? totalDamage = await _db.TableStats.Where(x => x.PlayerId != null).Select(x => x.IgDamageDealt).SumAsync();
 
             var top10DamageDealers = await GetTopDamageDealtAsync(10);
 
@@ -160,7 +160,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetTopHealingAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most healing
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = y.Select(z => z.IgHealing).Sum()
@@ -173,7 +173,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetTopDamageMitigatedAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most damage mitigated
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = y.Select(z => z.IgDamageMitigated).Sum()
@@ -186,7 +186,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetTopDamageTakenAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most damage taken
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = y.Select(z => z.IgDamageTaken).Sum()
@@ -199,7 +199,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry_Double>> GetTop5KdaAsync()
         {
             //Group all stats by playerID then get the top 10 players with the best KDA
-            List<LeaderboardEntry_Double> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
+            List<LeaderboardEntry_Double> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = Math.Round(((double)y.Select(z => z.IgKills).Sum() + (double)y.Select(z => z.IgAssists).Sum()) / (double)y.Select(z => z.IgDeaths).Sum(),2)
@@ -212,7 +212,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry_Double>> GetTopKillParticipationAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most damage taken
-            List<LeaderboardEntry_Double> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
+            List<LeaderboardEntry_Double> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = Math.Round((double)(y.Select(z => z.IgKills).Sum() + y.Select(z => z.IgAssists).Sum()) / (double)y.Select(z => z.TotalKillsTeam).Sum() * 100)
@@ -226,7 +226,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry_Double>> GetAverageKillParticipationAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most damage taken
-            List<LeaderboardEntry_Double> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
+            List<LeaderboardEntry_Double> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = Math.Round((double)(y.Select(z => z.IgKills).Average() + y.Select(z => z.IgAssists).Average()) / (double)y.Select(z => z.TotalKillsTeam).Average() * 100)
@@ -239,7 +239,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetAverageDamageMitigatedAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most damage mitigated
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = (int)y.Select(z => z.IgDamageMitigated).Average()
@@ -252,7 +252,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry_Double>> GetTop5AverageKdaAsync()
         {
             //Group all stats by playerID then get the top 10 players with the best KDA
-            List<LeaderboardEntry_Double> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
+            List<LeaderboardEntry_Double> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = Math.Round(((double)y.Select(z => z.IgKills).Average() + (double)y.Select(z => z.IgAssists).Average()) / (double)y.Select(z => z.IgDeaths).Average(), 2)
@@ -265,7 +265,7 @@ namespace inhouse_microservice.Services
         private async Task<List<LeaderboardEntry>> GetAverageDamageDealtAsync(int amount)
         {
             //Group all stats by playerID then get the top 10 players with the most damage dealt
-            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+            List<LeaderboardEntry> leaderboardEntries = await _db.TableStats.Where(x => x.PlayerId != null).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
             {
                 Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                 Score = (int)y.Select(z => z.IgDamageDealt).Average()
