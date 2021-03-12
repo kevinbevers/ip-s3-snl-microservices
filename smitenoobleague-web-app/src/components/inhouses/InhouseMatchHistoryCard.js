@@ -11,6 +11,7 @@ import {FaPlaystation, FaXbox, FaSteam, FaTrashAlt} from "react-icons/fa";
 import {RiSwitchFill} from "react-icons/ri";
 import {GiPc} from "react-icons/gi";
 import {SiEpicgames} from "react-icons/si";
+import {GrStatusUnknown} from "react-icons/gr";
 //API
 import inhouseservice from "services/inhouseservice";
 
@@ -40,9 +41,11 @@ export default function InhouseMatchHistoryCard({ MatchupResult, adminManage, re
                         <RiSwitchFill />)
                     || (p?.platform  == "Epic_Games" && 
                         <SiEpicgames />)
+                    || (p?.platform  == null && 
+                        <GrStatusUnknown />)
                     ||
                     
-                    member.teamMemberPlatform;
+                    p?.platform;
         };
 
         return (<>

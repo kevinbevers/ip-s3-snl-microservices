@@ -32,7 +32,7 @@ namespace inhouse_microservice.Services
                     GameID = gameId
                 };
 
-                        List<TableStat> matchStats = await _db.TableStats.Where(ts => ts.GameId == gameId).ToListAsync();
+                List<TableStat> matchStats = await _db.TableStats.Where(ts => ts.GameId == gameId).ToListAsync();
 
                 if(matchStats?.Count() > 0)
                 {
@@ -88,7 +88,14 @@ namespace inhouse_microservice.Services
                             double playerParticipation = (int)player.IgKills + (int)player.IgAssists;
                             int killParticipationPercentage = Convert.ToInt32(playerParticipation / totalKills * 100);
                             mvpScore *= (int)killParticipationPercentage;
-                            mvpScores.Add(new MvpPlayer { PlayerID = (int)player.PlayerId, MvpScore = mvpScore });
+                            if (player?.PlayerId == null)
+                            {
+                                //think of something to give hidden players mvp
+                            }
+                            else
+                            {
+                                mvpScores.Add(new MvpPlayer { PlayerID = (int)player?.PlayerId, MvpScore = mvpScore });
+                            }
 
                             //add all items to the list
                             itemsInMatch.Add(player?.IgItem1Id);
@@ -251,9 +258,9 @@ namespace inhouse_microservice.Services
             catch (Exception ex)
             {
                 //log the error
-                _logger.LogError(ex, "Something went wrong trying to delete a team.");
+                _logger.LogError(ex, "Something went wrong trying to delete a match.");
                 //return result to client
-                return new ObjectResult("Something went wrong trying to delete a team.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+                return new ObjectResult("Something went wrong trying to delete a match.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
 
@@ -370,9 +377,9 @@ namespace inhouse_microservice.Services
                         MatchPlayedDate = match.EntryDate,
                         IgMatchLengthInSeconds = match.MatchDurationInSeconds,
                         WinStatus = p.Won,
-                        PlayerId = p.Player.PlayerID,
-                        PlayerName = p.Player.Playername,
-                        PlayerPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), p.Player.Platform),
+                        PlayerId = p?.Player?.PlayerID == 0 ? null : p?.Player?.PlayerID,
+                        PlayerName = p?.Player?.Playername,
+                        PlayerPlatformId = p?.Player?.Platform != "" ? (int?)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), p?.Player?.Platform) : null,
                         PatchNumber = match.patchNumber,
                         IgTaskforce = p.IngameTeamID,
                         GodPlayedId = p.God.GodId,
@@ -522,7 +529,7 @@ namespace inhouse_microservice.Services
                         Relic2ID = relic2?.ItemId,
                         Relic2Name = relic2?.ItemName,
                         //Player & Role
-                        Player = new Player { PlayerID = p.PlayerId, Playername = p.PlayerName, Platform = ((ApiPlatformEnum)p.PlayerPlatformId).ToString() },
+                        Player = new Player { PlayerID = p?.PlayerId, Playername = p.PlayerName, Platform = p?.PlayerPlatformId != null ? ((ApiPlatformEnum)p.PlayerPlatformId).ToString() : null },
                         FirstBanSide = p.IgTaskforce == 1, //taskforce 1 is order, order is always the first ban side
                     };
 
