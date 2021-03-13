@@ -1,5 +1,7 @@
 //default react imports
 import React, { useState } from "react";
+import nookies from "nookies";
+import { parseCookies, setCookie, destroyCookie } from "nookies";
 //default page stuff
 import NavBar from "../src/components/NavBar";
 import Footer from "../src/components/Footer";
@@ -19,7 +21,7 @@ import scheduleservice from "services/scheduleservice";
 import divisionservice from "services/divisionservice";
 
 
-export default function standings({LoginSession, DivisionList, SchedulesForFirstDivision, CurrentStandingData }) {
+export default function standings({LoginSession, DivisionList, SchedulesForFirstDivision, CurrentStandingData, selectedDiv, selectedDivName }) {
 
   //Divisions for dropdown
   const [Divisions, setDivisions] = useState(DivisionList);
@@ -28,11 +30,12 @@ export default function standings({LoginSession, DivisionList, SchedulesForFirst
   //Standing
   const [Standing, setStanding] = useState(CurrentStandingData);
   //Select Division
-  const [SelectedDivisionName, setSelectedDivisionName] = useState(DivisionList?.length > 0 ? DivisionList[0]?.divisionName : "");
-  const [SelectedDivisionID, setSelectedDivisionID] = useState(DivisionList?.length > 0 ? DivisionList[0]?.divisionID : 0);
+  const [SelectedDivisionName, setSelectedDivisionName] = useState(selectedDivName);
+  const [SelectedDivisionID, setSelectedDivisionID] = useState(selectedDiv);
   const changeDivision = async(evt) => {
     //set the division id
     setSelectedDivisionID(evt.target.value);
+    setCookie(null, 'selected_division', evt.target.value, {path: "/"});
     //get division object
     const selectedDivision = Divisions.filter(d => d.divisionID == evt.target.value)[0];
     //set the name
@@ -106,6 +109,8 @@ export default function standings({LoginSession, DivisionList, SchedulesForFirst
 }
 
 export async function getServerSideProps(context) {
+  //parse cookies
+  const cookies = nookies.get(context);
 
   const loginSessionData = await helpers.GetLoginSession(context.req);
 
@@ -115,36 +120,63 @@ export async function getServerSideProps(context) {
   let StandingData = null;
 
   //Get division data from api
-  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {});
-
-  //check if there are divisions, if yes check if the first division has a schedule and get it
+  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data.filter(d => d.teamCount != null) }).catch(err => {});
+    
+      //check if there are divisions, if yes check if the first division has teams
   if (listOfDivisions?.length > 0) {
-    //get schedule data from api
-    await scheduleservice.GetListOfSchedulesByDivisionID(listOfDivisions[0]?.divisionID)
-      .then((res) => {
-        listOfSchedules = res.data;
-      })
-      .catch((error) => {
-      });
-
-
-    if (listOfDivisions[0]?.currentScheduleID != null) {
-      //get standing data from api
-      await standingservice.GetStandingsByScheduleID(listOfDivisions[0]?.currentScheduleID)
+    if (cookies != null && cookies['selected_division'] != undefined && listOfDivisions.filter(x => x.divisionID == cookies['selected_division']).length != 0) {
+        //get scheduels for division from api
+        await scheduleservice.GetListOfSchedulesByDivisionID(cookies['selected_division'])
         .then((res) => {
-          StandingData = res.data;
+          listOfSchedules = res.data;
         })
-        .catch((error) => { 
+        .catch((error) => {
         });
+
+      const div = listOfDivisions.filter(x => x.divisionID == cookies['selected_division'])[0];
+
+      if (div?.currentScheduleID != null) {
+        //get standing data from api
+        await standingservice.GetStandingsByScheduleID(div?.currentScheduleID)
+          .then((res) => {
+            StandingData = res.data;
+          })
+          .catch((error) => { 
+          });
+      }
+      }
+      else {
+        nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID, {path: "/"});
+        //get scheduels for division from api
+        await scheduleservice.GetListOfSchedulesByDivisionID(listOfDivisions[0]?.divisionID)
+        .then((res) => {
+          listOfSchedules = res.data;
+        })
+        .catch((error) => {
+        });
+  
+  
+      if (listOfDivisions[0]?.currentScheduleID != null) {
+        //get standing data from api
+        await standingservice.GetStandingsByScheduleID(listOfDivisions[0]?.currentScheduleID)
+          .then((res) => {
+            StandingData = res.data;
+          })
+          .catch((error) => { 
+          });
+      }
+      }
     }
-  }
+
 
   return {
     props: {
       LoginSession: loginSessionData,
-      DivisionList: listOfDivisions.filter(d => d.teamCount != null),
+      DivisionList: listOfDivisions,
       SchedulesForFirstDivision: listOfSchedules,
-      CurrentStandingData: StandingData
+      CurrentStandingData: StandingData,
+      selectedDivName: cookies['selected_division'] != undefined ? listOfDivisions.filter(x => x.divisionID == cookies['selected_division'])[0]?.divisionName  : listOfDivisions?.length > 0 ? listOfDivisions[0]?.divisionName : "",
+      selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null)[0]?.divisionID : 0
     },
   };
 }
