@@ -1,5 +1,7 @@
 //default react imports
 import React, { useState, useEffect } from "react";
+import nookies from "nookies";
+import { parseCookies, setCookie, destroyCookie } from "nookies";
 //default page stuff
 import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
@@ -13,17 +15,17 @@ import helpers from "utils/helpers";
 import divisionservice from "services/divisionservice";
 import teamservice from "services/teamservice";
 
-export default function team({LoginSession, DivisionList, TeamList}) {
+export default function team({LoginSession, DivisionList, TeamList, selectedDiv}) {
     //Divisions for dropdown
     const [Divisions, setDivisions] = useState(DivisionList);
     //CurrentSchedule
     const [TeamsToShow, setTeamsToShow] = useState(TeamList);
 
     //Select Division
-    const [SelectedDivisionID, setSelectedDivisionID] = useState(DivisionList?.length > 0 ? DivisionList[0]?.divisionID : 0);
+    const [SelectedDivisionID, setSelectedDivisionID] = useState(selectedDiv);
     const changeDivision = async(evt) => {
       setSelectedDivisionID(evt.target.value);
-
+      setCookie(null, 'selected_division', evt.target.value);
       //check if the no division is selected or one of the other divisions
       if(evt.target.value == 0)
       {
@@ -94,30 +96,59 @@ export default function team({LoginSession, DivisionList, TeamList}) {
 }
 
 export async function getServerSideProps(context) {
-  
+  //parse cookies
+  const cookies = nookies.get(context);
+
   const loginSessionData = await helpers.GetLoginSession(context.req);
-    //Get division names and id and get the list of teams for the first division in the list
-    let listOfDivisions = [];
-    let listOfTeams = null;
-    //Get division data from api
-    await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data }).catch(err => {});
+  //Get division names and id and get the list of teams for the first division in the list
+  let listOfDivisions = [];
+  let listOfTeams = null;
+  //Get division data from api
+  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data.filter(d => d.teamCount != null) }).catch(err => {});
     
       //check if there are divisions, if yes check if the first division has teams
   if (listOfDivisions?.length > 0) {
-    //get division teams from api
-    await teamservice.GetListOfTeamsByDivisionID(listOfDivisions[0]?.divisionID)
-      .then((res) => {
-        listOfTeams = res.data;
-      })
-      .catch((error) => {
-      });
+
+    if(cookies['selected_division'] == 0)
+    {
+        //get division teams from api
+        await teamservice.GetListOfTeamsWithoutDivisions()
+        .then((res) => {
+          listOfTeams = res.data;
+        })
+        .catch((error) => {
+        });
+    }
+    else {
+
+    if (cookies != null && cookies['selected_division'] != undefined && listOfDivisions.filter(x => x.divisionID == cookies['selected_division']).length != 0) {
+          //get division teams from api
+          await teamservice.GetListOfTeamsByDivisionID(cookies['selected_division'])
+          .then((res) => {
+            listOfTeams = res.data;
+          })
+          .catch((error) => {
+          });
+      }
+      else {
+        nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID);
+        //get division teams from api
+        await teamservice.GetListOfTeamsByDivisionID(listOfDivisions[0]?.divisionID)
+        .then((res) => {
+          listOfTeams = res.data;
+        })
+        .catch((error) => {
+        });
+      }
+    }
   }
 
   return {
       props: {
           LoginSession: loginSessionData,
-          DivisionList: listOfDivisions.filter(d => d.teamCount != null) != [] ? listOfDivisions.filter(d => d.teamCount != null) : [{divisionID: 0, divisionName: "Division-less Teams"}],
-          TeamList: listOfTeams
+          DivisionList: listOfDivisions != [] ? listOfDivisions : [{divisionID: 0, divisionName: "Division-less Teams"}],
+          TeamList: listOfTeams,
+          selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null)[0]?.divisionID : 0
       },
   };
 }
