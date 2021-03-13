@@ -31,7 +31,7 @@ export default function schedules({ LoginSession, DivisionList, SchedulesForFirs
     setSelectedDivisionID(evt.target.value);
 
     const selectedDivision = Divisions.filter(d => d.divisionID == evt.target.value)[0];
-    setCookie(null, 'selected_division', selectedDivision.divisionID);
+    setCookie(null, 'selected_division', selectedDivision.divisionID, {path: "/"});
     //set currentSchedule
     setSelectedPeriod(selectedDivision?.currentScheduleID);
     //Get all schedules for the selected division
@@ -119,54 +119,29 @@ export async function getServerSideProps(context) {
 
   //check if there are divisions, if yes check if the first division has a schedule and get it
   if (listOfDivisions?.length > 0) {
-    if (cookies != null) {
-      if (cookies['selected_division'] != undefined) {
-        if (listOfDivisions.filter(x => x.divisionID == cookies['selected_division']).length == 0) {
-          nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID);
-          //get schedule data from api
-          await scheduleservice.GetListOfSchedulesByDivisionID(listOfDivisions[0]?.divisionID)
-            .then((res) => {
-              listOfSchedules = res.data;
-            })
-            .catch((error) => {
-            });
-          if (listOfDivisions[0]?.currentScheduleID != null) {
-            //get schedule data from api
-            await scheduleservice.GetScheduleDetailsByScheduleID(listOfDivisions[0]?.currentScheduleID)
-              .then((res) => {
-                ScheduleData = res.data;
-              })
-              .catch((error) => {
-              });
-          }
-        }
-        else {
-          //get schedule data from api
-          await scheduleservice.GetListOfSchedulesByDivisionID(cookies['selected_division'])
-            .then((res) => {
-              listOfSchedules = res.data;
-            })
-            .catch((error) => {
-            });
+    if (cookies != null && cookies['selected_division'] != undefined && listOfDivisions.filter(x => x.divisionID == cookies['selected_division']).length != 0) {
+      //get schedule data from api
+      await scheduleservice.GetListOfSchedulesByDivisionID(cookies['selected_division'])
+        .then((res) => {
+          listOfSchedules = res.data;
+        })
+        .catch((error) => {
+        });
 
-          //current division object
-          const currentDiv = listOfDivisions.filter(x => x.divisionID == cookies['selected_division'])[0];  
+      const div = listOfDivisions.filter(x => x.divisionID == cookies['selected_division'])[0];
 
-          if (currentDiv?.currentScheduleID != null) {
-            //get schedule data from api
-            await scheduleservice.GetScheduleDetailsByScheduleID(currentDiv?.currentScheduleID)
-              .then((res) => {
-                ScheduleData = res.data;
-              })
-              .catch((error) => {
-              });
-          }
+      if (div?.currentScheduleID != null) {
+        //get schedule data from api
+        await scheduleservice.GetScheduleDetailsByScheduleID(div?.currentScheduleID)
+          .then((res) => {
+            ScheduleData = res.data;
+          })
+          .catch((error) => {
+          });
         }
-      }
     }
     else {
-      //set
-      nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID);
+      nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID, {path: "/"});
       //get schedule data from api
       await scheduleservice.GetListOfSchedulesByDivisionID(listOfDivisions[0]?.divisionID)
         .then((res) => {

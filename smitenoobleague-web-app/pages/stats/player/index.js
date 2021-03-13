@@ -46,7 +46,7 @@ export default function player({LoginSession, DivisionList, PlayerList, selected
       const [SelectedDivisionID, setSelectedDivisionID] = useState(selectedDiv);
       const changeDivision = async(evt) => {
         setSelectedDivisionID(evt.target.value);
-        setCookie(null, 'selected_division', evt.target.value);
+        setCookie(null, 'selected_division', evt.target.value, {path: "/"});
         setSearchValue("");
         //check if the no division is selected or one of the other divisions
         if(evt.target.value == 0)
@@ -174,7 +174,7 @@ if (listOfDivisions?.length > 0) {
       });
     }
     else {
-      nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID);
+      nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID, {path: "/"});
       //get division players from api
       await playerservice.GetListOfPlayersByDivisionID(listOfDivisions[0]?.divisionID)
       .then((res) => {

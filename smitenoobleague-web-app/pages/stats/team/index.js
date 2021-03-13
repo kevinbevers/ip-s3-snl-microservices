@@ -25,7 +25,7 @@ export default function team({LoginSession, DivisionList, TeamList, selectedDiv}
     const [SelectedDivisionID, setSelectedDivisionID] = useState(selectedDiv);
     const changeDivision = async(evt) => {
       setSelectedDivisionID(evt.target.value);
-      setCookie(null, 'selected_division', evt.target.value);
+      setCookie(null, 'selected_division', evt.target.value, {path: "/"});
       //check if the no division is selected or one of the other divisions
       if(evt.target.value == 0)
       {
@@ -131,7 +131,7 @@ export async function getServerSideProps(context) {
           });
       }
       else {
-        nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID);
+        nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID, {path: "/"});
         //get division teams from api
         await teamservice.GetListOfTeamsByDivisionID(listOfDivisions[0]?.divisionID)
         .then((res) => {

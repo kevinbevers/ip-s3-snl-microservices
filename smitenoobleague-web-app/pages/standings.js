@@ -35,7 +35,7 @@ export default function standings({LoginSession, DivisionList, SchedulesForFirst
   const changeDivision = async(evt) => {
     //set the division id
     setSelectedDivisionID(evt.target.value);
-    setCookie(null, 'selected_division', evt.target.value);
+    setCookie(null, 'selected_division', evt.target.value, {path: "/"});
     //get division object
     const selectedDivision = Divisions.filter(d => d.divisionID == evt.target.value)[0];
     //set the name
@@ -132,9 +132,12 @@ export async function getServerSideProps(context) {
         })
         .catch((error) => {
         });
-      if (listOfDivisions[0]?.currentScheduleID != null) {
+
+      const div = listOfDivisions.filter(x => x.divisionID == cookies['selected_division'])[0];
+
+      if (div?.currentScheduleID != null) {
         //get standing data from api
-        await standingservice.GetStandingsByScheduleID(cookies['selected_division'])
+        await standingservice.GetStandingsByScheduleID(div?.currentScheduleID)
           .then((res) => {
             StandingData = res.data;
           })
@@ -143,7 +146,7 @@ export async function getServerSideProps(context) {
       }
       }
       else {
-        nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID);
+        nookies.set(context, 'selected_division', listOfDivisions[0]?.divisionID, {path: "/"});
         //get scheduels for division from api
         await scheduleservice.GetListOfSchedulesByDivisionID(listOfDivisions[0]?.divisionID)
         .then((res) => {
