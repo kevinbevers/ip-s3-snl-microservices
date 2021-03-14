@@ -47,14 +47,14 @@ export default function standings({LoginSession, DivisionList, SchedulesForFirst
     .then(res => { setSchedules(res.data);}).catch(err => { setSchedules([{scheduleID: 0, scheduleName: "No schedules"}]);});
     //Get all the schedule divisions for the current schedule
     await standingservice.GetStandingsByScheduleID(selectedDivision.currentScheduleID)
-    .then(res => {  setStanding(res.data);}).catch(err => {console.log("hello"); setStanding(null);});
+    .then(res => {  setStanding(res.data);}).catch(err => {setStanding(null);});
  
   }
   //Select Standing
   const [SelectedPeriod, setSelectedPeriod] = useState(DivisionList?.length > 0 ? DivisionList[0]?.currentScheduleID : 0);
   const changePeriod = async(evt) => {
     setSelectedPeriod(evt.target.value);
-    await standingservice.GetStandingsByScheduleID(evt.target.value).then(res => {setStanding(res.data);}).catch(err => {console.log(err); setStanding(null)});
+    await standingservice.GetStandingsByScheduleID(evt.target.value).then(res => {setStanding(res.data);}).catch(err => {setStanding(null)});
   };
 
   return (

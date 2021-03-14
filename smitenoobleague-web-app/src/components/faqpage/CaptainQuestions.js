@@ -35,7 +35,9 @@ return (
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="0">
             <Card.Body>
-            <p className="m-0">On the captainpage you will see big button with manage team members; use it, it is pretty self explanatory.</p>
+            <p className="m-0">On the captainpage you can easily your manage team members; use it, it is pretty self explanatory.<br />
+            You can easily drag & drop your team members to change their roles and you can also easily add and replace members with the click of a button.
+            </p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>
