@@ -30,9 +30,9 @@ function Home({LoginSession}) {
         <p className="smallText">
         Wondering what's coming up for the Smitenoobleague? check out the <a href="/roadmap">roadmap</a>!
         </p>
-        <h4 className="font-weight-bold mb-0">Sign up now!</h4>
+        <h4 className="font-weight-bold mb-0">Sign up!</h4>
         <p className="smallText">
-        If you want to sign up as a team you should send an e-mail to <a href="mailto:signup@smitenoobleague.com?SUBJECT=Sign up for captain">signup@smitenoobleague.com</a> with the following information:<br />
+        If you want to sign up as a team captain you should send an e-mail to <a href="mailto:signup@smitenoobleague.com?SUBJECT=Sign up for captain">signup@smitenoobleague.com</a> with the following information:<br />
           - Your Gamertag / IGN.<br />
           - Your Platform.<br />
           - Your Region <br />
