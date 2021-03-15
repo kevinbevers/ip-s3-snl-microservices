@@ -113,18 +113,10 @@ namespace smiteapi_microservice.Services
                 MatchData match = await _hirezApiService.GetMatchDetailsAsync((int)submission.gameID);
 
                 //check return message from api. if the return msg is null the match is valid
-                if (match?.ret_msg != null)
+                if (match?.ret_msg != null && !match.ret_msg.ToString().Contains("Privacy flag set for player(s):"))
                 {
-                    if (!match.ret_msg.ToString().Contains("Privacy flag set for player(s):"))
-                    {
-                        return await SaveGameIdAndSendToStatsAsync(submission, match);
-                    }
-                    else
-                    {
-                        //something went wrong even when the matchData should have been available. because it is 7 days later
-                        return new ObjectResult(match.ret_msg) { StatusCode = 404 }; //BAD REQUEST
-                                                                                     //Node scheduler will add a new scheduled job 2 hours later to try to get the data again
-                    }
+                    //something went wrong even when the matchData should have been available. because it is 7 days later
+                    return new ObjectResult(match.ret_msg) { StatusCode = 404 }; //BAD REQUEST
                 }
                 else
                 {
