@@ -183,6 +183,7 @@ namespace smiteapi_microservice.Services
                     _db.Remove(entry);
                     await _db.SaveChangesAsync();
                 }
+                _logger.LogDebug("Privacy flag set, but still sending to savematch for email");
                 //send data to stat service
                 return await _externalServices.SaveMatchdataToStatService(match);
             }
