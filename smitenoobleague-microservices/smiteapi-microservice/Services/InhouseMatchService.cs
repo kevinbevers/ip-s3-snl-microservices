@@ -202,7 +202,7 @@ namespace smiteapi_microservice.Services
             if (msg.Contains("MatchDetails are intentionally hidden"))
             {
                 //match data becomes available after 7 days. datetime is greenwich maintime as my understanding.
-                string plannedDate = match.EntryDate.AddDays(7).ToString("s");
+                string plannedDate = match.EntryDate.AddDays(7).AddHours(1).ToString("s");
 
                 //add a schedule queue object to the schedule queue database table
                 _db.Add(new TableQueueInhouse { GameId = (int)submission.gameID, QueueDate = match.EntryDate.AddDays(7), QueueState = false, PatchVersion = submission.patchNumber });

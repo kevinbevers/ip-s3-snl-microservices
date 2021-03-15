@@ -22,21 +22,32 @@ namespace division_microservice.Classes
             teams.AddRange(ListTeam); // Copy all the elements.
             teams.RemoveAt(0); // To exclude the first team.
 
-            matchups.AddRange(RoundRobin(ListTeam, teams));
-            matchups.AddRange(RoundRobinInverted(ListTeam,teams));
+            int numTeams = ListTeam.Count();
+            int numWeeks = (numTeams - 1);
+            int numTeamsHalf = numTeams / 2;
+            int teamsSize = teams.Count();
+            //make sure that first team in schedule isn't always home for first part and always away for second.
+            List<int> randomHomeAwayFirstTeamInList = new List<int>();
+            Random rand = new Random();
+            for (int i = 0; i < numWeeks; i++)
+            {
+                //for each week add a random value of home and away to make sure the first team is not always home team in during the first part of the split.
+                int randomNumber = rand.Next(1, 100);
+                randomHomeAwayFirstTeamInList.Add(randomNumber % 2 == 0 ? 1 : 2);
+            }
+
+
+            matchups.AddRange(RoundRobin(ListTeam, teams, numWeeks,numTeamsHalf,teamsSize, randomHomeAwayFirstTeamInList));
+            matchups.AddRange(RoundRobinInverted(ListTeam,teams, numWeeks, numTeamsHalf, teamsSize, randomHomeAwayFirstTeamInList));
 
             //return schedule
             return matchups;
 
         }
 
-        private static IList<Matchup> RoundRobin(IList<Team> ListTeam, IList<Team> teams)
+        private static IList<Matchup> RoundRobin(IList<Team> ListTeam, IList<Team> teams,int numWeeks, int numTeamsHalf, int teamsSize, List<int> randomHomeOrAway)
         {
             IList<Matchup> matchups = new List<Matchup>();
-            int numTeams = ListTeam.Count();
-            int numWeeks = (numTeams - 1);
-            int numTeamsHalf = numTeams / 2;
-            int teamsSize = teams.Count();
             //matchup id
             int matchID = 0;
 
@@ -51,8 +62,8 @@ namespace division_microservice.Classes
                 {
                     MatchupID = matchID,
                     WeekNumber = week + 1,
-                    HomeTeam = ListTeam[0],
-                    AwayTeam = teams[teamIdx],
+                    HomeTeam = randomHomeOrAway[week] == 1 ? ListTeam[0] : teams[teamIdx],
+                    AwayTeam = randomHomeOrAway[week] == 1 ? teams[teamIdx] : ListTeam[0],
                     ByeWeek = teams[teamIdx].TeamID == 999999 || ListTeam[0].TeamID == 999999 ? true : false,
                 });
 
@@ -76,13 +87,9 @@ namespace division_microservice.Classes
             }
             return matchups;
         }
-        private static IList<Matchup> RoundRobinInverted(IList<Team> ListTeam, IList<Team> teams)
+        private static IList<Matchup> RoundRobinInverted(IList<Team> ListTeam, IList<Team> teams, int numWeeks, int numTeamsHalf, int teamsSize, List<int> randomHomeOrAway)
         {
             IList <Matchup> matchups = new List<Matchup>();
-            int numTeams = ListTeam.Count();
-            int numWeeks = (numTeams - 1);
-            int numTeamsHalf = numTeams / 2;
-            int teamsSize = teams.Count();
             //matchup id
             int matchID = 0;
 
@@ -97,8 +104,8 @@ namespace division_microservice.Classes
                 {
                     MatchupID = matchID,
                     WeekNumber = week + 1,
-                    HomeTeam = teams[teamIdx],
-                    AwayTeam = ListTeam[0],
+                    HomeTeam = randomHomeOrAway[week - numWeeks] == 1 ? teams[teamIdx] : ListTeam[0],
+                    AwayTeam = randomHomeOrAway[week - numWeeks] == 1 ? ListTeam[0] : teams[teamIdx],
                     ByeWeek = teams[teamIdx].TeamID == 999999 || ListTeam[0].TeamID == 999999 ? true : false,
                 });
 
