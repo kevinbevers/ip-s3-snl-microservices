@@ -113,7 +113,7 @@ namespace smiteapi_microservice.Services
                 MatchData match = await _hirezApiService.GetMatchDetailsAsync((int)submission.gameID);
 
                 //check return message from api. if the return msg is null the match is valid
-                if (match?.ret_msg != null && !match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+                if (match?.ret_msg != null && !match.ret_msg.ToString().Contains("Privacy flag set for player(s):"))
                 {
                     match.ret_msg += " Resubmit after the privacy option has been disabled for the player(s) in question.";
                     //something went wrong even when the matchData should have been available. because it is 7 days later
@@ -168,7 +168,7 @@ namespace smiteapi_microservice.Services
             //Add or update the submission entry in the database
             TableQueue entry = await _db.TableQueues.Where(entry => entry.GameId == submission.gameID).FirstOrDefaultAsync();
 
-            if (match?.ret_msg != null && match.ret_msg.ToString().Contains("Privacy flag set for one or more players.. Player(s):"))
+            if (match?.ret_msg != null && match.ret_msg.ToString().Contains("Privacy flag set for player(s):"))
             {
                 match.ret_msg += " Resubmit after the privacy option has been disabled for the player(s) in question.";
                 //if privacy flag was set remove the id from the queue table so it can be resubmitted.
@@ -231,7 +231,7 @@ namespace smiteapi_microservice.Services
                 return new ObjectResult(msg) { StatusCode = 200 }; //OK
             }
 
-            if (msg.Contains("Privacy flag set for one or more players.. Player(s):"))
+            if (msg.Contains("Privacy flag set for player(s):"))
             {
                 msg += ". Resubmit after the privacy option has been disabled for the player(s) in question.";
             }
