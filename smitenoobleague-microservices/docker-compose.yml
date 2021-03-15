@@ -68,6 +68,8 @@ services:
         - smtpHostPort=${smtpHostPort}
     depends_on:
       - db
+    volumes:
+      - ./stat-microservice/EmailTemplate.html:/app/EmailTemplate.html
 
   inhouse-microservice:
     image: ${DOCKER_REGISTRY-}inhousemicroservice
