@@ -816,8 +816,8 @@ namespace stat_microservice.Services
         private async Task SendSuccessMail(MatchData match, TeamWithDetails winnerTeam, TeamWithDetails loserTeam, string winnerCaptainMail, string loserCaptainMail, int gameNumber, string msg)
         {
             string title = "Match submitted successfully";
-            string messageWinner = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {loserTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/{match.GameID} <br />";
-            string messageLoser = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {winnerTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/{match.GameID}  <br />";
+            string messageWinner = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {loserTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/" + $"{match.GameID} <br />";
+            string messageLoser = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {winnerTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/" + $"{match.GameID} <br />";
 
             await _externalServices.SendEmailNotificationToCaptainAsync(messageWinner, title, winnerCaptainMail);
             await _externalServices.SendEmailNotificationToCaptainAsync(messageLoser, title, loserCaptainMail);
