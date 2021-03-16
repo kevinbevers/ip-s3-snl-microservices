@@ -372,7 +372,7 @@ namespace stat_microservice.Services
                             int gameNumber = homeTeamWinCount + awayTeamWinCount;
                             string gameDate = match.EntryDate.ToString("dddd dd MMMM yyyy 'at' H:mm");
                             string coolMailMessage = $"The match was played on {gameDate}. <br /> The match took {match.MatchDuration}.";
-                            await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage);
+                            await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage, validMatchup.matchup.MatchupID);
 
                             return new ObjectResult("Match stats successfully saved") { StatusCode = 200 };
                         }
@@ -391,7 +391,7 @@ namespace stat_microservice.Services
                         int gameNumber = 1;
                         string gameDate = match.EntryDate.ToString("dddd dd MMMM yyyy 'at' H:mm");
                         string coolMailMessage = $"The match was played on {gameDate}. <br /> The match took {match.MatchDuration}.";
-                        await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage);
+                        await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage, validMatchup.matchup.MatchupID);
 
                         return new ObjectResult("Match stats successfully saved") { StatusCode = 200 };
 
@@ -813,11 +813,11 @@ namespace stat_microservice.Services
             await _externalServices.SendEmailNotificationToCaptainAsync(messageLoser, title, loserCaptainMail);
         }
 
-        private async Task SendSuccessMail(MatchData match, TeamWithDetails winnerTeam, TeamWithDetails loserTeam, string winnerCaptainMail, string loserCaptainMail, int gameNumber, string msg)
+        private async Task SendSuccessMail(MatchData match, TeamWithDetails winnerTeam, TeamWithDetails loserTeam, string winnerCaptainMail, string loserCaptainMail, int gameNumber, string msg, int matchupID)
         {
             string title = "Match submitted successfully";
-            string messageWinner = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {loserTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/" + $"{match.GameID} <br />";
-            string messageLoser = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {winnerTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/" + $"{match.GameID} <br />";
+            string messageWinner = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {loserTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/" + $"{matchupID} <br />";
+            string messageLoser = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {winnerTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/" + $"{matchupID} <br />";
 
             await _externalServices.SendEmailNotificationToCaptainAsync(messageWinner, title, winnerCaptainMail);
             await _externalServices.SendEmailNotificationToCaptainAsync(messageLoser, title, loserCaptainMail);
