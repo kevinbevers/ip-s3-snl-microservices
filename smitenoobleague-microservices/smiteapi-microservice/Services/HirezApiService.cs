@@ -96,7 +96,7 @@ namespace smiteapi_microservice.Services
                                 {
                                     GodId = bansIds[i],
                                     GodName = banNames[i],
-                                    GodIcon = "https://web2.hirez.com/smite/god-icons/" + godname + ".jpg"
+                                    GodIcon = "https://webcdn.hirezstudios.com/smite/god-icons/" + godname + ".jpg"
                                 };
                                 //add to list of bans
                                 match.BannedGods.Add(ban);
@@ -186,7 +186,7 @@ namespace smiteapi_microservice.Services
                                 IngameTeamID = mp.TaskForce,
                                 Won = mp.TaskForce == mp.Winning_TaskForce ? true : false,
                                 FirstBanSide = mp.Win_Status == mp.First_Ban_Side ? true : false,
-                                God = new God { GodId = mp.GodId, GodName = mp.Reference_Name, GodIcon = "https://web2.hirez.com/smite/god-icons/" + godname + ".jpg" },
+                                God = new God { GodId = mp.GodId, GodName = mp.Reference_Name, GodIcon = "https://webcdn.hirezstudios.com/smite/god-icons/" + godname + ".jpg" },
                                 //DMG
                                 DamageDealt = mp.Damage_Player,
                                 DamageTaken = mp.Damage_Taken,
@@ -203,8 +203,8 @@ namespace smiteapi_microservice.Services
                                 //Relics
                                 Relic1ID = mp.ActiveId1,
                                 Relic2ID = mp.ActiveId2,
-                                Relic1Icon = relic1 != "" ? "https://web2.hirez.com/smite/item-icons/" + relic1 + ".jpg" : "/images/noimage1.png",
-                                Relic2Icon = relic2 != "" ? "https://web2.hirez.com/smite/item-icons/" + relic2 + ".jpg" : "/images/noimage1.png",
+                                Relic1Icon = relic1 != "" ? "https://webcdn.hirezstudios.com/smite/item-icons/" + relic1 + ".jpg" : "/images/noimage1.png",
+                                Relic2Icon = relic2 != "" ? "https://webcdn.hirezstudios.com/smite/item-icons/" + relic2 + ".jpg" : "/images/noimage1.png",
                                 Relic1Name = mp.Item_Active_1,
                                 Relic2Name = mp.Item_Active_2,
                                 //Items
@@ -214,12 +214,12 @@ namespace smiteapi_microservice.Services
                                 Item4ID = mp.ItemId4,
                                 Item5ID = mp.ItemId5,
                                 Item6ID = mp.ItemId6,
-                                Item1Icon = item1 != "" ? "https://web2.hirez.com/smite/item-icons/" + item1 + ".jpg" : "/images/noimage1.png",
-                                Item2Icon = item2 != "" ? "https://web2.hirez.com/smite/item-icons/" + item2 + ".jpg" : "/images/noimage1.png",
-                                Item3Icon = item3 != "" ? "https://web2.hirez.com/smite/item-icons/" + item3 + ".jpg" : "/images/noimage1.png",
-                                Item4Icon = item4 != "" ? "https://web2.hirez.com/smite/item-icons/" + item4 + ".jpg" : "/images/noimage1.png",
-                                Item5Icon = item5 != "" ? "https://web2.hirez.com/smite/item-icons/" + item5 + ".jpg" : "/images/noimage1.png",
-                                Item6Icon = item6 != "" ? "https://web2.hirez.com/smite/item-icons/" + item6 + ".jpg" : "/images/noimage1.png",
+                                Item1Icon = item1 != "" ? "https://webcdn.hirezstudios.com/smite/item-icons/" + item1 + ".jpg" : "/images/noimage1.png",
+                                Item2Icon = item2 != "" ? "https://webcdn.hirezstudios.com/smite/item-icons/" + item2 + ".jpg" : "/images/noimage1.png",
+                                Item3Icon = item3 != "" ? "https://webcdn.hirezstudios.com/smite/item-icons/" + item3 + ".jpg" : "/images/noimage1.png",
+                                Item4Icon = item4 != "" ? "https://webcdn.hirezstudios.com/smite/item-icons/" + item4 + ".jpg" : "/images/noimage1.png",
+                                Item5Icon = item5 != "" ? "https://webcdn.hirezstudios.com/smite/item-icons/" + item5 + ".jpg" : "/images/noimage1.png",
+                                Item6Icon = item6 != "" ? "https://webcdn.hirezstudios.com/smite/item-icons/" + item6 + ".jpg" : "/images/noimage1.png",
                                 Item1Name = mp.Item_Purch_1,
                                 Item2Name = mp.Item_Purch_2,
                                 Item3Name = mp.Item_Purch_3,
