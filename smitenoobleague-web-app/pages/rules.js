@@ -132,9 +132,10 @@ export default function rules({LoginSession}) {
           </p>
           <h5 id="rule1.7" className="font-weight-bold">1.7. Submitting the match id’s</h5>
           <p>
-          The captain of the home team is responsible for submitting the match id’s after each game is played. Failing to do so will result in a warning.
+          The captain of the home team is responsible for submitting the match ID after each game is played. On the first instance, failing to do so will result in a forfeit of that game as no proof is provided. <br />
+          There will not be opportunity to replay the game as this could be exploited to change the outcome of the set overall.
           <br /><br />
-          Upon repeated offense of this rule. The violating team will receive a 5-point deduction of their current split standings.
+          Upon repeatedly neglecting to submit the match ID a 5-point deduction of current split standings for the violating team will be implemented.
           </p>
           {/* Rules Section 2 */}
           <h4 id="rule2" className="font-weight-bold">2. Scheduling rules</h4>
