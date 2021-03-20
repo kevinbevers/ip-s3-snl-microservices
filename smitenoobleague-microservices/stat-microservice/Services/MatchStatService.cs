@@ -534,7 +534,7 @@ namespace stat_microservice.Services
                     TeamId = snlTeam.TeamID,
                     PlayerIsFill = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.Player.PlayerID).Count() <= 0,
                     WinStatus = p.Won,
-                    RoleId = playerRoleId != null ? playerRoleId : RoleIdForFill,
+                    RoleId = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.Player.PlayerID).Count() <= 0 ? RoleIdForFill : playerRoleId,
                     PlayerId = p.Player.PlayerID,
                     PlayerName = p.Player.Playername,
                     PlayerPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), p.Player.Platform),
