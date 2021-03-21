@@ -309,12 +309,12 @@ namespace stat_microservice.Services
                     if (validMatchup == null)
                     {
                         await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"There was no scheduled matchup found between these teams.");
-                        return new ObjectResult("There was no scheduled matchup found between these teams.") { StatusCode = 404 };
+                        return new ObjectResult("There was no scheduled matchup found between these teams.") { StatusCode = 400 };
                     }
                     else if(m == null)
                     {
                         await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"There was no valid matchup found between these teams. <br /> A match can't be played before it's scheduled. <br /> Missed a match? you have 2 weeks max to catch up.");
-                        return new ObjectResult("There was no valid matchup found between these teams.") { StatusCode = 404 };
+                        return new ObjectResult("There was no valid matchup found between these teams.") { StatusCode = 400 };
                     }
                     #endregion
 
@@ -337,6 +337,12 @@ namespace stat_microservice.Services
                     //Not the first gameID for this planned matchup
                     if (previousMatchupResults?.Count() > 0)
                     {
+                        if(previousMatchupResults.Where(x => x.GameId == matchResultToAdd.GameId).Count() > 0)
+                        {
+                            return new ObjectResult("The submitted match was useless the game is already in the database.") { StatusCode = 400 };
+                        }
+
+
                         int homeTeamID = m.HomeTeam.TeamID;
                         int awayTeamID = m.AwayTeam.TeamID;
                         //Use the previousMatchResults to decide which game this is and if it needs to be added or the match was already decided.
@@ -515,7 +521,7 @@ namespace stat_microservice.Services
             //Get the RoleID for the fill player
             var playerIds = players.Select(x => x.Player.PlayerID).ToList(); //get all players in the match
             var availableRoles = snlTeam?.TeamMembers?.Select(x => new { x.TeamMemberRole, x.PlayerID }).ToList(); // create list of available roles
-            int? RoleIdForFill = availableRoles.Where(x => playerIds.Contains(x.PlayerID)).Select(y => y.TeamMemberRole.RoleID).FirstOrDefault(); //filter out the fill
+            int? RoleIdForFill = availableRoles.Where(x => !playerIds.Contains(x.PlayerID)).Select(y => y.TeamMemberRole.RoleID).FirstOrDefault(); //filter out the fill
 
             foreach (var p in players)
             {

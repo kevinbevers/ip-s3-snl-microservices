@@ -95,11 +95,13 @@ function CallSmiteApi(id, patch, date) {
       console.log("scheduled job ran unsuccessfull with the following data: {" + "id: " + id + " @: " + date + "}");
       //Log the response text
       console.error(error.response.data);
-
+      if(error?.response?.statusCode == 404)
+      {
       //reschedule with + 2 hours
       date = date.addHours(2);
       ScheduleGame(date, patch, id);
-    }).catch(error => { console.error(error); });
+      }
+    });
 }
 
 function CallSmiteApiInhouse(id, patch, date) {
