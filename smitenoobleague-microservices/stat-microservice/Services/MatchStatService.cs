@@ -167,7 +167,7 @@ namespace stat_microservice.Services
 
                             for (int i = 0; i < 10; i++)
                             {
-                                if (bansIds[i] != null)
+                                if (bansIds[i] != null && bansIds[i] != 0)
                                 {
                                     TableGodDetail god = allGods.Where(bg => bg.GodId == bansIds[i]).FirstOrDefault();
 
@@ -185,7 +185,7 @@ namespace stat_microservice.Services
                                     //passed ban
                                     God ban = new God
                                     {
-                                        GodId = bansIds[i],
+                                        GodId = null,
                                         GodIcon = null,
                                     };
                                     matchData.BannedGods.Add(ban);
