@@ -235,7 +235,7 @@ namespace smiteapi_microservice.Services
                 msg += ". Resubmit after the privacy option has been disabled for the player(s) in question.";
             }
 
-            return new ObjectResult(msg) { StatusCode = 400 }; //BAD REQUEST
+            return new ObjectResult(msg) { StatusCode = 404 }; //BAD REQUEST
 
 
         }
