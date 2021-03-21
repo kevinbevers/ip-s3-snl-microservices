@@ -21,7 +21,7 @@ export default function matchhistory({LoginSession, MatchHistory}) {
   const loadMoreMatches = async() => {
     if(matchesRemaining)
     {
-      await matchservice.GetMatchupHistoryList(1,index)
+      await matchservice.GetMatchupHistoryList(10,index)
       .then(res => {
         setMatchHistoryState(MatchHistoryState.concat(res.data)); 
         setIndex(index + 1); 

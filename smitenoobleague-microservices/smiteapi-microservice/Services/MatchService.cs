@@ -215,7 +215,7 @@ namespace smiteapi_microservice.Services
             if (msg.Contains("MatchDetails are intentionally hidden"))
             {
                 //match data becomes available after 7 days. datetime is greenwich maintime as my understanding.
-                string plannedDate = match.EntryDate.AddDays(7).AddHours(1).ToString("s");
+                string plannedDate = match.EntryDate.AddDays(7).AddHours(1).AddMinutes(30).ToString("s");
 
                 //add a schedule queue object to the schedule queue database table
                 _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = match.EntryDate.AddDays(7), QueueState = false, PatchVersion = submission.patchNumber });
@@ -224,7 +224,7 @@ namespace smiteapi_microservice.Services
                 //call the nodejs schedule api
                 await CallScheduleApiAsync(submission, plannedDate); // _gatewayKey.Key
                 //beautify response
-                string bdate = match.EntryDate.AddDays(7).ToString("dddd d MMMM yyyy 'around' HH:mm 'GMT'");
+                string bdate = match.EntryDate.AddDays(7).AddHours(1).AddMinutes(30).ToString("dddd d MMMM yyyy 'around' HH:mm 'GMT'");
 
                 msg = $"{ResponseText_MatchDetailsHidden} {bdate}";
                 return new ObjectResult(msg) { StatusCode = 200 }; //OK
@@ -235,7 +235,7 @@ namespace smiteapi_microservice.Services
                 msg += ". Resubmit after the privacy option has been disabled for the player(s) in question.";
             }
 
-            return new ObjectResult(msg) { StatusCode = 404 }; //NOT FOUND
+            return new ObjectResult(msg) { StatusCode = 404 }; //BAD REQUEST
 
 
         }

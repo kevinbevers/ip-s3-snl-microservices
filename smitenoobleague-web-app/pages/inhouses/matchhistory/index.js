@@ -20,7 +20,7 @@ export default function matchhistory({LoginSession, MatchHistory, apiToken}) {
   const loadMoreMatches = async() => {
     if(matchesRemaining)
     {
-      await inhouseservice.GetInhouseHistoryList(1,index)
+      await inhouseservice.GetInhouseHistoryList(10,index)
       .then(res => {
         setMatchHistoryState(MatchHistoryState.concat(res.data)); 
         setIndex(index + 1); 
