@@ -116,7 +116,7 @@ export default function rules({LoginSession}) {
               <li>Starting gold: 1500</li>
               <li>Pause type: free</li>
               <li>Bonus time: 90</li>
-              <li>Region: Region of the team setting up (home team)</li>
+              <li>Region: Region of the team's division</li>
               <li>Allow Spectators/Record Demo: On</li>
               <li>Password: SNL(MatchupWeek) e.g., SNLWeek1</li>
               <li>Spectator password: [Leave this blank]</li>
