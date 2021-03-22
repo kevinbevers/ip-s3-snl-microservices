@@ -87,16 +87,16 @@ function CallSmiteApi(id, patch, date) {
     .then(res => {
       //log the response
       console.log("scheduled job ran successfull with the following data: {" + "id: " + id + " @: " + date + "}");
-      console.log(`statusCode: ${res.statusCode}`);
+      console.log(`statusCode: ${res.status}`);
       console.log(res);
     })
     .catch(error => {
       //log the error
       console.log("scheduled job ran unsuccessfull with the following data: {" + "id: " + id + " @: " + date + "}");
       //Log the response text
-      console.error(error.response.data);
-      if(error?.response?.statusCode == 404)
+      if(error?.response?.status == 404)
       {
+      console.log("scheduled for retry in 2 hours.")
       //reschedule with + 2 hours
       date = date.addHours(2);
       ScheduleGame(date, patch, id);
@@ -112,7 +112,7 @@ function CallSmiteApiInhouse(id, patch, date) {
     .then(res => {
       //log the response
       console.log("Inhouse scheduled job ran successfull with the following data: {" + "id: " + id + " @: " + date + "}");
-      console.log(`statusCode: ${res.statusCode}`);
+      console.log(`statusCode: ${res.status}`);
       console.log(res);
     })
     .catch(error => {
