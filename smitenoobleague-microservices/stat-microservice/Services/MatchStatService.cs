@@ -450,12 +450,19 @@ namespace stat_microservice.Services
                     {
                         if (godsToAdd.Where(g => g.GodId == (int)god.GodId).Count() == 0)
                         {
-                            godsToAdd.Add(new TableGodDetail
+                            //godsToAdd.Add(new TableGodDetail
+                            //{
+                            //    GodId = (int)god.GodId,
+                            //    GodIconUrl = god.GodIcon,
+                            //    GodName = god.GodName
+                            //});
+                            _db.TableGodDetails.Add(new TableGodDetail
                             {
                                 GodId = (int)god.GodId,
                                 GodIconUrl = god.GodIcon,
                                 GodName = god.GodName
                             });
+                            await _db.SaveChangesAsync();
                         }
                     }
                 }
@@ -496,21 +503,29 @@ namespace stat_microservice.Services
                     {
                         if (itemsToAdd.Where(i => i.ItemId == (int)item.ItemID).Count() == 0)
                         {
-                            itemsToAdd.Add(new TableItemDetail
+                            //itemsToAdd.Add(new TableItemDetail
+                            //{
+                            //    ItemId = (int)item.ItemID,
+                            //    ItemName = item.ItemName,
+                            //    ItemIconUrl = item.ItemIcon,
+                            //});
+
+                            _db.TableItemDetails.Add(new TableItemDetail
                             {
                                 ItemId = (int)item.ItemID,
                                 ItemName = item.ItemName,
                                 ItemIconUrl = item.ItemIcon,
                             });
+                            await _db.SaveChangesAsync();
                         }
                     }
                 }
             }
-            //add the new items to the database
-            await _db.TableGodDetails.AddRangeAsync(godsToAdd);
-            await _db.TableItemDetails.AddRangeAsync(itemsToAdd);
-            //save changes godtable and itemtable to database
-            await _db.SaveChangesAsync();
+            ////add the new items to the database
+            //await _db.TableGodDetails.AddRangeAsync(godsToAdd);
+            //await _db.TableItemDetails.AddRangeAsync(itemsToAdd);
+            ////save changes godtable and itemtable to database
+            //await _db.SaveChangesAsync();
             #endregion
 
         }
@@ -841,9 +856,9 @@ namespace stat_microservice.Services
 
                 God playedGod = new God
                 {
-                    GodId = p.GodPlayedId,
-                    GodName = god.GodName,
-                    GodIcon = god.GodIconUrl
+                    GodId = p?.GodPlayedId,
+                    GodName = god?.GodName,
+                    GodIcon = god?.GodIconUrl
                 };
 
                 //Get all 6 items and the 2 relics from the DB
