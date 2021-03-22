@@ -221,7 +221,7 @@ export default function rules({LoginSession}) {
           <h5 id="rule5.4" className="font-weight-bold">5.4. Banned skins</h5>
           <p>All skins that are banned in the SPL because they give a competitive advantage are banned from usage in the Smitenoobleague. If a player gets reported using a banned skin the players team will receive a 5-point score deduction for their current split standings.
           <br /> <br />
-          A list of banned skins in the SPL can be found here: <br /> <a href="https://www.smiteproleague.com/news/smite-pro-league-list-of-banned-skins-season-7">https://www.smiteproleague.com/news/smite-pro-league-list-of-banned-skins-season-7</a>
+          A list of banned skins in the SPL can be found here: <br /> <a href="https://www.smiteproleague.com/news/smite-pro-league-list-of-banned-skins">https://www.smiteproleague.com/news/smite-pro-league-list-of-banned-skins-season-7</a>
           <br /> one Extra skin that is banned is 'Ma Chérie Arachne'
           </p>
           </Col>
