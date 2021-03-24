@@ -179,7 +179,6 @@ function GetInhouseJobsFromDB() {
           console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
           //make api call to get matchdata. in that call it will also update the database
           CallSmiteApiInhouse(id, patch, date);
-          await sleep(2000);
         }
         else {
           console.log("Added " + id + " as scheduled job @: " + date);
@@ -197,8 +196,4 @@ function GetInhouseJobsFromDB() {
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
   return this;
-}
-
-function sleep(millis) {
-  return new Promise(resolve => setTimeout(resolve, millis));
 }
