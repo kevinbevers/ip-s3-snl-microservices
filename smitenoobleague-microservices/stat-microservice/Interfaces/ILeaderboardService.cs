@@ -8,6 +8,6 @@ namespace stat_microservice.Interfaces
 {
     public interface ILeaderboardService
     {
-        public Task<ActionResult<LeaderboardData>> GetLeaderboardDataAsync();
+        public Task<ActionResult<LeaderboardData>> GetLeaderboardDataAsync(int? divisionID);
     }
 }
