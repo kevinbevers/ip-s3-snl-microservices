@@ -14,7 +14,7 @@ const axios = require('axios');
 //export PORT=5003
 
 //INIT. get all scheduled jobs from the database. to prevent schedule loss on restart of node app
-await GetJobsFromDB();
+GetJobsFromDB();
 GetInhouseJobsFromDB();
 
 app.get('/', function (req, res) {
