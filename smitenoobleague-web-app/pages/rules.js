@@ -63,6 +63,7 @@ export default function rules({LoginSession}) {
               <a href="#rule5.2" className="subrule">5.2. Inappropriate player name</a><br />
               <a href="#rule5.3" className="subrule">5.3. Intentional feeding</a><br />
               <a href="#rule5.4" className="subrule">5.4. Banned skins</a><br />
+              <a href="#rule5.5" className="subrule">5.5. In-Game behaviour</a><br />
               </div>
               </Col>
               </Row>
@@ -203,16 +204,17 @@ export default function rules({LoginSession}) {
           Suspended teams and players are not allowed to compete in the Smitenoobleague during the suspension. This includes substituting for other teams.
           </p>
           {/* Rules Section 5 */}
-          <h4 id="rule5" className="font-weight-bold">5. In-game rules</h4>
+          <h4 id="rule5" className="font-weight-bold">5. In-Game rules</h4>
           <p>In this section the in-game rules for players get described.</p>
           <h5 id="rule5.1" className="font-weight-bold">5.1. Pausing</h5>
-          <p>Each team may pause 1 time per match. This pause can last a maximum of 10 minutes.
+          <p>Each team may pause a maximum of 10 minutes per match.
             <br /> <br />
           During a matchup the maximum time the pauses combined can last is 20 minutes. A team may only pause with valid reason. If the reason is deemed invalid the team may need to forfeit the match to the opposing team for false pausing trying to gain a competitive advantage.
           <br /> <br />
           If a match needs to be paused for exceptions the captain of the pausing team should contact the admin. 
           <br />
-          Pauses are not meant to go for a quick walk with the dog or to pee quickly. Or to have a quick tactical talk with the team. Teams using the pause for these reasons may receive point deduction penalty for the current split standings.
+          Pauses are not meant to go for a quick walk with the dog or to pee quickly. Or to have a quick tactical talk with the team. Teams using the pause for these reasons may receive point deduction penalty for the current split standings.<br />
+          Pauses can be used for players that need to reconnect, emergencies or responsibilities out side of smite that need immediate attention.
           </p>
           <h5 id="rule5.2" className="font-weight-bold">5.2. Inappropriate player name</h5>
           <p>When a Player name is deemed inappropriate, they are not allowed to compete in the Smitenoobleague until their name is changed.</p>
@@ -223,6 +225,15 @@ export default function rules({LoginSession}) {
           <br /> <br />
           A list of banned skins in the SPL can be found here: <br /> <a href="https://www.smiteproleague.com/news/smite-pro-league-list-of-banned-skins">Click to view list of banned skins.</a>
           <br /> one Extra skin that is banned is 'Ma Chérie Arachne'
+          </p>
+          <h5 id="rule5.5" className="font-weight-bold">5.5. In-Game behaviour</h5>
+          <p>
+            To keep the league in a healthy environment excessive spam taunting, laughing or otherwise spamming opponents / teammates is not condoned. <br />
+            Not complying with this rule will result in 1 to 5 penalty points for the offending player(s) and can result in a ban from the league.
+            <br />
+            <br />
+            If someone is harrassing or being toxic in your game send a short clip or screenshot of chat to one of the admins so they can review it. <br />
+            Of course spam taunting one or twice can be fun, but excessive use or going out of your way to do so will not be condoned.
           </p>
           </Col>
           <Col md={1} xl={2}></Col>
