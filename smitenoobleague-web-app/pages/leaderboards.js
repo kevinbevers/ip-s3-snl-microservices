@@ -72,7 +72,7 @@ export default function leaderboards({LoginSession, Data, status, errMsg, Divisi
         };
 
         useEffect(() => {
-          setDivisions(Divisions.concat({divisionID: 0, divisionName: "All divisions"}));
+          setDivisions(Divisions?.concat({divisionID: 0, divisionName: "All divisions"}));
           updateGraphs(LeaderboardData);
       }, []);
 
