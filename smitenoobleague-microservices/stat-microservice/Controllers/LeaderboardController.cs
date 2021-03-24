@@ -19,11 +19,11 @@ namespace stat_microservice.Controllers
         {
             _leaderboardService = leaderboardService;
         }
-        // GET: stat-service/playerstat/byplayerid
-        [HttpGet("data")]
-        public async Task<ActionResult<LeaderboardData>> Get()
+        // GET: stat-service/leaderboard/data/{divisionID}
+        [HttpGet("data/{divisionID}")]
+        public async Task<ActionResult<LeaderboardData>> Get(int? divisionID)
         {
-            return await _leaderboardService.GetLeaderboardDataAsync();
+            return await _leaderboardService.GetLeaderboardDataAsync(divisionID);
         }
     }
 }

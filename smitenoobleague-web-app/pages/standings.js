@@ -124,7 +124,7 @@ export async function getServerSideProps(context) {
     
       //check if there are divisions, if yes check if the first division has teams
   if (listOfDivisions?.length > 0) {
-    if (cookies != null && cookies['selected_division'] != undefined && listOfDivisions.filter(x => x.divisionID == cookies['selected_division']).length != 0) {
+    if (cookies != null && cookies['selected_division'] != undefined && cookies['selected_division'] != null && cookies['selected_division'] != 0  && listOfDivisions.filter(x => x.divisionID == cookies['selected_division'])?.length != 0) {
         //get scheduels for division from api
         await scheduleservice.GetListOfSchedulesByDivisionID(cookies['selected_division'])
         .then((res) => {
@@ -175,8 +175,8 @@ export async function getServerSideProps(context) {
       DivisionList: listOfDivisions,
       SchedulesForFirstDivision: listOfSchedules,
       CurrentStandingData: StandingData,
-      selectedDivName: cookies['selected_division'] != undefined ? listOfDivisions.filter(x => x.divisionID == cookies['selected_division'])[0]?.divisionName  : listOfDivisions?.length > 0 ? listOfDivisions[0]?.divisionName : "",
-      selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null)[0]?.divisionID : 0
+      selectedDivName: cookies['selected_division'] != undefined && cookies['selected_division'] != 0 && cookies['selected_division'] != null ? listOfDivisions.filter(x => x.divisionID == cookies['selected_division'])[0]?.divisionName  : listOfDivisions?.length > 0 ? listOfDivisions[0]?.divisionName : "",
+      selectedDiv: cookies['selected_division'] != undefined && cookies['selected_division'] != 0 && cookies['selected_division'] != null ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null)[0]?.divisionID : 0
     },
   };
 }
