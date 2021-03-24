@@ -304,7 +304,7 @@ export async function getServerSideProps(context) {
 
       if(cookies['selected_division'] == 0)
       {
-        nookies.set(context, 'selected_division', null, {path: "/"});
+        nookies.set(context, 'selected_division', 0, {path: "/"});
           //call api for the data
           await leaderboardservice.GetLeaderboardData(null)
             .then(res => { response.data = res.data })
@@ -324,7 +324,7 @@ export async function getServerSideProps(context) {
       if (cookies != null && cookies['selected_division'] != undefined && listOfDivisions.filter(x => x.divisionID == cookies['selected_division']).length != 0) {
           //call api for the data
           await leaderboardservice.GetLeaderboardData(cookies['selected_division'])
-            .then(res => { response.data = res.data })
+            .then(res => { if(res.data?.kills?.length == 0) {response.data = null} else { response.data = res.data} })
             .catch(err => {
               if (err.response == null) {
                 response.statusCode = 503;
@@ -340,7 +340,7 @@ export async function getServerSideProps(context) {
           nookies.set(context, 'selected_division', null, {path: "/"});
           //call api for the data
           await leaderboardservice.GetLeaderboardData(null)
-            .then(res => { response.data = res.data })
+            .then(res => { if(res.data?.kills?.length == 0) {response.data = null} else { response.data = res.data} })
             .catch(err => {
               if (err.response == null) {
                 response.statusCode = 503;
