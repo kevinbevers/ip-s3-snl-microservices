@@ -171,12 +171,20 @@ namespace stat_microservice.Services
                                 {
                                     TableGodDetail god = allGods.Where(bg => bg.GodId == bansIds[i]).FirstOrDefault();
 
-                                    God ban = new God
+
+                                    God ban = new God();
+
+                                    if (god != null)
                                     {
-                                        GodId = bansIds[i],
-                                        GodName = god.GodName,
-                                        GodIcon = god.GodIconUrl
-                                    };
+                                        ban.GodId = god.GodId;
+                                        ban.GodName = god.GodName;
+                                        ban.GodIcon = god.GodIconUrl;
+                                    }
+                                    else
+                                    {
+                                        ban.GodId = null;
+                                        ban.GodIcon = null;
+                                    }
                                     //add to list of bans
                                     matchData.BannedGods.Add(ban);
                                 }
@@ -456,13 +464,23 @@ namespace stat_microservice.Services
                             //    GodIconUrl = god.GodIcon,
                             //    GodName = god.GodName
                             //});
-                            _db.TableGodDetails.Add(new TableGodDetail
+                            try
                             {
-                                GodId = (int)god.GodId,
-                                GodIconUrl = god.GodIcon,
-                                GodName = god.GodName
-                            });
-                            await _db.SaveChangesAsync();
+                                if (await _db.TableGodDetails.Where(g => g.GodId == god.GodId).CountAsync() == 0)
+                                {
+                                    _db.TableGodDetails.Add(new TableGodDetail
+                                    {
+                                        GodId = (int)god.GodId,
+                                        GodIconUrl = god.GodIcon,
+                                        GodName = god.GodName
+                                    });
+                                    await _db.SaveChangesAsync();
+                                }
+                            }
+                            catch(Exception ex)
+                            {
+                                _logger.LogError(ex, "God saving went wrong..");
+                            }
                         }
                     }
                 }

@@ -14,7 +14,7 @@ const axios = require('axios');
 //export PORT=5003
 
 //INIT. get all scheduled jobs from the database. to prevent schedule loss on restart of node app
-GetJobsFromDB();
+await GetJobsFromDB();
 GetInhouseJobsFromDB();
 
 app.get('/', function (req, res) {
@@ -127,7 +127,7 @@ function CallSmiteApiInhouse(id, patch, date) {
     }).catch(error => { console.error(error); });
 }
 
-function GetJobsFromDB() {
+async function GetJobsFromDB() {
   axios.get(process.env.API_URL + '/queuedmatch',{headers: {"ServiceKey":process.env.InternalServiceKey}})
     .then(res =>
     // The whole response has been received. Print out the result.
@@ -146,7 +146,7 @@ function GetJobsFromDB() {
           console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
           //make api call to get matchdata. in that call it will also update the database
           CallSmiteApi(id, patch, date);
-          
+          // await sleep(2000);
         }
         else {
           console.log("Added " + id + " as scheduled job @: " + date);
@@ -197,3 +197,9 @@ Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
   return this;
 }
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+} 
