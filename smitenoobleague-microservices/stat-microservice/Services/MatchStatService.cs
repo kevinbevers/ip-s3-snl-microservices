@@ -32,9 +32,15 @@ namespace stat_microservice.Services
             {
                 //would of liked it to be more compact but entity framework left me no choice, can't orderby and group by and then skip and take in the same query
                 //get the latest matchup id's
-                var listOfMatchups = await _db.TableMatchResults.OrderByDescending(t => t.DatePlayed).Select(t => t.ScheduleMatchUpId).Distinct().Skip(pageSize * pageIndex).Take(pageSize).ToListAsync();
+                var listOfMatchups = await _db.TableMatchResults.OrderByDescending(t => t.DatePlayed).Select(t =>  new { t.ScheduleMatchUpId, t.DatePlayed }).ToListAsync();
+                var uniqueMatchups = listOfMatchups.GroupBy(x => x.ScheduleMatchUpId, (x, y) => new
+                                        {
+                                            MatchupID = x,
+                                            DatePlayed = y.Select(z => z.DatePlayed).Max()
+                                        }).OrderByDescending(x => x.DatePlayed).Skip(pageSize * pageIndex).Take(pageSize).Select(x => x.MatchupID).ToList();
+
                 //get all the entries for each matchup Id and calculate the totals
-                List<MatchHistory> matchHistoryList = await _db.TableMatchResults.Where(t => listOfMatchups.Contains(t.ScheduleMatchUpId)).GroupBy(x => x.ScheduleMatchUpId, (x, y) => new MatchHistory
+                List<MatchHistory> matchHistoryList = await _db.TableMatchResults.Where(t => uniqueMatchups.Contains(t.ScheduleMatchUpId)).GroupBy(x => x.ScheduleMatchUpId, (x, y) => new MatchHistory
                 {
                     MatchupID = x,
                     DatePlayed = y.Select(i => i.DatePlayed).Max().Value,
