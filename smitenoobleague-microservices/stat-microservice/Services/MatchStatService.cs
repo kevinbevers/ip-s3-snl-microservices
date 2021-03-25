@@ -32,7 +32,7 @@ namespace stat_microservice.Services
             {
                 //would of liked it to be more compact but entity framework left me no choice, can't orderby and group by and then skip and take in the same query
                 //get the latest matchup id's
-                var listOfMatchups = await _db.TableMatchResults.Select(t => new { t.DatePlayed, t.ScheduleMatchUpId }).Distinct().OrderByDescending(t => t.DatePlayed).Skip(pageSize * pageIndex).Take(pageSize).Select(x => x.ScheduleMatchUpId).ToListAsync();
+                var listOfMatchups = await _db.TableMatchResults.OrderByDescending(t => t.DatePlayed).Select(t => t.ScheduleMatchUpId).Distinct().Skip(pageSize * pageIndex).Take(pageSize).ToListAsync();
                 //get all the entries for each matchup Id and calculate the totals
                 List<MatchHistory> matchHistoryList = await _db.TableMatchResults.Where(t => listOfMatchups.Contains(t.ScheduleMatchUpId)).GroupBy(x => x.ScheduleMatchUpId, (x, y) => new MatchHistory
                 {
@@ -128,7 +128,6 @@ namespace stat_microservice.Services
                                 mvpScore += (int)player.IgKills * 20;
                                 mvpScore += (int)player.IgAssists * 15;
                                 mvpScore += (int)player.IgWardsPlaced * 9;
-                                mvpScore += (int)(((double)player.IgStructureDamage) * 0.2);
                                 mvpScore += (int)(((double)player.IgGoldEarned) * 0.1);
                                 mvpScore += (int)(((double)player.IgStructureDamage) / 45);
                                 //if the player died divide score by number of deaths
