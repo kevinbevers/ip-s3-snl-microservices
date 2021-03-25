@@ -106,7 +106,7 @@ return (
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="5">
             <Card.Body>
-            <p className="m-0">Of course there is! <a href="https://discord.gg/AudacityGaming" target="_blank">Click here to join</a></p>
+            <p className="m-0">Of course there is! <a href="https://discord.gg/suGs58TXJb" target="_blank">Click here to join</a></p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>
