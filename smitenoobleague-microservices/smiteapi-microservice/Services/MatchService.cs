@@ -218,7 +218,7 @@ namespace smiteapi_microservice.Services
                 string plannedDate = match.EntryDate.AddDays(7).AddHours(2).ToString("s");
 
                 //add a schedule queue object to the schedule queue database table
-                _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = match.EntryDate.AddDays(7), QueueState = false, PatchVersion = submission.patchNumber });
+                _db.Add(new TableQueue { GameId = (int)submission.gameID, QueueDate = match.EntryDate.AddDays(7).AddHours(2), QueueState = false, PatchVersion = submission.patchNumber });
                 await _db.SaveChangesAsync();
 
                 //call the nodejs schedule api
