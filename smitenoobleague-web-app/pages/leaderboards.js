@@ -71,8 +71,14 @@ export default function leaderboards({LoginSession, Data, status, errMsg, Divisi
                     setTop5KdaData(t5kd);
         };
 
-        useEffect(() => {
-          setDivisions(Divisions?.concat({divisionID: 0, divisionName: "All divisions"}));
+        useEffect(() => {  
+          if(Divisions?.length > 0)
+          {
+            if(!Divisions.includes(x => x.divisionID == 0))
+            {
+              setDivisions(Divisions.concat({divisionID: 0, divisionName: "All divisions"}));
+            }
+          }
           updateGraphs(LeaderboardData);
       }, []);
 
@@ -307,7 +313,7 @@ export async function getServerSideProps(context) {
         nookies.set(context, 'selected_division', 0, {path: "/"});
           //call api for the data
           await leaderboardservice.GetLeaderboardData(null)
-            .then(res => { response.data = res.data })
+            .then(res => { response.data = res.data;})
             .catch(err => {
               if (err.response == null) {
                 response.statusCode = 503;
@@ -324,7 +330,7 @@ export async function getServerSideProps(context) {
       if (cookies != null && cookies['selected_division'] != undefined && listOfDivisions.filter(x => x.divisionID == cookies['selected_division']).length != 0) {
           //call api for the data
           await leaderboardservice.GetLeaderboardData(cookies['selected_division'])
-            .then(res => { if(res.data?.kills?.length == 0) {response.data = null} else { response.data = res.data} })
+            .then(res => { if(res.data?.kills?.length == 0) {response.data = null} else { response.data = res.data;} })
             .catch(err => {
               if (err.response == null) {
                 response.statusCode = 503;
@@ -337,10 +343,10 @@ export async function getServerSideProps(context) {
             });
         }
         else {
-          nookies.set(context, 'selected_division', null, {path: "/"});
+          nookies.set(context, 'selected_division', 0, {path: "/"});
           //call api for the data
           await leaderboardservice.GetLeaderboardData(null)
-            .then(res => { if(res.data?.kills?.length == 0) {response.data = null} else { response.data = res.data} })
+            .then(res => { if(res.data?.kills?.length == 0) {response.data = null} else { response.data = res.data;} })
             .catch(err => {
               if (err.response == null) {
                 response.statusCode = 503;
@@ -361,8 +367,8 @@ export async function getServerSideProps(context) {
       Data: response.data,
       status: response.statusCode,
       errMsg: response.errMsg,
-      DivisionList: listOfDivisions != [] ? listOfDivisions : [{divisionID: 0, divisionName: "Division-less Players"}],
-      selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null)[0]?.divisionID : 0
+      DivisionList: listOfDivisions != [] ? listOfDivisions : [{divisionID: 0, divisionName: "All divisions"}],
+      selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : 0
     },
   };
 }
