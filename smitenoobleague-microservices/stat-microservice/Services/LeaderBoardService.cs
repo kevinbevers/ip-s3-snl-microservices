@@ -196,7 +196,15 @@ namespace stat_microservice.Services
 
             //Score to %
             top10DamageDealers.ForEach(x => x.Score = (int)((double)x.Score / (double)totalDamage * 100));
-            top10DamageDealers.Add(new LeaderboardEntry { Player = new LeaderboardPlayer { Playername = "The rest of the SNL" }, Score = (int)((double)(totalDamage - Top10Damage) / (double)totalDamage * 100) });
+
+            if (divisionID != null)
+            {
+                top10DamageDealers.Add(new LeaderboardEntry { Player = new LeaderboardPlayer { Playername = "The rest of the Division" }, Score = (int)((double)(totalDamage - Top10Damage) / (double)totalDamage * 100) });
+            }
+            else
+            {
+                top10DamageDealers.Add(new LeaderboardEntry { Player = new LeaderboardPlayer { Playername = "The rest of the SNL" }, Score = (int)((double)(totalDamage - Top10Damage) / (double)totalDamage * 100) });
+            }
             
             return top10DamageDealers;
         }
