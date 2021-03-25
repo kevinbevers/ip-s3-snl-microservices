@@ -147,12 +147,25 @@ namespace stat_microservice.Services
         private async Task<List<LeaderboardEntry>> GetTop10DamageDealtAsync(int? divisionID)
         {
             List<LeaderboardEntry> leaderboardEntries = new List<LeaderboardEntry>();
-            //Group all stats by playerID then get the top 10 players with the most damage dealt
-            leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+
+            if (divisionID != null)
             {
-                Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
-                Score = y.Select(z => z.IgDamageDealt).Sum()
-            }).OrderByDescending(x => x.Score).Take(10).ToListAsync();
+                //Group all stats by playerID then get the top 10 players with the most damage dealt
+                leaderboardEntries = await _db.TableStats.Where(x => x.DivisionId == divisionID).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+                {
+                    Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
+                    Score = y.Select(z => z.IgDamageDealt).Sum()
+                }).OrderByDescending(x => x.Score).Take(10).ToListAsync();
+            }
+            else
+            {
+                //Group all stats by playerID then get the top 10 players with the most damage dealt
+                leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+                {
+                    Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
+                    Score = y.Select(z => z.IgDamageDealt).Sum()
+                }).OrderByDescending(x => x.Score).Take(10).ToListAsync();
+            }
             //Set the platform name based on the ID
             leaderboardEntries.ForEach(x => x.Player.Platform = ((ApiPlatformEnum)x.Player.PlatformID).ToString());
 
