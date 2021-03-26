@@ -350,7 +350,7 @@ namespace stat_microservice.Services
                     //Not the first gameID for this planned matchup
                     if (previousMatchupResults?.Count() > 0)
                     {
-                        if(previousMatchupResults.Where(x => x.GameId == matchResultToAdd.GameId).Count() > 0)
+                        if(previousMatchupResults.Where(x => x.GameId == matchResultToAdd?.GameId && x.ScheduleMatchUpId == matchResultToAdd?.ScheduleMatchUpId).Count() > 0)
                         {
                             return new ObjectResult("The submitted match was useless the game is already in the database.") { StatusCode = 400 };
                         }

@@ -13,16 +13,12 @@ const axios = require('axios');
 //export TZ=UTC
 //export PORT=5003
 
-//INIT. get all scheduled jobs from the database. to prevent schedule loss on restart of node app
-GetJobsFromDB();
-GetInhouseJobsFromDB();
-
 app.get('/', function (req, res) {
   res.send('Node scheduler is running')
 });
 
 //post version
-app.post('/schedulematch', function (req, res) {
+app.post('/schedulematch', async function (req, res) {
 
   const date = new Date(req.body.time);
   const id = req.body.id;
@@ -35,7 +31,7 @@ app.post('/schedulematch', function (req, res) {
 
 //get version of scheduling expected: /schedulematch/1111111111/year-month-dayT00:00:00 //this get's called by the smite api 
 //date should be in the future.
-app.get('/schedulematch/:id/:patch/:time', function (req, res) {
+app.get('/schedulematch/:id/:patch/:time', async function (req, res) {
 
   const date = new Date(req.params.time);
   const id = req.params.id;
@@ -48,7 +44,7 @@ app.get('/schedulematch/:id/:patch/:time', function (req, res) {
 
 //get version of scheduling expected: /schedulematch/1111111111/year-month-dayT00:00:00 //this get's called by the smite api 
 //date should be in the future.
-app.get('/scheduleinhousematch/:id/:patch/:time', function (req, res) {
+app.get('/scheduleinhousematch/:id/:patch/:time', async function (req, res) {
 
   const date = new Date(req.params.time);
   const id = req.params.id;
@@ -61,10 +57,15 @@ app.get('/scheduleinhousematch/:id/:patch/:time', function (req, res) {
 
 //App listen
 const port = process.env.PORT || 3001;
-app.listen(port, () => console.log(`Listening on port: ${port}`));
+app.listen(port, async() => {
+  console.log(`Listening on port: ${port}`); 
+  //INIT. get all scheduled jobs from the database. to prevent schedule loss on restart of node app
+  await GetJobsFromDB();
+  GetInhouseJobsFromDB();
+});
 
 //Methods / functions
-function ScheduleGame(date, patch, id) {
+async function ScheduleGame(date, patch, id) {
   schedule.scheduleJob(date, function () {
     //send the gameID to the smiteapi microservice
     CallSmiteApi(id, patch, date);
@@ -73,7 +74,7 @@ function ScheduleGame(date, patch, id) {
 
 //Methods / functions
 function ScheduleInhouseGame(date, patch, id) {
-  schedule.scheduleJob(date, function () {
+  schedule.scheduleJob(date, async function () {
     //send the gameID to the smiteapi microservice
     CallSmiteApiInhouse(id, patch, date);
   });
@@ -112,8 +113,8 @@ function CallSmiteApiInhouse(id, patch, date) {
     .then(res => {
       //log the response
       console.log("Inhouse scheduled job ran successfull with the following data: {" + "id: " + id + " @: " + date + "}");
-      console.log(`statusCode: ${res.status}`);
-      console.log(res);
+      console.log(`statusCode: ${res?.response?.statusCode}`);
+      console.log(res?.response?.data);
     })
     .catch(error => {
       //log the error
@@ -128,7 +129,7 @@ function CallSmiteApiInhouse(id, patch, date) {
 }
 
 async function GetJobsFromDB() {
-  axios.get(process.env.API_URL + '/queuedmatch',{headers: {"ServiceKey":process.env.InternalServiceKey}})
+  await axios.get(process.env.API_URL + '/queuedmatch',{headers: {"ServiceKey":process.env.InternalServiceKey}})
     .then(res =>
     // The whole response has been received. Print out the result.
     {
@@ -136,8 +137,7 @@ async function GetJobsFromDB() {
       console.log(data);
       let scheduledGames = data;
       //foreach received object
-      scheduledGames.forEach(game => {
-
+      scheduledGames.forEach(async(game) => {
         const id = game.gameID;
         const date = new Date(game.scheduleTime);
         const patch = game.patchNumber;
@@ -146,7 +146,7 @@ async function GetJobsFromDB() {
           console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
           //make api call to get matchdata. in that call it will also update the database
           CallSmiteApi(id, patch, date);
-          // await sleep(2000);
+          await sleep(4000);
         }
         else {
           console.log("Added " + id + " as scheduled job @: " + date);
