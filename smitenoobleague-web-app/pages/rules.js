@@ -84,7 +84,7 @@ export default function rules({LoginSession}) {
           <br /><br />
           If a player is 30 minutes late the violating team will forfeit 1 game and the player’s team will be starting the matchup with a deficit.
           <br /><br />
-          After 30 minutes of waiting the opposing team automatically wins the matchup with a 2 – 0 victory.
+          After waiting a total of 35 minutes the waiting team automatically wins the matchup with a 2 – 0 victory.
           <br /><br />
           If a player or team doesn’t show up for a matchup without notifying both the league admin and the opposing captain. They will forfeit the matchup and lose a 2 – 0. And the whole team will receive 1 penalty point.
           <br /> Upon receiving 5 penalty points the team will be suspended from the league up to 1 full split.
