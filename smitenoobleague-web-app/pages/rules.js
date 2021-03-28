@@ -82,7 +82,7 @@ export default function rules({LoginSession}) {
           <br /><br />
           If a player is 15 minutes late the violating player will receive 1 penalty point. Upon reaching 5 penalty points a player is suspended from the league for 4 weeks.
           <br /><br />
-          If a player is 30 minutes late the violating team will forfeit 1 game and the player’s team will be starting the matchup with a deficit.
+          If a player is between 15 and 30 minutes late the violating team will forfeit 1 game and the player’s team will be starting the matchup with a deficit.
           <br /><br />
           After waiting a total of 35 minutes the waiting team automatically wins the matchup with a 2 – 0 victory.
           <br /><br />
