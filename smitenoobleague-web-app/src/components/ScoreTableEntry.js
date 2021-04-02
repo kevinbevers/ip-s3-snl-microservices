@@ -4,7 +4,7 @@ import Link from "next/link";
 //boostrap components
 import { Table, Col, Row} from "react-bootstrap";
 //icons
-import { FaCheckCircle, FaTimesCircle, FaCircle } from "react-icons/fa";
+import { FaCheckCircle, FaTimesCircle, FaCircle, FaStopwatch } from "react-icons/fa";
 //image optimization
 import Img from 'react-optimized-image';
 import Image from "next/image";
@@ -21,7 +21,6 @@ return d.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 
 };
 
 export default function ScoreTableEntry({s,index}) {
-
     return (
         <tr>
         {/* <td>1</td> */}
@@ -32,8 +31,9 @@ export default function ScoreTableEntry({s,index}) {
         <td>{s?.standingScore}</td>
         <td className="">
           {s.last5Results?.length > 0 ? s.last5Results.map((r, index) => (
+            !r?.inProgress?
             r.won != null ? r.won ? <Link key={index} href={"/matchhistory/" + r.matchupID}><a><FaCheckCircle title={ReadableDate(r?.datePlayed)} color="green" className="mr-1 Clickable"/></a></Link> : <Link key={index} href={"/matchhistory/" + r.matchupID}><a><FaTimesCircle title={ReadableDate(r?.datePlayed)} color="red" className="mr-1 Clickable"/></a></Link> : <FaCircle key={index} color="gray" className="mr-1"/>
-          )) : 
+          : <Link key={index} href={"/matchhistory/" + r.matchupID}><a><FaStopwatch title={ReadableDate(r?.datePlayed)} color="orange" className="mr-1 Clickable"/></a></Link>)) : 
           <>
             <FaCircle color="gray" className="mr-1"/>
             <FaCircle color="gray" className="mr-1"/>

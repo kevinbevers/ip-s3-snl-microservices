@@ -39,23 +39,29 @@ namespace stat_microservice.Services
 
                     foreach(var standing in foundStandings)
                     {
-                        var last5MatchupIds = await _db.TableMatchResults.Where(tmr => tmr.AwayTeamId == standing.TeamId || tmr.HomeTeamId == standing.TeamId).Select(t => new { t.DatePlayed, t.ScheduleMatchUpId }).Distinct().OrderByDescending(t => t.DatePlayed).Take(5).Select(x => x.ScheduleMatchUpId).ToListAsync();
+                        var last5MatchupIds = await _db.TableMatchResults.Where(tmr => tmr.AwayTeamId == standing.TeamId || tmr.HomeTeamId == standing.TeamId).OrderByDescending(t => t.DatePlayed).Select(t => t.ScheduleMatchUpId).Distinct().Take(5).ToListAsync();
                         var lastResults = await _db.TableMatchResults.Where(t => last5MatchupIds.Contains(t.ScheduleMatchUpId)).GroupBy(x => x.ScheduleMatchUpId, (x, y) => new {MatchupID = x ,GamesWon = y.Count(i => i.WinningTeamId == standing.TeamId), GamesLost = y.Count(i => i.LosingTeamId == standing.TeamId), DatePlayed = y.Select(i => i.DatePlayed).Max().Value }).ToListAsync();
                         List<WinLoss> WinLoss = new List<WinLoss>();
                         foreach(var result in lastResults.OrderByDescending(t => t.DatePlayed)) // latest first 
                         {
-                            WinLoss wl = new WinLoss {MatchupID = result.MatchupID, DatePlayed = result.DatePlayed, Won = null };
+                            WinLoss wl = new WinLoss {MatchupID = result.MatchupID, DatePlayed = result.DatePlayed, Won = null, InProgress = null };
 
                             if (result.GamesLost + result.GamesWon >= 2) // if the matchup is finished
                             {
                                 if (result.GamesWon > 1) // 2 gamesWon needed to win a best of 3
                                 {
                                     wl.Won = true;
+                                    wl.InProgress = false;
                                 }
                                 else // else lost
                                 {
                                     wl.Won = false;
+                                    wl.InProgress = false;
                                 }
+                            }
+                            else
+                            {
+                                wl.InProgress = true;
                             }
 
                             WinLoss.Add(wl);
