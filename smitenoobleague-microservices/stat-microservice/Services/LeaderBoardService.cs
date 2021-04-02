@@ -312,7 +312,7 @@ namespace stat_microservice.Services
                 leaderboardEntries = await _db.TableStats.Where(x => x.DivisionId == divisionID).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
                 {
                     Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
-                    Score = Math.Round(((double)y.Select(z => z.IgKills).Sum() + (double)y.Select(z => z.IgAssists).Sum()) / (double)y.Select(z => z.IgDeaths).Sum(), 2)
+                    Score = Math.Round(((double)y.Select(z => z.IgKills).Sum() + (double)y.Select(z => z.IgAssists).Sum()) / (double)y.Select(z => z.IgDeaths).Sum() == 0 ? 1 : (double)y.Select(z => z.IgDeaths).Sum(), 2)
                 }).OrderByDescending(x => x.Score).Take(5).ToListAsync();
             }
             else
@@ -321,7 +321,7 @@ namespace stat_microservice.Services
                 leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
                 {
                     Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
-                    Score = Math.Round(((double)y.Select(z => z.IgKills).Sum() + (double)y.Select(z => z.IgAssists).Sum()) / (double)y.Select(z => z.IgDeaths).Sum(), 2)
+                    Score = Math.Round(((double)y.Select(z => z.IgKills).Sum() + (double)y.Select(z => z.IgAssists).Sum()) / (double)y.Select(z => z.IgDeaths).Sum() == 0 ? 1 : (double)y.Select(z => z.IgDeaths).Sum(), 2)
                 }).OrderByDescending(x => x.Score).Take(5).ToListAsync();
             }
             //Set the platform name based on the ID
