@@ -102,8 +102,8 @@ export default function GameData({MatchResult, teamsInMatch}) {
         {
              
             setTotals(CalculateTotals(MatchResult));
-            setFirstTeam(MatchResult.losers[0]?.firstBanSide ? teamsInMatch?.filter(t => t.teamID == MatchResult.losingTeamID)[0] : teamsInMatch?.filter(t => t.teamID == MatchResult.winningTeamID)[0]);        
-            setSecondTeam(MatchResult.losers[0]?.firstBanSide ? teamsInMatch?.filter(t => t.teamID == MatchResult.winningTeamID)[0] : teamsInMatch?.filter(t => t.teamID == MatchResult.losingTeamID)[0]);
+            setFirstTeam(MatchResult.losers[0]?.firstBanSide ? teamsInMatch?.filter(t => t?.teamID == MatchResult?.losingTeamID)[0] : teamsInMatch?.filter(t => t?.teamID == MatchResult?.winningTeamID)[0]);        
+            setSecondTeam(MatchResult.losers[0]?.firstBanSide ? teamsInMatch?.filter(t => t?.teamID == MatchResult?.winningTeamID)[0] : teamsInMatch?.filter(t => t?.teamID == MatchResult?.losingTeamID)[0]);
         }
       }, []);
 
