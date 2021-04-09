@@ -126,7 +126,8 @@ const handleSearchPlayer = async() => {
             {
                 setFoundPlayers(null);
                 setSelectedPlayer(null);
-                setMsgPlayerInfo("No results found.");
+                setMsgPlayerInfo(err?.response?.data.includes("API") ? err?.response?.data : "No results found.");
+
                 setShowPlayerInfoAlert(true);
             }
             else {
