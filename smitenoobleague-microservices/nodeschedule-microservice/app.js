@@ -114,7 +114,7 @@ function CallSmiteApiInhouse(id, patch, date) {
       //log the response
       console.log("Inhouse scheduled job ran successfull with the following data: {" + "id: " + id + " @: " + date + "}");
       console.log(`statusCode: ${res?.response?.statusCode}`);
-      console.log(res?.response?.data);
+      //console.log(res?.response?.data);
     })
     .catch(error => {
       //log the error
