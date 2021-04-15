@@ -83,11 +83,11 @@ export default function InhouseGameStats({MatchResult, teamsInMatch}) {
         return <Image height={20} width={20} alt={t?.teamName} title={t?.teamName} src={t ? "/images/order.png" : "/images/chaos.png"} className="" draggable={false}></Image>;
       };
 
-      const BanWithTeamImage = (banNumber) => {
+      const BanWithTeamImage = (banNumber, phase) => {
         return (<>
             <div className="position-relative mt-3 mr-lg-2 mr-1">               
                 <div className="position-relative"><Image width={30} height={30} src={MatchResult?.bannedGods[banNumber - 1]?.godIcon != null ? MatchResult?.bannedGods[banNumber - 1]?.godIcon : "/images/empty_slot.png"} alt={MatchResult?.bannedGods[banNumber - 1]?.godName} title={MatchResult?.bannedGods[banNumber - 1]?.godName} className="GodImg rounded" draggable={false}/></div>
-                <div className="SmallTeamImg position-absolute">{RenderTeamImageLayoutFill(banNumber%2 ? true : false)}</div>
+                <div className="SmallTeamImg position-absolute">{RenderTeamImageLayoutFill(phase == 2 ? (banNumber%2 ? false : true) : (banNumber%2 ? true : false))}</div>
             </div>  
             </>);
       };
@@ -113,12 +113,12 @@ export default function InhouseGameStats({MatchResult, teamsInMatch}) {
                             <Row>
                                 <Col md={12} className="d-flex border-right border-secondary">
                                 <div className="d-flex align-items-center justify-content-left">
-                                    {BanWithTeamImage(1)}
-                                    {BanWithTeamImage(2)}
-                                    {BanWithTeamImage(3)}
-                                    {BanWithTeamImage(4)}
-                                    {BanWithTeamImage(5)}
-                                    {BanWithTeamImage(6)}
+                                    {BanWithTeamImage(1, 1)}
+                                    {BanWithTeamImage(2, 1)}
+                                    {BanWithTeamImage(3, 1)}
+                                    {BanWithTeamImage(4, 1)}
+                                    {BanWithTeamImage(5, 1)}
+                                    {BanWithTeamImage(6, 1)}
                                 </div>
                                 </Col>
                             </Row>
@@ -128,10 +128,10 @@ export default function InhouseGameStats({MatchResult, teamsInMatch}) {
                             <Row>
                                 <Col md={12} className="d-flex">
                                 <div className="d-flex align-items-center justify-content-left">
-                                    {BanWithTeamImage(7)}
-                                    {BanWithTeamImage(8)}
-                                    {BanWithTeamImage(9)}
-                                    {BanWithTeamImage(10)}
+                                    {BanWithTeamImage(7, 2)}
+                                    {BanWithTeamImage(8, 2)}
+                                    {BanWithTeamImage(9, 2)}
+                                    {BanWithTeamImage(10, 2)}
                                 </div>
                                 </Col>
                             </Row>
