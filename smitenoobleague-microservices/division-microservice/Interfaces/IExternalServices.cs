@@ -10,5 +10,6 @@ namespace division_microservice.Interfaces
     {
         Task<IList<Team>> GetDivisionTeamsByIdAsync(int divisionID);
         Task<bool> RemoveTeamsFromDivision(int divisionID);
+        Task<IList<Team>> GetScheduleTeamsWithListOfIds(List<int> teamIds);
     }
 }

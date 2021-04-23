@@ -43,6 +43,32 @@ namespace division_microservice.Services
             }
         }
 
+        public async Task<IList<Team>> GetScheduleTeamsWithListOfIds(List<int> teamIds)
+        {
+
+            var stringContent = new StringContent(JsonConvert.SerializeObject(teamIds));
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5); //timeout after 5 seconds
+                                                              //Add internal service header. so that the requests passes auth
+                httpClient.DefaultRequestHeaders.Add("ServiceKey", _servicekey.Key);
+                stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                using (var response = await httpClient.PostAsync($"http://team-microservice/team-service/team/basicbatch", stringContent))
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<List<Team>>(json);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
         public async Task<bool> RemoveTeamsFromDivision(int divisionID)
         {
             SetDivisionTeams divisionTeams = new SetDivisionTeams {divisionID = divisionID, teamIdList = null };

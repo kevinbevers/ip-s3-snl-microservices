@@ -153,16 +153,14 @@ namespace division_microservice.Services
                 }
                 else
                 {
-                    IList<Team> divisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(fs.ScheduleDivisionId);
-
                     Schedule schedule = new Schedule
                         {
                             ScheduleID = fs.ScheduleId,
                             ScheduleName = fs.ScheduleName,
                             ScheduleStartDate = fs.ScheduleStartDate,
                             DivisionID = fs.ScheduleDivisionId,
-                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, divisionTeams.Count()), //number of weeks gone by. remainder of 6 days
-                            Matchups = await GetMatchups(fs.ScheduleId, divisionTeams)
+                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, await _db.TableMatchups.Where(x => x.ScheduleId == scheduleID).Select(x => x.WeekNumber).Distinct().CountAsync()), //number of weeks gone by. remainder of 6 days
+                            Matchups = await GetMatchups(fs.ScheduleId)
                         };
                     
                     return new ObjectResult(schedule) { StatusCode = 200 };//OK
@@ -228,7 +226,7 @@ namespace division_microservice.Services
                     }
                     else
                     {
-                        IList<Team> divisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(fs.ScheduleDivisionId);
+                        //IList<Team> divisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(fs.ScheduleDivisionId);
 
                         Schedule schedule = new Schedule
                         {
@@ -236,8 +234,8 @@ namespace division_microservice.Services
                             ScheduleName = fs.ScheduleName,
                             ScheduleStartDate = fs.ScheduleStartDate,
                             DivisionID = fs.ScheduleDivisionId,
-                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, divisionTeams.Count()), //number of weeks gone by. remainder of 6 days
-                            Matchups = await GetMatchups(fs.ScheduleId, divisionTeams)
+                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, await _db.TableMatchups.Where(x => x.ScheduleId == scheduleID).Select(x => x.WeekNumber).Distinct().CountAsync()), //number of weeks gone by. remainder of 6 days
+                            Matchups = await GetMatchups(fs.ScheduleId)
                         };
 
                         return new ObjectResult(schedule) { StatusCode = 200 };//OK
@@ -314,16 +312,19 @@ namespace division_microservice.Services
         }
 
         #region methods
-        private int GetCurrentWeek(DateTime startDate, int teamCount)
+        private int GetCurrentWeek(DateTime startDate, int numberOfWeeks)
         {
-            int numberOfWeeks = (teamCount - 1) * 2;
             int currentWeekNumber = (DateTime.Now - startDate).Days / 7 + 1; //number of weeks gone by. remainder of 6 days //add one to not be 0 on week 1 etc..
 
             return currentWeekNumber > numberOfWeeks ? numberOfWeeks : currentWeekNumber;
         }
-        private async Task<IEnumerable<Matchup>> GetMatchups(int scheduleID, IList<Team> divisionTeams)
+        private async Task<IEnumerable<Matchup>> GetMatchups(int scheduleID) //, IList<Team> divisionTeams
         {
             List<TableMatchup> foundMatchups = await _db.TableMatchups.Where(matchup => matchup.ScheduleId == scheduleID).OrderBy(m => m.WeekNumber).ToListAsync();
+            //instead of just relying on the teams that are in the division get all teams that are in the schedule. so we can still display teams that are moved out of the division on old weeks of the schedule.
+            List<int> allTeamsInSchedule = foundMatchups.Select(x => x.HomeTeamId).Distinct().ToList();
+            allTeamsInSchedule.AddRange((IEnumerable<int>)foundMatchups.Select(x => x.AwayTeamId).Where(x => x.Value != 999999).Distinct().ToList());
+            IList<Team> scheduleTeams = await _externalServices.GetScheduleTeamsWithListOfIds(allTeamsInSchedule);
 
             //get all the teams for this division
             List<Matchup> matchupsToReturn = new List<Matchup>();
@@ -335,8 +336,8 @@ namespace division_microservice.Services
                     ByeWeek = fs.ByeGame,
                     Score = fs.Score, //calculate later. probably store it in the matchup table
                     WeekNumber = fs.WeekNumber,
-                    HomeTeam = divisionTeams.Where(t => t.TeamID == fs.HomeTeamId).FirstOrDefault(),
-                    AwayTeam = divisionTeams.Where(t => t.TeamID == fs.AwayTeamId).FirstOrDefault()
+                    HomeTeam = scheduleTeams.Where(t => t.TeamID == fs.HomeTeamId).FirstOrDefault(),
+                    AwayTeam = scheduleTeams.Where(t => t.TeamID == fs.AwayTeamId).FirstOrDefault()
                 });
             });
 
