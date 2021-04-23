@@ -144,14 +144,14 @@ namespace stat_microservice.Services
 
             return leaderboardEntries;
         }
-        private async Task<List<LeaderboardEntry>> GetTop10DamageDealtAsync(int? divisionID)
+        private async Task<List<LeaderboardEntry_Double>> GetTop10DamageDealtAsync(int? divisionID)
         {
-            List<LeaderboardEntry> leaderboardEntries = new List<LeaderboardEntry>();
+            List<LeaderboardEntry_Double> leaderboardEntries = new List<LeaderboardEntry_Double>();
 
             if (divisionID != null)
             {
                 //Group all stats by playerID then get the top 10 players with the most damage dealt
-                leaderboardEntries = await _db.TableStats.Where(x => x.DivisionId == divisionID).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+                leaderboardEntries = await _db.TableStats.Where(x => x.DivisionId == divisionID).GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
                 {
                     Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                     Score = y.Select(z => z.IgDamageDealt).Sum()
@@ -160,7 +160,7 @@ namespace stat_microservice.Services
             else
             {
                 //Group all stats by playerID then get the top 10 players with the most damage dealt
-                leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry
+                leaderboardEntries = await _db.TableStats.GroupBy(x => x.PlayerId, (x, y) => new LeaderboardEntry_Double
                 {
                     Player = new LeaderboardPlayer { PlayerID = x, Playername = y.Select(z => z.PlayerName).Min(), PlatformID = y.Select(z => z.PlayerPlatformId).Min().Value },
                     Score = y.Select(z => z.IgDamageDealt).Sum()
@@ -198,7 +198,7 @@ namespace stat_microservice.Services
 
             return leaderboardEntries;
         }
-        private async Task<List<LeaderboardEntry>> GetTop10DamageAndRemainderAsync(int? divisionID)
+        private async Task<List<LeaderboardEntry_Double>> GetTop10DamageAndRemainderAsync(int? divisionID)
         {
             //total damage dealt
             int? totalDamage = await _db.TableStats.Select(x => x.IgDamageDealt).SumAsync();
@@ -208,15 +208,15 @@ namespace stat_microservice.Services
             var Top10Damage = top10DamageDealers.Select(x => x.Score).Sum();
 
             //Score to %
-            top10DamageDealers.ForEach(x => x.Score = (int)((double)x.Score / (double)totalDamage * 100));
+            top10DamageDealers.ForEach(x => { x.Score = Math.Round(((double)x.Score / (double)totalDamage * 100), 2); } );
 
             if (divisionID != null)
             {
-                top10DamageDealers.Add(new LeaderboardEntry { Player = new LeaderboardPlayer { Playername = "The rest of the Division" }, Score = (int)((double)(totalDamage - Top10Damage) / (double)totalDamage * 100) });
+                top10DamageDealers.Add(new LeaderboardEntry_Double { Player = new LeaderboardPlayer { Playername = "The rest of the Division" }, Score = Math.Round(((double)(totalDamage - Top10Damage) / (double)totalDamage * 100),2) });
             }
             else
             {
-                top10DamageDealers.Add(new LeaderboardEntry { Player = new LeaderboardPlayer { Playername = "The rest of the SNL" }, Score = (int)((double)(totalDamage - Top10Damage) / (double)totalDamage * 100) });
+                top10DamageDealers.Add(new LeaderboardEntry_Double { Player = new LeaderboardPlayer { Playername = "The rest of the SNL" }, Score = (int)((double)(totalDamage - Top10Damage) / (double)totalDamage * 100) });
             }
             
             return top10DamageDealers;

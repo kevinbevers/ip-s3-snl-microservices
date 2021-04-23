@@ -58,7 +58,8 @@ export default function leaderboards({LoginSession, Data, status, errMsg, Divisi
                     //get the data and labels for the graphs and push them into the local variables
                     data?.top10DamageAndRemainingInPercentage?.forEach(x => {
                       tdmgl.push(x?.player?.playername);
-                      tdmgd.push(x?.score)
+                      tdmgd.push(x?.score);
+                      console.log(x?.score);
                     });
                     data?.top5KdaPlayers?.forEach(x => {
                       t5kl.push(x?.player?.playername);
@@ -169,7 +170,7 @@ const options = {
               });
               const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
     
-              label += Number((value / sum) * 100).toFixed(1) + "%";
+              label += Number((value).toFixed(2)) + "%";
               return label;
             } catch (error) {
               console.log(error);
