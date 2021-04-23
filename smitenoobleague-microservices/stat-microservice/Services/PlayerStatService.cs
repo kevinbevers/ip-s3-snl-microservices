@@ -119,7 +119,7 @@ namespace stat_microservice.Services
                 //Average achieved stats
                 //AverageKillParticipation = ((double)z.Select(s => s.Stats.IgKills).Sum() + (double)z.Select(s => s.Stats.IgAssists).Sum()) / (double)playerMatchesStats.Select(x => x.TotalKillsPlayerTeam).Sum() * 100,
                 AverageGPM = z.Select(s => s.Stats.IgGpm).Average(),
-                AverageKda = z.Select(s => ((double)s.Stats.IgKills + (double)s.Stats.IgAssists) / (double)s.Stats.IgDeaths).Average(),
+                AverageKda = Math.Round(z.Select(s => ((double)s.Stats.IgKills + (double)s.Stats.IgAssists) / (s.Stats.IgDeaths.Value > 0 ? (double)s.Stats.IgDeaths : 1)).Average(),2),
                 AverageKills = z.Select(s => s.Stats.IgKills).Average(),
                 AverageDeaths = z.Select(s => s.Stats.IgDeaths).Average(),
                 AverageAssists = z.Select(s => s.Stats.IgAssists).Average(),
