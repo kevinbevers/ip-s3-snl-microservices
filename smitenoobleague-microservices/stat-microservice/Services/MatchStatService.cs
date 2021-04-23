@@ -788,8 +788,9 @@ namespace stat_microservice.Services
                 Matchup matchup1 = foundSchedule.Matchups.Where(mup => mup?.HomeTeam?.TeamID == winnerTeam?.TeamID && mup?.AwayTeam?.TeamID == loserTeam?.TeamID).FirstOrDefault();
                 Matchup matchup2 = foundSchedule.Matchups.Where(mup => mup?.HomeTeam?.TeamID == loserTeam?.TeamID && mup?.AwayTeam?.TeamID == winnerTeam?.TeamID).FirstOrDefault();
                 List<Matchup> matchups = new List<Matchup> { matchup1, matchup2 };
+                _logger.LogDebug(matchups[0].ToString() + matchups[1].ToString());
                 //Get the matchup that is already past the currentWeek / the same and check if the matchup is not older then 2 weeks. 2 weeks is the catchup time.
-                scheduledMatch.matchup = matchups?.Where(mup => mup.WeekNumber <= foundSchedule.CurrentWeek && Math.Abs(foundSchedule.CurrentWeek - mup.WeekNumber) <= 2).FirstOrDefault();
+                scheduledMatch.matchup = matchups?.Where(mup => mup?.WeekNumber <= foundSchedule?.CurrentWeek && (foundSchedule.CurrentWeek - mup.WeekNumber) <= 2).FirstOrDefault();
                 //check if the entry date of the match id isn't before the matchup is scheduled
                 //var currentWeekDate = scheduledMatch.ScheduleStartDate.AddDays(7 * scheduledMatch.matchup.WeekNumber);
                 //if (match?.EntryDate < currentWeekDate)
