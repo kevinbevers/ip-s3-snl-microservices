@@ -321,7 +321,7 @@ namespace division_microservice.Services
             //instead of just relying on the teams that are in the division get all teams that are in the schedule. so we can still display teams that are moved out of the division on old weeks of the schedule.
             List<int> allTeamsInSchedule = foundMatchups.Where(x => x.HomeTeamId != 999999).Select(x => x.HomeTeamId).Distinct().ToList();
             allTeamsInSchedule.AddRange(foundMatchups.Where(x => x.AwayTeamId != 999999).Select(x => x.AwayTeamId).Distinct().ToList());
-            IList<Team> scheduleTeams = await _externalServices.GetScheduleTeamsWithListOfIds(allTeamsInSchedule.Distinct().ToList());
+            IList<Team> scheduleTeams = await _externalServices.GetBasicTeamInfoInBatchWithTeamIdsList(allTeamsInSchedule.Distinct().ToList());
 
             //get all the teams for this division
             List<Matchup> matchupsToReturn = new List<Matchup>();
