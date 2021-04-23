@@ -97,7 +97,7 @@ namespace division_microservice.Services
                             ScheduleName = fs.ScheduleName,
                             ScheduleStartDate = fs.ScheduleStartDate,
                             CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, divisionTeams.Count()), //number of weeks gone by. remainder of 6 days
-                            Matchups = await GetMatchups(fs.ScheduleId, divisionTeams)
+                            Matchups = await GetMatchups(fs.ScheduleId)
                         });
                     }
 
