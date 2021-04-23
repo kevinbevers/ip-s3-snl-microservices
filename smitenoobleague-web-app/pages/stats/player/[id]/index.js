@@ -155,17 +155,18 @@ const SimpleToolTip = (data) => {
           {/* Player Header */}
           <Row className="">
               <Col md={2} xl={1} xs={3} className="my-auto">
-                  <Img src={require("public/images/roles/" + PlayerStats?.player?.teamMemberRole.roleName + "_Logo.png")} className="MainRoleImage" draggable={false}></Img>
+                  <Img src={require("public/images/roles/" + PlayerStats?.player?.teamMemberRole?.roleName + "_Logo.png")} className="MainRoleImage" draggable={false}></Img>
               </Col>
               <Col md={4} xl={5} xs={9} className="pb-0 my-auto">
+              {PlayerStats.team?.teamID != null ? <>
               <Row className="">
                  <Col md={12} className="d-flex">
                  {PlayerStats.team?.teamLogoPath != null ? <Image layout="fixed" height={35} width={35} alt={PlayerStats.team?.teamName} src={imagePath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image>  : 
                         <Img alt={PlayerStats.team?.teamName} src={require("public/images/teamBadge.png")} className="SmallTeamImage mr-1 my-auto" draggable={false}></Img>
                       }
-                   <Link href={`/stats/team/${PlayerStats.team.teamID}`} ><h4 className="mb-0 PlayerStatTeamTitle my-auto Clickable Hoverable" title={"click to see team stats"}>{PlayerStats?.team?.teamName}</h4></Link>
+                  <Link href={`/stats/team/${PlayerStats.team?.teamID}`} ><h4 className="mb-0 PlayerStatTeamTitle my-auto Clickable Hoverable" title={"click to see team stats"}>{PlayerStats?.team?.teamName}</h4></Link> 
                   </Col>
-              </Row>
+              </Row> </> : <></> }
               <Row className="">
                 <Col md={12} className=""><h3 className="PlayerStatTitle my-auto">{(PlayerStats?.player?.teamMemberPlatform == "PS4" &&
                                                     <FaPlaystation />)

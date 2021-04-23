@@ -30,7 +30,8 @@ namespace stat_microservice.Services
             try
             {
                 PlayerWithTeamInfo foundPlayer = await _externalServices.GetPlayerWithTeamInfoByPlayerIdAsync(playerID);
-                if (foundPlayer != null)
+                
+                if (foundPlayer != null || await _db.TableStats.Where(x => x.PlayerId == playerID).CountAsync() > 0)
                 {
                     //List<TableStat> foundStats = await _db.TableStats.Where(ts => ts.PlayerId == playerID).ToListAsync();
                     //Get stats, probably best to calculate stats with sql as much as possible to make it faster
@@ -39,7 +40,8 @@ namespace stat_microservice.Services
                     PlayerStatistics playerStats = await GetPlayerStatByPlayerIdFromDbAsync(playerID, playerMatchesStats);
                     if (playerStats != null)
                     {
-                        playerStats.Player = foundPlayer?.Player;
+                        var playerData = await _db.TableStats.Where(x => x.PlayerId == playerID).Select(x => new { name = x.PlayerName, platform = ((ApiPlatformEnum)x.PlayerPlatformId).ToString()}).FirstOrDefaultAsync();
+                        playerStats.Player = foundPlayer?.Player != null ? foundPlayer.Player : new TeamMember {TeamMemberName = playerData.name, TeamMemberPlatform = playerData.platform, PlayerID = (int)playerID  };
                         playerStats.Team = foundPlayer?.Team;
                         playerStats.BestPicks = GetTop5BestGodsAsync(playerGodStats);
                         playerStats.MostPicked = GetTop5MostPickedGodsAsync(playerGodStats);
