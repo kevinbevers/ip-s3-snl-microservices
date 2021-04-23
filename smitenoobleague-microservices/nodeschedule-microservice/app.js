@@ -61,7 +61,7 @@ app.listen(port, async() => {
   console.log(`Listening on port: ${port}`); 
   //INIT. get all scheduled jobs from the database. to prevent schedule loss on restart of node app
   await GetJobsFromDB();
-  GetInhouseJobsFromDB();
+  await GetInhouseJobsFromDB();
 });
 
 //Methods / functions
@@ -89,17 +89,16 @@ function CallSmiteApi(id, patch, date) {
       //log the response
       console.log("scheduled job ran successfull with the following data: {" + "id: " + id + " @: " + date + "}");
       console.log(`statusCode: ${res.status}`);
-      console.log(res);
     })
     .catch(error => {
       //log the error
       console.log("scheduled job ran unsuccessfull with the following data: {" + "id: " + id + " @: " + date + "}");
       //Log the response text
-      if(error?.response?.status == 404)
+      if(error?.response?.status == 404 || error?.response?.status == 500)
       {
-      console.log("scheduled for retry in 2 hours.")
-      //reschedule with + 2 hours
-      date = date.addHours(2);
+      console.log("scheduled for retry in 1 hour.")
+      //reschedule with + 1 hours
+      date = Date.now().addHours(1);
       ScheduleGame(date, patch, id);
       }
     });
@@ -137,16 +136,16 @@ async function GetJobsFromDB() {
       console.log(data);
       let scheduledGames = data;
       //foreach received object
-      scheduledGames.forEach(async(game) => {
+      await scheduledGames.forEach(async(game) => {
         const id = game.gameID;
         const date = new Date(game.scheduleTime);
         const patch = game.patchNumber;
         //still something wrong with this date sorting.
         if (Date.parse(date) <= Date.now()) {
-          console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
+          console.log("Ran catch up job.. " + "id: " + id + " @: " + Date.now());
           //make api call to get matchdata. in that call it will also update the database
           CallSmiteApi(id, patch, date);
-          await sleep(4000);
+          await sleep(6000);
         }
         else {
           console.log("Added " + id + " as scheduled job @: " + date);
@@ -160,8 +159,8 @@ async function GetJobsFromDB() {
     });
 }
 
-function GetInhouseJobsFromDB() {
-  axios.get(process.env.API_URL + '/queuedmatch/inhouse',{headers: {"ServiceKey":process.env.InternalServiceKey}})
+async function GetInhouseJobsFromDB() {
+  await axios.get(process.env.API_URL + '/queuedmatch/inhouse',{headers: {"ServiceKey":process.env.InternalServiceKey}})
     .then(res =>
     // The whole response has been received. Print out the result.
     {
@@ -169,16 +168,17 @@ function GetInhouseJobsFromDB() {
       console.log(data);
       let scheduledGames = data;
       //foreach received object
-      scheduledGames.forEach(game => {
+      await scheduledGames.forEach(async(game) => {
 
         const id = game.gameID;
         const date = new Date(game.scheduleTime);
         const patch = game.patchNumber;
         //still something wrong with this date sorting.
         if (Date.parse(date) <= Date.now()) {
-          console.log("Ran catch up job.. " + "id: " + id + " @: " + date);
+          console.log("Ran catch up job.. " + "id: " + id + " @: " + Date.now());
           //make api call to get matchdata. in that call it will also update the database
           CallSmiteApiInhouse(id, patch, date);
+          await sleep(6000);
         }
         else {
           console.log("Added " + id + " as scheduled job @: " + date);
@@ -198,7 +198,7 @@ Date.prototype.addHours = function (h) {
   return this;
 }
 
-function sleep(ms) {
+async function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
