@@ -793,7 +793,7 @@ namespace service_tests
 
             mockExternalServices.Setup(r => r.GetDivisionTeamsByIdAsync(4)).ReturnsAsync(new List<Team>());
 
-            mockExternalServices.Setup(r => r.GetScheduleTeamsWithListOfIds(It.IsAny<List<int>>())).ReturnsAsync(new List<Team> {
+            mockExternalServices.Setup(r => r.GetBasicTeamInfoInBatchWithTeamIdsList(It.IsAny<List<int>>())).ReturnsAsync(new List<Team> {
                 new Team { TeamName = "team1", TeamID = 1 },
                 new Team { TeamName = "team2", TeamID = 2 },
                 new Team { TeamName = "team3", TeamID = 3 },
