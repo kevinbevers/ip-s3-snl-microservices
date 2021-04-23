@@ -169,7 +169,7 @@ const options = {
               });
               const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
     
-              label += Number((value / sum) * 100).toFixed(1) + "%";
+              label += Number((value / sum) * 100).toFixed(2) + "%";
               return label;
             } catch (error) {
               console.log(error);
