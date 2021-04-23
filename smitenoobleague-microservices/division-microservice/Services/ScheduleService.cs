@@ -83,9 +83,6 @@ namespace division_microservice.Services
                 }
                 else
                 {
-                    //get all teams in the division
-                    IList<Team> divisionTeams = await _externalServices.GetDivisionTeamsByIdAsync(divisionID);
-
                     List<Schedule> divisionSchedules = new List<Schedule>();
 
                     foreach (TableSchedule fs in foundSchedules)
@@ -96,7 +93,7 @@ namespace division_microservice.Services
                             DivisionID = fs.ScheduleDivisionId,
                             ScheduleName = fs.ScheduleName,
                             ScheduleStartDate = fs.ScheduleStartDate,
-                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, divisionTeams.Count()), //number of weeks gone by. remainder of 6 days
+                            CurrentWeek = GetCurrentWeek(fs.ScheduleStartDate, await _db.TableMatchups.Where(x => x.ScheduleId == fs.ScheduleId).Select(x => x.WeekNumber).Distinct().CountAsync()), //number of weeks gone by. remainder of 6 days
                             Matchups = await GetMatchups(fs.ScheduleId)
                         });
                     }
@@ -322,9 +319,9 @@ namespace division_microservice.Services
         {
             List<TableMatchup> foundMatchups = await _db.TableMatchups.Where(matchup => matchup.ScheduleId == scheduleID).OrderBy(m => m.WeekNumber).ToListAsync();
             //instead of just relying on the teams that are in the division get all teams that are in the schedule. so we can still display teams that are moved out of the division on old weeks of the schedule.
-            List<int> allTeamsInSchedule = foundMatchups.Select(x => x.HomeTeamId).Distinct().ToList();
-            allTeamsInSchedule.AddRange((IEnumerable<int>)foundMatchups.Select(x => x.AwayTeamId).Where(x => x.Value != 999999).Distinct().ToList());
-            IList<Team> scheduleTeams = await _externalServices.GetScheduleTeamsWithListOfIds(allTeamsInSchedule);
+            List<int> allTeamsInSchedule = foundMatchups.Where(x => x.HomeTeamId != 999999).Select(x => x.HomeTeamId).Distinct().ToList();
+            allTeamsInSchedule.AddRange(foundMatchups.Where(x => x.AwayTeamId != 999999).Select(x => x.AwayTeamId).Distinct().ToList());
+            IList<Team> scheduleTeams = await _externalServices.GetScheduleTeamsWithListOfIds(allTeamsInSchedule.Distinct().ToList());
 
             //get all the teams for this division
             List<Matchup> matchupsToReturn = new List<Matchup>();
