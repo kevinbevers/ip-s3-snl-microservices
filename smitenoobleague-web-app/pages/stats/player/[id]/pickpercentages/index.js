@@ -56,6 +56,7 @@ export default function PickPercentages({ LoginSession, PlayerPicks, status, err
               <Img src={require("public/images/roles/" + PlayerPicks?.player?.teamMemberRole?.roleName + "_Logo.png")} className="MainRoleImage" draggable={false}></Img>
             </Col>
             <Col md={6} lg={6} xl={8} xs={9} className="pb-0 my-auto">
+            {PlayerPicks.team?.teamID != null ? <>
               <Row className="">
                 <Col md={12} className="d-flex">
                   {PlayerPicks.team?.teamLogoPath != null ? <Image layout="fixed" height={35} width={35} alt={PlayerPicks.team?.teamName} src={imagePath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image> :
@@ -64,7 +65,7 @@ export default function PickPercentages({ LoginSession, PlayerPicks, status, err
                   <Link href={`/stats/team/${PlayerPicks.team.teamID}`} ><h4 className="mb-0 PlayerStatTeamTitle my-auto Clickable Hoverable" title={"click to see team stats"}>{PlayerPicks?.team?.teamName}</h4></Link>
                   
                 </Col>
-              </Row>
+              </Row> </> : <> </> }
               <Row className="">
                 <Col md={12} className=""><h3 className="PlayerStatTitle my-auto">{(PlayerPicks?.player?.teamMemberPlatform == "PS4" &&
                   <FaPlaystation />)

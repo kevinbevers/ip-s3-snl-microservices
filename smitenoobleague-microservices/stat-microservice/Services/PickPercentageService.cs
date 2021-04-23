@@ -30,11 +30,12 @@ namespace stat_microservice.Services
             try
             {
                 PlayerWithTeamInfo foundPlayer = await _externalServices.GetPlayerWithTeamInfoByPlayerIdAsync(playerID);
-                if (foundPlayer != null)
+                if (foundPlayer != null || await _db.TableStats.Where(x => x.PlayerId == playerID).CountAsync() > 0)
                 {
+                    var playerData = await _db.TableStats.Where(x => x.PlayerId == playerID).Select(x => new { name = x.PlayerName, platform = ((ApiPlatformEnum)x.PlayerPlatformId).ToString() }).FirstOrDefaultAsync();
                     PlayerPickPercentages playerPickPercentages = new PlayerPickPercentages {
-                        Player = foundPlayer?.Player,
-                        Team = foundPlayer?.Team,
+                        Player = foundPlayer?.Player != null ? foundPlayer.Player : new TeamMember { TeamMemberName = playerData.name, TeamMemberPlatform = playerData.platform, PlayerID = (int)playerID },
+                    Team = foundPlayer?.Team,
                         TotalGamesPlayed = _db.TableStats.Where(x => x.PlayerId == playerID).Select(x => new { x.GameId, x.MatchupId }).Distinct().Count(),
                         TotalGamesPlayedInSNL = _db.TableStats.Select(x => new { x.GameId, x.MatchupId }).Distinct().Count(),
                         Gods = await GetGodWithPickPercentagesForPlayerAsync(playerID)
