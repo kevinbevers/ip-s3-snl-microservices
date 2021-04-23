@@ -133,7 +133,7 @@ namespace stat_microservice.Services
             {
                 double killassists = (double)god.TotalKills + (double)god.TotalAssists;
                 double totalKillsByTeam = (double)playerMatchesStats.Where(z => z.GodPlayedId == god.God.GodId).Select(z => z.TotalKillsPlayerTeam).Sum();
-                double avgkp = Math.Round(killassists / totalKillsByTeam * 100);
+                double avgkp = Math.Round(killassists / (totalKillsByTeam != 0 ? totalKillsByTeam : 1) * 100);
                 god.AverageKillParticipation = avgkp;
             }
 
@@ -143,7 +143,7 @@ namespace stat_microservice.Services
         {
             PlayerStatistics PlayerStats = await _db.TableStats.Where(x => x.PlayerId == playerID).GroupBy(y => y.PlayerId, (y, z) => new PlayerStatistics
             {
-                AverageKillParticipation = (int)(((double)z.Select(s => s.IgKills).Sum() + (double)z.Select(s => s.IgAssists).Sum()) / (double)playerMatchesStats.Select(x => x.TotalKillsPlayerTeam).Sum() * 100),
+                AverageKillParticipation = (int)(((double)z.Select(s => s.IgKills).Sum() + (double)z.Select(s => s.IgAssists).Sum()) / ((double)playerMatchesStats.Select(x => x.TotalKillsPlayerTeam).Sum() != 0 ? (double)playerMatchesStats.Select(x => x.TotalKillsPlayerTeam).Sum() : 1) * 100),
                 AverageAssists = (int)z.Select(s => s.IgAssists).Average(),
                 AverageDamageDealt = (int)z.Select(s => s.IgDamageDealt).Average(),
                 AverageKills = (int)z.Select(s => s.IgKills).Average(),
