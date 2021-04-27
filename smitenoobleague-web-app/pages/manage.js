@@ -15,6 +15,7 @@ import CreateSchedule from "src/components/managepage/createschedule";
 import ManageArticles from "src/components/managepage/managearticles";
 import CreateArticle from "src/components/managepage/createarticle";
 import SubmitMatch from "src/components/managepage/submitmatch";
+import ManageForfeit from "src/components/managepage/manageforfeit";
 //Auth
 import helpers from "utils/helpers";
 
@@ -111,7 +112,7 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                                         <Button variant={"primary"} size={"lg"} className="btn-block">penalize team in standings</Button>
                                     </Col>
                                     <Col md={6} className="mb-2">
-                                    <Button variant={"primary"} size={"lg"} className="btn-block">Enforce match forfeit</Button>
+                                        <ManageForfeit apiToken={apiToken} adminManage={true}/>
                                     </Col>
                                 </Row>
                                 <Row>

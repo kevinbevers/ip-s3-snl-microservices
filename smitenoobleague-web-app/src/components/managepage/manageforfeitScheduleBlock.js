@@ -5,9 +5,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 //custom components
-import ScheduleItem from "src/components/ScheduleItem";
+import ManageForfeitScheduleItem from "src/components/managepage/manageforfeitScheduleItem";
 
-export default function ScheduleBlock({Schedule}) {
+export default function ManageForfeitScheduleBlock({Schedule, apiToken, updateScore}) {
   //First time render set the initial state values
   //CurrentWeekNumber
   const [weekNumber, setWeekNumber] = useState(Schedule?.currentWeek);
@@ -44,28 +44,33 @@ export default function ScheduleBlock({Schedule}) {
     setShownMatchups(Schedule?.matchups.filter(mu => mu.weekNumber == weekNumber - 1));
   };
 
+  function updateMatchupScore(matchupID, score) {
+    updateScore(matchupID, score);
+    setShownMatchups(Schedule?.matchups.filter(mu => mu.weekNumber == weekNumber));
+  };
+
   return (
     <>
         <Row>
-          <Col md={3}></Col>
-          <Col md={6} className="d-inline-flex justify-content-center">
+          <Col md={1}></Col>
+          <Col md={10} className="d-inline-flex justify-content-center p-0">
             {/* show previous button if we are not on first element */}
             <Button variant="primary" disabled={weekNumber == 1} onClick={DecrementWeekNumber}>prev</Button>
-            <h4 className="ml-2 mr-2 mb-0 align-self-center font-weight-bold">Schedule Week {weekNumber}</h4>
+            <h4 className="ml-1 mr-1 mb-0 align-self-center font-weight-bold">Schedule Week {weekNumber}</h4>
             {/* hide next button if we are at the last element */}
             <Button variant="primary" disabled={weekNumber >= maxWeeks} onClick={IncrementWeekNumber}>next</Button>
           </Col>
-          <Col md={3}></Col>
+          <Col md={1}></Col>
         </Row>
         <Row className="mt-2">
-          <Col md={1} xl={2}></Col>
-          <Col md={10} xl={8} className="text-center">
+          <Col md={1} xl={1}></Col>
+          <Col md={10} xl={10} className="text-center">
               <p>{calculateWeekString()}</p>
               {shownMatchups.map((m, index) => (
-                  <ScheduleItem key={index} homeTeam={m.homeTeam} awayTeam={m.awayTeam} matchupID={m.matchupID} byeWeek={m.byeWeek} score={m.score}/>     
+                  <ManageForfeitScheduleItem key={index} homeTeam={m.homeTeam} awayTeam={m.awayTeam} matchupID={m.matchupID} byeWeek={m.byeWeek} score={m.score} apiToken={apiToken} updateScore={updateMatchupScore}/>     
               ))}
           </Col>
-          <Col md={1} xl={2}></Col>
+          <Col md={1} xl={1}></Col>
         </Row>
     </>
   );

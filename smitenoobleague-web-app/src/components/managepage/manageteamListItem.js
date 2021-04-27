@@ -76,7 +76,7 @@ export default function ManageTeamListItem({apiToken, Team, removeTeamFunc, admi
               </Row>
             </Col>
             <Col md={7} xl={7} className="mb-2">
-              <CaptainTeamManagement apiToken={apiToken} apiResponse={teamdata} adminManage={true} />
+              <CaptainTeamManagement apiToken={apiToken} apiResponse={teamdata} adminManage={adminManage} />
             </Col>
           </Row>
         </Container>

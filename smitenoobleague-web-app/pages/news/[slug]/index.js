@@ -16,9 +16,15 @@ import Image from "next/image";
 
 
 export default function news({LoginSession, Article}) {
+  // custom loader, this one doesn't use server performance and just displays the image vanilla
+  const imageLoader = ({ src, width, quality }) => {
+    // return `${src}?w=${width}&q=${quality || 75}`
+    return `${src}`;
+    }
+
   const ArticleImg = (a) => {
     const articleImg = process.env.NEXT_PUBLIC_BASE_API_URL + "/news-service/images/" + Article?.articleImagePath;
-    return Article?.articleImagePath != null ? <Image alt={"SNL News Image"} layout={"fill"} src={articleImg} className="news-bannerimg" draggable={false}></Image>
+    return Article?.articleImagePath != null ? <Image loader={imageLoader} alt={"SNL News Image"} layout={"fill"} src={articleImg} className="news-bannerimg" draggable={false}></Image>
     : <Image alt={"SNL News Image"} layout={"fill"} src={"/images/news_placeholder.jpg"} className="news-bannerimg" draggable={false}></Image>;
   };
 

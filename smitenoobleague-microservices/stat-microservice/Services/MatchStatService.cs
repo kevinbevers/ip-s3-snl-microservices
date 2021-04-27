@@ -26,6 +26,31 @@ namespace stat_microservice.Services
 
         }
 
+        public async Task<ActionResult> ForfeitGameInMatchupAsync(int matchupID, int forfeitingTeamID)
+        {
+            //yes this code is almost the same as the bottom part in validate but the save matchstats are cut out.
+            try
+            {
+                //need objects to get the needed data / scheduleID, divisionID and matchup info
+                Team forfeitingTeam = await _externalServices.GetBasicTeamInfoByTeamId(forfeitingTeamID);
+                Schedule schedule = await _externalServices.GetPlannedMatchUpByDivisionIdAsync((int)forfeitingTeam.DivisionID);
+                Matchup m = schedule.Matchups.Where(x => x.MatchupID == matchupID).FirstOrDefault();
+                ScheduledMatch validMatchup = new ScheduledMatch { ScheduleID = schedule.ScheduleID, matchup = m, ScheduleStartDate = schedule.ScheduleStartDate };
+                //Team objects
+                TeamWithDetails loserTeam = new TeamWithDetails { TeamID = forfeitingTeamID };
+                TeamWithDetails winnerTeam = new TeamWithDetails { TeamID = m.AwayTeam.TeamID == forfeitingTeamID ? m.HomeTeam.TeamID : m.AwayTeam.TeamID };
+
+                return await ProcessMatchResults(null, winnerTeam, loserTeam, "", "", validMatchup, m);
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to forfeit a game in a matchup.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to forfeit a game in a matchup.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
         public async Task<ActionResult<IEnumerable<MatchHistory>>> GetMatchHistoryOverview(int pageSize, int pageIndex)
         {
            try
@@ -261,11 +286,11 @@ namespace stat_microservice.Services
                     int idLoser = loserTeam.TeamMembers.Where(m => m.TeamCaptain == true).Select(m => m.TeamMemberID).FirstOrDefault();
                     string loserCaptainMail = await _externalServices.GetCaptainEmailWithCaptainTeamMemberIDAsync(idLoser);
                     //log this, to track down issues with captain email not being saved in the db.
-                    if(loserCaptainMail == null)
+                    if (loserCaptainMail == null)
                     {
                         _logger.LogError("Losing team's captain doesn't have an email set in the DB");
                     }
-                    if(winnerCaptainMail == null)
+                    if (winnerCaptainMail == null)
                     {
                         _logger.LogError("Winning team's captain doesn't have an email set in the DB");
                     }
@@ -302,14 +327,14 @@ namespace stat_microservice.Services
                         await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"Both teams used more fills then allowed, only 1 fill is allowed per team per match.");
                         return new ObjectResult("Both of the teams are using more fills then allowed, max 1 fill per team per match.") { StatusCode = 400 };
                     }
-                    else if(winnerTeamUsedMoreFillsThanAllowed)
+                    else if (winnerTeamUsedMoreFillsThanAllowed)
                     {
                         await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"{winnerTeam.TeamName} used more fills then allowed, only 1 fill is allowed per team per match.");
                         return new ObjectResult($"{winnerTeam.TeamName} used more fills then allowed, max 1 fill per team per match.") { StatusCode = 400 };
                     }
-                    else if(loserTeamUsedMoreFillsThanAllowed)
+                    else if (loserTeamUsedMoreFillsThanAllowed)
                     {
-                        await SendErrorEmail(match,winnerTeam,loserTeam,winnerCaptainMail,loserCaptainMail, $"{loserTeam.TeamName} used more fills then allowed, only 1 fill is allowed per team per match.");
+                        await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"{loserTeam.TeamName} used more fills then allowed, only 1 fill is allowed per team per match.");
                         return new ObjectResult($"{loserTeam.TeamName} used more fills then allowed, max 1 fill per team per match.") { StatusCode = 400 };
                     }
                     #endregion
@@ -324,7 +349,7 @@ namespace stat_microservice.Services
                         await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"There was no scheduled matchup found between these teams.");
                         return new ObjectResult("There was no scheduled matchup found between these teams.") { StatusCode = 400 };
                     }
-                    else if(m == null)
+                    else if (m == null)
                     {
                         await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"There was no valid matchup found between these teams. <br /> A match can't be played before it's scheduled. <br /> Missed a match? you have 2 weeks max to catch up.");
                         return new ObjectResult("There was no valid matchup found between these teams.") { StatusCode = 400 };
@@ -332,89 +357,7 @@ namespace stat_microservice.Services
                     #endregion
 
                     #region check if teams already played a game prior to this one or if this is the first for the matchup. and act upon it
-                    List<TableMatchResult> previousMatchupResults = await _db.TableMatchResults.Where(mr => mr.ScheduleMatchUpId == m.MatchupID).ToListAsync();
-
-                    //Add a new matchResult
-                    TableMatchResult matchResultToAdd = new TableMatchResult
-                    {
-                        DatePlayed = match.EntryDate,
-                        GameId = match.GameID,
-                        ScheduleMatchUpId = m.MatchupID,
-                        WinningTeamId = winnerTeam.TeamID,
-                        LosingTeamId = loserTeam.TeamID,
-                        GamedurationInSeconds = match.MatchDurationInSeconds,
-                        AwayTeamId = m.AwayTeam.TeamID,
-                        HomeTeamId = m.HomeTeam.TeamID
-                    };
-
-                    //Not the first gameID for this planned matchup
-                    if (previousMatchupResults?.Count() > 0)
-                    {
-                        if(previousMatchupResults.Where(x => x.GameId == matchResultToAdd?.GameId && x.ScheduleMatchUpId == matchResultToAdd?.ScheduleMatchUpId).Count() > 0)
-                        {
-                            return new ObjectResult("The submitted match was useless the game is already in the database.") { StatusCode = 400 };
-                        }
-
-
-                        int homeTeamID = m.HomeTeam.TeamID;
-                        int awayTeamID = m.AwayTeam.TeamID;
-                        //Use the previousMatchResults to decide which game this is and if it needs to be added or the match was already decided.
-                        int homeTeamWinCount = previousMatchupResults.Where(pm => pm.WinningTeamId == homeTeamID).Count();
-                        int awayTeamWinCount = previousMatchupResults.Where(pm => pm.WinningTeamId == awayTeamID).Count();
-
-                        //one of the teams already has 2 wins. in a best of 3 that means you already won the matchup
-                        if(homeTeamWinCount > 1 || awayTeamWinCount > 1)
-                        {
-                            await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"The submitted match was useless the matchup is already completed.");
-                            return new ObjectResult("The submitted match was useless the matchup is already completed.") { StatusCode = 400 };
-                        }
-                        else
-                        {
-                            //save the matchResult to the matchresult table
-                            _db.TableMatchResults.Add(matchResultToAdd);
-                            await _db.SaveChangesAsync();
-
-                            await UpdateScoreTextAsync(winnerTeam, m, homeTeamWinCount, awayTeamWinCount);
-                            //update winCount based on latest result
-                            homeTeamWinCount = winnerTeam.TeamID == homeTeamID ? homeTeamWinCount + 1 : homeTeamWinCount;
-                            awayTeamWinCount = winnerTeam.TeamID == awayTeamID ? awayTeamWinCount + 1 : awayTeamWinCount;
-
-                            //This game completed the matchup
-                            if(homeTeamWinCount > 1 || awayTeamWinCount > 1)
-                            {
-                                await AddMatchResultsToStandingsAsync(winnerTeam, loserTeam, validMatchup, homeTeamID, awayTeamID, homeTeamWinCount, awayTeamWinCount);
-                            }
-
-                            await SaveMatchStatsToDatabaseAsync(match, winnerTeam, loserTeam, validMatchup);
-
-                            //send email to both captains the match has been added
-                            int gameNumber = homeTeamWinCount + awayTeamWinCount;
-                            string gameDate = match.EntryDate.ToString("dddd dd MMMM yyyy 'at' H:mm");
-                            string coolMailMessage = $"The match was played on {gameDate}. <br /> The match took {match.MatchDuration}.";
-                            await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage, validMatchup.matchup.MatchupID);
-
-                            return new ObjectResult("Match stats successfully saved") { StatusCode = 200 };
-                        }
-                    }
-                    else //the first game of the matchup series
-                    {
-                        //save the matchResult to the matchresult table
-                        _db.TableMatchResults.Add(matchResultToAdd);
-                        await _db.SaveChangesAsync();
-
-                        await UpdateScoreTextAsync(winnerTeam, m, 0, 0);
-
-                        await SaveMatchStatsToDatabaseAsync(match, winnerTeam, loserTeam, validMatchup);
-
-                        //send email to both captains the match has been added
-                        int gameNumber = 1;
-                        string gameDate = match.EntryDate.ToString("dddd dd MMMM yyyy 'at' H:mm");
-                        string coolMailMessage = $"The match was played on {gameDate}. <br /> The match took {match.MatchDuration}.";
-                        await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage, validMatchup.matchup.MatchupID);
-
-                        return new ObjectResult("Match stats successfully saved") { StatusCode = 200 };
-
-                    }
+                    return await ProcessMatchResults(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, validMatchup, m);
                     #endregion
                 }
             }
@@ -968,6 +911,115 @@ namespace stat_microservice.Services
             }
 
             return listOfPlayerStats; 
+        }
+
+        private async Task<ActionResult> ProcessMatchResults(MatchData match, TeamWithDetails winnerTeam, TeamWithDetails loserTeam, string winnerCaptainMail, string loserCaptainMail, ScheduledMatch validMatchup, Matchup m)
+        {
+            List<TableMatchResult> previousMatchupResults = await _db.TableMatchResults.Where(mr => mr.ScheduleMatchUpId == m.MatchupID).ToListAsync();
+
+            //Add a new matchResult
+            TableMatchResult matchResultToAdd = new TableMatchResult
+            {
+                DatePlayed = match != null ? match.EntryDate : DateTime.UtcNow,
+                GameId = match != null ? match.GameID : null,
+                ScheduleMatchUpId = m.MatchupID,
+                WinningTeamId = winnerTeam.TeamID,
+                LosingTeamId = loserTeam.TeamID,
+                GamedurationInSeconds = match != null ? match.MatchDurationInSeconds : null,
+                AwayTeamId = m.AwayTeam.TeamID,
+                HomeTeamId = m.HomeTeam.TeamID
+            };
+
+            //Not the first gameID for this planned matchup
+            if (previousMatchupResults?.Count() > 0)
+            {
+                if (match != null)
+                {
+                    if (previousMatchupResults.Where(x => x.GameId == matchResultToAdd?.GameId && x.ScheduleMatchUpId == matchResultToAdd?.ScheduleMatchUpId).Count() > 0)
+                    {
+                        return new ObjectResult("The submitted match was useless the game is already in the database.") { StatusCode = 400 };
+                    }
+                }
+
+
+                int homeTeamID = m.HomeTeam.TeamID;
+                int awayTeamID = m.AwayTeam.TeamID;
+                //Use the previousMatchResults to decide which game this is and if it needs to be added or the match was already decided.
+                int homeTeamWinCount = previousMatchupResults.Where(pm => pm.WinningTeamId == homeTeamID).Count();
+                int awayTeamWinCount = previousMatchupResults.Where(pm => pm.WinningTeamId == awayTeamID).Count();
+
+                //one of the teams already has 2 wins. in a best of 3 that means you already won the matchup
+                if (homeTeamWinCount > 1 || awayTeamWinCount > 1)
+                {
+                    if (match != null)
+                    {
+                        await SendErrorEmail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, $"The submitted match was useless the matchup is already completed.");
+                        return new ObjectResult("The submitted match was useless the matchup is already completed.") { StatusCode = 400 };
+                    }
+                    else
+                    {
+                        return new ObjectResult("Cant forfeit the matchup is already completed.") { StatusCode = 400 };
+                    }
+                }
+                else
+                {
+                    //save the matchResult to the matchresult table
+                    _db.TableMatchResults.Add(matchResultToAdd);
+                    await _db.SaveChangesAsync();
+
+                    await UpdateScoreTextAsync(winnerTeam, m, homeTeamWinCount, awayTeamWinCount);
+                    //update winCount based on latest result
+                    homeTeamWinCount = winnerTeam.TeamID == homeTeamID ? homeTeamWinCount + 1 : homeTeamWinCount;
+                    awayTeamWinCount = winnerTeam.TeamID == awayTeamID ? awayTeamWinCount + 1 : awayTeamWinCount;
+
+                    //This game completed the matchup
+                    if (homeTeamWinCount > 1 || awayTeamWinCount > 1)
+                    {
+                        await AddMatchResultsToStandingsAsync(winnerTeam, loserTeam, validMatchup, homeTeamID, awayTeamID, homeTeamWinCount, awayTeamWinCount);
+                    }
+
+                    if (match != null)
+                    {
+                        await SaveMatchStatsToDatabaseAsync(match, winnerTeam, loserTeam, validMatchup);
+                        //send email to both captains the match has been added
+                        int gameNumber = homeTeamWinCount + awayTeamWinCount;
+                        string gameDate = match.EntryDate.ToString("dddd dd MMMM yyyy 'at' H:mm");
+                        string coolMailMessage = $"The match was played on {gameDate}. <br /> The match took {match.MatchDuration}.";
+                        await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage, validMatchup.matchup.MatchupID);
+
+                        return new ObjectResult("Match stats successfully saved") { StatusCode = 200 };
+                    }
+                    else
+                    {
+                        return new ObjectResult("Game forfeited successfully.") { StatusCode = 200 };
+                    }
+                }
+            }
+            else //the first game of the matchup series
+            {
+                //save the matchResult to the matchresult table
+                _db.TableMatchResults.Add(matchResultToAdd);
+                await _db.SaveChangesAsync();
+
+                await UpdateScoreTextAsync(winnerTeam, m, 0, 0);
+
+                if (match != null)
+                {
+                    await SaveMatchStatsToDatabaseAsync(match, winnerTeam, loserTeam, validMatchup);
+                    //send email to both captains the match has been added
+                    int gameNumber = 1;
+                    string gameDate = match.EntryDate.ToString("dddd dd MMMM yyyy 'at' H:mm");
+                    string coolMailMessage = $"The match was played on {gameDate}. <br /> The match took {match.MatchDuration}.";
+                    await SendSuccessMail(match, winnerTeam, loserTeam, winnerCaptainMail, loserCaptainMail, gameNumber, coolMailMessage, validMatchup.matchup.MatchupID);
+
+                    return new ObjectResult("Match stats successfully saved") { StatusCode = 200 };
+                }
+                else
+                {
+                    return new ObjectResult("Game forfeited successfully.") { StatusCode = 200 };
+                }
+
+            }
         }
         #endregion
     }

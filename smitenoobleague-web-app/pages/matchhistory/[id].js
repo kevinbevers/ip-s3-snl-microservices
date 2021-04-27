@@ -34,15 +34,9 @@ export default function matchdetails({LoginSession, MatchupData, status, errMsg}
             <Col></Col>
             <Col xl={3} md={5} xs={12} className="">
               <Nav variant="pills" className="nav-justified"> {/*flex and justify center to have the nav links be in the middle of the object, grey color: id="pillNav" */}
-                <Nav.Item className="secondary">
-                  <Nav.Link eventKey="Game1" draggable="false">Game 1</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="Game2" draggable="false">Game 2</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="Game3" draggable="false">Game 3</Nav.Link>
-                </Nav.Item>
+                  {MatchupData?.matchResults.length > 0 ? <Nav.Item><Nav.Link eventKey="Game1" draggable="false">Game 1</Nav.Link></Nav.Item>: <> </>}
+                  {MatchupData?.matchResults.length > 1 ? <Nav.Item><Nav.Link eventKey="Game2" draggable="false">Game 2</Nav.Link></Nav.Item>: <> </>}
+                  {MatchupData?.matchResults.length > 2 ? <Nav.Item><Nav.Link eventKey="Game3" draggable="false">Game 3</Nav.Link></Nav.Item>: <> </>}
               </Nav>
             </Col>
             <Col></Col>
