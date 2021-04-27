@@ -18,7 +18,7 @@ export default function ScheduleItem({homeTeam, awayTeam, matchupID, byeWeek, sc
             return (<Img webp width={70} height={70} alt={t?.teamName} title={t?.teamName} src={require("public/images/byeweek.png")} className="MhTeamImg" draggable={false}></Img>);
         }
         else {
-        return (t?.teamLogoPath != null ? <Image height={70} width={70} alt={t?.teamName} title={t?.teamName} src={imagePath} className="MhTeamImg" draggable={false}></Image> :
+        return (t?.teamLogoPath != null ? <Image loading={"eager"} height={70} width={70} alt={t?.teamName} title={t?.teamName} src={imagePath} className="MhTeamImg" draggable={false}></Image> :
                 <Img webp width={70} height={70} alt={t?.teamName} title={t?.teamName} src={require("public/images/teamBadge.png")} className="MhTeamImg" draggable={false}></Img>);
         }
 };

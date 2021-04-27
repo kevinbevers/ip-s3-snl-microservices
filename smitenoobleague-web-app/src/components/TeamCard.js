@@ -26,7 +26,7 @@ export default function TeamCard({Team}){
                 <Row>
                   <Col md={2} className="p-0 align-items-left">
                     {Team?.teamLogoPath != null ?
-                    <Image priority={true} height={70} width={70} alt={Team?.teamName} src={imagePath} draggable={false}></Image>
+                    <Image loading={"eager"} height={70} width={70} alt={Team?.teamName} src={imagePath} draggable={false}></Image>
                     : <Img src={require("public/images/teamBadge.png")} alt={Team?.teamName} className="MhTeamImg" draggable={false}></Img>
                     }
                   </Col>

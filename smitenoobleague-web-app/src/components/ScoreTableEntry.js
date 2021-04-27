@@ -11,7 +11,7 @@ import Image from "next/image";
 
 const RenderTeamImage = (t) => {
     const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + t?.teamLogoPath;
-    return (t?.teamLogoPath != null ? <Image height={20} width={20} alt={t?.teamName} title={t?.teamName} src={imagePath} className="LogoStanding" draggable={false}></Image> :
+    return (t?.teamLogoPath != null ? <Image loading={"eager"} height={20} width={20} alt={t?.teamName} title={t?.teamName} src={imagePath} className="LogoStanding" draggable={false}></Image> :
             <Img webp width={20} height={20} alt={t?.teamName} title={t?.teamName} src={require("public/images/teamBadge.png")} className="LogoStanding" draggable={false}></Img>);
 };
 
