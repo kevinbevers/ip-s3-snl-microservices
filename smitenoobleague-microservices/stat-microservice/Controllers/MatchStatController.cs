@@ -42,6 +42,7 @@ namespace stat_microservice.Controllers
         }
         // POST: matchstat/forfeitmatch
         [HttpPost("forfeitmatch")]
+        [Authorize(Roles = "Admin,Mod")]
         public async Task<ActionResult> Post([FromBody] ForfeitInfo forfeitInfo)
         {
             return await _matchStatService.ForfeitGameInMatchupAsync(forfeitInfo.matchupID, forfeitInfo.forfeitingTeamID);
