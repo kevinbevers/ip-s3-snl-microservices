@@ -22,7 +22,8 @@ export default function CreateArticle({apiToken}) {
         setMsgArticleInfo("Err Msg.");
         setShowArticleInfoAlert(false);
         setModalArticleShow(false);
-        setImageFile(null);
+        removeImage();
+        setArticle({});
     };
 
     const handleCreateArticle = async() => {
