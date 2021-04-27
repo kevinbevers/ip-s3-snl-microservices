@@ -10,9 +10,15 @@ const GetMatchupHistoryList = async(pageSize,index) => {
     return apiClient.get(`stat-service/matchstat/getmatchhistory/${pageSize}/${index}`);
 };
 
+const ForfeitMatchup = async(data, apiToken) => {
+    const apiClient = await helpers.BuildApiClient(apiToken);
+    return apiClient.post(`stat-service/matchstat/forfeitmatch`, data);
+};
+
   
 
 export default {
     GetMatchupHistoryByMatchupID,
-    GetMatchupHistoryList
+    GetMatchupHistoryList,
+    ForfeitMatchup
 }

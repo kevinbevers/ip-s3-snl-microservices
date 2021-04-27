@@ -27,7 +27,7 @@ namespace stat_microservice.Controllers
             return await _matchStatService.GetMatchHistoryOverview(pageSize, index);
         }
 
-        // POST: matchstat/savematchdata
+        // POST: matchstat
         [HttpPost]
         [ServiceFilter(typeof(InternalServicesOnly))]
         public async Task<ActionResult> Post([FromBody] MatchData match)
@@ -39,6 +39,12 @@ namespace stat_microservice.Controllers
         public async Task<ActionResult<MatchHistoryDetails>> GetMatchHistory(int matchupID)
         {
             return await _matchStatService.GetMatchHistoryByMatchupIdAsync(matchupID);
+        }
+        // POST: matchstat/forfeitmatch
+        [HttpPost("forfeitmatch")]
+        public async Task<ActionResult> Post([FromBody] ForfeitInfo forfeitInfo)
+        {
+            return await _matchStatService.ForfeitGameInMatchupAsync(forfeitInfo.matchupID, forfeitInfo.forfeitingTeamID);
         }
     }
 }

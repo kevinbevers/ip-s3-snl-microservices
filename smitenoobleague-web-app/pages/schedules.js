@@ -8,7 +8,6 @@ import Footer from "../src/components/Footer";
 //bootstrap components
 import { Container, Form, Alert, Button, Col, Row } from "react-bootstrap";
 //custom components
-
 import ScheduleBlock from "src/components/ScheduleBlock";
 //Auth
 import helpers from "utils/helpers";
