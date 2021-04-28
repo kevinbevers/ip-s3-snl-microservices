@@ -11,6 +11,12 @@ import Image from "next/image";
 
 export default function ScheduleItem({homeTeam, awayTeam, matchupID, byeWeek, score}) {
 
+    // custom loader, this one doesn't use server performance and just displays the image vanilla
+    const imageLoader = ({ src, width, quality }) => {
+        // return `${src}?w=${width}&q=${quality || 75}`
+        return `${src}`;
+        }
+
     const RenderTeamImage = (t) => {
         const imagePath = process.env.NEXT_PUBLIC_BASE_API_URL + "/team-service/images/" + t?.teamLogoPath;
         if(t == null)
@@ -18,7 +24,7 @@ export default function ScheduleItem({homeTeam, awayTeam, matchupID, byeWeek, sc
             return (<Img webp width={70} height={70} alt={t?.teamName} title={t?.teamName} src={require("public/images/byeweek.png")} className="MhTeamImg" draggable={false}></Img>);
         }
         else {
-        return (t?.teamLogoPath != null ? <div className="MhTeamImg position-relative"><Image loading={"eager"} layout={"fill"} alt={t?.teamName} title={t?.teamName} src={imagePath} className="MhTeamImg" draggable={false}></Image></div> :
+        return (t?.teamLogoPath != null ? <Image loader={imageLoader} loading={"eager"} width={70} height={70} alt={t?.teamName} title={t?.teamName} src={imagePath} className="MhTeamImg" draggable={false}></Image> :
                 <Img webp width={70} height={70} alt={t?.teamName} title={t?.teamName} src={require("public/images/teamBadge.png")} className="MhTeamImg" draggable={false}></Img>);
         }
 };

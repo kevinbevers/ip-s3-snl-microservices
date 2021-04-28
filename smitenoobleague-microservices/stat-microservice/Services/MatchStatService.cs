@@ -33,7 +33,7 @@ namespace stat_microservice.Services
             {
                 //need objects to get the needed data / scheduleID, divisionID and matchup info
                 Team forfeitingTeam = await _externalServices.GetBasicTeamInfoByTeamId(forfeitingTeamID);
-                Schedule schedule = await _externalServices.GetPlannedMatchUpByDivisionIdAsync((int)forfeitingTeam.DivisionID);
+                Schedule schedule = await _externalServices.GetPlannedMatchUpByDivisionIdAsync((int)forfeitingTeam?.DivisionID);
                 Matchup m = schedule.Matchups.Where(x => x.MatchupID == matchupID).FirstOrDefault();
                 ScheduledMatch validMatchup = new ScheduledMatch { ScheduleID = schedule.ScheduleID, matchup = m, ScheduleStartDate = schedule.ScheduleStartDate };
                 //Team objects
