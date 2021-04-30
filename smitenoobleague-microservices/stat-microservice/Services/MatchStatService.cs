@@ -259,6 +259,16 @@ namespace stat_microservice.Services
 
         public async Task<ActionResult> ValidateAndSaveMatchStatsAsync(MatchData match)
         {
+            return await ValidateAndSaveMatchStatsAsyncChooseToIgnoreFillPrivacy(match, false);
+        }
+
+        public async Task<ActionResult> ValidateAndSaveMatchStatsWithPrivacyFlaggedFillAsync(MatchData match)
+        {
+            return await ValidateAndSaveMatchStatsAsyncChooseToIgnoreFillPrivacy(match, true);
+        }
+
+        private async Task<ActionResult> ValidateAndSaveMatchStatsAsyncChooseToIgnoreFillPrivacy(MatchData match, bool ignoreFillPrivacy)
+        {
             try
             {
                 List<int> IdsOfPlayerInMatchWinners = new List<int>();
@@ -293,6 +303,22 @@ namespace stat_microservice.Services
                     if (winnerCaptainMail == null)
                     {
                         _logger.LogError("Winning team's captain doesn't have an email set in the DB");
+                    }
+                    #endregion
+
+                    #region checkIfFillHasPrivacyFlagAndThenIgnoreItIfWanted
+                    if(ignoreFillPrivacy)
+                    {
+                        int winnerPrivacyFillCount = match.Winners.Where(x => x.Player.PlayerID == null && x.playerIsFill).Count();
+                        int loserPrivacyFillCount = match.Losers.Where(x => x.Player.PlayerID == null && x.playerIsFill).Count();
+
+                        if (winnerPrivacyFillCount <= 1 && loserPrivacyFillCount <= 1)
+                        {
+                            if (match.ret_msg.ToString().Contains("Privacy flag set for player(s):"))
+                            {
+                                match.ret_msg = null;
+                            }
+                        }
                     }
                     #endregion
 
