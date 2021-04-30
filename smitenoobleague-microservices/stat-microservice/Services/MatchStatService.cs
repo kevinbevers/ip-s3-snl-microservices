@@ -759,6 +759,11 @@ namespace stat_microservice.Services
                 List<Matchup> matchups = new List<Matchup> { matchup1, matchup2 };
                 //Get the matchup that is already past the currentWeek / the same and check if the matchup is not older then 2 weeks. 2 weeks is the catchup time.
                 scheduledMatch.matchup = matchups?.Where(mup => mup?.WeekNumber <= foundSchedule?.CurrentWeek && (foundSchedule.CurrentWeek - mup.WeekNumber) <= 2).FirstOrDefault();
+                //when the matchup is deemed null because it's submitted to long after. try this better method I should probably properly implement.
+                if(scheduledMatch.matchup == null)
+                {
+                    scheduledMatch.matchup = matchups?.Where(mup => scheduledMatch.ScheduleStartDate.AddDays(mup.WeekNumber * 7) < match.EntryDate && scheduledMatch.ScheduleStartDate.AddDays(mup.WeekNumber * 7).AddDays(14) > match.EntryDate).FirstOrDefault();
+                }
                 //check if the entry date of the match id isn't before the matchup is scheduled
                 //var currentWeekDate = scheduledMatch.ScheduleStartDate.AddDays(7 * scheduledMatch.matchup.WeekNumber);
                 //if (match?.EntryDate < currentWeekDate)
