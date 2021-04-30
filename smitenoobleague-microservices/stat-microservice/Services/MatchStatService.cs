@@ -550,7 +550,7 @@ namespace stat_microservice.Services
                     RoleId = snlTeam.TeamMembers?.Where(tm => tm.PlayerID == p.Player?.PlayerID).Count() <= 0 ? RoleIdForFill : playerRoleId,
                     PlayerId = p.Player?.PlayerID,
                     PlayerName = p.Player.Playername,
-                    PlayerPlatformId = p.Player?.Platform != null ? (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), p.Player?.Platform) : -1,
+                    PlayerPlatformId = p.Player?.Platform != "" && p.Player?.Platform != null ? (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), p.Player?.Platform) : -1,
                     PatchNumber = match.patchNumber,
                     IgTaskforce = p.IngameTeamID,
                     GodPlayedId = p.God.GodId,
