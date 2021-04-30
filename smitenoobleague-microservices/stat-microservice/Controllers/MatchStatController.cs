@@ -35,6 +35,13 @@ namespace stat_microservice.Controllers
         {
             return await _matchStatService.ValidateAndSaveMatchStatsAsync(match);
         }
+        // POST: matchstat
+        [HttpPost("ignorefillprivacy")]
+        [Authorize(Roles = "Admin,Mod")]
+        public async Task<ActionResult> PostIgnoreFillPrivacy([FromBody] MatchData match)
+        {
+            return await _matchStatService.ValidateAndSaveMatchStatsWithPrivacyFlaggedFillAsync(match);
+        }
         // GET: matchstat/matchhistorybymatchupid/{matchupID}
         [HttpGet("matchhistorybymatchupid/{matchupID}")]
         public async Task<ActionResult<MatchHistoryDetails>> GetMatchHistory(int matchupID)
