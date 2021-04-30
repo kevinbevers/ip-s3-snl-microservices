@@ -762,8 +762,9 @@ namespace stat_microservice.Services
                 //when the matchup is deemed null because it's submitted to long after. try this better method I should probably properly implement.
                 if(scheduledMatch.matchup == null)
                 {
-                    _logger.LogError("Went into the new function because matchup = null");
-                    scheduledMatch.matchup = matchups?.Where(mup => scheduledMatch.ScheduleStartDate.AddDays(mup.WeekNumber * 7) <= match.EntryDate && scheduledMatch.ScheduleStartDate.AddDays(mup.WeekNumber * 7).AddDays(14) >= match.EntryDate).FirstOrDefault();
+                    _logger.LogInformation("Went into the new function because matchup = null");
+                    //week number - 1 because you don't want to add 7 days too much.
+                    scheduledMatch.matchup = matchups?.Where(mup => scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7) <= match.EntryDate && scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7).AddDays(14) >= match.EntryDate).FirstOrDefault();
                 }
                 //check if the entry date of the match id isn't before the matchup is scheduled
                 //var currentWeekDate = scheduledMatch.ScheduleStartDate.AddDays(7 * scheduledMatch.matchup.WeekNumber);
