@@ -314,9 +314,12 @@ namespace stat_microservice.Services
 
                         if (winnerPrivacyFillCount <= 1 && loserPrivacyFillCount <= 1)
                         {
-                            if (match.ret_msg.ToString().Contains("Privacy flag set for player(s):"))
+                            if (match.ret_msg != null)
                             {
-                                match.ret_msg = null;
+                                if (match.ret_msg.ToString().Contains("Privacy flag set for player(s):"))
+                                {
+                                    match.ret_msg = null;
+                                }
                             }
                         }
                     }
