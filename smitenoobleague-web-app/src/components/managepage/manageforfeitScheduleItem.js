@@ -37,16 +37,6 @@ export default function ManageForfeitScheduleItem({homeTeam, awayTeam, matchupID
         }
     }
 
-    const checkByeWeek = () => {
-        if(awayTeam?.teamID != null && homeTeam?.teamID != null)
-        {
-            return false;
-        }
-        else {
-            return true;
-        }
-    };
-
     const forfeitMatch = async(forfeitID) => {
         const data = {
             matchupID: matchupID,
@@ -84,7 +74,7 @@ export default function ManageForfeitScheduleItem({homeTeam, awayTeam, matchupID
                                 <Col md={9} className="my-auto"><h3 className="">{homeTeam?.teamName != null ? <Link href={`/stats/team/${homeTeam.teamID}`}><span className="Hoverable Clickable" title={"click to see team stats"}>{homeTeam?.teamName}</span></Link> : "No opponent this week"}</h3></Col>
                             </Row>
                             <Row className="mt-1">
-                                <Col><Button block disabled={checkScore(true) || checkByeWeek()} onClick={handleForfeitHome}>Forfeit 1 Game</Button></Col>
+                                <Col><Button block disabled={checkScore(true) || byeWeek} onClick={handleForfeitHome}>Forfeit 1 Game</Button></Col>
                             </Row>
                         </Col>
                         <Col md={2} className="my-auto"><h2>VS</h2></Col>
@@ -96,7 +86,7 @@ export default function ManageForfeitScheduleItem({homeTeam, awayTeam, matchupID
                                 </Col>
                             </Row>
                             <Row className="mt-1">
-                                <Col><Button block disabled={checkScore(false)  || checkByeWeek()} onClick={handleForfeitAway}>Forfeit 1 Game</Button></Col>
+                                <Col><Button block disabled={checkScore(false)  || byeWeek} onClick={handleForfeitAway}>Forfeit 1 Game</Button></Col>
                             </Row>
                         </Col>
                     </Row>
