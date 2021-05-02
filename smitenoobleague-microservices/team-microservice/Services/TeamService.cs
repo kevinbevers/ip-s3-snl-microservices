@@ -1462,7 +1462,7 @@ namespace team_microservice.Services
         {
             var userFromJWT = _httpContext.HttpContext.User;
 
-            if (userFromJWT.IsInRole("Admin"))
+            if (userFromJWT.IsInRole("Admin") || userFromJWT.IsInRole("Mod"))
             {
                 return true;
             }
