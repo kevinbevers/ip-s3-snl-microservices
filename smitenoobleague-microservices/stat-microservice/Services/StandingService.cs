@@ -39,7 +39,7 @@ namespace stat_microservice.Services
 
                     foreach(var standing in foundStandings)
                     {
-                        var last5MatchupIds = await _db.TableMatchResults.Where(tmr => tmr.AwayTeamId == standing.TeamId || tmr.HomeTeamId == standing.TeamId).OrderByDescending(t => t.DatePlayed).Select(t => t.ScheduleMatchUpId).Distinct().Take(5).ToListAsync();
+                        var last5MatchupIds = await _db.TableMatchResults.OrderByDescending(t => t.DatePlayed).Where(tmr => tmr.AwayTeamId == standing.TeamId || tmr.HomeTeamId == standing.TeamId).Select(t => t.ScheduleMatchUpId).Distinct().Take(5).ToListAsync();
                         var lastResults = await _db.TableMatchResults.Where(t => last5MatchupIds.Contains(t.ScheduleMatchUpId)).GroupBy(x => x.ScheduleMatchUpId, (x, y) => new {MatchupID = x ,GamesWon = y.Count(i => i.WinningTeamId == standing.TeamId), GamesLost = y.Count(i => i.LosingTeamId == standing.TeamId), DatePlayed = y.Select(i => i.DatePlayed).Max().Value }).ToListAsync();
                         List<WinLoss> WinLoss = new List<WinLoss>();
                         foreach(var result in lastResults.OrderByDescending(t => t.DatePlayed)) // latest first 
