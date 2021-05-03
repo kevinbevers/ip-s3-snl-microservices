@@ -69,7 +69,7 @@ export default function TeamTable({playerdata, team}) {
                     </Table>
                 </Col>
             </Row>
-            <Row className="mb-5 d-block d-sm-none">
+            <Row className="d-block d-sm-none">
                 <Col><h6 className="text-muted ExtraInfoText">Hold and swipe to scroll table</h6></Col>
             </Row>
         </>
