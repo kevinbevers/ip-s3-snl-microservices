@@ -190,6 +190,9 @@ const SimpleToolTip = (data) => {
                     <Col className="pr-0"><h5 className="mb-0 PlayerBannerStats"><b>Games played:</b> {PlayerStats?.gamesPlayed}</h5></Col>
                     <Col md={6} xs={6} className="pl-0 pr-0"><h5 className="mb-0 PlayerBannerStats"><b>Win / Loss:</b> {PlayerStats?.wins} / {PlayerStats?.losses}</h5></Col>
                     </Row>
+                    <Row className="">
+                  <Col xl={12} md={12} xs={12} className=""><p className="mb-0 pr-0 TeamStatInfo"><i>Player stats do not include forfeits</i></p></Col>
+              </Row>
                 </Col>
               </Row>
               </Col>

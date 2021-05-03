@@ -45,7 +45,8 @@ namespace stat_microservice.Services
                         teamStats.MostPlayed = GetTop5MostPickedGods(godStatistics);
                         teamStats.StarPlayer = await GetStarPlayerId(teamID, teamMatchesStats, foundTeam.TeamMembers);
                         teamStats.RecentPerformanceScore = await GetRecentPerformanceScoreAsync(teamMatchesStats, teamID);
-                        teamStats.RecentMatches = await GetLast5MatchupsByTeamId(teamMatchesStats, teamID);
+                        teamStats.RecentMatches = await GetPageOfMatchupsByTeamId(teamID, 0);
+                        teamStats.MatchHistoryNumberOfPages = (int) Math.Ceiling((double)await _db.TableMatchResults.Where(tmr => tmr.AwayTeamId == teamID || tmr.HomeTeamId == teamID).GroupBy(t => t.ScheduleMatchUpId, (x, y) => new { ScheduleMatchUpId = x, DatePlayed = y.Select(z => z.DatePlayed).Max() }).Select(x => x.ScheduleMatchUpId).Distinct().CountAsync() / 5 );
                     }
                     else
                     {
@@ -68,6 +69,21 @@ namespace stat_microservice.Services
                 _logger.LogError(ex, "Something went wrong trying to get team stats with team ID.");
                 //return result to client
                 return new ObjectResult("Something went wrong trying to get team stats with team ID.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
+            }
+        }
+
+        public async Task<ActionResult<List<RecentMatch>>> GetTeamsMatchHistoryAsync(int? teamID, int page)
+        {
+            try
+            {
+                return new ObjectResult(await GetPageOfMatchupsByTeamId(teamID, page)) { StatusCode = 200 }; //OK
+            }
+            catch (Exception ex)
+            {
+                //log the error
+                _logger.LogError(ex, "Something went wrong trying to get a page of team matches.");
+                //return result to client
+                return new ObjectResult("Something went wrong trying to get a page of team matches.") { StatusCode = 500 }; //INTERNAL SERVER ERROR
             }
         }
 
@@ -161,10 +177,10 @@ namespace stat_microservice.Services
                 
             }).FirstOrDefaultAsync();
 
-            //Games played, won, lost from matchresults to include forfeits.
-            TeamStats.GamesPlayed = await _db.TableMatchResults.Where(x => x.HomeTeamId == teamID || x.AwayTeamId == teamID).CountAsync();
-            TeamStats.Losses = await _db.TableMatchResults.Where(x => x.LosingTeamId == teamID).CountAsync();
-            TeamStats.Wins = await _db.TableMatchResults.Where(x => x.WinningTeamId == teamID).CountAsync();
+            ////Games played, won, lost from matchresults to include forfeits.
+            //TeamStats.GamesPlayed = await _db.TableMatchResults.Where(x => x.HomeTeamId == teamID || x.AwayTeamId == teamID).CountAsync();
+            //TeamStats.Losses = await _db.TableMatchResults.Where(x => x.LosingTeamId == teamID).CountAsync();
+            //TeamStats.Wins = await _db.TableMatchResults.Where(x => x.WinningTeamId == teamID).CountAsync();
 
             //Most banned against.
             List<int?> bannedGods = new List<int?>();
@@ -310,13 +326,13 @@ namespace stat_microservice.Services
 
             return recentPerformanceScoreList;
         }
-        private async Task<List<RecentMatch>> GetLast5MatchupsByTeamId(List<TeamMatchesStats> teamMatchesStats, int? teamID)
+        private async Task<List<RecentMatch>> GetPageOfMatchupsByTeamId(int? teamID, int page)
         {
             //Actually played with stats
             //List<int?> IdOfLast5Matchups = teamMatchesStats.GroupBy(t => t.MatchupId, (x, y) => new { MatchupId = x, DatePlayed = y.Select(z => z.DatePlayed).Max() }).OrderByDescending(x => x.DatePlayed).Take(5).Select(x => x.MatchupId).ToList();
 
             //Last 5 based on results, includes forfeits
-            var IdOfLast5Matchups = await _db.TableMatchResults.Where(tmr => tmr.AwayTeamId == teamID || tmr.HomeTeamId == teamID).GroupBy(t => t.ScheduleMatchUpId, (x, y) => new { ScheduleMatchUpId = x, DatePlayed = y.Select(z => z.DatePlayed).Max() }).OrderByDescending(x => x.DatePlayed).Take(5).Select(x => x.ScheduleMatchUpId).ToListAsync();
+            var IdOfLast5Matchups = await _db.TableMatchResults.Where(tmr => tmr.AwayTeamId == teamID || tmr.HomeTeamId == teamID).GroupBy(t => t.ScheduleMatchUpId, (x, y) => new { ScheduleMatchUpId = x, DatePlayed = y.Select(z => z.DatePlayed).Max() }).OrderByDescending(x => x.DatePlayed).Skip(page * 5).Take(5).Select(x => x.ScheduleMatchUpId).ToListAsync();
 
             List<RecentMatch> matchHistoryList = await _db.TableMatchResults.Where(t => IdOfLast5Matchups.Contains(t.ScheduleMatchUpId)).GroupBy(x => x.ScheduleMatchUpId, (x, y) => new RecentMatch
             {
@@ -332,9 +348,12 @@ namespace stat_microservice.Services
             List<int> listOfTeamIds = matchHistoryList.Select(x => x.Opponent.TeamID).Distinct().ToList();
             IEnumerable<Team> allTeamsInReturn = await _externalServices.GetBasicTeamInfoInBatchWithTeamIdsList(listOfTeamIds);
             //replace team entry with ID only with actual team
-            foreach (Team t in allTeamsInReturn)
+            if (allTeamsInReturn != null)
             {
-                matchHistoryList.Where(mh => mh.Opponent.TeamID == t.TeamID).ToList().ForEach(r => r.Opponent = t);
+                foreach (Team t in allTeamsInReturn)
+                {
+                    matchHistoryList.Where(mh => mh.Opponent.TeamID == t.TeamID).ToList().ForEach(r => r.Opponent = t);
+                }
             }
 
             return matchHistoryList;

@@ -9,6 +9,10 @@
     font-weight: 700;
 }
 
+.TeamStatInfo {
+    font-size: 1vw;
+}
+
 .RecentPerformanceTitle {
     font-size: 1.5vw;
     font-weight: 700;
@@ -50,7 +54,7 @@
         font-weight: 700;
     }
     .TeamBannerStats {
-        font-size: 2vw;
+        font-size: 2.1vw;
     }
     .RecentPerformanceTitle {
         font-size: 4vw;
@@ -71,6 +75,11 @@
     .RecentTeamExtra {
         font-size: 3vw;
     }
+
+    .TeamStatInfo {
+        font-size: 2vw;
+    }
+    
     
     .RecentTeamLogo {
         height: 9vw;

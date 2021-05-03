@@ -14,8 +14,6 @@ export default function RecentTeams({recent}){
             <Img webp alt={t?.teamName} title={t?.teamName} src={require("public/images/teamBadge.png")} className="RecentTeamLogo mr-2" draggable={false}></Img>);
 };
 
-console.log(recent);
-
 const ReadableDate = (date) => {
   const d = new Date(date);
   return d.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
@@ -41,7 +39,7 @@ const ReadableDate = (date) => {
             </Row>
             <Row className="mb-0">
               <Col className="mb-0"> 
-                <p className="mb-0 RecentTeamExtra float-left">{recent?.MatchDurationInSeconds > 0 ? "" : recent?.won ? "Won by Forfeit" : recent?.lost ? "Lost by forfeit" : "In progress"}</p>
+                <p className="mb-0 RecentTeamExtra float-left">{recent?.matchDurationInSeconds > 0 ? "" : recent?.won ? "Won by Forfeit" : recent?.lost ? "Lost by forfeit" : "In progress"}</p>
                 <p className="mb-0 RecentTeamExtra float-right">{ReadableDate(recent?.datePlayed)}</p>
               </Col>
             </Row>

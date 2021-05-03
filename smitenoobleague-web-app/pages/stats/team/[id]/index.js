@@ -6,7 +6,7 @@ import NavBar from "src/components/NavBar";
 import Footer from "src/components/Footer";
 import DefaultErrorPage from "next/error";
 //boostrap components
-import { Badge, Modal, Button, Row, Col, Container, OverlayTrigger, Tooltip, Alert } from "react-bootstrap";
+import { Badge, Modal, Button, Row, Col, Container, OverlayTrigger, Tooltip, Alert, Pagination } from "react-bootstrap";
 //icons
 import { FaBox, FaInfoCircle } from "react-icons/fa";
 //chart
@@ -57,6 +57,35 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
         return <Tooltip id="button-tooltip"><div><b>Not enough data yet to show.</b></div></Tooltip>
       }
     };
+
+    const [currentPage,setCurrentPage] = useState(0);
+    const [recentMatches, setRecentMatches] = useState(TeamStats?.recentMatches);
+    const nextPageInTeamMatchHistory = async() => {
+      const pageNumber = currentPage + 1;
+      await teamservice.GetTeamMatchHistoryWithPageAndTeamID(TeamStats?.team?.teamID, pageNumber).then(res => {
+        console.log(res.data);
+        setRecentMatches(res.data);
+        setCurrentPage(pageNumber);
+      }).catch(err => {});
+    };
+    const previousPageInTeamMatchHistory = async() => {
+      const pageNumber = currentPage - 1;
+      await teamservice.GetTeamMatchHistoryWithPageAndTeamID(TeamStats?.team?.teamID, pageNumber).then(res => {
+        console.log(res.data);
+        setRecentMatches(res.data);
+        setCurrentPage(pageNumber);
+      }).catch(err => {});
+    };
+    const paginationBasic = (
+      <Row className="mt-auto mb-2">
+        <Col>
+        <Pagination className="my-auto">
+            <Pagination.Prev onClick={previousPageInTeamMatchHistory} disabled={currentPage == 0}/>
+            <Pagination.Next onClick={nextPageInTeamMatchHistory} disabled={currentPage == (TeamStats?.matchHistoryNumberOfPages - 1)}/>
+          </Pagination>
+        </Col>
+      </Row>
+    );
 
     const [teamMembers, setTeamMembers] = useState([]);
     //const [test, setTest] = useState([{ id: 1, name: "Player 1" }, { id: 2, name: "Player 2" }, { id: 3, name: "Player 3" }, { id: 4, name: "Player 4" }, { id: 5, name: "Player 5" }]);
@@ -174,7 +203,14 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                     </Col>
                     {/* <Col xl={5} md={5} xs={4} className="pl-0 pr-0"></Col> */}
                     </Row>
+                    {/* <Row className="mb-0 mt-2 pb-0">
+                    <Col xl={12} md={12} xs={6} className="pr-0"><h5 className="mb-0 TeamBannerStats"><b>Games lost by forfeit</b> 43</h5></Col>
+                    <Col xl={12} md={12} xs={6} className="pr-0"><h5 className="mb-0 TeamBannerStats"><b>Games won by forfeit:</b> 50</h5></Col>
+                    </Row> */}
                 </Col>
+              </Row>
+              <Row className="">
+                  <Col xl={12} md={12} xs={12} className="pl-1"><p className="mb-0 pr-0 TeamStatInfo"><i>Team stats do not include forfeits</i></p></Col>
               </Row>
               </Col>
               <Col md={3} xl={3} xs={12} className="">
@@ -326,13 +362,14 @@ export default function TeamStat({LoginSession, TeamStats, status, errMsg }) {
                 </Row>
                 </Col>
                 {/* Recently played, no border right needed */}
-                <Col md={2} className=""> 
+                <Col md={2} className="d-flex flex-column"> 
                     <h2 className="font-weight-bold StatTitle">RECENTLY PLAYED</h2>
-                    {TeamStats?.recentMatches != null ? <>
-              {TeamStats?.recentMatches.map((r, index) => ( <>
+                    {recentMatches != null && recentMatches != [] ? <>
+              {recentMatches.map((r, index) => ( <>
                 <RecentTeams key={index} recent={r} />
                 </>
               ))}
+              {paginationBasic}
              </> : 
              <> 
               <Row className="mt-2 mb-2">
