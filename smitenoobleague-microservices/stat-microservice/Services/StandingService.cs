@@ -46,20 +46,17 @@ namespace stat_microservice.Services
                         {
                             WinLoss wl = new WinLoss {MatchupID = result.MatchupID, DatePlayed = result.DatePlayed, Won = null, InProgress = null };
 
-                            if (result.GamesLost + result.GamesWon >= 2) // if the matchup is finished
+                            if (result.GamesWon > 1) // 2 gamesWon needed to win a best of 3
                             {
-                                if (result.GamesWon > 1) // 2 gamesWon needed to win a best of 3
-                                {
-                                    wl.Won = true;
-                                    wl.InProgress = false;
-                                }
-                                else // else lost
-                                {
-                                    wl.Won = false;
-                                    wl.InProgress = false;
-                                }
+                                wl.Won = true;
+                                wl.InProgress = false;
                             }
-                            else
+                            else if(result.GamesLost > 1) // else lost
+                            {
+                                wl.Won = false;
+                                wl.InProgress = false;
+                            }
+                            else // it's 1 - 1 or 1 - 0 or 0 - 1
                             {
                                 wl.InProgress = true;
                             }

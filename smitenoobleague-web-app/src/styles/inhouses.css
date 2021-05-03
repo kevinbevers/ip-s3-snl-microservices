@@ -25,6 +25,17 @@
         border-right-width: 10px;
         border-right-color: #dc3545!important;
     }
+
+    .inProgress{
+      /* home win border */
+      border-left-style:solid;
+      border-left-width: 10px;
+      border-left-color:	#FFA500!important;
+      /* away loss border */
+      border-right-style:solid;
+      border-right-width: 10px;
+      border-right-color: #FFA500!important;
+  }
 }
 
 @media (max-width: 769px) {
@@ -49,6 +60,17 @@
         border-bottom-width: 10px;
         border-bottom-color: #dc3545!important;
     }
+
+    .inProgress{
+      /* home win border */
+      border-top-style:solid;
+      border-top-width: 10px;
+      border-top-color: #FFA500!important;
+      /* away loss border */
+      border-bottom-style:solid;
+      border-bottom-width: 10px;
+      border-bottom-color: #FFA500!important;
+  }
 }
 
 @media (min-width: 768px) {
