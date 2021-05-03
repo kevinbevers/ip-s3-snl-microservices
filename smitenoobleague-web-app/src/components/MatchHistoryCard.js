@@ -45,7 +45,7 @@ export default function MatchHistoryCard({ MatchupResult }) {
                                 </Row>
                           </Container>
                      </Card.Body>
-                <Card.Footer className="text-muted"><p className="float-left m-0">{(MatchupResult?.totalMatchDuration.charAt(0)) > 0 ? "" : "Forfeited"}</p><p className="float-right m-0">Total match duration: {MatchupResult?.totalMatchDuration}</p></Card.Footer>
+                <Card.Footer className="text-muted"><p className="float-left m-0">{(MatchupResult?.totalMatchDuration?.charAt(0)) > 0 ? "" : "Forfeited"}</p><p className="float-right m-0">Total match duration: {MatchupResult?.totalMatchDuration}</p></Card.Footer>
                 </Card>
         </>);
 }
