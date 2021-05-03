@@ -22,6 +22,10 @@
     font-size: 0.8vw;
 }
 
+.RecentTeamExtra {
+    font-size: 0.6vw;
+}
+
 .RecentTeamLogo {
     height: 2vw;
     width: 2vw;
@@ -62,6 +66,10 @@
   @media (max-width: 767px) {
     .RecentTeamTitle {
         font-size: 4vw;
+    }
+
+    .RecentTeamExtra {
+        font-size: 3vw;
     }
     
     .RecentTeamLogo {

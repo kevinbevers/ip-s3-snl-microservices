@@ -9,5 +9,6 @@ namespace stat_microservice.Models.Internal
         public bool? Lost { get; set; }
         public Team Opponent { get; set; }
         public int? GamesPlayed { get; set; }
+        public int? MatchDurationInSeconds { get; set; }
     }
 }

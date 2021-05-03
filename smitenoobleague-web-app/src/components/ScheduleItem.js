@@ -39,13 +39,13 @@ export default function ScheduleItem({homeTeam, awayTeam, matchupID, byeWeek, sc
                                 <Col md={3} className="p-0">
                                     {RenderTeamImage(homeTeam)}
                                 </Col>
-                                <Col md={9} className="my-auto"><h3 className="">{homeTeam?.teamName != null ? <Link href={`/stats/team/${homeTeam.teamID}`}><span className="Hoverable Clickable" title={"click to see team stats"}>{homeTeam?.teamName}</span></Link> : "No opponent this week"}</h3></Col>
+                                <Col md={9} className="my-auto"><h3 className="">{homeTeam?.teamName != null ? <Link href={`/stats/team/${homeTeam.teamID}`}><a className="link-unstyled my-auto"><span className="Hoverable Clickable" title={"click to see team stats"}>{homeTeam?.teamName}</span></a></Link> : "No opponent this week"}</h3></Col>
                             </Row>
                         </Col>
                         <Col md={2} className="my-auto"><h2>VS</h2></Col>
                         <Col md={5} className="p-0">
                             <Row>
-                                <Col md={9} className="my-auto"><h3 className="">{awayTeam?.teamName != null ? <Link href={`/stats/team/${awayTeam.teamID}`}><span className="Hoverable Clickable" title={"click to see team stats"}>{awayTeam?.teamName}</span></Link> : "No opponent this week"}</h3></Col>
+                                <Col md={9} className="my-auto"><h3 className="">{awayTeam?.teamName != null ? <Link href={`/stats/team/${awayTeam.teamID}`}><a className="link-unstyled my-auto"><span className="Hoverable Clickable" title={"click to see team stats"}>{awayTeam?.teamName}</span></a></Link> : "No opponent this week"}</h3></Col>
                                 <Col md={3} className="p-0">
                                     {RenderTeamImage(awayTeam)}
                                 </Col>
@@ -54,7 +54,7 @@ export default function ScheduleItem({homeTeam, awayTeam, matchupID, byeWeek, sc
                     </Row>
                     <Card.Text>
                         {byeWeek ? "Bye week" 
-                        : <>{score != null ? <Link href={"/matchhistory/" + matchupID}>{score}</Link> : "Not played yet"}  </>}
+                        : <>{score != null ? <Link href={"/matchhistory/" + matchupID}><a>{score}</a></Link> : "Not played yet"}  </>}
                        
                     </Card.Text>
                 </Container>

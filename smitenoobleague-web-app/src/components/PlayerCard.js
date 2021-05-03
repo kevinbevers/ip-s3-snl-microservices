@@ -55,11 +55,12 @@ export default function PlayerCard({Player,Team}){
                       {Team?.teamLogoPath != null ? <Image height={30} width={30} alt={Team?.teamName} src={imagePath} className="SmallTeamImage" draggable={false}></Image>  : 
                         <Img alt={Team?.teamName} src={require("public/images/teamBadge.png")} className="SmallTeamImage" draggable={false}></Img>
                       }
-                        <p className="ml-2 my-auto">{Team?.teamName}</p>
+                         <Link href={`/stats/team/${Team?.teamID}`}><a className="link-unstyled my-auto"><p className="ml-2 my-auto Clickable Hoverable">{Team?.teamName}</p></a></Link>
                     </Col>
                     </Row>
                   </Col>
                 </Row>
+                <p className="text-muted smallfootertext mb-0 mt-0">Click to see player stats</p>
               </Col>
             </Row>
           </Container>

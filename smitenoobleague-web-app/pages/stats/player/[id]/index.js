@@ -164,7 +164,7 @@ const SimpleToolTip = (data) => {
                  {PlayerStats.team?.teamLogoPath != null ? <Image layout="fixed" height={35} width={35} alt={PlayerStats.team?.teamName} src={imagePath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image>  : 
                         <Img alt={PlayerStats.team?.teamName} src={require("public/images/teamBadge.png")} className="SmallTeamImage mr-1 my-auto" draggable={false}></Img>
                       }
-                  <Link href={`/stats/team/${PlayerStats.team?.teamID}`} ><h4 className="mb-0 PlayerStatTeamTitle my-auto Clickable Hoverable" title={"click to see team stats"}>{PlayerStats?.team?.teamName}</h4></Link> 
+                  <Link href={`/stats/team/${PlayerStats.team?.teamID}`} ><a className="link-unstyled my-auto"><h4 className="mb-0 PlayerStatTeamTitle my-auto Clickable Hoverable" title={"click to see team stats"}>{PlayerStats?.team?.teamName}</h4></a></Link> 
                   </Col>
               </Row> </> : <></> }
               <Row className="">

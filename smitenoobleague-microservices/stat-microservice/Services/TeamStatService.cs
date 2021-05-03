@@ -161,6 +161,11 @@ namespace stat_microservice.Services
                 
             }).FirstOrDefaultAsync();
 
+            //Games played, won, lost from matchresults to include forfeits.
+            TeamStats.GamesPlayed = await _db.TableMatchResults.Where(x => x.HomeTeamId == teamID || x.AwayTeamId == teamID).CountAsync();
+            TeamStats.Losses = await _db.TableMatchResults.Where(x => x.LosingTeamId == teamID).CountAsync();
+            TeamStats.Wins = await _db.TableMatchResults.Where(x => x.WinningTeamId == teamID).CountAsync();
+
             //Most banned against.
             List<int?> bannedGods = new List<int?>();
             //add all banned gods to 1 list
@@ -307,7 +312,11 @@ namespace stat_microservice.Services
         }
         private async Task<List<RecentMatch>> GetLast5MatchupsByTeamId(List<TeamMatchesStats> teamMatchesStats, int? teamID)
         {
-            List<int?> IdOfLast5Matchups = teamMatchesStats.OrderByDescending(x => x.DatePlayed).Select(x => x.MatchupId).Distinct().ToList();
+            //Actually played with stats
+            //List<int?> IdOfLast5Matchups = teamMatchesStats.GroupBy(t => t.MatchupId, (x, y) => new { MatchupId = x, DatePlayed = y.Select(z => z.DatePlayed).Max() }).OrderByDescending(x => x.DatePlayed).Take(5).Select(x => x.MatchupId).ToList();
+
+            //Last 5 based on results, includes forfeits
+            var IdOfLast5Matchups = await _db.TableMatchResults.Where(tmr => tmr.AwayTeamId == teamID || tmr.HomeTeamId == teamID).GroupBy(t => t.ScheduleMatchUpId, (x, y) => new { ScheduleMatchUpId = x, DatePlayed = y.Select(z => z.DatePlayed).Max() }).OrderByDescending(x => x.DatePlayed).Take(5).Select(x => x.ScheduleMatchUpId).ToListAsync();
 
             List<RecentMatch> matchHistoryList = await _db.TableMatchResults.Where(t => IdOfLast5Matchups.Contains(t.ScheduleMatchUpId)).GroupBy(x => x.ScheduleMatchUpId, (x, y) => new RecentMatch
             {
@@ -317,6 +326,7 @@ namespace stat_microservice.Services
                 Lost = y.Count(i => i.LosingTeamId == teamID) == 2,
                 DatePlayed = y.Select(i => i.DatePlayed).Max().Value,
                 Opponent = new Team { TeamID = y.Select(i => i.HomeTeamId).Max().Value != teamID ? y.Select(i => i.HomeTeamId).Max().Value : y.Select(i => i.AwayTeamId).Max().Value },
+                MatchDurationInSeconds = y.Select(i => i.GamedurationInSeconds).Sum()
             }).OrderByDescending(x => x.DatePlayed).ToListAsync();
 
             List<int> listOfTeamIds = matchHistoryList.Select(x => x.Opponent.TeamID).Distinct().ToList();
