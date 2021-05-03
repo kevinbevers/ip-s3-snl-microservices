@@ -22,7 +22,7 @@ const ReadableDate = (date) => {
     return (
       <Row><Col>
       <Link href={`/matchhistory/${recent?.matchupID}`}>
-        <a className="link-unstyled" title={`click to see match details, ${ReadableDate(recent.datePlayed)}`}>
+        <a className="link-unstyled" title={`click to see match details`}>
         <Card className="text-center mb-2">
         <Card.Body className={recent?.won ? "RecentTeamWinBackground p-1" : recent?.lost ? "RecentTeamLossBackground p-1" : "bg-light p-1"}>
           <Container>
@@ -32,9 +32,15 @@ const ReadableDate = (date) => {
                 <Row className="">
                   <Col md={12} xs={12} className="align-items-left d-flex">
                     {RenderTeamImage(recent?.opponent)}
-                    <h3 className="text-center my-auto RecentTeamTitle font-weight-bold">{recent?.opponent?.teamName}</h3>
+                    <h3 className="text-center my-auto RecentTeamTitle font-weight-bold mb-0">{recent?.opponent?.teamName}</h3>
                   </Col>
                 </Row>
+              </Col>
+            </Row>
+            <Row className="mb-0">
+              <Col className="mb-0"> 
+                <p className="mb-0 RecentTeamExtra float-left">{recent?.matchDurationInSeconds > 0 ? "" : recent?.won ? "Won by Forfeit" : recent?.lost ? "Lost by forfeit" : "In progress"}</p>
+                <p className="mb-0 RecentTeamExtra float-right">{ReadableDate(recent?.datePlayed)}</p>
               </Col>
             </Row>
           </Container>

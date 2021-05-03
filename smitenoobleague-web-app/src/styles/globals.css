@@ -213,3 +213,17 @@ textarea {
   right: 16px;
   font-size: 18px;
 }
+
+.pagination {
+  display: table;
+  width: 100%;
+}
+.pager li, .pagination>li {
+  display: inline;
+  display: table-cell;
+}
+.pagination>li>a,
+.pagination>li>span {
+  width: 100%;
+  text-align: center;
+}

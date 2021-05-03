@@ -29,13 +29,13 @@ export default function MatchHistoryCard({ MatchupResult }) {
                                     <Col md={5} className="p-0">
                                         <Row>
                                           <Col md={3} className="p-0">{RenderTeamImage(MatchupResult?.homeTeam)}</Col>
-                                          <Col md={9} className="my-auto"><Link href={`/stats/team/${MatchupResult.homeTeam.teamID}`}><h3 className="Clickable Hoverable" title={"click to see team stats"}>{MatchupResult?.homeTeam?.teamName}</h3></Link></Col>
+                                          <Col md={9} className="my-auto"><Link href={`/stats/team/${MatchupResult.homeTeam.teamID}`}><a className="link-unstyled my-auto"><h3 className="Clickable Hoverable" title={"click to see team stats"}>{MatchupResult?.homeTeam?.teamName}</h3></a></Link></Col>
                                         </Row>
                                      </Col>
                                      <Col md={2} className="my-auto"><h2>{MatchupResult?.homeTeamScore} - {MatchupResult?.awayTeamScore}</h2></Col>
                                      <Col md={5} className="p-0">
                                          <Row>
-                                            <Col md={9} className="my-auto"><Link href={`/stats/team/${MatchupResult.awayTeam.teamID}`}><h3 className="Clickable Hoverable" title={"click to see team stats"}>{MatchupResult?.awayTeam?.teamName}</h3></Link></Col>
+                                            <Col md={9} className="my-auto"><Link href={`/stats/team/${MatchupResult.awayTeam.teamID}`}><a className="link-unstyled my-auto"><h3 className="Clickable Hoverable" title={"click to see team stats"}>{MatchupResult?.awayTeam?.teamName}</h3></a></Link></Col>
                                             <Col md={3} className="p-0">{RenderTeamImage(MatchupResult?.awayTeam)}</Col>
                                          </Row>
                                     </Col>

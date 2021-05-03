@@ -164,7 +164,7 @@ const SimpleToolTip = (data) => {
                  {PlayerStats.team?.teamLogoPath != null ? <Image layout="fixed" height={35} width={35} alt={PlayerStats.team?.teamName} src={imagePath} className="SmallTeamImage mr-1 my-auto" draggable={false}></Image>  : 
                         <Img alt={PlayerStats.team?.teamName} src={require("public/images/teamBadge.png")} className="SmallTeamImage mr-1 my-auto" draggable={false}></Img>
                       }
-                  <Link href={`/stats/team/${PlayerStats.team?.teamID}`} ><h4 className="mb-0 PlayerStatTeamTitle my-auto Clickable Hoverable" title={"click to see team stats"}>{PlayerStats?.team?.teamName}</h4></Link> 
+                  <Link href={`/stats/team/${PlayerStats.team?.teamID}`} ><a className="link-unstyled my-auto"><h4 className="mb-0 PlayerStatTeamTitle my-auto Clickable Hoverable" title={"click to see team stats"}>{PlayerStats?.team?.teamName}</h4></a></Link> 
                   </Col>
               </Row> </> : <></> }
               <Row className="">
@@ -190,6 +190,9 @@ const SimpleToolTip = (data) => {
                     <Col className="pr-0"><h5 className="mb-0 PlayerBannerStats"><b>Games played:</b> {PlayerStats?.gamesPlayed}</h5></Col>
                     <Col md={6} xs={6} className="pl-0 pr-0"><h5 className="mb-0 PlayerBannerStats"><b>Win / Loss:</b> {PlayerStats?.wins} / {PlayerStats?.losses}</h5></Col>
                     </Row>
+                    <Row className="">
+                  <Col xl={12} md={12} xs={12} className=""><p className="mb-0 pr-0 TeamStatInfo"><i>Player stats do not include forfeits</i></p></Col>
+              </Row>
                 </Col>
               </Row>
               </Col>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using stat_microservice.Interfaces;
 using stat_microservice.Models.External;
+using stat_microservice.Models.Internal;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,14 +22,21 @@ namespace stat_microservice.Controllers
             _teamStatService = teamStatService;
             _pickPercentageService = pickPercentageService;
         }
-        // GET: stat-service/playerstat/byid
+        // GET: stat-service/teamstat/byid
         [HttpGet("byteamid/{teamID}")]
         public async Task<ActionResult<TeamStatistics>> Get(int? teamID)
         {
             return await _teamStatService.GetTeamStatsByTeamIdAsync(teamID);
         }
 
-        // GET: stat-service/playerstat/pickpercentagesbyplayerid
+        // GET: stat-service/teamstat/getrecentmatchpage/{teamID}/{page}
+        [HttpGet("getrecentmatchpage/{teamID}/{page}")]
+        public async Task<ActionResult<List<RecentMatch>>> GetRecentMatches(int? teamID, int page)
+        {
+            return await _teamStatService.GetTeamsMatchHistoryAsync(teamID, page);
+        }
+
+        // GET: stat-service/teamstat/pickpercentagesbyteamid
         [HttpGet("pickpercentagesbyteamid/{teamID}")]
         public async Task<ActionResult<TeamPickPercentages>> GetPlayerPickPercentages(int? teamID)
         {

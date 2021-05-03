@@ -27,6 +27,7 @@ export default function NewsCard({Article}){
     return (
     <Col className="mb-4">
       <Link href={"news/" + Article?.articleSlug}>
+        <a className="link-unstyled">
     <Card className="h-100 Clickable newsArticle">
       {/* <Card.Img variant="top" src={require("public/images/news_bg.jpg")}  className="newsimg" draggable={false}/> */}
       <div className="w-100 newsimg2 position-relative">{ArticleImg(Article)}</div>
@@ -39,6 +40,7 @@ export default function NewsCard({Article}){
         <small className="text-muted float-right">{Article?.articleType}</small>
       </Card.Footer>
     </Card>
+    </a>
     </Link>
   </Col>
     );

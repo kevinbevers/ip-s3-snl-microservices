@@ -30,5 +30,6 @@ namespace stat_microservice.Models.External
         //recent matches
         public List<int> RecentPerformanceScore { get; set; }
         public List<RecentMatch> RecentMatches { get; set; }
+        public int? MatchHistoryNumberOfPages { get; set; }
     }
 }
