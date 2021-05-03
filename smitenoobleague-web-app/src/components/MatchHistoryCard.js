@@ -22,8 +22,8 @@ export default function MatchHistoryCard({ MatchupResult }) {
 
         return (<>
                 <Card className="text-center mb-2">
-                <Card.Header>Last game completed at {ReadableDate(MatchupResult?.datePlayed)}{MatchupResult?.homeTeamScore > 1 ||  MatchupResult?.awayTeamScore > 1 ? "" : "(Matchup in progress)"}</Card.Header>
-                     <Card.Body>
+                <Card.Header>Last game completed at {ReadableDate(MatchupResult?.datePlayed)}{MatchupResult?.homeTeamScore > 1 ||  MatchupResult?.awayTeamScore > 1 ? "" : " (Matchup in progress)"}</Card.Header>
+                     <Card.Body className={`${MatchupResult?.homeTeamScore > 1 ? "homeWin" : MatchupResult?.awayTeamScore > 1 ? "awayWin" : "inProgress"}`}>
                          <Container>
                                 <Row>
                                     <Col md={5} className="p-0">
@@ -45,7 +45,7 @@ export default function MatchHistoryCard({ MatchupResult }) {
                                 </Row>
                           </Container>
                      </Card.Body>
-                <Card.Footer className="text-muted"><p className="float-right m-0">Total match duration: {MatchupResult?.totalMatchDuration}</p></Card.Footer>
+                <Card.Footer className="text-muted"><p className="float-left m-0">{(MatchupResult?.totalMatchDuration.charAt(0)) > 0 ? "" : "Forfeited"}</p><p className="float-right m-0">Total match duration: {MatchupResult?.totalMatchDuration}</p></Card.Footer>
                 </Card>
         </>);
 }
