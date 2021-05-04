@@ -8,7 +8,7 @@ import DefaultErrorPage from "next/error";
 //boostrap components
 import { Badge, Modal, Button, Container, Row, Col, OverlayTrigger, Tooltip, Alert } from "react-bootstrap";
 //icons
-import {FaTimes, FaPlaystation, FaXbox, FaSteam} from "react-icons/fa";
+import {FaTimes, FaPlaystation, FaXbox, FaSteam, FaQuestion, FaQuestionCircle} from "react-icons/fa";
 import {RiSwitchFill} from "react-icons/ri";
 import {GiPc} from "react-icons/gi";
 import {SiEpicgames} from "react-icons/si";
@@ -180,6 +180,8 @@ const SimpleToolTip = (data) => {
                                                     <RiSwitchFill />)
                                                 || (PlayerStats?.player?.teamMemberPlatform == "Epic_Games" && 
                                                     <SiEpicgames />)
+                                                || (PlayerStats?.player?.teamMemberPlatform == "Unknown" && 
+                                                <FaQuestionCircle />)
                                                 ||
                                                 PlayerStats?.player?.teamMemberPlatform
                                                 } {PlayerStats?.player?.teamMemberName}</h3></Col>
