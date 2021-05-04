@@ -41,7 +41,7 @@ function Home({LoginSession}) {
         </p>
         <h4 className="font-weight-bold mb-0">Partnership with Audacity Gaming</h4>
         <p>
-        We’re proud to partner with <a href="https://discord.gg/suGs58TXJb" target="_blank">Audacity Gaming</a>.<br />One of the first things that this partnership brings is an <a href="/inhouses" target="_blank">InHouse StatTracker</a> where you can compete to be the top dog of the Audacity inhouses.<br />
+        We’re proud to partner with <a href="https://discord.gg/PNAH9P9RJU" target="_blank">Audacity Gaming</a>.<br />One of the first things that this partnership brings is an <a href="/inhouses" target="_blank">InHouse StatTracker</a> where you can compete to be the top dog of the Audacity inhouses.<br />
         We are both looking forward to bring you more innovative solutions to elevate your smite experience to the next level.
         </p>
     </div>

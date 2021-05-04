@@ -29,9 +29,9 @@ function Home({LoginSession, Data, status, errMsg, apiToken }) {
         <hr className="my-4" />
         <h4 className="font-weight-bold mb-0">Join the inhouses now!</h4>
         <p className="smallText">
-        If you want to join an InHouse, join the Discord and go to <a href="https://discord.gg/mYgpURSwK3" target="_blank" title="Join AudacityGaming Discord">#inhouses</a><br />
+        If you want to join an InHouse, join the Discord and go to <a href="https://discord.gg/PNAH9P9RJU" target="_blank" title="Join AudacityGaming Discord">#inhouses</a><br />
         </p>
-        <a className="btn btn-primary btn-block" target="_blank" href="https://discord.gg/audacitygaming">Join AudacityGaming <FaDiscord /></a>
+        <a className="btn btn-primary btn-block" target="_blank" href="https://discord.gg/PNAH9P9RJU">Join AudacityGaming <FaDiscord /></a>
     </div>
   </div>
   <Row>
