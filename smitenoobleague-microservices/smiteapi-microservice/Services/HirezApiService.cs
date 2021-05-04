@@ -182,7 +182,7 @@ namespace smiteapi_microservice.Services
                             PlayerStat playerStat = new PlayerStat
                             {
                                 //General info //gamertag for console - playername for pc, will be empty string when other platform
-                                Player = new Player { PlayerID = mp.ActivePlayerId, Playername = (string)(mp.hz_player_name != null ? mp.hz_player_name : mp.hz_gamer_tag), Platform = mp.playerPortalId.ToString() },
+                                Player = new Player { PlayerID = mp?.ActivePlayerId == 0 ? null : mp?.ActivePlayerId, Playername = (string)(mp.hz_player_name != null ? mp.hz_player_name : mp.hz_gamer_tag), Platform = mp?.playerPortalId.ToString() },
                                 IngameTeamID = mp.TaskForce,
                                 Won = mp.TaskForce == mp.Winning_TaskForce ? true : false,
                                 FirstBanSide = mp.Win_Status == mp.First_Ban_Side ? true : false,
