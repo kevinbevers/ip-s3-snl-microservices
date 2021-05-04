@@ -271,7 +271,7 @@ namespace stat_microservice.Services
                 mvpScore += mvpScore * killParticipationPercentage;
                 mvpScores.Add(new MvpPlayer { PlayerID = (int)player.PlayerId, MvpScore = mvpScore });
             }
-            List<int> currentMemberIds = new List<int>();
+            List<int?> currentMemberIds = new List<int?>();
             currentTeamMembers.ForEach(x => currentMemberIds.Add(x.PlayerID));
             var MvpPlayerID = mvpScores.Where(x => currentMemberIds.Contains(x.PlayerID)).OrderByDescending(item => item.MvpScore).First().PlayerID;
 
