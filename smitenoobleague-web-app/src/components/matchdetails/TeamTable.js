@@ -43,7 +43,7 @@ export default function TeamTable({playerdata, team}) {
                     <Row>
                     <Col md={8} className="d-inline-flex">
                         {RenderTeamImage(team)}
-                        <Link href={`/stats/team/${team.teamID}`}><h4 className="font-weight-bold my-auto ml-1 Clickable Hoverable" title={"click to see team stats"}>{team?.teamName}</h4></Link>
+                        <Link href={`/stats/team/${team.teamID}`}><a className="link-unstyled my-auto"><h4 className="font-weight-bold my-auto ml-1 Clickable Hoverable" title={"click to see team stats"}>{team?.teamName}</h4></a></Link>
                     </Col>
                     </Row>
                 </Col>
