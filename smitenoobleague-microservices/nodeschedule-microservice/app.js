@@ -203,3 +203,9 @@ async function sleep(ms) {
     setTimeout(resolve, ms);
   });
 } 
+
+Date.prototype.addHours= function(h){
+  var copiedDate = new Date(this.getTime());
+  copiedDate.setHours(copiedDate.getHours()+h);
+  return copiedDate;
+}
