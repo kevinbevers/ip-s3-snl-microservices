@@ -105,6 +105,12 @@ namespace smiteapi_microservice.Services
                 //check return message from api. if the return msg is null the match is valid
                 if (match.ret_msg != null)
                 {
+                    //check return message from api. if the return msg is null the match is valid
+                    if (match.ret_msg.ToString().Contains("Privacy flag set for player(s):"))
+                    {
+                        match.ret_msg = null;
+                        return await SaveGameIdAndSendToStatsAsync(submission, match);
+                    }
                     //something went wrong even when the matchData should have been available. because it is 7 days later
                     return new ObjectResult(match.ret_msg) { StatusCode = 404 }; //BAD REQUEST
                                                                                  //Node scheduler will add a new scheduled job 2 hours later to try to get the data again
