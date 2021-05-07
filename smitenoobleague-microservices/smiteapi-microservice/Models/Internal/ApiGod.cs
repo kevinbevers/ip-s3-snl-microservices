@@ -60,6 +60,7 @@ namespace smiteapi_microservice.Models.Internal
         public Uri GodAbility4_Url { get; set; }
         public Uri GodAbility5_Url { get; set; }
         public Uri GodCard_Url { get; set; }
+        public Uri GodCardDecent_Url { get; set; }
         public Uri GodIcon_URL { get; set; }
         public long Id { get; set; }
         public LatestGod LatestGod { get; set; }

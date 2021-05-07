@@ -29,7 +29,9 @@ namespace smiteapi_microservice.Services
 
         public async Task<IEnumerable<ApiGod>> GetGodsAsync()
         {
-           return await _hirezApi.GetAllGods();
+            var allGodData = await _hirezApi.GetAllGods();
+            allGodData.ForEach(x => x.GodCardDecent_Url = new Uri($"https://webcdn.hirezstudios.com/smite/god-skins/{x.Name}_standard-{x.Name}.jpg"));
+            return allGodData;
         }
 
         public async Task<IEnumerable<ApiItem>> GetItemsAsync()
