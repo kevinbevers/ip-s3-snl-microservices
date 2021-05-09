@@ -30,7 +30,7 @@ namespace smiteapi_microservice.Services
         public async Task<IEnumerable<ApiGod>> GetGodsAsync()
         {
             var allGodData = await _hirezApi.GetAllGods();
-            allGodData.ForEach(x => x.GodCardDecent_Url = new Uri($"https://webcdn.hirezstudios.com/smite/god-skins/{x.Name.ToLower().Replace(' ','_')}_standard-{x.Name.ToLower().Replace(' ','_')}.jpg"));
+            allGodData.ForEach(x => x.GodCardDecent_Url = new Uri($"https://webcdn.hirezstudios.com/smite/god-skins/{x.Name.ToLower().Replace(' ','_')}_standard-{x.Name.ToLower().Replace(' ','-')}.jpg"));
             return allGodData;
         }
 
