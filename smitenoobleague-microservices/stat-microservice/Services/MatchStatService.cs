@@ -298,11 +298,15 @@ namespace stat_microservice.Services
                     //log this, to track down issues with captain email not being saved in the db.
                     if (loserCaptainMail == null)
                     {
+                        await _externalServices.SendEmailNotificationToCaptainAsync("Title says it all.", $"{loserTeam?.TeamName} captain doesn't have an email set in the DB", "admin@smitenoobleague.com");
                         _logger.LogError("Losing team's captain doesn't have an email set in the DB");
+                        return new ObjectResult($"{loserTeam?.TeamName} captain doesn't have an email set in the DB") { StatusCode = 404 };
                     }
                     if (winnerCaptainMail == null)
                     {
+                        await _externalServices.SendEmailNotificationToCaptainAsync("Title says it all.", $"{winnerTeam?.TeamName} captain doesn't have an email set in the DB", "admin@smitenoobleague.com");
                         _logger.LogError("Winning team's captain doesn't have an email set in the DB");
+                        return new ObjectResult($"{winnerTeam?.TeamName} captain doesn't have an email set in the DB") { StatusCode = 404 };
                     }
                     #endregion
 
