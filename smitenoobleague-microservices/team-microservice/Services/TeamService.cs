@@ -599,7 +599,7 @@ namespace team_microservice.Services
                             members.Add(new TeamMember
                             {
                                 TeamMemberID = m.TeamMemberId,
-                                TeamCaptain = foundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
+                                TeamCaptain = nextFoundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
                                 TeamMemberName = m.TeamMemberName,
                                 TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
                                 TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
@@ -609,11 +609,11 @@ namespace team_microservice.Services
 
                         TeamWithDetails returnTeam = new TeamWithDetails
                         {
-                            TeamID = foundTeam.TeamId,
-                            TeamName = foundTeam.TeamName,
+                            TeamID = nextFoundTeam.TeamId,
+                            TeamName = nextFoundTeam.TeamName,
                             TeamMembers = members,
-                            DivisionID = foundTeam.TeamDivisionId,
-                            TeamLogoPath = foundTeam.TeamLogoPath
+                            DivisionID = nextFoundTeam.TeamDivisionId,
+                            TeamLogoPath = nextFoundTeam.TeamLogoPath
 
                         };
 
