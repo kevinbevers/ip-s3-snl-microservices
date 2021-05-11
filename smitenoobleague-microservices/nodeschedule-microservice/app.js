@@ -98,7 +98,8 @@ function CallSmiteApi(id, patch, date) {
       {
       console.log("scheduled for retry in 1 hour.")
       //reschedule with + 1 hours
-      date = Date.now().addHours(1);
+      date = Date.now();
+      date += (1 * 60 * 60 * 1000);
       ScheduleGame(date, patch, id);
       }
     });
@@ -122,7 +123,8 @@ function CallSmiteApiInhouse(id, patch, date) {
       console.error(error.response.data);
 
       //reschedule with + 2 hours
-      date = date.addHours(2);
+      date = Date.now();
+      date += (1 * 60 * 60 * 1000);
       ScheduleInhouseGame(date, patch, id);
     }).catch(error => { console.error(error); });
 }
@@ -192,20 +194,8 @@ async function GetInhouseJobsFromDB() {
     });
 }
 
-//extension for Date object
-Date.prototype.addHours = function (h) {
-  this.setHours(this.getHours() + h);
-  return this;
-}
-
 async function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 } 
-
-Date.prototype.addHours= function(h){
-  var copiedDate = new Date(this.getTime());
-  copiedDate.setHours(copiedDate.getHours()+h);
-  return copiedDate;
-}
