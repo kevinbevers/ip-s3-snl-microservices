@@ -274,8 +274,8 @@ namespace stat_microservice.Services
                 List<int> IdsOfPlayerInMatchWinners = new List<int>();
                 List<int> IdsOfPlayerInMatchLosers = new List<int>();
                 //Add All player ids to 1 array of ints
-                match.Winners.ForEach(p => IdsOfPlayerInMatchWinners.Add((int)p.Player.PlayerID));
-                match.Losers.ForEach(p => IdsOfPlayerInMatchLosers.Add((int)p.Player.PlayerID));
+                match.Winners.ForEach(p => IdsOfPlayerInMatchWinners.Add((int)p.Player?.PlayerID));
+                match.Losers.ForEach(p => IdsOfPlayerInMatchLosers.Add((int)p.Player?.PlayerID));
                 //Call team service to get the teams that where in this match.
                 TeamWithDetails winnerTeam = await _externalServices.GetTeamByPlayersAsync(IdsOfPlayerInMatchWinners);
                 TeamWithDetails loserTeam = await _externalServices.GetTeamByPlayersAsync(IdsOfPlayerInMatchLosers);
