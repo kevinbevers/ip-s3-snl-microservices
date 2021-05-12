@@ -790,14 +790,29 @@ namespace stat_microservice.Services
 
         private bool checkForFillsAsync(TeamWithDetails teamToCheck, List<int> playersInMatch)
         {
-            int originalTeamCount = teamToCheck.TeamMembers.Where(tm => playersInMatch.Contains(tm.PlayerID)).Count();
-            if (originalTeamCount < 4)
+            if (playersInMatch.Count == 5)
             {
-                return true;
+                int originalTeamCount = teamToCheck.TeamMembers.Where(tm => playersInMatch.Contains(tm.PlayerID)).Count();
+                if (originalTeamCount < 4)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            else //this will execute when there is a player with privacy set in the match. it will then check if the 4 other players contain a fill. this will accept 2 fills when 1 fill has privacy set.
             {
-                return false;
+                int originalTeamCount = teamToCheck.TeamMembers.Where(tm => playersInMatch.Contains(tm.PlayerID)).Count();
+                if (originalTeamCount < 3)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
