@@ -269,7 +269,7 @@ namespace stat_microservice.Services
                 double playerParticipation = player.TotalKills + player.TotalKills;
                 int killParticipationPercentage = Convert.ToInt32(playerParticipation / totalKills * 100);
                 mvpScore += mvpScore * killParticipationPercentage;
-                mvpScores.Add(new MvpPlayer { PlayerID = (int)player.PlayerId, MvpScore = mvpScore });
+                mvpScores.Add(new MvpPlayer { PlayerID = player?.PlayerId, MvpScore = mvpScore });
             }
             List<int?> currentMemberIds = new List<int?>();
             currentTeamMembers.ForEach(x => currentMemberIds.Add(x.PlayerID));
