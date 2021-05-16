@@ -18,7 +18,7 @@ namespace smiteapi_microservice.Contexts
         private const string language = "/1";
         private string timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
         private ApiSessionResult sessionResult = new ApiSessionResult();
-        private readonly string PCAPIurl = "http://api.smitegame.com/smiteapi.svc/";
+        private readonly string PCAPIurl = "https://api.smitegame.com/smiteapi.svc/";
 
         public HirezApiContextV2(ApiCredentials credentials)
         {
@@ -30,15 +30,15 @@ namespace smiteapi_microservice.Contexts
         {
             //return await Task.Run(() => {
             //    //Hashing here...
-                var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-                var bytes = Encoding.UTF8.GetBytes(input);
-                bytes = md5.ComputeHash(bytes);
-                var sb = new StringBuilder();
-                foreach (byte b in bytes)
-                {
-                    sb.Append(b.ToString("x2").ToLower());
-                }
-                return sb.ToString();
+            var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            var bytes = Encoding.UTF8.GetBytes(input);
+            bytes = md5.ComputeHash(bytes);
+            var sb = new StringBuilder();
+            foreach (byte b in bytes)
+            {
+                sb.Append(b.ToString("x2").ToLower());
+            }
+            return sb.ToString();
             //});
         }
 
@@ -78,7 +78,7 @@ namespace smiteapi_microservice.Contexts
             }
             string json = await File.ReadAllTextAsync("Config/hirezapi.json");
             sessionResult = JsonConvert.DeserializeObject<ApiSessionResult>(json);
-          
+
             if (sessionResult.sessionTime != null)
             {
                 DateTime parsedSessionTime = DateTime.Parse(sessionResult.sessionTime, CultureInfo.InvariantCulture);
@@ -104,20 +104,20 @@ namespace smiteapi_microservice.Contexts
             using var httpClient = new HttpClient(handler, false);
 
             string requrl = $"{PCAPIurl}{endpoint}json" + $"/{_devID}" + $"/{signature}" + $"/{sessionResult.sessionID}" + $"/{timestamp}";
-            requrl = value != "" ?  requrl + $"/{value}" : requrl;
+            requrl = value != "" ? requrl + $"/{value}" : requrl;
 
             using var request = new HttpRequestMessage(HttpMethod.Get, requrl);
 
             var response = await httpClient.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
-            ApiResponse res = new ApiResponse(); 
+            ApiResponse res = new ApiResponse();
             if (json.ToLowerInvariant().Contains("html"))
             {
                 res.error = json;
 
                 return res;
             }
-            else if(!json.Contains("{"))
+            else if (!json.Contains("{"))
             {
                 res.error = json;
                 return res;
@@ -181,14 +181,14 @@ namespace smiteapi_microservice.Contexts
         }
 
         public async Task<List<ApiPlayer>> SearchPlayerByName(string playername)
-        { 
+        {
             ApiResponse response = await CallAsync("searchplayers", playername);
             if (response.error != null)
             {
                 var error = new List<ApiPlayer> { new ApiPlayer { ret_msg = response.error } };
                 //set error message as ret_msg 
                 return error;
-            }    
+            }
             try
             {
                 return JsonConvert.DeserializeObject<List<ApiPlayer>>(response.content);
@@ -229,7 +229,7 @@ namespace smiteapi_microservice.Contexts
                 var error = new List<ApiItem> { new ApiItem { ret_msg = response.content } };
                 //set error message as ret_msg 
                 return error;
-            }  
+            }
         }
 
         public async Task<List<ApiGod>> GetAllGods()
@@ -241,7 +241,7 @@ namespace smiteapi_microservice.Contexts
                 var error = new List<ApiGod> { new ApiGod { ret_msg = response.error } };
                 //set error message as ret_msg 
                 return error;
-            }           
+            }
             try
             {
                 return JsonConvert.DeserializeObject<List<ApiGod>>(response.content);
@@ -269,10 +269,10 @@ namespace smiteapi_microservice.Contexts
             ApiResponse response = await CallAsync("getpatchinfo", "");
             if (response.error != null)
             {
-                var error = new ApiPatchInfo { ret_msg = response.error } ;
+                var error = new ApiPatchInfo { ret_msg = response.error };
                 //set error message as ret_msg 
                 return error;
-            }        
+            }
             try
             {
                 return JsonConvert.DeserializeObject<ApiPatchInfo>(response.content);
@@ -287,7 +287,7 @@ namespace smiteapi_microservice.Contexts
 
         public async Task<string> PingAPI()
         {
-            
+
             ApiResponse response = await CallAsync("ping", "");
             if (response.error != null)
             {
@@ -297,7 +297,7 @@ namespace smiteapi_microservice.Contexts
         }
 
         public async Task<string> DataUsed()
-        {        
+        {
             ApiResponse response = await CallAsync("getdataused", "");
             if (response.error != null)
             {
