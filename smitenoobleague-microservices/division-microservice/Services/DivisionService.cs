@@ -229,28 +229,28 @@ namespace division_microservice.Services
         {
             try
             {
-                    //update row in database and save
-                    TableDivision foundDivision = await _db.TableDivisions.Where( d => d.DivisionId == division.DivisionID).FirstOrDefaultAsync();
+                //update row in database and save
+                TableDivision foundDivision = await _db.TableDivisions.Where( d => d.DivisionId == division.DivisionID).FirstOrDefaultAsync();
 
-                    if (foundDivision == null)
+                if (foundDivision == null)
+                {
+                    return new ObjectResult("No division found with the given divisionID") { StatusCode = 404 }; //NOT FOUND
+                }
+                else
+                {
+                    if (await _validationService.DivisionNameIsTakenAsync(division.DivisionName, division.DivisionID))
                     {
-                        return new ObjectResult("No division found with the given divisionID") { StatusCode = 404 }; //NOT FOUND
+                        return new ObjectResult("Given division name is already in use") { StatusCode = 400 }; //CREATED
                     }
-                    else
-                    {
-                        if (await _validationService.DivisionNameIsTakenAsync(division.DivisionName, division.DivisionID))
-                        {
-                            return new ObjectResult("Given division name is already in use") { StatusCode = 400 }; //CREATED
-                        }
 
-                        foundDivision.DivisionName = division?.DivisionName;
-                        await _db.SaveChangesAsync();
+                    foundDivision.DivisionName = division?.DivisionName;
+                    await _db.SaveChangesAsync();
 
-                        Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
-                        returnDivision.CurrentScheduleID = await GetCurrentSchedule(returnDivision.DivisionID);
+                    Division returnDivision = new Division { DivisionID = foundDivision.DivisionId, DivisionName = foundDivision.DivisionName };
+                    returnDivision.CurrentScheduleID = await GetCurrentSchedule(returnDivision.DivisionID);
 
-                        return new ObjectResult(returnDivision) { StatusCode = 200 }; //OK
-                    }
+                    return new ObjectResult(returnDivision) { StatusCode = 200 }; //OK
+                }
             }
             catch (Exception ex)
             {
@@ -271,18 +271,33 @@ namespace division_microservice.Services
         }
 
         #region methods
-        private async Task<int?> GetCurrentSchedule(int divisionID)
+        private async Task<int?>  GetCurrentSchedule(int divisionID)
         {
-            var Today = DateTime.Now;
-            //check if given date overlaps with already existing schedules
-            var currentSchedule = await _db.TableSchedules.Where(s => Today >= s.ScheduleStartDate && Today <= s.ScheduleEndDate && s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
-
-            if(currentSchedule == null)
+            if(await _db.TableSchedules.Where(s => s.ScheduleDivisionId == divisionID).CountAsync() > 1)
             {
-                currentSchedule = await _db.TableSchedules.Where(s => Today.AddDays(7) >= s.ScheduleStartDate && Today <= s.ScheduleEndDate && s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
-            }
+                var Today = DateTime.Now;
+                //check if given date overlaps with already existing schedules
+                var currentSchedule = await _db.TableSchedules.Where(s => Today >= s.ScheduleStartDate && Today <= s.ScheduleEndDate && s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
 
-            return currentSchedule?.ScheduleId;
+                if(currentSchedule == null)
+                {
+                    currentSchedule = await _db.TableSchedules.Where(s => Today.AddDays(7) >= s.ScheduleStartDate && Today <= s.ScheduleEndDate && s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
+
+                    if(currentSchedule == null)
+                    {
+                        //just get the first occurence.
+                        currentSchedule = await _db.TableSchedules.Where(s => s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
+                    }
+                }
+
+                return currentSchedule?.ScheduleId;
+
+            }
+            else
+            {
+                var currentschedule = await _db.TableSchedules.Where(s => s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
+                return currentschedule?.ScheduleId;
+            }
         }
 
         private async Task<bool> DeleteAllSchedulesForDivisionByIdAsync(int divisionID)
