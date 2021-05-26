@@ -138,7 +138,7 @@ async function GetJobsFromDB() {
       console.log(data);
       let scheduledGames = data;
       //foreach received object
-      asyncForEach(scheduledGames, async(game) => {
+      await asyncForEach(scheduledGames, async(game) => {
         const id = game.gameID;
         const date = new Date(game.scheduleTime);
         const patch = game.patchNumber;
@@ -170,7 +170,7 @@ async function GetInhouseJobsFromDB() {
       console.log(data);
       let scheduledGames = data;
       //foreach received object
-      asyncForEach(scheduledGames, async(game) => {
+      await asyncForEach(scheduledGames, async(game) => {
         const id = game.gameID;
         const date = new Date(game.scheduleTime);
         const patch = game.patchNumber;
