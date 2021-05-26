@@ -138,7 +138,7 @@ async function GetJobsFromDB() {
       console.log(data);
       let scheduledGames = data;
       //foreach received object
-      scheduledGames.forEach(async(game) => {
+      asyncForEach(scheduledGames, async(game) => {
         const id = game.gameID;
         const date = new Date(game.scheduleTime);
         const patch = game.patchNumber;
@@ -146,8 +146,8 @@ async function GetJobsFromDB() {
         if (Date.parse(date) <= Date.now()) {
           console.log("Ran catch up job.. " + "id: " + id + " @: " + Date.now());
           //make api call to get matchdata. in that call it will also update the database
-          CallSmiteApi(id, patch, date);
           await sleep(6000);
+          CallSmiteApi(id, patch, date);
         }
         else {
           console.log("Added " + id + " as scheduled job @: " + date);
@@ -170,8 +170,7 @@ async function GetInhouseJobsFromDB() {
       console.log(data);
       let scheduledGames = data;
       //foreach received object
-      scheduledGames.forEach(async(game) => {
-
+      asyncForEach(scheduledGames, async(game) => {
         const id = game.gameID;
         const date = new Date(game.scheduleTime);
         const patch = game.patchNumber;
@@ -179,8 +178,8 @@ async function GetInhouseJobsFromDB() {
         if (Date.parse(date) <= Date.now()) {
           console.log("Ran catch up job.. " + "id: " + id + " @: " + Date.now());
           //make api call to get matchdata. in that call it will also update the database
-          CallSmiteApiInhouse(id, patch, date);
           await sleep(6000);
+          CallSmiteApiInhouse(id, patch, date);
         }
         else {
           console.log("Added " + id + " as scheduled job @: " + date);
@@ -199,3 +198,9 @@ async function sleep(ms) {
     setTimeout(resolve, ms);
   });
 } 
+
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
