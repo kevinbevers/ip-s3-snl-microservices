@@ -131,7 +131,7 @@ function CallSmiteApiInhouse(id, patch, date) {
 
 async function GetJobsFromDB() {
   await axios.get(process.env.API_URL + '/queuedmatch',{headers: {"ServiceKey":process.env.InternalServiceKey}})
-    .then(res =>
+    .then(async(res) =>
     // The whole response has been received. Print out the result.
     {
       const data = res.data;
@@ -163,7 +163,7 @@ async function GetJobsFromDB() {
 
 async function GetInhouseJobsFromDB() {
   await axios.get(process.env.API_URL + '/queuedmatch/inhouse',{headers: {"ServiceKey":process.env.InternalServiceKey}})
-    .then(res =>
+    .then(async(res) =>
     // The whole response has been received. Print out the result.
     {
       const data = res.data;
