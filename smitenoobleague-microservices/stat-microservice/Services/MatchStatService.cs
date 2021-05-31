@@ -761,20 +761,20 @@ namespace stat_microservice.Services
             {
                 ScheduledMatch scheduledMatch = new ScheduledMatch { ScheduleID = foundSchedule.ScheduleID, ScheduleStartDate = foundSchedule.ScheduleStartDate };
                 //Get the 2 matchups that are scheduled for these 2 teams
-                Matchup matchup1 = foundSchedule.Matchups.Where(mup => mup?.HomeTeam?.TeamID == winnerTeam?.TeamID && mup?.AwayTeam?.TeamID == loserTeam?.TeamID).FirstOrDefault();
-                Matchup matchup2 = foundSchedule.Matchups.Where(mup => mup?.HomeTeam?.TeamID == loserTeam?.TeamID && mup?.AwayTeam?.TeamID == winnerTeam?.TeamID).FirstOrDefault();
-                List<Matchup> matchups = new List<Matchup> { matchup1, matchup2 };
+                //Matchup matchup1 = foundSchedule.Matchups.Where(mup => mup?.HomeTeam?.TeamID == winnerTeam?.TeamID && mup?.AwayTeam?.TeamID == loserTeam?.TeamID).FirstOrDefault();
+                //Matchup matchup2 = foundSchedule.Matchups.Where(mup => mup?.HomeTeam?.TeamID == loserTeam?.TeamID && mup?.AwayTeam?.TeamID == winnerTeam?.TeamID).FirstOrDefault();
+                //List<Matchup> matchups = new List<Matchup> { matchup1, matchup2 };
+                List<Matchup> allMatchupsBetweenTeams = foundSchedule.Matchups.Where(mup => (mup?.HomeTeam?.TeamID == winnerTeam?.TeamID  && mup?.AwayTeam?.TeamID == loserTeam?.TeamID) || (mup?.HomeTeam?.TeamID == loserTeam?.TeamID && mup?.AwayTeam?.TeamID == winnerTeam?.TeamID)).ToList();
                 //Get the matchup that is already past the currentWeek / the same and check if the matchup is not older then 2 weeks. 2 weeks is the catchup time.
-                scheduledMatch.matchup = matchups?.Where(mup => mup?.WeekNumber <= foundSchedule?.CurrentWeek && (foundSchedule.CurrentWeek - mup.WeekNumber) <= 3 ).FirstOrDefault();
+                scheduledMatch.matchup = allMatchupsBetweenTeams?.Where(mup => mup?.WeekNumber <= foundSchedule?.CurrentWeek && (foundSchedule.CurrentWeek - mup.WeekNumber) <= 3 ).FirstOrDefault();
                 //when the matchup is deemed null because it's submitted to long after. try this better method I should probably properly implement.
                 if(scheduledMatch.matchup == null)
                 {
                     _logger.LogInformation("Went into the new function because matchup = null");
                     _logger.LogInformation($"{winnerTeam?.TeamName} VS {loserTeam?.TeamName}");
-                    _logger.LogInformation($"{matchup1?.WeekNumber} | {matchup2?.WeekNumber}");
 
                     //week number - 1 because you don't want to add 7 days too much.
-                    scheduledMatch.matchup = matchups?.Where(mup => scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7) <= match.EntryDate && scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7).AddDays(14) >= match.EntryDate).FirstOrDefault();
+                    scheduledMatch.matchup = allMatchupsBetweenTeams?.Where(mup => scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7) <= match.EntryDate && scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7).AddDays(14) >= match.EntryDate).FirstOrDefault();
                 }
                 //check if the entry date of the match id isn't before the matchup is scheduled
                 //var currentWeekDate = scheduledMatch.ScheduleStartDate.AddDays(7 * scheduledMatch.matchup.WeekNumber);
