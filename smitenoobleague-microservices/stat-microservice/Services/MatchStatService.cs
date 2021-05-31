@@ -770,6 +770,9 @@ namespace stat_microservice.Services
                 if(scheduledMatch.matchup == null)
                 {
                     _logger.LogInformation("Went into the new function because matchup = null");
+                    _logger.LogInformation($"{winnerTeam?.TeamName} VS {loserTeam?.TeamName}");
+                    _logger.LogInformation($"{matchup1?.WeekNumber} | {matchup2?.WeekNumber}");
+
                     //week number - 1 because you don't want to add 7 days too much.
                     scheduledMatch.matchup = matchups?.Where(mup => scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7) <= match.EntryDate && scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7).AddDays(14) >= match.EntryDate).FirstOrDefault();
                 }
