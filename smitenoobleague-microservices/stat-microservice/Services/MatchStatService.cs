@@ -765,6 +765,7 @@ namespace stat_microservice.Services
                 //Matchup matchup2 = foundSchedule.Matchups.Where(mup => mup?.HomeTeam?.TeamID == loserTeam?.TeamID && mup?.AwayTeam?.TeamID == winnerTeam?.TeamID).FirstOrDefault();
                 //List<Matchup> matchups = new List<Matchup> { matchup1, matchup2 };
                 List<Matchup> allMatchupsBetweenTeams = foundSchedule.Matchups.Where(mup => (mup?.HomeTeam?.TeamID == winnerTeam?.TeamID  && mup?.AwayTeam?.TeamID == loserTeam?.TeamID) || (mup?.HomeTeam?.TeamID == loserTeam?.TeamID && mup?.AwayTeam?.TeamID == winnerTeam?.TeamID)).ToList();
+                _logger.LogInformation("Number of matchups found: " + allMatchupsBetweenTeams.Count().ToString());
                 //Get the matchup that is already past the currentWeek / the same and check if the matchup is not older then 2 weeks. 2 weeks is the catchup time.
                 scheduledMatch.matchup = allMatchupsBetweenTeams?.Where(mup => mup?.WeekNumber <= foundSchedule?.CurrentWeek && (foundSchedule.CurrentWeek - mup.WeekNumber) <= 3 ).FirstOrDefault();
                 //when the matchup is deemed null because it's submitted to long after. try this better method I should probably properly implement.
