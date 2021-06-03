@@ -29,6 +29,10 @@ namespace stat_microservice.Services
         {
             try
             {
+                if (playerID == null)
+                {
+                    return new ObjectResult("Can't find player with given value, please use a player id.") { StatusCode = 400 }; //BAD REQUEST
+                }
                 PlayerWithTeamInfo foundPlayer = await _externalServices.GetPlayerWithTeamInfoByPlayerIdAsync(playerID);
                 
                 if (foundPlayer != null || await _db.TableStats.Where(x => x.PlayerId == playerID).CountAsync() > 0)

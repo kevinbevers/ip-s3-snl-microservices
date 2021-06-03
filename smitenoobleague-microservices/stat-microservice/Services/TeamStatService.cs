@@ -29,6 +29,10 @@ namespace stat_microservice.Services
         {
             try
             {
+                if(teamID == null)
+                {
+                    return new ObjectResult("Can't find team with given value, please use a team id.") { StatusCode = 400 }; //BAD REQUEST
+                }
                 TeamWithDetails foundTeam = await _externalServices.GetTeamWithDetailsByTeamId(teamID);
                 if (foundTeam != null)
                 {
