@@ -23,7 +23,7 @@ function Home({LoginSession}) {
   <div className="jumbotron-fluid">
     {/* render body here */}
     <div className=" container mb-2 mt-5 rounded p-4" id="welcomeScreen">
-        <Row className="mb-2"><Col className="d-flex justify-content-center"><Img alt={"SNL Roadmap"} height={400} webp src={require("public/images/SCL_Logo.png")} className="" draggable={false}></Img></Col></Row>
+        <Row className="mb-2"><Col className="d-flex justify-content-center"><Img alt={"SNL Roadmap"} webp src={require("public/images/SCL_Logo.png")} className="LandingImage" draggable={false}></Img></Col></Row>
         <h2 className="landingTitle font-weight-bold text-white text-center">The fully automated smite amateur league!</h2>
     </div>
   </div>

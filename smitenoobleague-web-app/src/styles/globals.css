@@ -98,6 +98,10 @@ body {
   width: 60px;
 }
 
+.LandingImage {
+  height: 1024px;
+}
+
 @media (min-width: 768px) {
     .LeaderboardStatText {
       margin: 0;
@@ -259,6 +263,9 @@ textarea {
     top: -280px;
     left: -200px;
   }
+  .LandingImage {
+    height: 400px;
+  }
 }
 
 @media (max-width: 1440.98px) {
@@ -266,11 +273,17 @@ textarea {
     top: -280px;
     left: -400px;
   }
+  .LandingImage {
+    height: 350px;
+  }
 }
 
 @media (max-width: 767.98px) {
   .zeusBackground {
     top: -280px;
     left: -570px;
+  }
+  .LandingImage {
+    height: 300px;
   }
 }
