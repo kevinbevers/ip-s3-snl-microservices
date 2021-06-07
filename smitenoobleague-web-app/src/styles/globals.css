@@ -87,6 +87,17 @@ body {
     padding-bottom: 20px;
 }
 
+.landingTitle {
+  /* text-shadow: 6px 6px 0px rgba(0,0,0,0.2); */
+  text-shadow: horizontal-offset vertical-offset blur color;
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+}
+
+.LogoPush {
+  height: 60px;
+  width: 60px;
+}
+
 @media (min-width: 768px) {
     .LeaderboardStatText {
       margin: 0;
@@ -116,9 +127,9 @@ body {
       font-size: 4vw;
     }
 
-    /* .landingTitle {
-      font-size: 10vw;
-    } */
+    .landingTitle {
+      font-size: 2.6vw;
+    }
 }
 
 /*faq page*/
@@ -227,4 +238,39 @@ textarea {
 .pagination>li>span {
   width: 100%;
   text-align: center;
+}
+
+/* Video background styles */
+
+.zeusBackground {
+  min-height: 100%;
+  min-width: 1920px;
+  width: 100%;
+  height: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  filter:brightness(45%);
+}
+
+@media (max-width: 1920.98px) {
+  .zeusBackground {
+    top: -280px;
+    left: -200px;
+  }
+}
+
+@media (max-width: 1440.98px) {
+  .zeusBackground {
+    top: -280px;
+    left: -400px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .zeusBackground {
+    top: -280px;
+    left: -570px;
+  }
 }
