@@ -298,13 +298,13 @@ namespace stat_microservice.Services
                     //log this, to track down issues with captain email not being saved in the db.
                     if (loserCaptainMail == null)
                     {
-                        await _externalServices.SendEmailNotificationToCaptainAsync("Title says it all.", $"{loserTeam?.TeamName} captain doesn't have an email set in the DB", "admin@smitenoobleague.com");
+                        await _externalServices.SendEmailNotificationToCaptainAsync("Title says it all.", $"{loserTeam?.TeamName} captain doesn't have an email set in the DB", "admin@smitechampions.com");
                         _logger.LogError("Losing team's captain doesn't have an email set in the DB");
                         return new ObjectResult($"{loserTeam?.TeamName} captain doesn't have an email set in the DB") { StatusCode = 404 };
                     }
                     if (winnerCaptainMail == null)
                     {
-                        await _externalServices.SendEmailNotificationToCaptainAsync("Title says it all.", $"{winnerTeam?.TeamName} captain doesn't have an email set in the DB", "admin@smitenoobleague.com");
+                        await _externalServices.SendEmailNotificationToCaptainAsync("Title says it all.", $"{winnerTeam?.TeamName} captain doesn't have an email set in the DB", "admin@smitechampions.com");
                         _logger.LogError("Winning team's captain doesn't have an email set in the DB");
                         return new ObjectResult($"{winnerTeam?.TeamName} captain doesn't have an email set in the DB") { StatusCode = 404 };
                     }
@@ -862,8 +862,8 @@ namespace stat_microservice.Services
         private async Task SendSuccessMail(MatchData match, TeamWithDetails winnerTeam, TeamWithDetails loserTeam, string winnerCaptainMail, string loserCaptainMail, int gameNumber, string msg, int matchupID)
         {
             string title = "Match submitted successfully";
-            string messageWinner = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {loserTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/" + $"{matchupID} <br />";
-            string messageLoser = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {winnerTeam.TeamName} <br /><br /> {msg} <br /> https://smitenoobleague.com/matchhistory/" + $"{matchupID} <br />";
+            string messageWinner = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {loserTeam.TeamName} <br /><br /> {msg} <br /> https://smitechampions.com/matchhistory/" + $"{matchupID} <br />";
+            string messageLoser = $"<b>Submitted Match ID:</b> {match.GameID} <br /><b>Game:</b> {gameNumber} <br /> <b>Opponent:</b> {winnerTeam.TeamName} <br /><br /> {msg} <br /> https://smitechampions.com/matchhistory/" + $"{matchupID} <br />";
 
             await _externalServices.SendEmailNotificationToCaptainAsync(messageWinner, title, winnerCaptainMail);
             await _externalServices.SendEmailNotificationToCaptainAsync(messageLoser, title, loserCaptainMail);

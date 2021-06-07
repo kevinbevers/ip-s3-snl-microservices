@@ -6,13 +6,13 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { useRouter } from "next/router";
 //optimized images
 import Img from 'react-optimized-image';
-import Logo from "public/images/SNL_Navbar_Logo.png";
+import Logo from "public/images/SCL_Logo.png";
 //icon
 import {FaDiscord} from "react-icons/fa";
 //dynamic head
 import Head from "next/head";
 
-export default function NavBar({LoginSession}) {
+export default function NavBar({LoginSession, hideLogo}) {
     
     const router = useRouter();
 
@@ -26,9 +26,10 @@ export default function NavBar({LoginSession}) {
         <meta name="twitter:image" key="twitter:image" content="https://smitenoobleague.com/images/twitterbanner.jpg" />
         </Head>
             <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="darktext font-weight-bold">
-                <Navbar.Brand href="/" className={router?.pathname == "/" ? "p-0 active" : "p-0"}>
+               {!hideLogo ? <Navbar.Brand href="/" className={router?.pathname == "/" ? "p-0 active" : "p-0"}>
                 <Img src={Logo} webp sizes={[60, 120]} width="60" height="60" className="d-inline-block align-top" alt="SNL" draggable={false}/>
-                </Navbar.Brand>
+                </Navbar.Brand> : 
+                <div className="d-inline-block align-top LogoPush"></div>}
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mr-auto">

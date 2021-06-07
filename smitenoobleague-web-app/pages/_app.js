@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-      <title>Smitenoobleague 📊</title>
+      <title>Smite Champions 🏆</title>
       </Head>
       <Component {...pageProps} />
     </>
