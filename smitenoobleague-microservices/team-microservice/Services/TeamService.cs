@@ -536,135 +536,66 @@ namespace team_microservice.Services
             try
             {
                 //get the captain
-                TableTeamMember captain = await _db.TableTeamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId) && m.TeamMemberAccountId != null).FirstOrDefaultAsync();
-                if (captain != null)
+                List<TableTeamMember> captains = await _db.TableTeamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId) && m.TeamMemberAccountId != null).ToListAsync();
+                TableTeamMember captain = captains.FirstOrDefault();
+                if (captains?.Count() > 1)
                 {
-                    //get the team
-                    TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamCaptainId == captain.TeamMemberId).FirstOrDefaultAsync();
-                    //get all the team members
-                    List<TableTeamMember> teamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == foundTeam.TeamId).OrderBy(m => m.TeamMemberRole).ToListAsync();
-
-                    //check if the foundTeam via captainID is the correct one. in Case multiple captains are in 1 match. if the wrong captain of the 2 is chosen it won't go in this if. that means we should grab the other one.
-                    if (teamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId)).Count() > 2)
-                    {
-                        //create a new list of members and give each teamMember it's role and transform to external model
-                        List<TeamMember> members = new List<TeamMember>();
-
-                        foreach (var m in teamMembers)
-                        {
-                            var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == m.TeamMemberRole).FirstOrDefaultAsync();
-
-                            members.Add(new TeamMember
-                            {
-                                TeamMemberID = m.TeamMemberId,
-                                TeamCaptain = foundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
-                                TeamMemberName = m.TeamMemberName,
-                                TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
-                                TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
-                                PlayerID = m.TeamMemberPlayerId
-                            });
-                        }
-
-                        TeamWithDetails returnTeam = new TeamWithDetails
-                        {
-                            TeamID = foundTeam.TeamId,
-                            TeamName = foundTeam.TeamName,
-                            TeamMembers = members,
-                            DivisionID = foundTeam.TeamDivisionId,
-                            TeamLogoPath = foundTeam.TeamLogoPath
-
-                        };
-
-                        return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
-                    }
-                    else
-                    {
-                        //remove the wrong captain from players in match list.
-                        playersInMatch.Remove(captain.TeamMemberPlayerId);
-
-                        //get the captain
-                        TableTeamMember nextCaptain = await _db.TableTeamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId) && m.TeamMemberAccountId != null).FirstOrDefaultAsync();
-                        //get the team
-                        TableTeam nextFoundTeam = await _db.TableTeams.Where(t => t.TeamCaptainId == nextCaptain.TeamMemberId).FirstOrDefaultAsync();
-                        //get all the team members
-                        List<TableTeamMember> nextTeamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == nextFoundTeam.TeamId).OrderBy(m => m.TeamMemberRole).ToListAsync();
-
-                        //create a new list of members and give each teamMember it's role and transform to external model
-                        List<TeamMember> members = new List<TeamMember>();
-
-                        foreach (var m in nextTeamMembers)
-                        {
-                            var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == m.TeamMemberRole).FirstOrDefaultAsync();
-
-                            members.Add(new TeamMember
-                            {
-                                TeamMemberID = m.TeamMemberId,
-                                TeamCaptain = nextFoundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
-                                TeamMemberName = m.TeamMemberName,
-                                TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
-                                TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
-                                PlayerID = m.TeamMemberPlayerId
-                            });
-                        }
-
-                        TeamWithDetails returnTeam = new TeamWithDetails
-                        {
-                            TeamID = nextFoundTeam.TeamId,
-                            TeamName = nextFoundTeam.TeamName,
-                            TeamMembers = members,
-                            DivisionID = nextFoundTeam.TeamDivisionId,
-                            TeamLogoPath = nextFoundTeam.TeamLogoPath
-
-                        };
-
-                        return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
-                    }
+                    return await getTeamWhen2CaptainsAreInTheMatch(playersInMatch, captain);
                 }
                 else
                 {
-                    //check if maybe the captain is getting filled and get the team by the remaining 4 players.
-                    TableTeamMember teamMember = await _db.TableTeamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId)).FirstOrDefaultAsync();
-                    if (teamMember != null)
+                    if (captain != null)
                     {
-                        //get the team
-                        TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == teamMember.TeamMemberTeamId).FirstOrDefaultAsync();
-                        //get all the team members
-                        List<TableTeamMember> teamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == foundTeam.TeamId).OrderBy(m => m.TeamMemberRole).ToListAsync();
-                        //create a new list of members and give each teamMember it's role and transform to external model
-                        List<TeamMember> members = new List<TeamMember>();
-
-                        foreach (var m in teamMembers)
-                        {
-                            var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == m.TeamMemberRole).FirstOrDefaultAsync();
-
-                            members.Add(new TeamMember
-                            {
-                                TeamMemberID = m.TeamMemberId,
-                                TeamCaptain = foundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
-                                TeamMemberName = m.TeamMemberName,
-                                TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
-                                TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
-                                PlayerID = m.TeamMemberPlayerId
-                            });
-                        }
-
-                        TeamWithDetails returnTeam = new TeamWithDetails
-                        {
-                            TeamID = foundTeam.TeamId,
-                            TeamName = foundTeam.TeamName,
-                            TeamMembers = members,
-                            DivisionID = foundTeam.TeamDivisionId,
-                            TeamLogoPath = foundTeam.TeamLogoPath
-
-                        };
-
-                        return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
+                        return await getTeamWithCaptain(captain);
                     }
                     else
                     {
-                        return new ObjectResult("No team found for the given players, maybe the captain isn't linked to an account yet.") { StatusCode = 404 }; //NOT FOUND
+                        //check if maybe the captain is getting filled and get the team by the remaining 4 players.
+                        TableTeamMember teamMember = await _db.TableTeamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId)).FirstOrDefaultAsync();
+                        if (teamMember != null)
+                        {
+                            //get the team
+                            TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamId == teamMember.TeamMemberTeamId).FirstOrDefaultAsync();
+                            //get all the team members
+                            List<TableTeamMember> teamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == foundTeam.TeamId).OrderBy(m => m.TeamMemberRole).ToListAsync();
+                            //create a new list of members and give each teamMember it's role and transform to external model
+                            List<TeamMember> members = new List<TeamMember>();
+
+                            foreach (var m in teamMembers)
+                            {
+                                var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == m.TeamMemberRole).FirstOrDefaultAsync();
+
+                                members.Add(new TeamMember
+                                {
+                                    TeamMemberID = m.TeamMemberId,
+                                    TeamCaptain = foundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
+                                    TeamMemberName = m.TeamMemberName,
+                                    TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
+                                    TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                                    PlayerID = m.TeamMemberPlayerId
+                                });
+                            }
+
+                            TeamWithDetails returnTeam = new TeamWithDetails
+                            {
+                                TeamID = foundTeam.TeamId,
+                                TeamName = foundTeam.TeamName,
+                                TeamMembers = members,
+                                DivisionID = foundTeam.TeamDivisionId,
+                                TeamLogoPath = foundTeam.TeamLogoPath
+
+                            };
+
+                            return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
+                        }
+                        else
+                        {
+                            return new ObjectResult("No team found for the given players, maybe the captain isn't linked to an account yet.") { StatusCode = 404 }; //NOT FOUND
+                        }
                     }
                 }
+
+               
             }
             catch (Exception ex)
             {
@@ -1524,6 +1455,136 @@ namespace team_microservice.Services
             else
             {
                 return false;
+            }
+        }
+
+        private async Task<ActionResult<TeamWithDetails>> getTeamWithCaptain(TableTeamMember captain)
+        {
+            //get the team
+            TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamCaptainId == captain.TeamMemberId).FirstOrDefaultAsync();
+            //get all the team members
+            List<TableTeamMember> teamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == foundTeam.TeamId).OrderBy(m => m.TeamMemberRole).ToListAsync();
+
+            //create a new list of members and give each teamMember it's role and transform to external model
+            List<TeamMember> members = new List<TeamMember>();
+
+            foreach (var m in teamMembers)
+            {
+                var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == m.TeamMemberRole).FirstOrDefaultAsync();
+
+                members.Add(new TeamMember
+                {
+                    TeamMemberID = m.TeamMemberId,
+                    TeamCaptain = foundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
+                    TeamMemberName = m.TeamMemberName,
+                    TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
+                    TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                    PlayerID = m.TeamMemberPlayerId
+                });
+            }
+
+            TeamWithDetails returnTeam = new TeamWithDetails
+            {
+                TeamID = foundTeam.TeamId,
+                TeamName = foundTeam.TeamName,
+                TeamMembers = members,
+                DivisionID = foundTeam.TeamDivisionId,
+                TeamLogoPath = foundTeam.TeamLogoPath
+
+            };
+
+            return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
+        }
+
+        private async Task<ActionResult<TeamWithDetails>> getTeamWhen2CaptainsAreInTheMatch(List<int> playersInMatch, TableTeamMember captain)
+        {
+            //get the team
+            TableTeam foundTeam = await _db.TableTeams.Where(t => t.TeamCaptainId == captain.TeamMemberId).FirstOrDefaultAsync();
+            //get all the team members
+            List<TableTeamMember> teamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == foundTeam.TeamId).OrderBy(m => m.TeamMemberRole).ToListAsync();
+
+            //check if the foundTeam via captainID is the correct one. in Case multiple captains are in 1 match. if the wrong captain of the 2 is chosen it won't go in this if. that means we should grab the other one.
+            if (teamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId)).Count() > 2)
+            {
+                //create a new list of members and give each teamMember it's role and transform to external model
+                List<TeamMember> members = new List<TeamMember>();
+
+                foreach (var m in teamMembers)
+                {
+                    var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == m.TeamMemberRole).FirstOrDefaultAsync();
+
+                    members.Add(new TeamMember
+                    {
+                        TeamMemberID = m.TeamMemberId,
+                        TeamCaptain = foundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
+                        TeamMemberName = m.TeamMemberName,
+                        TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
+                        TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                        PlayerID = m.TeamMemberPlayerId
+                    });
+                }
+
+                TeamWithDetails returnTeam = new TeamWithDetails
+                {
+                    TeamID = foundTeam.TeamId,
+                    TeamName = foundTeam.TeamName,
+                    TeamMembers = members,
+                    DivisionID = foundTeam.TeamDivisionId,
+                    TeamLogoPath = foundTeam.TeamLogoPath
+
+                };
+
+                return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
+            }
+            else
+            {
+                //remove the wrong captain from players in match list.
+                playersInMatch.Remove(captain.TeamMemberPlayerId);
+
+                //get the captain
+                TableTeamMember nextCaptain = await _db.TableTeamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId) && m.TeamMemberAccountId != null).FirstOrDefaultAsync();
+                //get the team
+                TableTeam nextFoundTeam = await _db.TableTeams.Where(t => t.TeamCaptainId == nextCaptain.TeamMemberId).FirstOrDefaultAsync();
+                //get all the team members
+                List<TableTeamMember> nextTeamMembers = await _db.TableTeamMembers.Where(m => m.TeamMemberTeamId == nextFoundTeam.TeamId).OrderBy(m => m.TeamMemberRole).ToListAsync();
+
+                //check if the foundTeam via captainID is the correct one. in Case multiple captains are in 1 match. if the wrong captain of the 2 is chosen it won't go in this if. that means we should grab the other one.
+                if (nextTeamMembers.Where(m => playersInMatch.Contains(m.TeamMemberPlayerId)).Count() > 2)
+                {
+                    //create a new list of members and give each teamMember it's role and transform to external model
+                    List<TeamMember> members = new List<TeamMember>();
+
+                    foreach (var m in nextTeamMembers)
+                    {
+                        var PlayerRole = await _db.TableRoles.Where(r => r.RoleId == m.TeamMemberRole).FirstOrDefaultAsync();
+
+                        members.Add(new TeamMember
+                        {
+                            TeamMemberID = m.TeamMemberId,
+                            TeamCaptain = nextFoundTeam.TeamCaptainId == m.TeamMemberId ? true : false,
+                            TeamMemberName = m.TeamMemberName,
+                            TeamMemberPlatform = ((ApiPlatformEnum)m.TeamMemberPlatformId).ToString(),
+                            TeamMemberRole = new Role { RoleID = PlayerRole.RoleId, RoleName = PlayerRole.RoleName },
+                            PlayerID = m.TeamMemberPlayerId
+                        });
+                    }
+
+                    TeamWithDetails returnTeam = new TeamWithDetails
+                    {
+                        TeamID = nextFoundTeam.TeamId,
+                        TeamName = nextFoundTeam.TeamName,
+                        TeamMembers = members,
+                        DivisionID = nextFoundTeam.TeamDivisionId,
+                        TeamLogoPath = nextFoundTeam.TeamLogoPath
+
+                    };
+
+                    return new ObjectResult(returnTeam) { StatusCode = 200 }; //OK
+                }
+                else
+                {
+                    return new ObjectResult("The team that was found has made significant roster changes. The system couldn't verify all players in the match.") { StatusCode = 404 }; //NOT FOUND
+                }
             }
         }
         #endregion
