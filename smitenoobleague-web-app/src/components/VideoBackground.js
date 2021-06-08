@@ -9,6 +9,7 @@ export default function VideoBackground() {
     return (
         <video autoPlay muted loop id="myVideo" className={"zeusBackground"}
           ref={videoRef}
+          poster={"/images/main_bg.jpg"}
           onCanPlay={() => setPlayBack()}>
           <source src='/Season8_KeyArt_mograph_noBellona.mp4' type="video/mp4"></source>
         </video>
