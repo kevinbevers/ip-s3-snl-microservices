@@ -72,7 +72,7 @@ return (
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="3">
             <Card.Body>
-            <p className="m-0"><b>No</b> you can"t change your teams division, if you would like to switch to another division contact the league admin.</p>
+            <p className="m-0"><b>No</b> you can't change your teams division, if you would like to switch to another division contact the league admin.</p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>
