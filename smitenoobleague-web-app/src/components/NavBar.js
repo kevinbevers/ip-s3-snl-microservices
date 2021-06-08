@@ -20,10 +20,10 @@ export default function NavBar({LoginSession, hideLogo}) {
         <>
         <Head>
         <meta name="twitter:card" key={"twitter:card"} content="summary_large_image" />
-        <meta name="twitter:site" key="twitter:site" content="@Smitenoobleague" />
+        <meta name="twitter:site" key="twitter:site" content="@smitechampions" />
         <meta name="twitter:title" key="twitter:title" content="Schedules, Stats, Leaderboards and more" />
-        <meta name="twitter:description" key="twitter:description" content="Smitenoobleague is a website for a fully automated smite amateur league where teams can sign up, compete, see their stats and captains can manage their teams." />
-        <meta name="twitter:image" key="twitter:image" content="https://smitenoobleague.com/images/twitterbanner.jpg" />
+        <meta name="twitter:description" key="twitter:description" content="Smite champions is a website for a fully automated smite amateur league where teams can sign up, compete, see their stats and captains can manage their teams." />
+        <meta name="twitter:image" key="twitter:image" content="https://www.smitechampions.com/images/twitterbanner.jpg" />
         </Head>
             <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="darktext font-weight-bold">
                {!hideLogo ? <Navbar.Brand href="/" className={router?.pathname == "/" ? "p-0 active" : "p-0"}>
