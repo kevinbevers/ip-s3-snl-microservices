@@ -35,7 +35,7 @@ return (
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="0">
             <Card.Body>
-            <p className="m-0">there are <b>4 to 8 teams</b> in a division.</p>
+            <p className="m-0">there are <b>4 to 6 teams</b> in a division.</p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>

@@ -44,15 +44,15 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="1">
-            <ContextAwareToggle eventKey="1">What is smitenoobleague.com?</ContextAwareToggle>
+            <ContextAwareToggle eventKey="1">What is smitechampions.com?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="1">
             <Card.Body>
-            <p className="m-0">Smitenoobleague or in short SNL is a website where amateur smite league's get hosted and managed. 
-            In the smitenoobleague there are multiple divisions, each division contains a number of teams, 
+            <p className="m-0">Smite Champions is an amateur Smite Tournament and League organisation. the smitechampions.com website is used to host and manage the league and in the future Tournaments as well. 
+            In the Smite Champions League (SCL in short) there are multiple divisions, each division contains a number of teams, 
             these teams compete agains eachother for several weeks. during this time team captains submit their played match IDs. 
             These match IDs get collected and processed, with the data the matches provide everything gets calculated.
-            Essentially this means you will be able to view the final match results and statistics of every team that plays in the smitenoobleague</p>
+            Essentially this means you will be able to view the final match results and statistics of every team that plays in the SCL</p>
             </Card.Body>
         </Accordion.Collapse>
         </Card>
@@ -63,8 +63,9 @@ return (
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="2">
             <Card.Body>
-            <span className="m-0">If you want to sign up as a team captain you should send an e-mail to <a href="mailto:signup@smitenoobleague.com?SUBJECT=Sign up for captain">signup@smitenoobleague.com</a> with the following information:
+            <span className="m-0">To check if sign up's are open join the discord too find out. In general all applications will require the following information:
             <ul>
+                <li>Your Discordname with #</li>
                 <li>Your Gamertag / IGN,</li>
                 <li>Your Platform</li>
                 <li>Your Region</li>
@@ -113,7 +114,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="6">
-            <ContextAwareToggle eventKey="6">Is the smitenoobleague cross region?</ContextAwareToggle>
+            <ContextAwareToggle eventKey="6">Is the Smite Champions League cross region?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="6">
             <Card.Body>
@@ -124,7 +125,7 @@ return (
 
         <Card>
         <Accordion.Toggle as={Card.Header} eventKey="7">
-            <ContextAwareToggle eventKey="7">Is the smitenoobleague cross platform?</ContextAwareToggle>
+            <ContextAwareToggle eventKey="7">Is the Smite Champions League cross platform?</ContextAwareToggle>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey="7">
             <Card.Body>
