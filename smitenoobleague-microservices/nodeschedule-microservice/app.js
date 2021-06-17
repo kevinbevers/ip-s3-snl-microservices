@@ -98,8 +98,7 @@ function CallSmiteApi(id, patch, date) {
       {
       console.log("scheduled for retry in 1 hour.")
       //reschedule with + 1 hours
-      date = Date.now();
-      date += (1 * 60 * 60 * 1000);
+      date = Date.now() + (1 * 60 * 60 * 1000);
       ScheduleGame(date, patch, id);
       }
     });
@@ -123,8 +122,7 @@ function CallSmiteApiInhouse(id, patch, date) {
       console.error(error.response.data);
 
       //reschedule with + 2 hours
-      date = Date.now();
-      date += (1 * 60 * 60 * 1000);
+      date = Date.now()+ (1 * 60 * 60 * 1000);
       ScheduleInhouseGame(date, patch, id);
     }).catch(error => { console.error(error); });
 }
