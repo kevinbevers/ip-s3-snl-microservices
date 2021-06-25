@@ -148,7 +148,7 @@ export async function getServerSideProps(context) {
           LoginSession: loginSessionData,
           DivisionList: listOfDivisions != [] ? listOfDivisions : [{divisionID: 0, divisionName: "Division-less Teams"}],
           TeamList: listOfTeams,
-          selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null)[0]?.divisionID : 0
+          selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null || d.currentScheduleID != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null || d.currentScheduleID != null)[0]?.divisionID : 0
       },
   };
 }

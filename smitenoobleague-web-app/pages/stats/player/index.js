@@ -191,7 +191,7 @@ if (listOfDivisions?.length > 0) {
           LoginSession: loginSessionData,
           DivisionList: listOfDivisions != [] ? listOfDivisions : [{divisionID: 0, divisionName: "Division-less Players"}],
           PlayerList: listOfPlayers,
-          selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null)[0]?.divisionID : 0
+          selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null || d.currentScheduleID != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null || d.currentScheduleID != null)[0]?.divisionID : 0
       },
   };
 }

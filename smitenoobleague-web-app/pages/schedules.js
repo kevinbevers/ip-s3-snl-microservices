@@ -114,7 +114,7 @@ export async function getServerSideProps(context) {
   let ScheduleData = null;
 
   //Get division data from api
-  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data.filter(d => d.teamCount != null); }).catch(err => { });
+  await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data.filter(d => d.teamCount != null || d.currentScheduleID != null); }).catch(err => { });
 
   //check if there are divisions, if yes check if the first division has a schedule and get it
   if (listOfDivisions?.length > 0) {
@@ -167,7 +167,7 @@ export async function getServerSideProps(context) {
       DivisionList: listOfDivisions,
       SchedulesForFirstDivision: listOfSchedules,
       CurrentScheduleDataForFirstDivision: ScheduleData,
-      selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null)[0]?.divisionID : 0
+      selectedDiv: cookies['selected_division'] != undefined ? cookies['selected_division'] : listOfDivisions.filter(d => d.teamCount != null || d.currentScheduleID != null)?.length > 0 ? listOfDivisions.filter(d => d.teamCount != null || d.currentScheduleID != null)[0]?.divisionID : 0
     },
   };
 }

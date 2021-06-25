@@ -44,7 +44,7 @@ export default function ManageTeams({apiToken, adminManage}) {
         //Add the teams without division
         let listOfDivisions = null;
   
-        await divisionservice.GetBasicListOfDivisions().then(res => {listOfDivisions = res.data.filter(d => d.teamCount != null) }).catch(err => {});
+        await divisionservice.GetBasicListOfDivisions().then(res => {listOfDivisions = res.data.filter(d => d.teamCount != null || d.currentScheduleID != null) }).catch(err => {});
   
           if(listOfDivisions?.length > 0)
           {

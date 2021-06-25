@@ -304,7 +304,7 @@ export async function getServerSideProps(context) {
     //Get division names and id and get the list of teams for the first division in the list
     let listOfDivisions = [];
     //Get division data from api
-    await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data.filter(d => d.teamCount != null) }).catch(err => {});
+    await divisionservice.GetBasicListOfDivisions().then(res => { listOfDivisions = res.data.filter(d => d.teamCount != null || d.currentScheduleID != null) }).catch(err => {});
     
     //check if there are divisions, if yes check if the first division has teams
     if (listOfDivisions?.length > 0) {
