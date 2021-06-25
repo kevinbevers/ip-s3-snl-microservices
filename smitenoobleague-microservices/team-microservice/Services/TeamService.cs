@@ -1351,7 +1351,7 @@ namespace team_microservice.Services
                                 {
                                     TeamMemberPlayerId = (int)ts.Captain.TeamCaptainPlayerID,
                                     TeamMemberAccountId = ts.Captain.TeamCaptainAccountID,
-                                    TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : foundTeam?.TeamDivisionId != null ? (int)foundTeam.TeamDivisionId : null,
+                                    TeamMemberDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam?.TeamDivisionId != null ? foundTeam.TeamDivisionId : null,
                                     TeamMemberName = ts.Captain.TeamCaptainPlayerName,
                                     TeamMemberRole = ts.Captain.TeamCaptainRoleID,
                                     TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts?.Captain?.TeamCaptainPlatformName),
@@ -1385,7 +1385,7 @@ namespace team_microservice.Services
                                 //update current team member to captain if the given captain is a team member
                                 TeamCaptain.TeamMemberPlayerId = (int)ts.Captain.TeamCaptainPlayerID;
                                 TeamCaptain.TeamMemberAccountId = ts.Captain.TeamCaptainAccountID != null ? ts.Captain.TeamCaptainAccountID : TeamCaptain.TeamMemberAccountId;
-                                TeamCaptain.TeamMemberDivisionId = ts.TeamDivisionID != null ? (int)ts.TeamDivisionID : foundTeam?.TeamDivisionId != null ? (int)foundTeam.TeamDivisionId : null;
+                                TeamCaptain.TeamMemberDivisionId = ts.TeamDivisionID != null ? ts.TeamDivisionID : foundTeam?.TeamDivisionId != null ? foundTeam.TeamDivisionId : null;
                                 TeamCaptain.TeamMemberName = ts.Captain.TeamCaptainPlayerName;
                                 TeamCaptain.TeamMemberRole = ts.Captain.TeamCaptainRoleID;
                                 TeamCaptain.TeamMemberPlatformId = (int)(ApiPlatformEnum)Enum.Parse(typeof(ApiPlatformEnum), ts?.Captain?.TeamCaptainPlatformName);
