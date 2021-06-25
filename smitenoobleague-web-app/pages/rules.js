@@ -94,6 +94,8 @@ export default function rules({LoginSession}) {
           <br /><br />
           Only 1 substitute player is allowed per team per matchup. If one of the teams is using more than 1 fill the games will be invalided by the system.
           A substitute player cannot be from the opposing team from next week’s matchup, to keep the competitive integrity intact.
+          <br/><br/>
+          A substitute player should be from another team in the division or the substitute player has to be submitted and approved by a league admin or moderator.
           <br /><br />
           Substitute players should not be put on the roster in the captain dashboard. And should just join the match instead of the player that needs to be substituted.
           </p>
