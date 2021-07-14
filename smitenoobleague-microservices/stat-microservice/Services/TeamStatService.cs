@@ -277,7 +277,7 @@ namespace stat_microservice.Services
             }
             List<int?> currentMemberIds = new List<int?>();
             currentTeamMembers.ForEach(x => currentMemberIds.Add(x.PlayerID));
-            int? MvpPlayerID = mvpScores.Where(x => currentMemberIds.Contains(x.PlayerID)).OrderByDescending(item => item.MvpScore).First()?.PlayerID;
+            int? MvpPlayerID = mvpScores.Where(x => currentMemberIds.Contains(x.PlayerID))?.OrderByDescending(item => item.MvpScore).First()?.PlayerID;
 
 
             return currentTeamMembers.Where(x => x.PlayerID == MvpPlayerID).FirstOrDefault();
