@@ -96,7 +96,7 @@ function CallSmiteApi(id, patch, date) {
       //Log the response text
       if(error?.response?.status == 404 || error?.response?.status == 500)
       {
-      console.log("scheduled for retry in 1 hour.")
+      console.log("scheduled for retry in 1 hour. " + error?.response?.data);
       //reschedule with + 1 hours
       date = Date.now() + (1 * 60 * 60 * 1000);
       ScheduleGame(date, patch, id);
