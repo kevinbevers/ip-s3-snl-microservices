@@ -775,7 +775,7 @@ namespace stat_microservice.Services
                     _logger.LogInformation($"{winnerTeam?.TeamName} VS {loserTeam?.TeamName}");
 
                     //week number - 1 because you don't want to add 7 days too much.
-                    scheduledMatch.matchup = allMatchupsBetweenTeams?.Where(mup => scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7) <= match.EntryDate && scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7).AddDays(14) >= match.EntryDate).FirstOrDefault();
+                    scheduledMatch.matchup = allMatchupsBetweenTeams?.Where(mup => scheduledMatch.ScheduleStartDate.AddDays((mup.WeekNumber - 1) * 7) <= match.EntryDate && scheduledMatch.ScheduleStartDate.AddDays(7).AddDays((mup.WeekNumber - 1) * 7).AddDays(14) >= match.EntryDate).FirstOrDefault();
                 }
                 //check if the entry date of the match id isn't before the matchup is scheduled
                 //var currentWeekDate = scheduledMatch.ScheduleStartDate.AddDays(7 * scheduledMatch.matchup.WeekNumber);
