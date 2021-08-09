@@ -285,8 +285,8 @@ namespace division_microservice.Services
 
                     if(currentSchedule == null)
                     {
-                        //just get the first occurence.
-                        currentSchedule = await _db.TableSchedules.Where(s => s.ScheduleDivisionId == divisionID).FirstOrDefaultAsync();
+                        //just get the latest occurence.
+                        currentSchedule = await _db.TableSchedules.Where(s => s.ScheduleDivisionId == divisionID).LastOrDefaultAsync();
                     }
                 }
 
