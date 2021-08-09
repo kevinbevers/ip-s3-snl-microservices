@@ -92,7 +92,7 @@ function CallSmiteApi(id, patch, date) {
     })
     .catch(error => {
       //log the error
-      console.log("scheduled job ran unsuccessfull with the following data: {" + "id: " + id + " @: " + date + "}");
+      console.error("scheduled job ran unsuccessfull with the following data: {" + "id: " + id + " @: " + date + "}");
       //Log the response text
       if(error?.response?.status == 404 || error?.response?.status == 500)
       {
