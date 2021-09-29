@@ -93,6 +93,9 @@ Open the solution file(.sln)
 >press the run button to run the docker compose.
 * Docker desktop needs to be installed to run the back-end.
 
+#### Questions?
+Feel free to reach out to me if you want something cleared up or prehaps need help setting it all up.
+
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
    [ASP.NET Core]: <https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1>
