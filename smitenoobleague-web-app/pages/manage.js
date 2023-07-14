@@ -109,7 +109,7 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                                 <Card.Title><h2 className="font-weight-bolder">Admin tools</h2></Card.Title>
                                 <Row>
                                     <Col md={6} className="mb-2">
-                                        <Button variant={"primary"} size={"lg"} className="btn-block">penalize team in standings</Button>
+                                        <Button disabled={true} variant={"primary"} size={"lg"} className="btn-block">penalize team in standings</Button>
                                     </Col>
                                     <Col md={6} className="mb-2">
                                         <ManageForfeit apiToken={apiToken} adminManage={true}/>
@@ -120,7 +120,7 @@ export default function Manage({LoginSession, apiToken, status, errMsg}) {
                                        <SubmitMatch apiToken={apiToken} />
                                     </Col>
                                     <Col md={6} className="mb-2">
-                                    <Button variant={"primary"} size={"lg"} className="btn-block">Generate MatchData</Button>
+                                    <Button disabled={true} variant={"primary"} size={"lg"} className="btn-block">Generate MatchData</Button>
                                     </Col>
                                 </Row>
                             </Card.Body>

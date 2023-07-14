@@ -166,7 +166,7 @@ export default function GameData({MatchResult, teamsInMatch}) {
                         <hr />
                         <h6><b>Total kills:</b> {totals?.killCount}</h6>
                         <h6><b>Total wards placed:</b> {totals?.wardsPlaced}</h6>
-                        <h6 className="d-flex"> <b className="mr-1">First blood:</b> {totals?.firstBlood != null ? <Image loading={"eager"} layout="fixed" height={20} width={20} src={totals?.firstBlood?.godIcon} alt="FirstBloodGod" className="rounded" />: <> </> }<span className="ml-1">{totals?.firstBlood?.playername}</span></h6>
+                        <h6 className="d-flex"> <b className="mr-1">First blood:</b> {totals?.firstBlood?.godIcon != null ? <Image loading={"eager"} layout="fixed" height={20} width={20} src={totals?.firstBlood?.godIcon} alt="FirstBloodGod" className="rounded" />: <> </> }<span className="ml-1">{totals?.firstBlood?.playername}</span></h6>
                         <h6 className="d-flex"> <b className="mr-1">MVP:</b> <Image loading={"eager"} layout="fixed" height={20} width={20} src={totals?.mvp?.godIcon != null ? totals?.mvp?.godIcon : "/images/empty_slot.png"} alt="MvpGod" className="GodImg rounded" /> <span className="ml-1">{totals?.mvp?.player?.playername}</span></h6>
                         {/* <p className="mb-0">A little text describing the game, possibly auto generated.</p> */}
                         <hr />

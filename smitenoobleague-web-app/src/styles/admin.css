@@ -47,3 +47,24 @@
 .adminTeamListItem:hover {
     background-color: whitesmoke;
 }
+
+.imagedrop > a::after {
+    content:none;
+}
+
+.imagedrop > .nav-link {
+    border: 0px!important;
+    padding: 0!important;
+}
+
+.imagedrop > .dropdown-menu {
+    padding-top: 0px;
+    height: 60vh;
+    overflow-y: scroll;
+    font-size: 0.8vw;
+    min-width: 13vw;
+}
+
+.overflow-visible {
+    overflow-x: visible;
+}

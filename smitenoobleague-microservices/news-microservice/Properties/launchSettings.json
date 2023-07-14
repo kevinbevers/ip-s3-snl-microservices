@@ -20,8 +20,7 @@
     "news_microservice": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
-      "applicationUrl": "https://localhost:11340;http://localhost:28137",
+      "applicationUrl": "http://localhost:30054",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

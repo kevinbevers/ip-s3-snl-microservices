@@ -5,6 +5,7 @@
     <RootNamespace>ocelot_api_gateway</RootNamespace>
     <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
     <UserSecretsId>1f010c85-405a-4426-9bd9-19f57fd172a7</UserSecretsId>
+    <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 
 
