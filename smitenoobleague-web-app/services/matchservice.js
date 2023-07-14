@@ -15,10 +15,16 @@ const ForfeitMatchup = async(data, apiToken) => {
     return apiClient.post(`stat-service/matchstat/forfeitmatch`, data);
 };
 
+const AddMatchData = async(data, apiToken) => {
+    const apiClient = await helpers.BuildApiClient(apiToken);
+    return apiClient.post(`stat-service/matchstat/manual`, data);
+};
+
   
 
 export default {
     GetMatchupHistoryByMatchupID,
     GetMatchupHistoryList,
-    ForfeitMatchup
+    ForfeitMatchup,
+    AddMatchData
 }

@@ -38,7 +38,8 @@ namespace division_microservice.Classes
 
 
             matchups.AddRange(RoundRobin(ListTeam, teams, numWeeks,numTeamsHalf,teamsSize, randomHomeAwayFirstTeamInList));
-            matchups.AddRange(RoundRobinInverted(ListTeam,teams, numWeeks, numTeamsHalf, teamsSize, randomHomeAwayFirstTeamInList));
+            //Disabled double round robin effect, because Revify's new league is single round robin
+            //matchups.AddRange(RoundRobinInverted(ListTeam,teams, numWeeks, numTeamsHalf, teamsSize, randomHomeAwayFirstTeamInList));
 
             //return schedule
             return matchups;

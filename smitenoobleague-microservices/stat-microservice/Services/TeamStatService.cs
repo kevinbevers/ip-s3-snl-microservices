@@ -298,7 +298,7 @@ namespace stat_microservice.Services
                 if (match != null)
                 {
                     double recentPerformanceScore = 0;
-                    double matchTimeDivision = (double)match.MatchDurationInSeconds / 360;
+                    double matchTimeDivision = (double) (match.MatchDurationInSeconds != null ? match.MatchDurationInSeconds : 1) / 360;
 
                     recentPerformanceScore += (int)((double)match.TotalDamageDealtInMatch * 0.005);
                     recentPerformanceScore += (int)((double)match.GoldEarnedInMatch * 0.008);

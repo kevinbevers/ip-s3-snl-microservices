@@ -125,7 +125,7 @@ namespace stat_microservice.Services
 
                         if (matchStats?.Count() > 0)
                         {
-                            TimeSpan time = TimeSpan.FromSeconds((int)matchStats?[0]?.IgMatchLengthInSeconds);
+                            TimeSpan time = TimeSpan.FromSeconds((int)(matchStats?[0]?.IgMatchLengthInSeconds != null ? matchStats?[0]?.IgMatchLengthInSeconds : 0));
                             var ms = matchStats?[0];
 
                             MatchDataWithRole matchData = new MatchDataWithRole
@@ -171,8 +171,17 @@ namespace stat_microservice.Services
                                 //use double because division could go under 1 with 0.8 for example
                                 double totalKills = (int)matchStats.Select(m => m.IgKills).Sum();
                                 double playerParticipation = (int)player.IgKills + (int)player.IgAssists;
-                                int killParticipationPercentage = Convert.ToInt32(playerParticipation / totalKills * 100);
-                                mvpScore *= (int)killParticipationPercentage;
+                                //Dirty try catch to prevent issues with new manual input data
+                                try
+                                {
+                                    int killParticipationPercentage = Convert.ToInt32(playerParticipation / totalKills * 100);
+                                    mvpScore *= (int)killParticipationPercentage;
+                                }
+                                catch
+                                {
+                                    mvpScore *= 0;
+                                }
+                                
                                 mvpScores.Add(new MvpPlayer { PlayerID = player.PlayerId, MvpScore = mvpScore });
 
                                 //add all items to the list

@@ -88,7 +88,7 @@ export default function ManageForfeit({apiToken, adminManage}) {
 
     return (
         <>
-            <Button variant={"primary"} size={"lg"} onClick={openManageTeam} className="btn-block">Enforce match forfeit</Button>
+            <Button variant={"primary"} size={"lg"} onClick={openManageTeam} className="btn-block">Manage matches</Button>
             <Modal
             size="xl"
             show={modalListShow}
@@ -97,7 +97,7 @@ export default function ManageForfeit({apiToken, adminManage}) {
             >
             <Modal.Header closeButton>
                 <Modal.Title className="font-weight-bold">
-                Enforce match forfeit
+                Manage matches
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

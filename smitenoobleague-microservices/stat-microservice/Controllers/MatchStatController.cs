@@ -35,6 +35,13 @@ namespace stat_microservice.Controllers
         {
             return await _matchStatService.ValidateAndSaveMatchStatsAsync(match);
         }
+        // POST: matchstat/manual
+        [HttpPost("manual")]
+        [Authorize(Roles = "Admin,Mod")]
+        public async Task<ActionResult> PostManual([FromBody] MatchData match)
+        {
+            return await _matchStatService.ValidateAndSaveMatchStatsAsync(match);
+        }
         // POST: matchstat
         [HttpPost("ignorefillprivacy")]
         [Authorize(Roles = "Admin,Mod")]

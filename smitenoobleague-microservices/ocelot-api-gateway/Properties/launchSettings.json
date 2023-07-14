@@ -14,17 +14,16 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "ancmHostingModel": "OutOfProcess"
+      }
     },
     "ocelot_api_gateway": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "/swagger",
+      "applicationUrl": "http://localhost:5000;",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:5000;"
+      }
     }
   }
 }
