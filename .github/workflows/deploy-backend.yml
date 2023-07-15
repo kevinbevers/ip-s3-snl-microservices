@@ -56,6 +56,7 @@ jobs:
     - name: Executing remote  command
       uses: appleboy/ssh-action@master
       with:
+        command_timeout: 25m
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         port: ${{ secrets.PORT }}
