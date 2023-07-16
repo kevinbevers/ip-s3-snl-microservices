@@ -150,4 +150,3 @@ services:
         - ./db/mysql/init:/docker-entrypoint-initdb.d/:ro
     ports:
         - 3308:3306
-
