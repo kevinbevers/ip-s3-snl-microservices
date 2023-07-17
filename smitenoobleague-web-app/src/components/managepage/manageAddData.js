@@ -189,6 +189,7 @@ export default function ManageAddData({ listOfGods, listOfItems, homeTeam, awayT
 
     return (
         <>
+        <Row><Col><p>Not filling in everything can cause issues, on the leaderboard and stat pages</p></Col></Row>
             <Row className="mb-2">
                 <Col ><Form.Control ref={patchNumber} className="pl-1 pr-1" type="text" placeholder={"Patch number, e.g. 10.7"} required /></Col>
                 <Col ><Form.Control ref={gameID} className="pl-1 pr-1" type="text" placeholder={"Match ID e.g. 1234567890"} required /></Col>
