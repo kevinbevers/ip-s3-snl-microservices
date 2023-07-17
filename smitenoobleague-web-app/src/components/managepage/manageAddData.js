@@ -12,7 +12,7 @@ import captainservice from "services/captainservice";
 import Img from 'react-optimized-image';
 import Image from "next/image";
 
-export default function ManageAddData({ listOfGods, listOfItems, homeTeam, awayTeam, submitFunction }) {
+export default function ManageAddData({ listOfGods, listOfItems, homeTeam, awayTeam, submitFunction, disableButton }) {
 
     // custom loader, this one doesn't use server performance and just displays the image vanilla
     const imageLoader = ({ src, width, quality }) => {
@@ -165,7 +165,6 @@ export default function ManageAddData({ listOfGods, listOfItems, homeTeam, awayT
         bannedGod.godName = god.godName;
         bannedGod.godIcon = god.godIcon;
         bannedGodsList[banNumber - 1] = bannedGod;
-        console.log(bannedGodsList);
         setFormD({...formD, bannedGods: bannedGodsList});
     };
 
@@ -301,7 +300,7 @@ export default function ManageAddData({ listOfGods, listOfItems, homeTeam, awayT
                 </Col>
             </Row>
             <Row>
-                <Col><Button block onClick={submitMatchData}>Submit match data</Button></Col>
+                <Col><Button disabled={disableButton} block onClick={submitMatchData}>Submit match data</Button></Col>
             </Row>
         </>
     );

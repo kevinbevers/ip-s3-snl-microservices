@@ -65,6 +65,7 @@ export default function ManageForfeitScheduleItem({ homeTeam, awayTeam, matchupI
     const handleForfeitAway = () => { forfeitMatch(awayTeam.teamID) };
     const handleForfeitHome = () => { forfeitMatch(homeTeam.teamID) };
 
+    const [disableButton,setDisableButton] = useState(false);
     const [modalDataShow, setModalDataShow] = useState(false);
     const closeDataModal = () => {
         setModalDataShow(false);
@@ -100,16 +101,18 @@ export default function ManageForfeitScheduleItem({ homeTeam, awayTeam, matchupI
     };
 
     const handleMatchDataAdd = async (winnerID, filledInData) => {
+        setDisableButton(true);
         const data = JSON.stringify(filledInData);
-        console.log(data);
         await matchservice.AddMatchData(data, apiToken).then((res) => {
             if (res.status == 200) {
                 if (winnerID != awayTeam.teamID) {
                     updateScore(matchupID, score != null ? (Number(scoreHome) + 1) + " - " + (scoreAway) : "1 - 0");
+                    setDisableButton(false);
                     setModalDataShow(false);
                 }
                 else {
                     updateScore(matchupID, score != null ? (scoreHome) + " - " + (Number(scoreAway) + 1) : "0 - 1");
+                    setDisableButton(false);
                     setModalDataShow(false);
                 }
             }
@@ -171,7 +174,7 @@ export default function ManageForfeitScheduleItem({ homeTeam, awayTeam, matchupI
             </Modal.Header>
             <Modal.Body>
                 <Container fluid>
-                    <ManageAddData listOfGods={godData} listOfItems={itemData} homeTeam={homeData} awayTeam={awayData} submitFunction={handleMatchDataAdd} />
+                    <ManageAddData disableButton={disableButton} listOfGods={godData} listOfItems={itemData} homeTeam={homeData} awayTeam={awayData} submitFunction={handleMatchDataAdd} />
                 </Container>
             </Modal.Body>
         </Modal>
