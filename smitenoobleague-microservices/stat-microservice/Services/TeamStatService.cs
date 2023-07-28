@@ -270,7 +270,7 @@ namespace stat_microservice.Services
                 //the sum returns the total amount of kills in this match
                 //use double because division could go under 1 with 0.8 for example
                 double totalKills = (int)teamMatchesStats.Select(x => x.TotalKillsTeam).Sum();
-                double playerParticipation = player.TotalKills + player.TotalKills;
+                double playerParticipation = player.TotalKills + player.TotalAssists;
                 int killParticipationPercentage = Convert.ToInt32(playerParticipation / totalKills * 100);
                 mvpScore += mvpScore * killParticipationPercentage;
                 mvpScores.Add(new MvpPlayer { PlayerID = player?.PlayerId, MvpScore = mvpScore });
