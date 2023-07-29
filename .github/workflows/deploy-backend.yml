@@ -43,7 +43,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: copy files via sshkey
-      uses: appleboy/scp-action@v0.1.3
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -54,7 +54,7 @@ jobs:
         target: "/opt/app/"
 
     - name: Executing remote  command
-      uses: appleboy/scp-action@v0.1.3
+      uses: appleboy/scp-action@master
       with:
         command_timeout: 25m
         host: ${{ secrets.HOST }}
