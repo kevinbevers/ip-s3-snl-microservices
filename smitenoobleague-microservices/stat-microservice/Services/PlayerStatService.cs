@@ -149,7 +149,7 @@ namespace stat_microservice.Services
         {
             PlayerStatistics PlayerStats = await _db.TableStats.Where(x => x.PlayerId == playerID).GroupBy(y => y.PlayerId, (y, z) => new PlayerStatistics
             {
-                AverageKillParticipation = (int)(((double)z.Select(s => s.IgKills).Sum() + (double)z.Select(s => s.IgAssists).Sum()) / ((double)playerMatchesStats.Select(x => x.TotalKillsPlayerTeam).Sum() != 0 ? (double)playerMatchesStats.Select(x => x.TotalKillsPlayerTeam).Sum() : 1) * 100),
+                AverageKillParticipation = (int)Math.Round((((double)z.Select(s => s.IgKills).Sum() + (double)z.Select(s => s.IgAssists).Sum()) / ((double)playerMatchesStats.Select(x => x.TotalKillsPlayerTeam).Sum() != 0 ? (double)playerMatchesStats.Select(x => x.TotalKillsPlayerTeam).Sum() : 1)) * 100),
                 AverageAssists = (int)z.Select(s => s.IgAssists).Average(),
                 AverageDamageDealt = (int)z.Select(s => s.IgDamageDealt).Average(),
                 AverageKills = (int)z.Select(s => s.IgKills).Average(),
