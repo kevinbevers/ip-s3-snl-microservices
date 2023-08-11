@@ -139,7 +139,7 @@ namespace stat_microservice.Services
             {
                 double killassists = (double)god.TotalKills + (double)god.TotalAssists;
                 double totalKillsByTeam = (double)playerMatchesStats.Where(z => z.GodPlayedId == god.God.GodId).Select(z => z.TotalKillsPlayerTeam).Sum();
-                double avgkp = Math.Round(killassists / (totalKillsByTeam != 0 ? totalKillsByTeam : 1) * 100);
+                double avgkp = Math.Round((killassists / (totalKillsByTeam != 0 ? totalKillsByTeam : 1)) * 100);
                 god.AverageKillParticipation = avgkp;
             }
 

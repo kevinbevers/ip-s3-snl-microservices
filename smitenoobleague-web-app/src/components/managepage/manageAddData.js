@@ -311,7 +311,7 @@ export function PlayerEntry({ won, winToggleNumber, playerInfo, data, index, lis
 
     const [thisPlayerData, setThisPlayerData] = useState(
         {
-            ingameTeamID: winToggleNumber - 1,
+            ingameTeamID: winToggleNumber,
             won: won == winToggleNumber,
             firstBanSide: won == winToggleNumber,
             playerIsFill: false,
